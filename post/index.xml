@@ -54,12 +54,16 @@ Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
 &lt;p&gt;设置站点&lt;/p&gt;
 &lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;hugo new site myBlog
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;生成myblog文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/image-20230313114148771.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/post/tutorial/image-20230313114148771.png&#34;
+	width=&#34;818&#34;
+	height=&#34;166&#34;
+	srcset=&#34;https://chenyuan1125.github.io/post/tutorial/image-20230313114148771_hu44b8ab736764cd3cf4138eb712efb7bc_14080_480x0_resize_box_3.png 480w, https://chenyuan1125.github.io/post/tutorial/image-20230313114148771_hu44b8ab736764cd3cf4138eb712efb7bc_14080_1024x0_resize_box_3.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;492&#34;
+		data-flex-basis=&#34;1182px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;/li&gt;
@@ -170,32 +174,6 @@ Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
 &lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;湖南理工大学     2019.09-2023.06     计算机科学与技术&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;&lt;strong&gt;公司：&lt;/strong&gt; xxxxxx信息科技有限公司  &lt;strong&gt;职位：&lt;/strong&gt; 安卓开发工程师  &lt;strong&gt;时间：&lt;/strong&gt; 2018.03-2019.03
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;项目名称：&lt;/strong&gt; xxxxxxxxxx
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;项目简介：&lt;/strong&gt; xxxxxxxxxx
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;主要工作：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
-&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
-&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
-&lt;li&gt;
-&lt;h2 id=&#34;技术栈&#34;&gt;技术栈：&lt;/h2&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; xxxx  
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;简介：&lt;/strong&gt; xxxxxxxxxxxxxxxxxxxx。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; yyyy
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;简介：&lt;/strong&gt; yyyyyyyyyyyyyyyyyyyy。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; zzzz
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;简介：&lt;/strong&gt; zzzzzzzzzzzzzzzzzzzz。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;以下均为我熟练使用的技能：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;编程语言：Java、C、C++&lt;/li&gt;
@@ -205,16 +183,19 @@ Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
 &lt;/ul&gt;
 &lt;p&gt;以下是我接触并了解的技能：&lt;/p&gt;
 &lt;p&gt;  Linux系统安全、爬虫、音视频开发等等&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/.%5c%e7%ae%80%e5%8e%86.jpg&#34;
-	
-	
-	
+&lt;p&gt;简历如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/post/about-me/%E7%AE%80%E5%8E%86.jpg&#34;
+	width=&#34;3443&#34;
+	height=&#34;4756&#34;
+	srcset=&#34;https://chenyuan1125.github.io/post/about-me/%E7%AE%80%E5%8E%86_hua0d8a78c71d5e1b7913b7aa759539a9d_3184028_480x0_resize_q75_box.jpg 480w, https://chenyuan1125.github.io/post/about-me/%E7%AE%80%E5%8E%86_hua0d8a78c71d5e1b7913b7aa759539a9d_3184028_1024x0_resize_q75_box.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;简历&#34;
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;72&#34;
+		data-flex-basis=&#34;173px&#34;
 	
-&gt;)&lt;/p&gt;
+&gt;&lt;/p&gt;
 </description>
         </item>
         <item>
