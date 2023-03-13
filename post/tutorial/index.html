@@ -408,9 +408,10 @@ Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
 <ol>
 <li>Git要上传或执行的文件可以在文件夹中，右键空白地区点git bash here从而实现目录内操作。</li>
 <li>在linux操作中（比如git）粘贴操作是shift+insert或单击鼠标的滚轮。而复制只要选中即可。</li>
-<li>**【非常重要】**github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。</li>
+<li>github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。</li>
 <li>hugo命令 <code>hugo --baseUrl=&quot;https://你的github名字.github.io/&quot;</code>执行完后，会生成一个public文件夹。</li>
 <li>用git推送的时候 <code>git pull --rebase origin master</code>语句可能会出错显示没有文件，不用担心，这是因为此时目标仓库是空的，直接下一步最后，你只需要输入对应网址，即可看到博客了！</li>
+<li>如果想将默认语言设置为中文，只要在config中设置一下defaultContentLanguage=&ldquo;zh-cn&quot;就行了，但可能会不生效，最好将其放在config.toml的第一行</li>
 </ol>
 <h2 id="更新博客">更新博客</h2>
 <ol>
