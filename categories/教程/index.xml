@@ -23,6 +23,10 @@
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;找到对应系统的下载文件(win10为例，建议选择extended版本，有些主题需要extended版本才能正常使用)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;
 &lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/post/tutorial/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwOTkyMTUy,size_16,color_FFFFFF,t_70#pic_center.png&#34;
 	width=&#34;1182&#34;
 	height=&#34;641&#34;
@@ -34,12 +38,7 @@
 		data-flex-grow=&#34;184&#34;
 		data-flex-basis=&#34;442px&#34;
 	
-&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;建立blog文件夹，并将下载好的zip文件解压到该文件夹下(建议不要有中文和空格)&lt;/p&gt;
+&gt;建立blog文件夹，并将下载好的zip文件解压到该文件夹下(建议不要有中文和空格)&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;再将hogu.exe的路径添加到环境变量中(不会则请STFW)&lt;/p&gt;
