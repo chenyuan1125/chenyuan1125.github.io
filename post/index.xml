@@ -7,71 +7,6 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <lastBuildDate>Thu, 09 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chenyuan1125.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>Hello Blog</title>
-        <link>https://chenyuan1125.github.io/post/about-me/</link>
-        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-        
-        <guid>https://chenyuan1125.github.io/post/about-me/</guid>
-        <description>&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;&lt;strong&gt;邮 箱：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;mailto:1321352582@qq.com&#34; &gt;1321352582@qq.com&lt;/a&gt;   &lt;strong&gt;手 机 号：&lt;/strong&gt; 18007304397&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;证  书：&lt;/strong&gt; 英语六级、计算机三级   &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;GitHub：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;https://github.com/chenyuan1125&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/chenyuan1125&lt;/a&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;湖南理工大学     2019.09-2023.06     计算机科学与技术&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;&lt;strong&gt;公司：&lt;/strong&gt; xxxxxx信息科技有限公司  &lt;strong&gt;职位：&lt;/strong&gt; 安卓开发工程师  &lt;strong&gt;时间：&lt;/strong&gt; 2018.03-2019.03
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;项目名称：&lt;/strong&gt; xxxxxxxxxx
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;项目简介：&lt;/strong&gt; xxxxxxxxxx
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;主要工作：&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
-&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
-&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
-&lt;li&gt;
-&lt;h2 id=&#34;技术栈&#34;&gt;技术栈：&lt;/h2&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; xxxx  
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;简介：&lt;/strong&gt; xxxxxxxxxxxxxxxxxxxx。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; yyyy
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;简介：&lt;/strong&gt; yyyyyyyyyyyyyyyyyyyy。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; zzzz
-&lt;!-- raw HTML omitted --&gt;
-&lt;strong&gt;简介：&lt;/strong&gt; zzzzzzzzzzzzzzzzzzzz。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;以下均为我熟练使用的技能：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;编程语言：Java、C、C++&lt;/li&gt;
-&lt;li&gt;Web开发：熟悉等&lt;/li&gt;
-&lt;li&gt;Web框架：Spring、Springboot、Mybatis-plus、Java-sevelet等&lt;/li&gt;
-&lt;li&gt;其他：Git、Linux操作、Shell编程等&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;以下是我接触并了解的技能：&lt;/p&gt;
-&lt;p&gt;  Linux系统安全、爬虫、音视频开发等等&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;  我是一个热爱技术热爱编程的人，大学四年自学编程，做过很多小项目（贪吃蛇、计算器、简单的数据库读取录入系统等等）
-&lt;!-- raw HTML omitted --&gt;
-  我希望在以后的工作中，深度上能学习掌握更多关于Java开发的高级知识及数据结构算法；广度上能扩宽自己的技术栈，如前端、后端、混合开发以及其他比较新潮有趣的技术等；高度上希望经过未来几年的职业生涯发展，能成为软件架构师级的技术专家。&lt;/p&gt;
-&lt;p&gt;简历如下&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/D:%5cblog%5cmyblog%5cstatic%5c%e7%ae%80%e5%8e%86.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-</description>
-        </item>
-        <item>
         <title>搭建个人博客</title>
         <link>https://chenyuan1125.github.io/post/blog/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
@@ -218,6 +153,71 @@ Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>自我介绍</title>
+        <link>https://chenyuan1125.github.io/post/about-me/</link>
+        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://chenyuan1125.github.io/post/about-me/</guid>
+        <description>&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;strong&gt;邮 箱：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;mailto:1321352582@qq.com&#34; &gt;1321352582@qq.com&lt;/a&gt;   &lt;strong&gt;手 机 号：&lt;/strong&gt; 18007304397&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;证  书：&lt;/strong&gt; 英语六级、计算机三级   &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;GitHub：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;https://github.com/chenyuan1125&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/chenyuan1125&lt;/a&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;湖南理工大学     2019.09-2023.06     计算机科学与技术&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;strong&gt;公司：&lt;/strong&gt; xxxxxx信息科技有限公司  &lt;strong&gt;职位：&lt;/strong&gt; 安卓开发工程师  &lt;strong&gt;时间：&lt;/strong&gt; 2018.03-2019.03
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;项目名称：&lt;/strong&gt; xxxxxxxxxx
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;项目简介：&lt;/strong&gt; xxxxxxxxxx
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;主要工作：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
+&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
+&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
+&lt;li&gt;
+&lt;h2 id=&#34;技术栈&#34;&gt;技术栈：&lt;/h2&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; xxxx  
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;简介：&lt;/strong&gt; xxxxxxxxxxxxxxxxxxxx。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; yyyy
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;简介：&lt;/strong&gt; yyyyyyyyyyyyyyyyyyyy。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; zzzz
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;简介：&lt;/strong&gt; zzzzzzzzzzzzzzzzzzzz。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;以下均为我熟练使用的技能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;编程语言：Java、C、C++&lt;/li&gt;
+&lt;li&gt;Web开发：熟悉等&lt;/li&gt;
+&lt;li&gt;Web框架：Spring、Springboot、Mybatis-plus、Java-sevelet等&lt;/li&gt;
+&lt;li&gt;其他：Git、Linux操作、Shell编程等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下是我接触并了解的技能：&lt;/p&gt;
+&lt;p&gt;  Linux系统安全、爬虫、音视频开发等等&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;  我是一个热爱技术热爱编程的人，大学四年自学编程，做过很多小项目（贪吃蛇、计算器、简单的数据库读取录入系统等等）
+&lt;!-- raw HTML omitted --&gt;
+  我希望在以后的工作中，深度上能学习掌握更多关于Java开发的高级知识及数据结构算法；广度上能扩宽自己的技术栈，如前端、后端、混合开发以及其他比较新潮有趣的技术等；高度上希望经过未来几年的职业生涯发展，能成为软件架构师级的技术专家。&lt;/p&gt;
+&lt;p&gt;简历如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/D:%5cblog%5cmyblog%5cstatic%5c%e7%ae%80%e5%8e%86.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
 </description>
         </item>
         
