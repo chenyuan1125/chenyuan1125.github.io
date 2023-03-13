@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='讲述一些学习经历和心得'>
-<meta name="keywords" content="心得、经验"><title>计算机学习心理路程</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='利用Hugo在github上搭建博客'>
+<meta name="keywords" content="博客、教程、github"><title>搭建个人博客</title>
 
 <link rel='canonical' href='https://chenyuan1125.github.io/post/blog/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='计算机学习心理路程'>
-<meta property='og:description' content='讲述一些学习经历和心得'>
+<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='搭建个人博客'>
+<meta property='og:description' content='利用Hugo在github上搭建博客'>
 <meta property='og:url' content='https://chenyuan1125.github.io/post/blog/'>
 <meta property='og:site_name' content='My New Hugo Site'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='心得体会' /><meta property='article:published_time' content='2023-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-03-09T00:00:00&#43;00:00'/>
-<meta name="twitter:title" content="计算机学习心理路程">
-<meta name="twitter:description" content="讲述一些学习经历和心得">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hugo教程' /><meta property='article:published_time' content='2023-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2023-03-09T00:00:00&#43;00:00'/>
+<meta name="twitter:title" content="搭建个人博客">
+<meta name="twitter:description" content="利用Hugo在github上搭建博客">
     </head>
     <body class="
     article-page
@@ -111,8 +111,8 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" >
-                碎碎念
+            <a href="/categories/%E6%95%99%E7%A8%8B/" >
+                教程
             </a>
         
     </header>
@@ -120,12 +120,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/post/blog/">计算机学习心理路程</a>
+            <a href="/post/blog/">搭建个人博客</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            讲述一些学习经历和心得
+            利用Hugo在github上搭建博客
         </h3>
         
     </div>
@@ -161,7 +161,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -176,68 +176,147 @@
     <section class="article-content">
     
     
-    <p>前置要求
-你可能需要学习如何使用git，可参考本博中的教程或观看狂神git简单教程。
-你也许也想知道怎么利用GitHub Desktop上传东西到github上，可参考GitHub Desktop 的使用教程
-认识hugo
-Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。
-中文文档地址： <a class="link" href="https://www.gohugo.org/"  target="_blank" rel="noopener"
-    >https://www.gohugo.org/</a> 图文安装教程1
-图文安装教程2</p>
-<p>hugo的结构
-hugo的基本用法和页面改造
-hugo中文帮助文档</p>
-<p>皮肤下载
-<a class="link" href="https://www.gohugo.org/theme/"  target="_blank" rel="noopener"
-    >https://www.gohugo.org/theme/</a> 注：我用的是hahwul
-写的stack： <a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack"  target="_blank" rel="noopener"
-    >https://github.com/CaiJimmy/hugo-theme-stack</a>
-主题手册</p>
+    <h2 id="hugo介绍">Hugo介绍</h2>
+<p>Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。</p>
+<p>Hugo中文文档地址： <a class="link" href="https://www.gohugo.org"  target="_blank" rel="noopener"
+    >https://www.gohugo.org</a></p>
+<h2 id="hugo安装">Hugo安装</h2>
+<ul>
+<li>
+<p>下载地址：https://github.com/gohugoio/hugo/releases</p>
+</li>
+<li>
+<p>找到对应系统的下载文件(win10为例，建议选择extended版本，有些主题需要extended版本才能正常使用)：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200407184350694.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwOTkyMTUy,size_16,color_FFFFFF,t_70#pic_center"
+	
+	
+	
+	loading="lazy"
+	
+		alt="在这里插入图片描述"
+	
+	
+></p>
+</li>
+</ul>
+<ul>
+<li>
+<p>建立blog文件夹，并将下载好的zip文件解压到该文件夹下(建议不要有中文和空格)</p>
+</li>
+<li>
+<p>再将hogu.exe的路径添加到环境变量中(不会则请STFW)</p>
+</li>
+<li>
+<p>在cmd中查看命令是否成功</p>
+<pre tabindex="0"><code>输入下面命令查看是否成功
+$ hugo version
+输出结果：
+Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
+说明安装成功
+</code></pre></li>
+<li>
+<p>设置站点</p>
+<pre tabindex="0"><code>hugo new site myBlog
+</code></pre><p>生成myblog文件夹</p>
+<p><img src="/D:%5cblog%5cmyblog%5cstatic%5cimage-20230313114148771.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+</ul>
+<h2 id="hugo主题下载">Hugo主题下载</h2>
+<p>官方网址：https://www.gohugo.org/theme/</p>
 <p>建议安装方法：</p>
-<p>hugo new site myblog
-在myblog/config.toml加一行 theme=xxxx（下载后theme文件夹的名）
-下载放到theme
-把example的config和yaml覆盖放到首页（首页的config是空的）
-hugo server
-markdown语法检索
-<a class="link" href="https://www.appinn.com/markdown/#%E5%AE%97%E6%97%A8"  target="_blank" rel="noopener"
-    >https://www.appinn.com/markdown/#%E5%AE%97%E6%97%A8</a>
-常见的markdown写法</p>
-<p>创建你的第一个文章
-使用 hugo new xxxxx.md 注意命名时不可以空格，可以用-代替
-然后就可以使用 hugo server 来查看效果啦！</p>
-<p>发布你的博客
-我们将使用github.io来代替服务器以及域名：推荐参考教程
-几个注意事项：</p>
-<p>Git要上传或执行的文件可以在文件夹中，右键空白地区点git bash here从而实现目录内操作。
-在linux操作中（比如git）粘贴操作是shift+insert或单击鼠标的滚轮。而复制只要选中即可。
-**【非常重要】**github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。
-hugo命令 hugo &ndash;baseUrl=&ldquo;https://改为你的名字.github.io/&ldquo;执行完后，会生成一个public文件夹，在public文件中执行1.操作即可推送。
-用git推送的时候 git pull &ndash;rebase origin master语句可能会出错显示没有文件，不用担心，这是因为此时目标仓库是空的，直接下一步最后，你只需要输入对应网址，即可看到自己的宝贝博客了！
-*（可选）如果你想给博客加上评论系统，请参考这样的流程:WALINE且记得修改config.yaml配置文件中的commit和对应waline项即可
-更新你的博客
-在博客目录下使用 hugo &ndash;baseUrl=&ldquo;https://改为你的名字.github.io/&ldquo;覆盖原来的public文件夹
-进入public文件夹右键git bash
-分别执行 git add . // git commit -m ‘写你的备注’ // git push
-可能存在的问题：
-界面出现404
-使用Shift+F5强制刷新页面
-检查域名是否和github的名字对应
-github上存放文件的仓库是否只有一个分支（创建时不要勾选生成README.md)
-正常public上传github仓库后会只有一个分支，且包含了public内的所有文件
-文章看不到
-检查是否格式正确，使用了hugo new xxxx.md
-检查是否包含了 draft: true，若有则删除或使用 hugo server -D，若草稿模式开启是看不到文章的
-数学公式不显示
-是否使用了 math: true，或尝试导入MathJax包，可参考Hugo に MathJax を導入して数式を書けるようにする或者分离式的mathjax调用方法HugoでMathJaxを使うMathJax的中文文档：https://www.gohugo.org/doc/tutorials/mathjax/Mathjax的日文文档：https://www.eng.niigata-u.ac.jp/~nomoto/download/mathjax.pdf</p>
-<p>注意此时 \换行不成功的话，用 \\试试看，有些 ,的无效也可以用 \,代替尝试。</p>
-<p>有时候数学公式正确也会显示不出来，此时你可以检查代码界面或网页公式处是否存在斜体如&rdquo;<em>j&rdquo;，此时改为&rdquo;<em>j&quot;即可恢复正常，特别是</em>{}时要注意，可以把开始倾斜的代码（找到这里的&rdquo;</em>&quot;)改为_{}就可以正常显示。</p>
-<p>文章图片加载很慢
-可以参考这个文章Hugo Content 使用图源、压缩与工具介绍
-文章头看到了不同的格式比如+++与—
-Front Matter支持三种格式，yaml，toml与json方式，你可以参考：基础文件和头部格式介绍
-git push不成功
-此时大概率是网络通信有问题，可以关掉git终端后科学上网；重启git 终端后（windows需要，linux系统不需要）再进行push大概率就可以解决问题了；此时无需再进行git init 等初始化操作因为之前已经做完。</p>
+<ul>
+<li>
+<p>将下载好的主题解压放入myblog文件夹下的themes下</p>
+</li>
+<li>
+<p>并在myblog/config.toml里加一行 theme=xxxx（解压后的主题文件夹的名称）</p>
+</li>
+<li>
+<p>把exampleSite的文件复制放到myblog文件夹下</p>
+</li>
+<li>
+<p>启动站点</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>hugo server
+</span></span></code></pre></div></li>
+</ul>
+<ul>
+<li>
+<p>请注意倒数第二行（ Web Server is available at //localhost:1313/ (bind address 127.0.0.1) ）说明启动成功了</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Building sites … WARN 2020/04/07 17:51:51 Markup type mmark is deprecated and will be removed in a future release. See https://gohugo.io//content-management/formats/#list-of-content-formats
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                   | EN
+</span></span><span style="display:flex;"><span>-------------------+-----
+</span></span><span style="display:flex;"><span>  Pages            | <span style="color:#ae81ff">74</span>
+</span></span><span style="display:flex;"><span>  Paginator pages  |  <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  Non-page files   | <span style="color:#ae81ff">21</span>
+</span></span><span style="display:flex;"><span>  Static files     |  <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  Processed images | <span style="color:#ae81ff">28</span>
+</span></span><span style="display:flex;"><span>  Aliases          | <span style="color:#ae81ff">14</span>
+</span></span><span style="display:flex;"><span>  Sitemaps         |  <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  Cleaned          |  <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Built in <span style="color:#ae81ff">1103</span> ms
+</span></span><span style="display:flex;"><span>Watching <span style="color:#66d9ef">for</span> changes in F:<span style="color:#ae81ff">\b</span>log<span style="color:#ae81ff">\m</span>yBlog<span style="color:#ae81ff">\{</span>archetypes,content,data,layouts,static,themes<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>Watching <span style="color:#66d9ef">for</span> config changes in F:<span style="color:#ae81ff">\b</span>log<span style="color:#ae81ff">\m</span>yBlog<span style="color:#ae81ff">\c</span>onfig.toml, F:<span style="color:#ae81ff">\b</span>log<span style="color:#ae81ff">\m</span>yBlog<span style="color:#ae81ff">\c</span>onfig<span style="color:#ae81ff">\_</span>default
+</span></span><span style="display:flex;"><span>Environment: <span style="color:#e6db74">&#34;development&#34;</span>
+</span></span><span style="display:flex;"><span>Serving pages from memory
+</span></span><span style="display:flex;"><span>Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+</span></span><span style="display:flex;"><span>Web Server is available at //localhost:1313/ <span style="color:#f92672">(</span>bind address 127.0.0.1<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Press Ctrl+C to stop
+</span></span></code></pre></div></li>
+<li>
+<p>在浏览器中输入 localhost:1313，就可以看到效果了</p>
+</li>
+</ul>
+<p>注意事项：如果启动站点失败，可以先将主题删除，再启动站点，看是否报错，若没报错则是主题配置问题。</p>
+<h2 id="hugo基本结构">Hugo基本结构</h2>
+<p><a class="link" href="https://blog.csdn.net/weixin_44397907/article/details/99621517"  target="_blank" rel="noopener"
+    >hugo的基本用法和页面改造</a>
+<a class="link" href="https://hugo.aiaide.com/"  target="_blank" rel="noopener"
+    >hugo中文帮助文档</a></p>
+<h2 id="创建文章">创建文章</h2>
+<p>创建第一篇文章，放到 <code>post</code> 目录，方便之后生成聚合页面。(注意命名时不可以空格，可以用-代替)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>hugo post/first.md
+</span></span></code></pre></div><p>然后就可以使用 hugo server 来查看效果啦！</p>
+<p>(注意：如果没出现新文章，则可能开启了draft模式，使用hogu server -D)</p>
+<h2 id="部署到服务器">部署到服务器</h2>
+<p>我们将使用github.io来代替服务器以及域名：<a class="link" href="https://blog.csdn.net/cbb944131226/article/details/82940224"  target="_blank" rel="noopener"
+    >推荐参考教程</a></p>
+<p>几个注意事项：</p>
+<ol>
+<li>Git要上传或执行的文件可以在文件夹中，右键空白地区点git bash here从而实现目录内操作。</li>
+<li>在linux操作中（比如git）粘贴操作是shift+insert或单击鼠标的滚轮。而复制只要选中即可。</li>
+<li>**【非常重要】**github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。</li>
+<li>hugo命令 <code>hugo --baseUrl=&quot;https://你的github名字.github.io/&quot;</code>执行完后，会生成一个public文件夹。</li>
+<li>用git推送的时候 <code>git pull --rebase origin master</code>语句可能会出错显示没有文件，不用担心，这是因为此时目标仓库是空的，直接下一步最后，你只需要输入对应网址，即可看到博客了！</li>
+</ol>
+<h2 id="更新博客">更新博客</h2>
+<ol>
+<li>
+<p>在博客目录下使用 hugo &ndash;baseUrl=&ldquo;https://你的github名字.github.io/&ldquo;覆盖原来的public文件夹</p>
+</li>
+<li>
+<p>进入public文件夹右键git bash
+分别执行</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m ‘first commit’
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><p>可能存在的问题：</p>
+<ul>
+<li>github上存放文件的仓库是否只有一个分支（创建时不要勾选生成README.md)</li>
+<li>正常public上传github仓库后会只有一个分支，且包含了public内的所有文件
+文章看不到,检查是否格式正确，使用了hugo new xxxx.md,检查是否包含了 draft: true，若有则删除或使用 hugo server -D，若草稿模式开启是看不到文章的</li>
+<li>git push不成功,此时大概率是网络通信有问题，可以关掉git终端后科学上网；重启git 终端后（windows需要，linux系统不需要）再进行push大概率就可以解决问题了；此时无需再进行git init 等初始化操作因为之前已经做完。</li>
+</ul>
+</li>
+</ol>
 
 </section>
 
@@ -246,7 +325,7 @@ git push不成功
     
     <section class="article-tags">
         
-            <a href="/tags/%E5%BF%83%E5%BE%97%E4%BD%93%E4%BC%9A/">心得体会</a>
+            <a href="/tags/hugo%E6%95%99%E7%A8%8B/">Hugo教程</a>
         
     </section>
 

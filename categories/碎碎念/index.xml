@@ -12,77 +12,63 @@
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
         <guid>https://chenyuan1125.github.io/post/about-me/</guid>
-        <description>&lt;p&gt;Hello blog！&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>计算机学习心理路程</title>
-        <link>https://chenyuan1125.github.io/post/blog/</link>
-        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-        
-        <guid>https://chenyuan1125.github.io/post/blog/</guid>
-        <description>&lt;p&gt;前置要求
-你可能需要学习如何使用git，可参考本博中的教程或观看狂神git简单教程。
-你也许也想知道怎么利用GitHub Desktop上传东西到github上，可参考GitHub Desktop 的使用教程
-认识hugo
-Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。
-中文文档地址： &lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://www.gohugo.org/&lt;/a&gt; 图文安装教程1
-图文安装教程2&lt;/p&gt;
-&lt;p&gt;hugo的结构
-hugo的基本用法和页面改造
-hugo中文帮助文档&lt;/p&gt;
-&lt;p&gt;皮肤下载
-&lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org/theme/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://www.gohugo.org/theme/&lt;/a&gt; 注：我用的是hahwul
-写的stack： &lt;a class=&#34;link&#34; href=&#34;https://github.com/CaiJimmy/hugo-theme-stack&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/CaiJimmy/hugo-theme-stack&lt;/a&gt;
-主题手册&lt;/p&gt;
-&lt;p&gt;建议安装方法：&lt;/p&gt;
-&lt;p&gt;hugo new site myblog
-在myblog/config.toml加一行 theme=xxxx（下载后theme文件夹的名）
-下载放到theme
-把example的config和yaml覆盖放到首页（首页的config是空的）
-hugo server
-markdown语法检索
-&lt;a class=&#34;link&#34; href=&#34;https://www.appinn.com/markdown/#%E5%AE%97%E6%97%A8&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://www.appinn.com/markdown/#%E5%AE%97%E6%97%A8&lt;/a&gt;
-常见的markdown写法&lt;/p&gt;
-&lt;p&gt;创建你的第一个文章
-使用 hugo new xxxxx.md 注意命名时不可以空格，可以用-代替
-然后就可以使用 hugo server 来查看效果啦！&lt;/p&gt;
-&lt;p&gt;发布你的博客
-我们将使用github.io来代替服务器以及域名：推荐参考教程
-几个注意事项：&lt;/p&gt;
-&lt;p&gt;Git要上传或执行的文件可以在文件夹中，右键空白地区点git bash here从而实现目录内操作。
-在linux操作中（比如git）粘贴操作是shift+insert或单击鼠标的滚轮。而复制只要选中即可。
-**【非常重要】**github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。
-hugo命令 hugo &amp;ndash;baseUrl=&amp;ldquo;https://改为你的名字.github.io/&amp;ldquo;执行完后，会生成一个public文件夹，在public文件中执行1.操作即可推送。
-用git推送的时候 git pull &amp;ndash;rebase origin master语句可能会出错显示没有文件，不用担心，这是因为此时目标仓库是空的，直接下一步最后，你只需要输入对应网址，即可看到自己的宝贝博客了！
-*（可选）如果你想给博客加上评论系统，请参考这样的流程:WALINE且记得修改config.yaml配置文件中的commit和对应waline项即可
-更新你的博客
-在博客目录下使用 hugo &amp;ndash;baseUrl=&amp;ldquo;https://改为你的名字.github.io/&amp;ldquo;覆盖原来的public文件夹
-进入public文件夹右键git bash
-分别执行 git add . // git commit -m ‘写你的备注’ // git push
-可能存在的问题：
-界面出现404
-使用Shift+F5强制刷新页面
-检查域名是否和github的名字对应
-github上存放文件的仓库是否只有一个分支（创建时不要勾选生成README.md)
-正常public上传github仓库后会只有一个分支，且包含了public内的所有文件
-文章看不到
-检查是否格式正确，使用了hugo new xxxx.md
-检查是否包含了 draft: true，若有则删除或使用 hugo server -D，若草稿模式开启是看不到文章的
-数学公式不显示
-是否使用了 math: true，或尝试导入MathJax包，可参考Hugo に MathJax を導入して数式を書けるようにする或者分离式的mathjax调用方法HugoでMathJaxを使うMathJax的中文文档：https://www.gohugo.org/doc/tutorials/mathjax/Mathjax的日文文档：https://www.eng.niigata-u.ac.jp/~nomoto/download/mathjax.pdf&lt;/p&gt;
-&lt;p&gt;注意此时 \换行不成功的话，用 \\试试看，有些 ,的无效也可以用 \,代替尝试。&lt;/p&gt;
-&lt;p&gt;有时候数学公式正确也会显示不出来，此时你可以检查代码界面或网页公式处是否存在斜体如&amp;rdquo;&lt;em&gt;j&amp;rdquo;，此时改为&amp;rdquo;&lt;em&gt;j&amp;quot;即可恢复正常，特别是&lt;/em&gt;{}时要注意，可以把开始倾斜的代码（找到这里的&amp;rdquo;&lt;/em&gt;&amp;quot;)改为_{}就可以正常显示。&lt;/p&gt;
-&lt;p&gt;文章图片加载很慢
-可以参考这个文章Hugo Content 使用图源、压缩与工具介绍
-文章头看到了不同的格式比如+++与—
-Front Matter支持三种格式，yaml，toml与json方式，你可以参考：基础文件和头部格式介绍
-git push不成功
-此时大概率是网络通信有问题，可以关掉git终端后科学上网；重启git 终端后（windows需要，linux系统不需要）再进行push大概率就可以解决问题了；此时无需再进行git init 等初始化操作因为之前已经做完。&lt;/p&gt;
+        <description>&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;strong&gt;邮 箱：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;mailto:1321352582@qq.com&#34; &gt;1321352582@qq.com&lt;/a&gt;   &lt;strong&gt;手 机 号：&lt;/strong&gt; 18007304397&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;证  书：&lt;/strong&gt; 英语六级、计算机三级   &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;GitHub：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;https://github.com/chenyuan1125&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/chenyuan1125&lt;/a&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;湖南理工大学     2019.09-2023.06     计算机科学与技术&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;strong&gt;公司：&lt;/strong&gt; xxxxxx信息科技有限公司  &lt;strong&gt;职位：&lt;/strong&gt; 安卓开发工程师  &lt;strong&gt;时间：&lt;/strong&gt; 2018.03-2019.03
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;项目名称：&lt;/strong&gt; xxxxxxxxxx
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;项目简介：&lt;/strong&gt; xxxxxxxxxx
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;主要工作：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
+&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
+&lt;li&gt;xxxxxxxxxxxx。&lt;/li&gt;
+&lt;li&gt;
+&lt;h2 id=&#34;技术栈&#34;&gt;技术栈：&lt;/h2&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; xxxx  
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;简介：&lt;/strong&gt; xxxxxxxxxxxxxxxxxxxx。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; yyyy
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;简介：&lt;/strong&gt; yyyyyyyyyyyyyyyyyyyy。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;名称：&lt;/strong&gt; zzzz
+&lt;!-- raw HTML omitted --&gt;
+&lt;strong&gt;简介：&lt;/strong&gt; zzzzzzzzzzzzzzzzzzzz。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;以下均为我熟练使用的技能：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;编程语言：Java、C、C++&lt;/li&gt;
+&lt;li&gt;Web开发：熟悉等&lt;/li&gt;
+&lt;li&gt;Web框架：Spring、Springboot、Mybatis-plus、Java-sevelet等&lt;/li&gt;
+&lt;li&gt;其他：Git、Linux操作、Shell编程等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下是我接触并了解的技能：&lt;/p&gt;
+&lt;p&gt;  Linux系统安全、爬虫、音视频开发等等&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;  我是一个热爱技术热爱编程的人，大学四年自学编程，做过很多小项目（贪吃蛇、计算器、简单的数据库读取录入系统等等）
+&lt;!-- raw HTML omitted --&gt;
+  我希望在以后的工作中，深度上能学习掌握更多关于Java开发的高级知识及数据结构算法；广度上能扩宽自己的技术栈，如前端、后端、混合开发以及其他比较新潮有趣的技术等；高度上希望经过未来几年的职业生涯发展，能成为软件架构师级的技术专家。&lt;/p&gt;
+&lt;p&gt;简历如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/D:%5cblog%5cmyblog%5cstatic%5c%e7%ae%80%e5%8e%86.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
 </description>
         </item>
         
