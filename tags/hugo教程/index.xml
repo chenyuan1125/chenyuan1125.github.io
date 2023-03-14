@@ -117,11 +117,6 @@ Hugo Static Site Generator v0.68.3/extended windows/amd64 BuildDate: unknown
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;注意事项：如果启动站点失败，可以先将主题删除，再启动站点，看是否报错，若没报错则是主题配置问题。&lt;/p&gt;
-&lt;h2 id=&#34;hugo基本结构&#34;&gt;Hugo基本结构&lt;/h2&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/weixin_44397907/article/details/99621517&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;hugo的基本用法和页面改造&lt;/a&gt;
-&lt;a class=&#34;link&#34; href=&#34;https://hugo.aiaide.com/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;hugo中文帮助文档&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;创建文章&#34;&gt;创建文章&lt;/h2&gt;
 &lt;p&gt;创建第一篇文章，放到 &lt;code&gt;post&lt;/code&gt; 目录，方便之后生成聚合页面。(注意命名时不可以空格，可以用-代替)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo post/first.md
