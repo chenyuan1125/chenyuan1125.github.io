@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>教程 on Lee</title>
-        <link>https://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/</link>
+        <link>http://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/</link>
         <description>Recent content in 教程 on Lee</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Thu, 09 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 09 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>个人博客搭建</title>
-        <link>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
+        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
+        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
 &lt;/h2&gt;&lt;p&gt;Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。&lt;/p&gt;
 &lt;p&gt;Hugo中文文档地址： &lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.gohugo.org&lt;/a&gt;&lt;/p&gt;
@@ -28,10 +28,10 @@
 &lt;/ul&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
 	width=&#34;1182&#34;
 	height=&#34;641&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -74,10 +74,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;生成myblog文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
 	width=&#34;818&#34;
 	height=&#34;166&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	

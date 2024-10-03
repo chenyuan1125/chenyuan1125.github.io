@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Lee</title>
-        <link>https://chenyuan1125.github.io/</link>
+        <link>http://chenyuan1125.github.io/</link>
         <description>Recent content on Lee</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://chenyuan1125.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://chenyuan1125.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CSAPP:attack实验</title>
-        <link>https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
+        <link>http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg" alt="Featured image of post CSAPP:attack实验" /&gt;&lt;h1 id=&#34;attack-lab&#34;&gt;Attack lab
+        <guid>http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg" alt="Featured image of post CSAPP:attack实验" /&gt;&lt;h1 id=&#34;attack-lab&#34;&gt;Attack lab
 &lt;/h1&gt;&lt;p&gt;该实验在我电脑的wsl的ubuntu操作系统下无法正常运行，在debian环境下能正常运行，注意运行时要加上-q&lt;/p&gt;
 &lt;h2 id=&#34;part-icode-injection-attacks&#34;&gt;Part I:Code Injection Attacks
 &lt;/h2&gt;&lt;h3 id=&#34;level-1&#34;&gt;Level 1
@@ -75,12 +75,16 @@
 &lt;/div&gt;&lt;h3 id=&#34;level-2&#34;&gt;Level 2
 &lt;/h3&gt;&lt;p&gt;level2需要将vlevel的值改成cookie值，再return到touch2函数入口处。&lt;/p&gt;
 &lt;p&gt;修改后的rsp寄存器如下所示：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/phase2.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2.png&#34;
+	width=&#34;743&#34;
+	height=&#34;584&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu13663029604867286409.png 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu11577064378276042830.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;127&#34;
+		data-flex-basis=&#34;305px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;phase_2.txt文件&lt;/p&gt;
@@ -306,25 +310,33 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;针对这些防御措施，文档提供了攻击策略，即&lt;strong&gt;ROP：面向返回的程序设计&lt;/strong&gt;，就是在已经存在的程序中找到特定的以&lt;code&gt;ret&lt;/code&gt;结尾的指令序列为我们所用，称这样的代码段为&lt;code&gt;gadget&lt;/code&gt;，把要用到部分的地址压入栈中，每次&lt;code&gt;ret&lt;/code&gt;后又会取出一个新的&lt;code&gt;gadget&lt;/code&gt;，于是这样就能形成一个程序链，实现我们的目的。&lt;strong&gt;我喜欢将这种攻击方式称作“就地取材，拼凑代码”&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240224165336733.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733.png&#34;
+	width=&#34;1029&#34;
+	height=&#34;582&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu7106984471997724594.png 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu16357492657825526984.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240224165336733&#34;
 	
 	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;176&#34;
+		data-flex-basis=&#34;424px&#34;
+	
 &gt;&lt;/p&gt;
 &lt;p&gt;同时也给出指令编码表&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240224165427601.png&#34;
-	
-	
-	
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601.png&#34;
+	width=&#34;1117&#34;
+	height=&#34;1141&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu3870573879609345137.png 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu11996603093128378326.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240224165427601&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;97&#34;
+		data-flex-basis=&#34;234px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;举个例子：&lt;/strong&gt;&lt;/p&gt;
@@ -401,14 +413,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp&#34;
-	
-	
-	
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp&#34;
+	width=&#34;1241&#34;
+	height=&#34;726&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu2488226402346328207.webp 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu10118464121499149602.webp 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;img&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;170&#34;
+		data-flex-basis=&#34;410px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;逻辑如下：&lt;/p&gt;
@@ -657,14 +673,18 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;按理说后面是91不是90(nop)，所以不能取，但在x86汇编中，0x91 表示 xchg eax, ecx 指令。这条指令的作用是交换 %eax 和 %ecx 寄存器的值。不影响寄存器的值，所以可以。&lt;/p&gt;
 &lt;h3 id=&#34;栈帧讲解-1&#34;&gt;栈帧讲解
-&lt;/h3&gt;&lt;p&gt;为节省空间，每一行代码都省略了后面的&lt;code&gt;ret&lt;/code&gt;，&lt;img src=&#34;https://chenyuan1125.github.io/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp&#34;
-	
-	
-	
+&lt;/h3&gt;&lt;p&gt;为节省空间，每一行代码都省略了后面的&lt;code&gt;ret&lt;/code&gt;，&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp&#34;
+	width=&#34;1132&#34;
+	height=&#34;796&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu9797061224875917748.webp 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu17673280219868860253.webp 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;img&#34;
 	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;142&#34;
+		data-flex-basis=&#34;341px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;逻辑在图上标的很清楚，这里就不再用文字写啦！&lt;/p&gt;
@@ -713,11 +733,11 @@
         </item>
         <item>
         <title>CSAPP:bomb实验</title>
-        <link>https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</link>
+        <link>http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:bomb实验" /&gt;&lt;h1 id=&#34;bomb实验&#34;&gt;Bomb实验
+        <guid>http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:bomb实验" /&gt;&lt;h1 id=&#34;bomb实验&#34;&gt;Bomb实验
 &lt;/h1&gt;&lt;h2 id=&#34;题目解析&#34;&gt;题目解析
 &lt;/h2&gt;&lt;p&gt;注意：本人所写的注释可能有些错误，有问题还请大家批评指正，注释中*的用法和C语言类似，有些寄存器名称没有带%&lt;/p&gt;
 &lt;p&gt;题目只给了一个main函数，我们可以大致看出来，它的模式是从某个地方读取字符串，然后作为参数输入每个关卡&lt;code&gt;phase_&lt;/code&gt;，进行验证。具体的情况没有显示，说明我们需要通过某种手段去进行探查：&lt;/p&gt;
@@ -748,10 +768,10 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;说明可以通过文件读取的方式进行读取。&lt;/p&gt;
 &lt;p&gt;寄存器说明：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png&#34;
 	width=&#34;1724&#34;
 	height=&#34;804&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu9272793004077583584.png 480w, https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu2869656510892282907.png 1024w&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu9272793004077583584.png 480w, http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu2869656510892282907.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240106202523168&#34;
@@ -762,10 +782,10 @@
 		data-flex-basis=&#34;514px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png&#34;
 	width=&#34;1736&#34;
 	height=&#34;789&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu4644931881825792889.png 480w, https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu14912383351731075300.png 1024w&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu4644931881825792889.png 480w, http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu14912383351731075300.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240107114435272&#34;
@@ -1934,11 +1954,11 @@
         </item>
         <item>
         <title>个人博客搭建</title>
-        <link>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
+        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
+        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
 &lt;/h2&gt;&lt;p&gt;Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。&lt;/p&gt;
 &lt;p&gt;Hugo中文文档地址： &lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.gohugo.org&lt;/a&gt;&lt;/p&gt;
@@ -1953,10 +1973,10 @@
 &lt;/ul&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
 	width=&#34;1182&#34;
 	height=&#34;641&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -1999,10 +2019,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;生成myblog文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
 	width=&#34;818&#34;
 	height=&#34;166&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
+	srcset=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -2152,11 +2172,11 @@
         </item>
         <item>
         <title>个人简历</title>
-        <link>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/</link>
+        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 个人简历" /&gt;&lt;h2 id=&#34;自我介绍&#34;&gt;自我介绍
+        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 个人简历" /&gt;&lt;h2 id=&#34;自我介绍&#34;&gt;自我介绍
 &lt;/h2&gt;&lt;div style=&#34;float:right&#34;&gt;
     &lt;img src=&#34;头像.jpg&#34; width=&#34;150&#34;&gt;
 &lt;/div&gt;
@@ -2217,18 +2237,18 @@
         </item>
         <item>
         <title>Archives</title>
-        <link>https://chenyuan1125.github.io/archives/</link>
+        <link>http://chenyuan1125.github.io/archives/</link>
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/archives/</guid>
+        <guid>http://chenyuan1125.github.io/archives/</guid>
         <description></description>
         </item>
         <item>
         <title>About</title>
-        <link>https://chenyuan1125.github.io/about/</link>
+        <link>http://chenyuan1125.github.io/about/</link>
         <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/about/</guid>
+        <guid>http://chenyuan1125.github.io/about/</guid>
         <description>&lt;p&gt;Written in Go, Hugo is an open source static site generator available under the &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio/hugo/blob/master/LICENSE&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Apache License 2.0.&lt;/a&gt; Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.&lt;/p&gt;
 &lt;p&gt;Hugo makes use of a variety of open source projects including:&lt;/p&gt;
@@ -2253,18 +2273,18 @@
         </item>
         <item>
         <title>Links</title>
-        <link>https://chenyuan1125.github.io/links/</link>
+        <link>http://chenyuan1125.github.io/links/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/links/</guid>
+        <guid>http://chenyuan1125.github.io/links/</guid>
         <description></description>
         </item>
         <item>
         <title>Search</title>
-        <link>https://chenyuan1125.github.io/search/</link>
+        <link>http://chenyuan1125.github.io/search/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/search/</guid>
+        <guid>http://chenyuan1125.github.io/search/</guid>
         <description></description>
         </item>
         

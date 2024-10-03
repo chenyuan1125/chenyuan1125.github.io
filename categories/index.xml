@@ -2,42 +2,42 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Categories on Lee</title>
-        <link>https://chenyuan1125.github.io/categories/</link>
+        <link>http://chenyuan1125.github.io/categories/</link>
         <description>Recent content in Categories on Lee</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://chenyuan1125.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://chenyuan1125.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>实验</title>
-        <link>https://chenyuan1125.github.io/categories/%E5%AE%9E%E9%AA%8C/</link>
+        <link>http://chenyuan1125.github.io/categories/%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/categories/%E5%AE%9E%E9%AA%8C/</guid>
+        <guid>http://chenyuan1125.github.io/categories/%E5%AE%9E%E9%AA%8C/</guid>
         <description></description>
         </item>
         <item>
         <title>教程</title>
-        <link>https://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/</link>
+        <link>http://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/</guid>
+        <guid>http://chenyuan1125.github.io/categories/%E6%95%99%E7%A8%8B/</guid>
         <description></description>
         </item>
         <item>
         <title>碎碎念</title>
-        <link>https://chenyuan1125.github.io/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
+        <link>http://chenyuan1125.github.io/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</guid>
+        <guid>http://chenyuan1125.github.io/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</guid>
         <description></description>
         </item>
         <item>
         <title>Test</title>
-        <link>https://chenyuan1125.github.io/categories/test/</link>
+        <link>http://chenyuan1125.github.io/categories/test/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/categories/test/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
+        <guid>http://chenyuan1125.github.io/categories/test/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
         </item>
         
     </channel>

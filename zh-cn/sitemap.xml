@@ -2,64 +2,64 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://chenyuan1125.github.io/zh-cn/</loc>
+    <loc>http://chenyuan1125.github.io/zh-cn/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://chenyuan1125.github.io/"
+                href="http://chenyuan1125.github.io/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://chenyuan1125.github.io/zh-cn/"
+                href="http://chenyuan1125.github.io/zh-cn/"
                 />
   </url><url>
-    <loc>https://chenyuan1125.github.io/zh-cn/categories/</loc>
+    <loc>http://chenyuan1125.github.io/zh-cn/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://chenyuan1125.github.io/categories/"
+                href="http://chenyuan1125.github.io/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://chenyuan1125.github.io/zh-cn/categories/"
+                href="http://chenyuan1125.github.io/zh-cn/categories/"
                 />
   </url><url>
-    <loc>https://chenyuan1125.github.io/zh-cn/page/</loc>
+    <loc>http://chenyuan1125.github.io/zh-cn/page/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://chenyuan1125.github.io/page/"
+                href="http://chenyuan1125.github.io/page/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://chenyuan1125.github.io/zh-cn/page/"
+                href="http://chenyuan1125.github.io/zh-cn/page/"
                 />
   </url><url>
-    <loc>https://chenyuan1125.github.io/zh-cn/tags/</loc>
+    <loc>http://chenyuan1125.github.io/zh-cn/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://chenyuan1125.github.io/tags/"
+                href="http://chenyuan1125.github.io/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://chenyuan1125.github.io/zh-cn/tags/"
+                href="http://chenyuan1125.github.io/zh-cn/tags/"
                 />
   </url><url>
-    <loc>https://chenyuan1125.github.io/zh-cn/%E5%85%B3%E4%BA%8E/</loc>
+    <loc>http://chenyuan1125.github.io/zh-cn/%E5%85%B3%E4%BA%8E/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://chenyuan1125.github.io/about/"
+                href="http://chenyuan1125.github.io/about/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://chenyuan1125.github.io/zh-cn/%E5%85%B3%E4%BA%8E/"
+                href="http://chenyuan1125.github.io/zh-cn/%E5%85%B3%E4%BA%8E/"
                 />
   </url>
 </urlset>
