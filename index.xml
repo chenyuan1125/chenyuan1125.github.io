@@ -6,8 +6,7 @@
         <description>Recent content on Lee</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 29 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="http://chenyuan1125.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <copyright>Lee</copyright><atom:link href="http://chenyuan1125.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CSAPP:attack实验</title>
         <link>http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
@@ -1953,12 +1952,61 @@
 </description>
         </item>
         <item>
+        <title>个人介绍</title>
+        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D/</link>
+        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
+        
+        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D/</guid>
+        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D/1.jpg" alt="Featured image of post 个人介绍" /&gt;&lt;h2 id=&#34;校园经历&#34;&gt;校园经历
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;2019.09 - 2021.06&lt;/strong&gt;                &lt;strong&gt;社会实践部部长&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;处理学院社会实践等相关事宜&lt;/li&gt;
+&lt;li&gt;带领志愿服务团队开展志愿服务活动&lt;/li&gt;
+&lt;li&gt;组织团队参加志愿服务大赛并荣获湖南省志愿服务大赛金奖。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;2021.06 - 2022.06&lt;/strong&gt;                &lt;strong&gt;校园招聘助理&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;负责对接学校承办的各类招聘会，通过与企业的沟通为学生筛选出优质企业&lt;/li&gt;
+&lt;li&gt;同时向企业推荐一些优秀毕业生，从而提高学校的就业水平和质量，营造良好的就业氛围&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;2021.09 - 2022.06&lt;/strong&gt;             &lt;strong&gt;可视化智慧农业小程序项目负责人&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;带领项目团队参加挑战杯大学生课外学术科技作品竞赛&lt;/li&gt;
+&lt;li&gt;主要负责微信小程序的后台开发&lt;/li&gt;
+&lt;li&gt;软件架构：SpringBoot+MyBatis+Maven+Redis+Vue+jdk1.8&lt;/li&gt;
+&lt;li&gt;利用ffmpeg实现实时视频的推流和拉流&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;荣誉奖项&#34;&gt;荣誉奖项
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;国家级：国家励志奖学金&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;省级：湖南省志愿服务大赛金奖&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;校级：优秀学生干部、优秀青年志愿者、三好学生、“挑战杯”大学生课外学术科技作品竞赛二等奖、&amp;ldquo;互联网+&amp;ldquo;创新创业竞赛二等奖、&amp;ldquo;创青春&amp;quot;大学生创业计划竞赛二等奖、暑假&amp;quot;三下乡&amp;quot;社会实践活动&amp;quot;优秀个人&amp;rdquo;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;专业技能&#34;&gt;专业技能
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;熟悉Java，熟悉Spring、SpringMVC、SpringBoot、Mybatis-plus等常用开源框架&lt;/li&gt;
+&lt;li&gt;熟悉MySQL，能够熟练编写sql语句，了解Redis等缓存技术&lt;/li&gt;
+&lt;li&gt;熟悉JQuery、JavaScript、JSP、ajax、css、xml等web技术&lt;/li&gt;
+&lt;li&gt;熟悉常见的开发辅助工具Git、maven等&lt;/li&gt;
+&lt;li&gt;熟悉tomcat，掌握常用的通信协议，了解常用设计模式，数据结构及算法&lt;/li&gt;
+&lt;li&gt;熟悉Linux环境，基本操作，服务器环境搭建及部署，了解Linux开发和shell编程。&lt;/li&gt;
+&lt;li&gt;熟悉抓包、爬虫、利用ffmpeg进行音视频开发&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>个人博客搭建</title>
         <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
         <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
-        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/matt-le-SJSpo9hQf7s-unsplash.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
+        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
 &lt;/h2&gt;&lt;p&gt;Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。&lt;/p&gt;
 &lt;p&gt;Hugo中文文档地址： &lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.gohugo.org&lt;/a&gt;&lt;/p&gt;
@@ -2142,7 +2190,7 @@
 &lt;h2 id=&#34;更新博客&#34;&gt;更新博客
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;在博客目录下使用 hugo &amp;ndash;baseUrl=&amp;ldquo;https://你的github名字.github.io/&amp;ldquo;覆盖原来的public文件夹&lt;/p&gt;
+&lt;p&gt;在博客目录下使用 hugo &amp;ndash;baseURL=&amp;ldquo;https://你的github名字.github.io/&amp;ldquo;覆盖原来的public文件夹&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;进入public文件夹右键git bash
@@ -2168,71 +2216,6 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-</description>
-        </item>
-        <item>
-        <title>个人简历</title>
-        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/</link>
-        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-        
-        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/</guid>
-        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/helena-hertz-wWZzXlDpMog-unsplash.jpg" alt="Featured image of post 个人简历" /&gt;&lt;h2 id=&#34;自我介绍&#34;&gt;自我介绍
-&lt;/h2&gt;&lt;div style=&#34;float:right&#34;&gt;
-    &lt;img src=&#34;头像.jpg&#34; width=&#34;150&#34;&gt;
-&lt;/div&gt;
-**基本信息：** 李俊/ 男/ 21&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;&amp;emsp;**现&amp;ensp;在&amp;ensp;地：** 湖南岳阳
-&lt;p&gt;&lt;strong&gt;邮 箱：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;mailto:1321352582@qq.com&#34; &gt;1321352582@qq.com&lt;/a&gt;   &lt;strong&gt;手 机 号：&lt;/strong&gt; 18007304397&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;证  书：&lt;/strong&gt; 英语六级、普通话二乙、计算机三级   &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;GitHub：&lt;/strong&gt; &lt;a class=&#34;link&#34; href=&#34;https://github.com/chenyuan1125&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/chenyuan1125&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;教育背景&#34;&gt;教育背景
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;湖南理工学院&lt;/strong&gt;     &lt;strong&gt;2019.09-2023.06&lt;/strong&gt;     &lt;strong&gt;计算机科学与技术专业&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;主修课程：计算机网络原理(94)、计算机系统结构(90)、数据库原理(92)、计算机组成原理、操作系统、数据结构、编译原理&lt;/li&gt;
-&lt;li&gt;平均绩点：3.49/4               专业排名：3/61&lt;/li&gt;
-&lt;li&gt;毕业论文：基于Linux的实时视频流传输服务&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;校园经历&#34;&gt;校园经历
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;2019.09 - 2021.06&lt;/strong&gt;                &lt;strong&gt;社会实践部部长&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;处理学院社会实践等相关事宜&lt;/li&gt;
-&lt;li&gt;带领志愿服务团队开展志愿服务活动&lt;/li&gt;
-&lt;li&gt;组织团队参加志愿服务大赛并荣获湖南省志愿服务大赛金奖。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;2021.06 - 2022.06&lt;/strong&gt;                &lt;strong&gt;校园招聘助理&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;负责对接学校承办的各类招聘会，通过与企业的沟通为学生筛选出优质企业&lt;/li&gt;
-&lt;li&gt;同时向企业推荐一些优秀毕业生，从而提高学校的就业水平和质量，营造良好的就业氛围&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;2021.09 - 2022.06&lt;/strong&gt;             &lt;strong&gt;可视化智慧农业小程序项目负责人&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;带领项目团队参加挑战杯大学生课外学术科技作品竞赛&lt;/li&gt;
-&lt;li&gt;主要负责微信小程序的后台开发&lt;/li&gt;
-&lt;li&gt;软件架构：SpringBoot+MyBatis+Maven+Redis+Vue+jdk1.8&lt;/li&gt;
-&lt;li&gt;利用ffmpeg实现实时视频的推流和拉流&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;荣誉奖项&#34;&gt;荣誉奖项
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;国家级：国家励志奖学金&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;省级：湖南省志愿服务大赛金奖&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;校级：优秀学生干部、优秀青年志愿者、三好学生、“挑战杯”大学生课外学术科技作品竞赛二等奖、&amp;ldquo;互联网+&amp;ldquo;创新创业竞赛二等奖、&amp;ldquo;创青春&amp;quot;大学生创业计划竞赛二等奖、暑假&amp;quot;三下乡&amp;quot;社会实践活动&amp;quot;优秀个人&amp;rdquo;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;专业技能&#34;&gt;专业技能
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;熟悉Java，熟悉Spring、SpringMVC、SpringBoot、Mybatis-plus等常用开源框架&lt;/li&gt;
-&lt;li&gt;熟悉MySQL，能够熟练编写sql语句，了解Redis等缓存技术&lt;/li&gt;
-&lt;li&gt;熟悉JQuery、JavaScript、JSP、ajax、css、xml等web技术&lt;/li&gt;
-&lt;li&gt;熟悉常见的开发辅助工具Git、maven等&lt;/li&gt;
-&lt;li&gt;熟悉tomcat，掌握常用的通信协议，了解常用设计模式，数据结构及算法&lt;/li&gt;
-&lt;li&gt;熟悉Linux环境，基本操作，服务器环境搭建及部署，了解Linux开发和shell编程。&lt;/li&gt;
-&lt;li&gt;熟悉抓包、爬虫、利用ffmpeg进行音视频开发&lt;/li&gt;
-&lt;/ul&gt;
 </description>
         </item>
         <item>
