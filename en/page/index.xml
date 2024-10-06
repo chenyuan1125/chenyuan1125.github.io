@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Pages on Lee</title>
+        <link>chenyuan1125.github.io/en/page/</link>
+        <description>Recent content in Pages on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Thu, 03 Oct 2024 12:15:29 +0800</lastBuildDate><atom:link href="chenyuan1125.github.io/en/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>归档</title>
+        <link>chenyuan1125.github.io/en/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/en/archives/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>关于</title>
+        <link>chenyuan1125.github.io/en/%E5%85%B3%E4%BA%8E/</link>
+        <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/en/%E5%85%B3%E4%BA%8E/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>搜索</title>
+        <link>chenyuan1125.github.io/en/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/en/search/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>链接</title>
+        <link>chenyuan1125.github.io/en/%E9%93%BE%E6%8E%A5/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/en/%E9%93%BE%E6%8E%A5/</guid>
+        <description></description>
+        </item>
+        
+    </channel>
+</rss>

