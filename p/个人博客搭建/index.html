@@ -10,7 +10,7 @@
 <meta property='og:description' content="利用Hugo在github上搭建博客">
 <meta property='og:url' content='https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/'>
 <meta property='og:site_name' content='尘'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hugo教程' /><meta property='article:published_time' content='2023-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-10-05T21:29:59&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Hugo教程' /><meta property='article:published_time' content='2023-03-09T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-10-08T21:59:08&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg' />
 <meta name="twitter:title" content="个人博客搭建">
 <meta name="twitter:description" content="利用Hugo在github上搭建博客"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg' />
@@ -297,6 +297,8 @@
     <li><a href="#创建文章">创建文章</a></li>
     <li><a href="#部署到服务器">部署到服务器</a></li>
     <li><a href="#更新博客">更新博客</a></li>
+    <li><a href="#添加评论功能">添加评论功能</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
   </ol>
 </nav>
         </div>
@@ -501,6 +503,8 @@
 </ul>
 <h2 id="hugo主题下载">Hugo主题下载
 </h2><p>官方网址：https://www.gohugo.org/theme/</p>
+<p>我这里下载的是：<a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack"  target="_blank" rel="noopener"
+    >CaiJimmy/hugo-theme-stack: Card-style Hugo theme designed for bloggers (github.com)</a></p>
 <p>建议安装方法：</p>
 <ul>
 <li>
@@ -634,6 +638,17 @@
 </ul>
 </li>
 </ol>
+<h2 id="添加评论功能">添加评论功能
+</h2><p>可参考这篇博客：<a class="link" href="https://blog.xseven.top/posts/vercel-deploy-waline.html"  target="_blank" rel="noopener"
+    >使用vercel搭建属于自己的waline评论系统 | 叉七的叨叨哔 (xseven.top)</a></p>
+<p>如果评论无法正常显示，则可能是引文vercel.app被DNS污染导致无法使用，需要自行配置域名，具体解决方案可查看这篇博客。</p>
+<p><a class="link" href="https://izumi.vip/2022/11/12/Waline%e5%9b%bd%e5%86%85IP%e6%97%a0%e6%b3%95%e8%af%84%e8%ae%ba%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88/index.html"  target="_blank" rel="noopener"
+    >Waline国内IP无法评论的解决方案(LeanCloud国际版/Vercel) | 泉子的理想乡 (izumi.vip)</a></p>
+<h2 id="参考资料">参考资料
+</h2><p><a class="link" href="https://brume.top/p/build-your-personal-blog-with-hugo/#%e4%b8%8b%e8%bd%bd%e5%b9%b6%e5%ae%89%e8%a3%85-hugo"  target="_blank" rel="noopener"
+    >从零到一，用 Hugo 打造你的个人网站 (brume.top)</a></p>
+<p><a class="link" href="https://krislinzhao.github.io/docs/create-a-wesite-using-github-pages-and-hugo/"  target="_blank" rel="noopener"
+    >如何用 GitHub Pages + Hugo 搭建个人博客 · KrislinBlog (krislinzhao.github.io)</a></p>
 
 </section>
 
@@ -669,7 +684,7 @@
 
 
         <span>
-            最后更新于 Oct 05, 2024 21:29 CST
+            最后更新于 Oct 08, 2024 21:59 CST
         </span>
     </section></footer>
 
@@ -724,7 +739,7 @@
     }
 </style><script type="module">
     import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
-    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"谢谢你的支持"},"pageview":true,"requiredMeta":["name","email","url"],"serverURL":"https://chenyuan1125.top","visitor":true});
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://chenyuan1125.top","visitor":true});
 </script>
 
     

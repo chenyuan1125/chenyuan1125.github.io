@@ -89,6 +89,8 @@
 &lt;/ul&gt;
 &lt;h2 id=&#34;hugo主题下载&#34;&gt;Hugo主题下载
 &lt;/h2&gt;&lt;p&gt;官方网址：https://www.gohugo.org/theme/&lt;/p&gt;
+&lt;p&gt;我这里下载的是：&lt;a class=&#34;link&#34; href=&#34;https://github.com/CaiJimmy/hugo-theme-stack&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CaiJimmy/hugo-theme-stack: Card-style Hugo theme designed for bloggers (github.com)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;建议安装方法：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -222,6 +224,17 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h2 id=&#34;添加评论功能&#34;&gt;添加评论功能
+&lt;/h2&gt;&lt;p&gt;可参考这篇博客：&lt;a class=&#34;link&#34; href=&#34;https://blog.xseven.top/posts/vercel-deploy-waline.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;使用vercel搭建属于自己的waline评论系统 | 叉七的叨叨哔 (xseven.top)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;如果评论无法正常显示，则可能是引文vercel.app被DNS污染导致无法使用，需要自行配置域名，具体解决方案可查看这篇博客。&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://izumi.vip/2022/11/12/Waline%e5%9b%bd%e5%86%85IP%e6%97%a0%e6%b3%95%e8%af%84%e8%ae%ba%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88/index.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Waline国内IP无法评论的解决方案(LeanCloud国际版/Vercel) | 泉子的理想乡 (izumi.vip)&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://brume.top/p/build-your-personal-blog-with-hugo/#%e4%b8%8b%e8%bd%bd%e5%b9%b6%e5%ae%89%e8%a3%85-hugo&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;从零到一，用 Hugo 打造你的个人网站 (brume.top)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://krislinzhao.github.io/docs/create-a-wesite-using-github-pages-and-hugo/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;如何用 GitHub Pages + Hugo 搭建个人博客 · KrislinBlog (krislinzhao.github.io)&lt;/a&gt;&lt;/p&gt;
 </description>
         </item>
         
