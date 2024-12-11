@@ -10,7 +10,7 @@
 <meta property='og:description' content="深入分析containerd源码">
 <meta property='og:url' content='https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/'>
 <meta property='og:site_name' content='尘'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='containerd' /><meta property='article:published_time' content='2024-10-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-10-23T19:40:54&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='containerd' /><meta property='article:published_time' content='2024-10-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-11T19:43:23&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg' />
 <meta name="twitter:title" content="containerd通信机制分析">
 <meta name="twitter:description" content="深入分析containerd源码"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg' />
@@ -291,59 +291,59 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#1-简述">1 简述</a></li>
-    <li><a href="#2-grpc框架原理">2 gRPC框架原理</a>
+    <li><a href="#简述">简述</a></li>
+    <li><a href="#grpc框架原理">gRPC框架原理</a>
       <ol>
-        <li><a href="#21-grpc-的工作流程">2.1 <strong>gRPC 的工作流程</strong></a>
+        <li><a href="#grpc-的工作流程">gRPC 的工作流程</a>
           <ol>
-            <li><a href="#211-服务定义与接口生成">2.1.1 <strong>服务定义与接口生成</strong></a></li>
-            <li><a href="#212-grpc-服务的实现">2.1.2 <strong>gRPC 服务的实现</strong></a></li>
-            <li><a href="#213-grpc-通信机制">2.1.3 <strong>gRPC 通信机制</strong></a></li>
-            <li><a href="#214-关键应用场景">2.1.4 <strong>关键应用场景</strong></a></li>
+            <li><a href="#服务定义与接口生成">服务定义与接口生成</a></li>
+            <li><a href="#grpc-服务的实现">gRPC 服务的实现</a></li>
+            <li><a href="#grpc-通信机制">gRPC 通信机制</a></li>
+            <li><a href="#关键应用场景">关键应用场景</a></li>
           </ol>
         </li>
       </ol>
     </li>
-    <li><a href="#3-grpc中使用uds的场景">3 gRPC中使用UDS的场景</a>
+    <li><a href="#grpc中使用uds的场景">gRPC中使用UDS的场景</a>
       <ol>
-        <li><a href="#31-containerd-守护进程与客户端之间的通信">3.1 <strong><code>containerd</code> 守护进程与客户端之间的通信</strong></a></li>
-        <li><a href="#32-containerd-shim-与-containerd-守护进程之间的通信">3.2 <strong><code>containerd-shim</code> 与 <code>containerd</code> 守护进程之间的通信</strong></a></li>
-        <li><a href="#33-containerd-插件与外部服务的通信">3.3 <strong><code>containerd</code> 插件与外部服务的通信</strong></a></li>
-        <li><a href="#34-守护进程之间的通信">3.4 <strong>守护进程之间的通信</strong></a></li>
+        <li><a href="#containerd-守护进程与客户端之间的通信"><code>containerd</code> 守护进程与客户端之间的通信</a></li>
+        <li><a href="#containerd-shim-与-containerd-守护进程之间的通信"><code>containerd-shim</code> 与 <code>containerd</code> 守护进程之间的通信</a></li>
+        <li><a href="#containerd-插件与外部服务的通信"><code>containerd</code> 插件与外部服务的通信</a></li>
+        <li><a href="#守护进程之间的通信">守护进程之间的通信</a></li>
       </ol>
     </li>
-    <li><a href="#4-containerd源码分析">4 containerd源码分析</a>
+    <li><a href="#containerd源码分析">containerd源码分析</a>
       <ol>
-        <li><a href="#41-containerd启动流程">4.1 <strong>containerd启动流程</strong></a></li>
-        <li><a href="#42-client与containerd守护进程的通信">4.2 client与containerd守护进程的通信</a></li>
+        <li><a href="#containerd启动流程">containerd启动流程</a></li>
+        <li><a href="#client与containerd守护进程的通信">client与containerd守护进程的通信</a></li>
       </ol>
     </li>
-    <li><a href="#5-grpc框架中的rpc通信">5 gRPC框架中的RPC通信</a>
+    <li><a href="#grpc框架中的rpc通信">gRPC框架中的RPC通信</a>
       <ol>
-        <li><a href="#51-grpc-go-中-rpc-通信">5.1 gRPC-Go 中 RPC 通信</a>
+        <li><a href="#grpc-go-中-rpc-通信">gRPC-Go 中 RPC 通信</a>
           <ol>
-            <li><a href="#511-go-版本-grpc-通信机制概述">5.1.1 Go 版本 gRPC 通信机制概述</a></li>
-            <li><a href="#512-go-grpc-源码结构">5.1.2 Go gRPC 源码结构</a></li>
-            <li><a href="#513-grpc-go-中-rpc-通信流程的源码分析">5.1.3 gRPC-Go 中 RPC 通信流程的源码分析</a></li>
+            <li><a href="#go版本grpc通信机制概述">Go版本gRPC通信机制概述</a></li>
+            <li><a href="#go版本grpc源码结构">Go版本gRPC源码结构</a></li>
+            <li><a href="#grpc-go-中-rpc-通信流程的源码分析">gRPC-Go 中 RPC 通信流程的源码分析</a></li>
           </ol>
         </li>
       </ol>
     </li>
-    <li><a href="#6-containerd与containerd-shim通信机制">6 Containerd与Containerd-shim通信机制</a>
+    <li><a href="#containerd与containerd-shim通信机制">Containerd与Containerd-shim通信机制</a>
       <ol>
-        <li><a href="#1-ttrpc">1. <strong>ttRPC</strong></a></li>
-        <li><a href="#2-unix-域套接字">2. <strong>Unix 域套接字</strong></a></li>
-        <li><a href="#3-容器生命周期管理">3. <strong>容器生命周期管理</strong></a></li>
-        <li><a href="#4-容器与守护进程的分离">4. <strong>容器与守护进程的分离</strong></a></li>
+        <li><a href="#ttrpc">ttRPC</a></li>
+        <li><a href="#unix-域套接字">Unix 域套接字</a></li>
+        <li><a href="#容器生命周期管理">容器生命周期管理</a></li>
+        <li><a href="#容器与守护进程的分离">容器与守护进程的分离</a></li>
       </ol>
     </li>
-    <li><a href="#7-containerd-shim与container通信机制">7 Containerd-shim与Container通信机制</a>
+    <li><a href="#containerd-shim与container通信机制">Containerd-shim与Container通信机制</a>
       <ol>
         <li><a href="#通信流程">通信流程</a></li>
         <li><a href="#源码解析">源码解析</a></li>
       </ol>
     </li>
-    <li><a href="#8-容器启动流程分析">8 容器启动流程分析</a></li>
+    <li><a href="#容器启动流程分析">容器启动流程分析</a></li>
     <li><a href="#问题与解答">问题与解答</a></li>
     <li><a href="#参考资料">参考资料</a></li>
   </ol>
@@ -453,7 +453,7 @@
     
     
     <h1 id="containerd通信机制">containerd通信机制
-</h1><h2 id="1-简述">1 简述
+</h1><h2 id="简述">简述
 </h2><p>Containerd 是一个云原生（容器）领域行业标准容器运行时。以操作系统守护进程方式提供服务，管理一台机器上每个容器生命周期，包括：</p>
 <ul>
 <li>镜像下载和存储。</li>
@@ -490,10 +490,10 @@
 	
 	
 ></p>
-<h2 id="2-grpc框架原理">2 gRPC框架原理
+<h2 id="grpc框架原理">gRPC框架原理
 </h2><p>gRPC（Google Remote Procedure Call）是一个现代化、高性能的远程过程调用（RPC）框架，设计用于在分布式系统中实现跨网络、跨语言的服务调用。它利用了 HTTP/2 和 Protocol Buffers，为开发者提供了一种简便的方式来调用远程服务，就像调用本地函数一样。下面是 gRPC 的基本原理及其关键组件。</p>
-<h3 id="21-grpc-的工作流程">2.1 <strong>gRPC 的工作流程</strong>
-</h3><h4 id="211-服务定义与接口生成">2.1.1 <strong>服务定义与接口生成</strong>
+<h3 id="grpc-的工作流程">gRPC 的工作流程
+</h3><h4 id="服务定义与接口生成">服务定义与接口生成
 </h4><ul>
 <li>
 <p><strong>Protocol Buffers 定义服务</strong>: <code>containerd</code> 使用 Protocol Buffers（protobuf）来定义 gRPC 服务。这些服务接口和消息结构通常定义在 <code>.proto</code> 文件中。例如，<code>containers.proto</code> 文件定义了容器管理的服务接口。</p>
@@ -540,7 +540,7 @@
 <p><strong>生成客户端和服务端代码</strong>: 使用 <code>protoc</code> 编译器，<code>.proto</code> 文件会生成相应的客户端和服务端代码。对于 <code>containerd</code>，这些生成的代码是与 <code>containerd</code> 核心功能集成在一起的，客户端代码通常由外部工具或服务使用。</p>
 </li>
 </ul>
-<h4 id="212-grpc-服务的实现">2.1.2 <strong>gRPC 服务的实现</strong>
+<h4 id="grpc-服务的实现">gRPC 服务的实现
 </h4><ul>
 <li>
 <p><strong>服务实现</strong>: <code>containerd</code> 中每个 gRPC 服务都有一个具体的实现，这些实现负责处理来自客户端的请求并执行相应的操作。服务的实现通常位于 <code>containerd</code> 的 <code>services</code> 目录中，下面是一个示例。</p>
@@ -593,21 +593,21 @@
 </div>
 </div></li>
 </ul>
-<h4 id="213-grpc-通信机制">2.1.3 <strong>gRPC 通信机制</strong>
+<h4 id="grpc-通信机制">gRPC 通信机制
 </h4><ul>
 <li><strong>请求的发送与接收</strong>: 客户端通过生成的 gRPC 客户端代码向 <code>containerd</code> 发送请求。请求通过 gRPC 框架在客户端进行序列化（使用 Protocol Buffers），然后通过底层传输协议（通常是 HTTP/2 over Unix Domain Sockets）发送到 <code>containerd</code>。</li>
 <li><strong>服务器端处理</strong>: <code>containerd</code> 的 gRPC 服务器接收到请求后，将其反序列化为相应的消息对象，并调用对应服务的实现方法进行处理。处理完成后，响应结果再通过 gRPC 返回给客户端。</li>
 <li><strong>连接管理</strong>: gRPC 支持长连接，多个请求可以在同一个连接中并发进行。对于本地通信，<code>containerd</code> 通常使用 Unix Domain Sockets (UDS) 作为传输层，提升通信效率并增强安全性。</li>
 </ul>
-<h4 id="214-关键应用场景">2.1.4 <strong>关键应用场景</strong>
+<h4 id="关键应用场景">关键应用场景
 </h4><ul>
 <li><strong>客户端与 <code>containerd</code> 的通信</strong>: 外部客户端（如 <code>ctr</code> 工具或 Docker 引擎）通过 gRPC 与 <code>containerd</code> 进行通信，执行容器的创建、启动、停止、删除等操作。</li>
 <li><strong><code>containerd</code> 插件的集成</strong>: 插件通过 gRPC 提供服务接口，<code>containerd</code> 核心通过调用这些接口来管理镜像、快照和容器运行时等。</li>
 <li><strong><code>containerd-shim</code> 与 <code>containerd</code> 的通信</strong>: <code>containerd-shim</code> 进程负责管理每个容器的生命周期，与 <code>containerd</code> 核心通过 gRPC 通信来报告容器状态、接收管理命令等。</li>
 </ul>
-<h2 id="3-grpc中使用uds的场景">3 gRPC中使用UDS的场景
+<h2 id="grpc中使用uds的场景">gRPC中使用UDS的场景
 </h2><p>在 <code>containerd</code> 中，Unix Domain Sockets (UDS) 通信通常用于以下场景：</p>
-<h3 id="31-containerd-守护进程与客户端之间的通信">3.1 <strong><code>containerd</code> 守护进程与客户端之间的通信</strong>
+<h3 id="containerd-守护进程与客户端之间的通信"><code>containerd</code> 守护进程与客户端之间的通信
 </h3><ul>
 <li><strong>场景</strong>: <code>containerd</code> 守护进程与外部客户端（如 <code>ctr</code> 工具或 Docker 引擎）之间的通信。</li>
 <li><strong>例子</strong>: 当 Docker 引擎需要与 <code>containerd</code> 交互时，它通过 gRPC 连接到 <code>containerd</code> 的 UDS 地址，如 <code>/run/containerd/containerd.sock</code>，以请求管理容器、镜像、快照等操作。</li>
@@ -619,7 +619,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="32-containerd-shim-与-containerd-守护进程之间的通信">3.2 <strong><code>containerd-shim</code> 与 <code>containerd</code> 守护进程之间的通信</strong>
+<h3 id="containerd-shim-与-containerd-守护进程之间的通信"><code>containerd-shim</code> 与 <code>containerd</code> 守护进程之间的通信
 </h3><ul>
 <li><strong>场景</strong>: 每个容器都有一个 <code>containerd-shim</code> 进程，<code>containerd-shim</code> 负责管理容器的生命周期，而 <code>containerd-shim</code> 与 <code>containerd</code> 守护进程之间的通信也是通过 UDS 实现的。</li>
 <li><strong>例子</strong>: 当 <code>containerd</code> 启动一个新的容器时，它会创建并启动一个对应的 <code>containerd-shim</code> 进程。<code>containerd-shim</code> 通过一个 UDS 与 <code>containerd</code> 进行通信，以报告容器的状态和接受命令。</li>
@@ -630,7 +630,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="33-containerd-插件与外部服务的通信">3.3 <strong><code>containerd</code> 插件与外部服务的通信</strong>
+<h3 id="containerd-插件与外部服务的通信"><code>containerd</code> 插件与外部服务的通信
 </h3><ul>
 <li><strong>场景</strong>: 某些插件可能作为外部服务运行，需要通过 UDS 与 <code>containerd</code> 通信。</li>
 <li><strong>例子</strong>: 一些外部存储插件可能独立运行并通过 UDS 暴露其 gRPC 服务，<code>containerd</code> 通过连接这个 UDS 来调用插件的服务。</li>
@@ -641,7 +641,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="34-守护进程之间的通信">3.4 <strong>守护进程之间的通信</strong>
+<h3 id="守护进程之间的通信">守护进程之间的通信
 </h3><ul>
 <li><strong>场景</strong>: 如果需要在多个守护进程（例如 <code>containerd</code> 和其他依赖服务）之间建立安全且高效的本地通信，可以使用 UDS。</li>
 <li><strong>例子</strong>: 在一些复杂的集群环境中，<code>containerd</code> 可能需要与其他守护进程（如 CRI-O、etcd 等）进行本地通信，这种情况下也可能使用 UDS。</li>
@@ -651,8 +651,8 @@
 </ul>
 </li>
 </ul>
-<h2 id="4-containerd源码分析">4 containerd源码分析
-</h2><h3 id="41-containerd启动流程">4.1 <strong>containerd启动流程</strong>
+<h2 id="containerd源码分析">containerd源码分析
+</h2><h3 id="containerd启动流程">containerd启动流程
 </h3><blockquote>
 <p>文件路径：<code>containerd/cmd/containerd/main.go</code>，整个程序从这里开始启动，调用command.App()函数。</p>
 </blockquote>
@@ -1587,7 +1587,7 @@
 <li><strong>设置所有者</strong>：使用 <code>os.Chown</code> 将目录的所有者和组设置为指定的 <code>uid</code> 和 <code>gid</code>。</li>
 <li><strong>返回结果</strong>：如果所有操作都成功，返回 <code>nil</code>。如果任何步骤出错，则返回相应的错误信息。</li>
 </ul>
-<h3 id="42-client与containerd守护进程的通信">4.2 client与containerd守护进程的通信
+<h3 id="client与containerd守护进程的通信">client与containerd守护进程的通信
 </h3><blockquote>
 <p>文件路径：containerd/client/client.go，这段代码是 <code>containerd</code> 项目中 <code>client</code> 包的实现，负责创建与 <code>containerd</code> 守护进程通信的客户端实例。它包含了与 <code>containerd</code> 进行 gRPC 通信的基础设施，提供了一组方法，用于与 <code>containerd</code> 的各种服务进行交互，例如容器管理、镜像管理、快照管理等。</p>
 </blockquote>
@@ -2158,9 +2158,9 @@
 <li><strong>创建连接</strong>：在后台尝试与目标地址建立连接，并根据连接状态更新 <code>ClientConn</code> 的状态。</li>
 <li><strong>管理连接生命周期</strong>：在连接的生命周期中，<code>ClientConn</code> 会自动处理连接失败、重连、负载均衡等逻辑。</li>
 </ol>
-<h2 id="5-grpc框架中的rpc通信">5 gRPC框架中的RPC通信
-</h2><h3 id="51-grpc-go-中-rpc-通信">5.1 gRPC-Go 中 RPC 通信
-</h3><h4 id="511-go-版本-grpc-通信机制概述">5.1.1 Go 版本 gRPC 通信机制概述
+<h2 id="grpc框架中的rpc通信">gRPC框架中的RPC通信
+</h2><h3 id="grpc-go-中-rpc-通信">gRPC-Go 中 RPC 通信
+</h3><h4 id="go版本grpc通信机制概述">Go版本gRPC通信机制概述
 </h4><p>在 gRPC-Go 中，客户端发起的每一个 RPC 调用都会涉及到以下几个步骤：</p>
 <ol>
 <li><strong>发起 RPC 请求</strong>：客户端创建一个 RPC 调用，并发送元数据和请求数据。</li>
@@ -2168,7 +2168,7 @@
 <li><strong>发送响应</strong>：服务器将响应发送回客户端。</li>
 <li><strong>接收响应</strong>：客户端接收到响应，并将结果返回给用户。</li>
 </ol>
-<h4 id="512-go-grpc-源码结构">5.1.2 Go gRPC 源码结构
+<h4 id="go版本grpc源码结构">Go版本gRPC源码结构
 </h4><p>gRPC-Go 的源码主要分为以下几个模块：</p>
 <ul>
 <li><strong>transport</strong>：负责底层 HTTP/2 传输的实现。</li>
@@ -2176,8 +2176,8 @@
 <li><strong>server</strong> 和 <strong>client</strong>：分别管理 gRPC 服务器和客户端的生命周期。</li>
 <li><strong>codec</strong>：用于消息的编码和解码。</li>
 </ul>
-<h4 id="513-grpc-go-中-rpc-通信流程的源码分析">5.1.3 gRPC-Go 中 RPC 通信流程的源码分析
-</h4><h5 id="1clientconn-的初始化"><strong>1、<code>ClientConn</code> 的初始化</strong>
+<h4 id="grpc-go-中-rpc-通信流程的源码分析">gRPC-Go 中 RPC 通信流程的源码分析
+</h4><h5 id="clientconn-的初始化"><strong><code>ClientConn</code> 的初始化</strong>
 </h5><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2222,7 +2222,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="2rpc-请求的发起"><strong>2、RPC 请求的发起</strong>
+</div><h5 id="rpc-请求的发起"><strong>RPC 请求的发起</strong>
 </h5><p>在 gRPC-Go 中，RPC 请求的发起主要通过 <code>invoke</code> 方法。这个方法位于 <code>google.golang.org/grpc</code> 包的 <code>call.go</code> 文件中：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2251,7 +2251,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>invoke</code> 方法是客户端执行单个 RPC 调用的入口。它首先通过 <code>newClientStream</code> 方法创建一个新的客户端流（<code>ClientStream</code>），然后发送消息并接收响应。</p>
-<h5 id="3创建-clientstream"><strong>3、创建 ClientStream</strong>
+<h5 id="创建-clientstream"><strong>创建 ClientStream</strong>
 </h5><p><code>newClientStream</code> 的实现位于 <code>google.golang.org/grpc</code> 包的 <code>stream.go</code> 文件中，它负责初始化 gRPC 的流：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2290,7 +2290,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里的 <code>NewStream</code> 方法是由 <code>transport</code> 层来处理的，它将创建一个新的 HTTP/2 流，用于后续的消息传输。</p>
-<h5 id="4传输层transport-layer"><strong>4、传输层（Transport Layer）</strong>
+<h5 id="传输层transport-layer"><strong>传输层（Transport Layer）</strong>
 </h5><p>在 gRPC-Go 中，传输层的核心实现位于 <code>transport/http2_client.go</code> 中。这个文件包含了 gRPC 使用 HTTP/2 进行数据传输的核心逻辑。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2333,7 +2333,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>NewStream</code> 方法创建一个新的 HTTP/2 流，并通过 <code>writeHeaders</code> 方法将 gRPC 请求的元数据发送到服务器。</p>
-<h5 id="5消息的发送和接收"><strong>5、消息的发送和接收</strong>
+<h5 id="消息的发送和接收"><strong>消息的发送和接收</strong>
 </h5><p>在客户端流中，消息的发送和接收通过 <code>SendMsg</code> 和 <code>RecvMsg</code> 方法来完成，这些方法同样位于 <code>stream.go</code> 文件中。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2696,7 +2696,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="6-服务器端的处理"><strong>6、 服务器端的处理</strong>
+</div><h5 id="服务器端的处理"><strong>服务器端的处理</strong>
 </h5><p>在服务器端，RPC 调用的处理通过 <code>handleStream</code> 函数进行管理。这个函数位于 <code>server.go</code> 文件中，<code>handleStream</code> 方法处理传入的流，解析客户端的请求，并调用相应的服务方法来生成响应。</p>
 <p><strong>上下文初始化和追踪信息</strong></p>
 <div class="highlight"><div class="chroma">
@@ -3212,9 +3212,9 @@
 <li><strong><code>sd</code> 对象</strong>：<code>sd</code> 是 <code>*StreamDesc</code> 类型的对象，描述了流式 RPC 方法的特性，包括是否是客户端流、是否是服务器端流，以及处理该 RPC 调用的 <code>Handler</code> 函数。</li>
 <li><strong><code>Handler</code> 字段</strong>：<code>sd.Handler</code> 是一个函数类型，用于处理特定的流式 RPC 请求。这个函数是用户在服务注册时提供的，用于执行实际的业务逻辑。</li>
 </ul>
-<h2 id="6-containerd与containerd-shim通信机制">6 Containerd与Containerd-shim通信机制
+<h2 id="containerd与containerd-shim通信机制">Containerd与Containerd-shim通信机制
 </h2><p><code>containerd-shim</code> 和 <code>containerd</code> 之间的通信是容器运行时的核心部分，确保容器的创建、管理和删除等操作能够顺利进行。它们之间的通信主要通过以下方式进行：</p>
-<h3 id="1-ttrpc">1. <strong>ttRPC</strong>
+<h3 id="ttrpc">ttRPC
 </h3><p><code>containerd</code> 和 <code>containerd-shim</code> 之间的通信主要通过一种称为 <code>ttRPC</code> 的轻量级 RPC 框架进行。<code>ttRPC</code> 是 <code>containerd</code> 项目中引入的，专门设计用于高效的进程间通信（IPC），特别是在同一主机上运行的进程之间。</p>
 <ul>
 <li>ttRPC:
@@ -3241,7 +3241,7 @@
 </span></span><span class="line"><span class="cl"><span class="nf">serve</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">tl</span><span class="p">,</span> <span class="nx">server</span><span class="p">.</span><span class="nx">ServeTTRPC</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="2-unix-域套接字">2. <strong>Unix 域套接字</strong>
+</div><h3 id="unix-域套接字">Unix 域套接字
 </h3><p><code>containerd</code> 和 <code>containerd-shim</code> 之间的通信通常通过 Unix 域套接字进行。这种通信方式非常适合同一主机上的进程间通信，具有低延迟和高效的特点。</p>
 <ul>
 <li>Unix 域套接字:
@@ -3251,7 +3251,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="3-容器生命周期管理">3. <strong>容器生命周期管理</strong>
+<h3 id="容器生命周期管理">容器生命周期管理
 </h3><p><code>containerd</code> 通过 <code>ttRPC</code> 和 Unix 域套接字与 <code>containerd-shim</code> 进行通信，以管理容器的生命周期：</p>
 <ul>
 <li>容器创建:
@@ -3270,7 +3270,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="4-容器与守护进程的分离">4. <strong>容器与守护进程的分离</strong>
+<h3 id="容器与守护进程的分离">容器与守护进程的分离
 </h3><p><code>containerd-shim</code> 的存在还使得容器与 <code>containerd</code> 守护进程分离。这意味着：</p>
 <ul>
 <li>独立性:
@@ -3284,7 +3284,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="7-containerd-shim与container通信机制">7 Containerd-shim与Container通信机制
+<h2 id="containerd-shim与container通信机制">Containerd-shim与Container通信机制
 </h2><h3 id="通信流程">通信流程
 </h3><p><code>containerd</code> 通过一个<code>runtime</code>来实现对多个容器的控制，例如 create、start 和 stop。</p>
 <p>通信流程如下：</p>
@@ -4025,7 +4025,7 @@
 		data-flex-basis="1323px"
 	
 ></p>
-<h2 id="8-容器启动流程分析">8 容器启动流程分析
+<h2 id="容器启动流程分析">容器启动流程分析
 </h2><p>分析流程图如下，task.Start没有往下分析，它的函数传递流程与Newtask类似。</p>
 <p><img src="/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98.png"
 	width="4552"
@@ -7059,7 +7059,7 @@
 	
 	loading="lazy"
 	
-		alt="image-20240827113414851"
+		alt="监听uds"
 	
 	
 ></p>
@@ -7069,7 +7069,7 @@
 	
 	loading="lazy"
 	
-		alt="image-20240826095151377"
+		alt="serve函数"
 	
 	
 ></p>
@@ -7085,7 +7085,7 @@
 	
 	loading="lazy"
 	
-		alt="image-20240826104113183"
+		alt="外部插件"
 	
 	
 ></p>
@@ -7095,7 +7095,7 @@
 	
 	loading="lazy"
 	
-		alt="image-20240826104245632"
+		alt="代理插件"
 	
 	
 ></p>
@@ -7220,18 +7220,14 @@
 <p><strong>（事实上containerd应该是不支持systemd的socket activation机制的，github也有人提出过在containerd中加入此机制：<a class="link" href="https://github.com/containerd/containerd/issues/164"  target="_blank" rel="noopener"
     >add socket activation · Issue #164 · containerd/containerd (github.com)</a>）</strong></p>
 <p>一般如果支持socket activation机制的话会有类似下图的逻辑，服务器会先调用sd_listen_fds函数，看systemd是否创建了socket文件，如果创建了就不会再创建了。所以如果使用system的socket activation启动进程，那么就一定是systemd创建socket文件。</p>
-<p><img src="/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240827232023457.png"
-	width="888"
-	height="555"
-	srcset="/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240827232023457_hu4741567155301719914.png 480w, /p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240827232023457_hu7240352696813363171.png 1024w"
+<p><img src="/assets/image-20240827232023457.png"
+	
+	
+	
 	loading="lazy"
 	
 		alt="socket activation代码逻辑"
 	
-	
-		class="gallery-image" 
-		data-flex-grow="160"
-		data-flex-basis="384px"
 	
 ></p>
 <p>具体过程如下：</p>
@@ -7392,7 +7388,7 @@
 
 
         <span>
-            最后更新于 Oct 23, 2024 19:40 CST
+            最后更新于 Dec 11, 2024 19:43 CST
         </span>
     </section></footer>
 

@@ -13,7 +13,7 @@
         
         <guid>https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</guid>
         <description>&lt;img src="https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg" alt="Featured image of post containerd通信机制分析" /&gt;&lt;h1 id=&#34;containerd通信机制&#34;&gt;containerd通信机制
-&lt;/h1&gt;&lt;h2 id=&#34;1-简述&#34;&gt;1 简述
+&lt;/h1&gt;&lt;h2 id=&#34;简述&#34;&gt;简述
 &lt;/h2&gt;&lt;p&gt;Containerd 是一个云原生（容器）领域行业标准容器运行时。以操作系统守护进程方式提供服务，管理一台机器上每个容器生命周期，包括：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;镜像下载和存储。&lt;/li&gt;
@@ -50,10 +50,10 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;2-grpc框架原理&#34;&gt;2 gRPC框架原理
+&lt;h2 id=&#34;grpc框架原理&#34;&gt;gRPC框架原理
 &lt;/h2&gt;&lt;p&gt;gRPC（Google Remote Procedure Call）是一个现代化、高性能的远程过程调用（RPC）框架，设计用于在分布式系统中实现跨网络、跨语言的服务调用。它利用了 HTTP/2 和 Protocol Buffers，为开发者提供了一种简便的方式来调用远程服务，就像调用本地函数一样。下面是 gRPC 的基本原理及其关键组件。&lt;/p&gt;
-&lt;h3 id=&#34;21-grpc-的工作流程&#34;&gt;2.1 &lt;strong&gt;gRPC 的工作流程&lt;/strong&gt;
-&lt;/h3&gt;&lt;h4 id=&#34;211-服务定义与接口生成&#34;&gt;2.1.1 &lt;strong&gt;服务定义与接口生成&lt;/strong&gt;
+&lt;h3 id=&#34;grpc-的工作流程&#34;&gt;gRPC 的工作流程
+&lt;/h3&gt;&lt;h4 id=&#34;服务定义与接口生成&#34;&gt;服务定义与接口生成
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Protocol Buffers 定义服务&lt;/strong&gt;: &lt;code&gt;containerd&lt;/code&gt; 使用 Protocol Buffers（protobuf）来定义 gRPC 服务。这些服务接口和消息结构通常定义在 &lt;code&gt;.proto&lt;/code&gt; 文件中。例如，&lt;code&gt;containers.proto&lt;/code&gt; 文件定义了容器管理的服务接口。&lt;/p&gt;
@@ -100,7 +100,7 @@
 &lt;p&gt;&lt;strong&gt;生成客户端和服务端代码&lt;/strong&gt;: 使用 &lt;code&gt;protoc&lt;/code&gt; 编译器，&lt;code&gt;.proto&lt;/code&gt; 文件会生成相应的客户端和服务端代码。对于 &lt;code&gt;containerd&lt;/code&gt;，这些生成的代码是与 &lt;code&gt;containerd&lt;/code&gt; 核心功能集成在一起的，客户端代码通常由外部工具或服务使用。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;212-grpc-服务的实现&#34;&gt;2.1.2 &lt;strong&gt;gRPC 服务的实现&lt;/strong&gt;
+&lt;h4 id=&#34;grpc-服务的实现&#34;&gt;gRPC 服务的实现
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;strong&gt;服务实现&lt;/strong&gt;: &lt;code&gt;containerd&lt;/code&gt; 中每个 gRPC 服务都有一个具体的实现，这些实现负责处理来自客户端的请求并执行相应的操作。服务的实现通常位于 &lt;code&gt;containerd&lt;/code&gt; 的 &lt;code&gt;services&lt;/code&gt; 目录中，下面是一个示例。&lt;/p&gt;
@@ -153,21 +153,21 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;213-grpc-通信机制&#34;&gt;2.1.3 &lt;strong&gt;gRPC 通信机制&lt;/strong&gt;
+&lt;h4 id=&#34;grpc-通信机制&#34;&gt;gRPC 通信机制
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;请求的发送与接收&lt;/strong&gt;: 客户端通过生成的 gRPC 客户端代码向 &lt;code&gt;containerd&lt;/code&gt; 发送请求。请求通过 gRPC 框架在客户端进行序列化（使用 Protocol Buffers），然后通过底层传输协议（通常是 HTTP/2 over Unix Domain Sockets）发送到 &lt;code&gt;containerd&lt;/code&gt;。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;服务器端处理&lt;/strong&gt;: &lt;code&gt;containerd&lt;/code&gt; 的 gRPC 服务器接收到请求后，将其反序列化为相应的消息对象，并调用对应服务的实现方法进行处理。处理完成后，响应结果再通过 gRPC 返回给客户端。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;连接管理&lt;/strong&gt;: gRPC 支持长连接，多个请求可以在同一个连接中并发进行。对于本地通信，&lt;code&gt;containerd&lt;/code&gt; 通常使用 Unix Domain Sockets (UDS) 作为传输层，提升通信效率并增强安全性。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;214-关键应用场景&#34;&gt;2.1.4 &lt;strong&gt;关键应用场景&lt;/strong&gt;
+&lt;h4 id=&#34;关键应用场景&#34;&gt;关键应用场景
 &lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;客户端与 &lt;code&gt;containerd&lt;/code&gt; 的通信&lt;/strong&gt;: 外部客户端（如 &lt;code&gt;ctr&lt;/code&gt; 工具或 Docker 引擎）通过 gRPC 与 &lt;code&gt;containerd&lt;/code&gt; 进行通信，执行容器的创建、启动、停止、删除等操作。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;containerd&lt;/code&gt; 插件的集成&lt;/strong&gt;: 插件通过 gRPC 提供服务接口，&lt;code&gt;containerd&lt;/code&gt; 核心通过调用这些接口来管理镜像、快照和容器运行时等。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;containerd-shim&lt;/code&gt; 与 &lt;code&gt;containerd&lt;/code&gt; 的通信&lt;/strong&gt;: &lt;code&gt;containerd-shim&lt;/code&gt; 进程负责管理每个容器的生命周期，与 &lt;code&gt;containerd&lt;/code&gt; 核心通过 gRPC 通信来报告容器状态、接收管理命令等。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;3-grpc中使用uds的场景&#34;&gt;3 gRPC中使用UDS的场景
+&lt;h2 id=&#34;grpc中使用uds的场景&#34;&gt;gRPC中使用UDS的场景
 &lt;/h2&gt;&lt;p&gt;在 &lt;code&gt;containerd&lt;/code&gt; 中，Unix Domain Sockets (UDS) 通信通常用于以下场景：&lt;/p&gt;
-&lt;h3 id=&#34;31-containerd-守护进程与客户端之间的通信&#34;&gt;3.1 &lt;strong&gt;&lt;code&gt;containerd&lt;/code&gt; 守护进程与客户端之间的通信&lt;/strong&gt;
+&lt;h3 id=&#34;containerd-守护进程与客户端之间的通信&#34;&gt;&lt;code&gt;containerd&lt;/code&gt; 守护进程与客户端之间的通信
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;: &lt;code&gt;containerd&lt;/code&gt; 守护进程与外部客户端（如 &lt;code&gt;ctr&lt;/code&gt; 工具或 Docker 引擎）之间的通信。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;例子&lt;/strong&gt;: 当 Docker 引擎需要与 &lt;code&gt;containerd&lt;/code&gt; 交互时，它通过 gRPC 连接到 &lt;code&gt;containerd&lt;/code&gt; 的 UDS 地址，如 &lt;code&gt;/run/containerd/containerd.sock&lt;/code&gt;，以请求管理容器、镜像、快照等操作。&lt;/li&gt;
@@ -179,7 +179,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;32-containerd-shim-与-containerd-守护进程之间的通信&#34;&gt;3.2 &lt;strong&gt;&lt;code&gt;containerd-shim&lt;/code&gt; 与 &lt;code&gt;containerd&lt;/code&gt; 守护进程之间的通信&lt;/strong&gt;
+&lt;h3 id=&#34;containerd-shim-与-containerd-守护进程之间的通信&#34;&gt;&lt;code&gt;containerd-shim&lt;/code&gt; 与 &lt;code&gt;containerd&lt;/code&gt; 守护进程之间的通信
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;: 每个容器都有一个 &lt;code&gt;containerd-shim&lt;/code&gt; 进程，&lt;code&gt;containerd-shim&lt;/code&gt; 负责管理容器的生命周期，而 &lt;code&gt;containerd-shim&lt;/code&gt; 与 &lt;code&gt;containerd&lt;/code&gt; 守护进程之间的通信也是通过 UDS 实现的。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;例子&lt;/strong&gt;: 当 &lt;code&gt;containerd&lt;/code&gt; 启动一个新的容器时，它会创建并启动一个对应的 &lt;code&gt;containerd-shim&lt;/code&gt; 进程。&lt;code&gt;containerd-shim&lt;/code&gt; 通过一个 UDS 与 &lt;code&gt;containerd&lt;/code&gt; 进行通信，以报告容器的状态和接受命令。&lt;/li&gt;
@@ -190,7 +190,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;33-containerd-插件与外部服务的通信&#34;&gt;3.3 &lt;strong&gt;&lt;code&gt;containerd&lt;/code&gt; 插件与外部服务的通信&lt;/strong&gt;
+&lt;h3 id=&#34;containerd-插件与外部服务的通信&#34;&gt;&lt;code&gt;containerd&lt;/code&gt; 插件与外部服务的通信
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;: 某些插件可能作为外部服务运行，需要通过 UDS 与 &lt;code&gt;containerd&lt;/code&gt; 通信。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;例子&lt;/strong&gt;: 一些外部存储插件可能独立运行并通过 UDS 暴露其 gRPC 服务，&lt;code&gt;containerd&lt;/code&gt; 通过连接这个 UDS 来调用插件的服务。&lt;/li&gt;
@@ -201,7 +201,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;34-守护进程之间的通信&#34;&gt;3.4 &lt;strong&gt;守护进程之间的通信&lt;/strong&gt;
+&lt;h3 id=&#34;守护进程之间的通信&#34;&gt;守护进程之间的通信
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;场景&lt;/strong&gt;: 如果需要在多个守护进程（例如 &lt;code&gt;containerd&lt;/code&gt; 和其他依赖服务）之间建立安全且高效的本地通信，可以使用 UDS。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;例子&lt;/strong&gt;: 在一些复杂的集群环境中，&lt;code&gt;containerd&lt;/code&gt; 可能需要与其他守护进程（如 CRI-O、etcd 等）进行本地通信，这种情况下也可能使用 UDS。&lt;/li&gt;
@@ -211,8 +211,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;4-containerd源码分析&#34;&gt;4 containerd源码分析
-&lt;/h2&gt;&lt;h3 id=&#34;41-containerd启动流程&#34;&gt;4.1 &lt;strong&gt;containerd启动流程&lt;/strong&gt;
+&lt;h2 id=&#34;containerd源码分析&#34;&gt;containerd源码分析
+&lt;/h2&gt;&lt;h3 id=&#34;containerd启动流程&#34;&gt;containerd启动流程
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;文件路径：&lt;code&gt;containerd/cmd/containerd/main.go&lt;/code&gt;，整个程序从这里开始启动，调用command.App()函数。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1147,7 +1147,7 @@
 &lt;li&gt;&lt;strong&gt;设置所有者&lt;/strong&gt;：使用 &lt;code&gt;os.Chown&lt;/code&gt; 将目录的所有者和组设置为指定的 &lt;code&gt;uid&lt;/code&gt; 和 &lt;code&gt;gid&lt;/code&gt;。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;返回结果&lt;/strong&gt;：如果所有操作都成功，返回 &lt;code&gt;nil&lt;/code&gt;。如果任何步骤出错，则返回相应的错误信息。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;42-client与containerd守护进程的通信&#34;&gt;4.2 client与containerd守护进程的通信
+&lt;h3 id=&#34;client与containerd守护进程的通信&#34;&gt;client与containerd守护进程的通信
 &lt;/h3&gt;&lt;blockquote&gt;
 &lt;p&gt;文件路径：containerd/client/client.go，这段代码是 &lt;code&gt;containerd&lt;/code&gt; 项目中 &lt;code&gt;client&lt;/code&gt; 包的实现，负责创建与 &lt;code&gt;containerd&lt;/code&gt; 守护进程通信的客户端实例。它包含了与 &lt;code&gt;containerd&lt;/code&gt; 进行 gRPC 通信的基础设施，提供了一组方法，用于与 &lt;code&gt;containerd&lt;/code&gt; 的各种服务进行交互，例如容器管理、镜像管理、快照管理等。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1718,9 +1718,9 @@
 &lt;li&gt;&lt;strong&gt;创建连接&lt;/strong&gt;：在后台尝试与目标地址建立连接，并根据连接状态更新 &lt;code&gt;ClientConn&lt;/code&gt; 的状态。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;管理连接生命周期&lt;/strong&gt;：在连接的生命周期中，&lt;code&gt;ClientConn&lt;/code&gt; 会自动处理连接失败、重连、负载均衡等逻辑。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&#34;5-grpc框架中的rpc通信&#34;&gt;5 gRPC框架中的RPC通信
-&lt;/h2&gt;&lt;h3 id=&#34;51-grpc-go-中-rpc-通信&#34;&gt;5.1 gRPC-Go 中 RPC 通信
-&lt;/h3&gt;&lt;h4 id=&#34;511-go-版本-grpc-通信机制概述&#34;&gt;5.1.1 Go 版本 gRPC 通信机制概述
+&lt;h2 id=&#34;grpc框架中的rpc通信&#34;&gt;gRPC框架中的RPC通信
+&lt;/h2&gt;&lt;h3 id=&#34;grpc-go-中-rpc-通信&#34;&gt;gRPC-Go 中 RPC 通信
+&lt;/h3&gt;&lt;h4 id=&#34;go版本grpc通信机制概述&#34;&gt;Go版本gRPC通信机制概述
 &lt;/h4&gt;&lt;p&gt;在 gRPC-Go 中，客户端发起的每一个 RPC 调用都会涉及到以下几个步骤：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;strong&gt;发起 RPC 请求&lt;/strong&gt;：客户端创建一个 RPC 调用，并发送元数据和请求数据。&lt;/li&gt;
@@ -1728,7 +1728,7 @@
 &lt;li&gt;&lt;strong&gt;发送响应&lt;/strong&gt;：服务器将响应发送回客户端。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;接收响应&lt;/strong&gt;：客户端接收到响应，并将结果返回给用户。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&#34;512-go-grpc-源码结构&#34;&gt;5.1.2 Go gRPC 源码结构
+&lt;h4 id=&#34;go版本grpc源码结构&#34;&gt;Go版本gRPC源码结构
 &lt;/h4&gt;&lt;p&gt;gRPC-Go 的源码主要分为以下几个模块：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;transport&lt;/strong&gt;：负责底层 HTTP/2 传输的实现。&lt;/li&gt;
@@ -1736,8 +1736,8 @@
 &lt;li&gt;&lt;strong&gt;server&lt;/strong&gt; 和 &lt;strong&gt;client&lt;/strong&gt;：分别管理 gRPC 服务器和客户端的生命周期。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;codec&lt;/strong&gt;：用于消息的编码和解码。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;513-grpc-go-中-rpc-通信流程的源码分析&#34;&gt;5.1.3 gRPC-Go 中 RPC 通信流程的源码分析
-&lt;/h4&gt;&lt;h5 id=&#34;1clientconn-的初始化&#34;&gt;&lt;strong&gt;1、&lt;code&gt;ClientConn&lt;/code&gt; 的初始化&lt;/strong&gt;
+&lt;h4 id=&#34;grpc-go-中-rpc-通信流程的源码分析&#34;&gt;gRPC-Go 中 RPC 通信流程的源码分析
+&lt;/h4&gt;&lt;h5 id=&#34;clientconn-的初始化&#34;&gt;&lt;strong&gt;&lt;code&gt;ClientConn&lt;/code&gt; 的初始化&lt;/strong&gt;
 &lt;/h5&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -1782,7 +1782,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h5 id=&#34;2rpc-请求的发起&#34;&gt;&lt;strong&gt;2、RPC 请求的发起&lt;/strong&gt;
+&lt;/div&gt;&lt;h5 id=&#34;rpc-请求的发起&#34;&gt;&lt;strong&gt;RPC 请求的发起&lt;/strong&gt;
 &lt;/h5&gt;&lt;p&gt;在 gRPC-Go 中，RPC 请求的发起主要通过 &lt;code&gt;invoke&lt;/code&gt; 方法。这个方法位于 &lt;code&gt;google.golang.org/grpc&lt;/code&gt; 包的 &lt;code&gt;call.go&lt;/code&gt; 文件中：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -1811,7 +1811,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;code&gt;invoke&lt;/code&gt; 方法是客户端执行单个 RPC 调用的入口。它首先通过 &lt;code&gt;newClientStream&lt;/code&gt; 方法创建一个新的客户端流（&lt;code&gt;ClientStream&lt;/code&gt;），然后发送消息并接收响应。&lt;/p&gt;
-&lt;h5 id=&#34;3创建-clientstream&#34;&gt;&lt;strong&gt;3、创建 ClientStream&lt;/strong&gt;
+&lt;h5 id=&#34;创建-clientstream&#34;&gt;&lt;strong&gt;创建 ClientStream&lt;/strong&gt;
 &lt;/h5&gt;&lt;p&gt;&lt;code&gt;newClientStream&lt;/code&gt; 的实现位于 &lt;code&gt;google.golang.org/grpc&lt;/code&gt; 包的 &lt;code&gt;stream.go&lt;/code&gt; 文件中，它负责初始化 gRPC 的流：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -1850,7 +1850,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这里的 &lt;code&gt;NewStream&lt;/code&gt; 方法是由 &lt;code&gt;transport&lt;/code&gt; 层来处理的，它将创建一个新的 HTTP/2 流，用于后续的消息传输。&lt;/p&gt;
-&lt;h5 id=&#34;4传输层transport-layer&#34;&gt;&lt;strong&gt;4、传输层（Transport Layer）&lt;/strong&gt;
+&lt;h5 id=&#34;传输层transport-layer&#34;&gt;&lt;strong&gt;传输层（Transport Layer）&lt;/strong&gt;
 &lt;/h5&gt;&lt;p&gt;在 gRPC-Go 中，传输层的核心实现位于 &lt;code&gt;transport/http2_client.go&lt;/code&gt; 中。这个文件包含了 gRPC 使用 HTTP/2 进行数据传输的核心逻辑。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -1893,7 +1893,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;code&gt;NewStream&lt;/code&gt; 方法创建一个新的 HTTP/2 流，并通过 &lt;code&gt;writeHeaders&lt;/code&gt; 方法将 gRPC 请求的元数据发送到服务器。&lt;/p&gt;
-&lt;h5 id=&#34;5消息的发送和接收&#34;&gt;&lt;strong&gt;5、消息的发送和接收&lt;/strong&gt;
+&lt;h5 id=&#34;消息的发送和接收&#34;&gt;&lt;strong&gt;消息的发送和接收&lt;/strong&gt;
 &lt;/h5&gt;&lt;p&gt;在客户端流中，消息的发送和接收通过 &lt;code&gt;SendMsg&lt;/code&gt; 和 &lt;code&gt;RecvMsg&lt;/code&gt; 方法来完成，这些方法同样位于 &lt;code&gt;stream.go&lt;/code&gt; 文件中。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -2256,7 +2256,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h5 id=&#34;6-服务器端的处理&#34;&gt;&lt;strong&gt;6、 服务器端的处理&lt;/strong&gt;
+&lt;/div&gt;&lt;h5 id=&#34;服务器端的处理&#34;&gt;&lt;strong&gt;服务器端的处理&lt;/strong&gt;
 &lt;/h5&gt;&lt;p&gt;在服务器端，RPC 调用的处理通过 &lt;code&gt;handleStream&lt;/code&gt; 函数进行管理。这个函数位于 &lt;code&gt;server.go&lt;/code&gt; 文件中，&lt;code&gt;handleStream&lt;/code&gt; 方法处理传入的流，解析客户端的请求，并调用相应的服务方法来生成响应。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;上下文初始化和追踪信息&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -2772,9 +2772,9 @@
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;sd&lt;/code&gt; 对象&lt;/strong&gt;：&lt;code&gt;sd&lt;/code&gt; 是 &lt;code&gt;*StreamDesc&lt;/code&gt; 类型的对象，描述了流式 RPC 方法的特性，包括是否是客户端流、是否是服务器端流，以及处理该 RPC 调用的 &lt;code&gt;Handler&lt;/code&gt; 函数。&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;&lt;code&gt;Handler&lt;/code&gt; 字段&lt;/strong&gt;：&lt;code&gt;sd.Handler&lt;/code&gt; 是一个函数类型，用于处理特定的流式 RPC 请求。这个函数是用户在服务注册时提供的，用于执行实际的业务逻辑。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;6-containerd与containerd-shim通信机制&#34;&gt;6 Containerd与Containerd-shim通信机制
+&lt;h2 id=&#34;containerd与containerd-shim通信机制&#34;&gt;Containerd与Containerd-shim通信机制
 &lt;/h2&gt;&lt;p&gt;&lt;code&gt;containerd-shim&lt;/code&gt; 和 &lt;code&gt;containerd&lt;/code&gt; 之间的通信是容器运行时的核心部分，确保容器的创建、管理和删除等操作能够顺利进行。它们之间的通信主要通过以下方式进行：&lt;/p&gt;
-&lt;h3 id=&#34;1-ttrpc&#34;&gt;1. &lt;strong&gt;ttRPC&lt;/strong&gt;
+&lt;h3 id=&#34;ttrpc&#34;&gt;ttRPC
 &lt;/h3&gt;&lt;p&gt;&lt;code&gt;containerd&lt;/code&gt; 和 &lt;code&gt;containerd-shim&lt;/code&gt; 之间的通信主要通过一种称为 &lt;code&gt;ttRPC&lt;/code&gt; 的轻量级 RPC 框架进行。&lt;code&gt;ttRPC&lt;/code&gt; 是 &lt;code&gt;containerd&lt;/code&gt; 项目中引入的，专门设计用于高效的进程间通信（IPC），特别是在同一主机上运行的进程之间。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;ttRPC:
@@ -2801,7 +2801,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;serve&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ctx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;tl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ServeTTRPC&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;2-unix-域套接字&#34;&gt;2. &lt;strong&gt;Unix 域套接字&lt;/strong&gt;
+&lt;/div&gt;&lt;h3 id=&#34;unix-域套接字&#34;&gt;Unix 域套接字
 &lt;/h3&gt;&lt;p&gt;&lt;code&gt;containerd&lt;/code&gt; 和 &lt;code&gt;containerd-shim&lt;/code&gt; 之间的通信通常通过 Unix 域套接字进行。这种通信方式非常适合同一主机上的进程间通信，具有低延迟和高效的特点。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Unix 域套接字:
@@ -2811,7 +2811,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;3-容器生命周期管理&#34;&gt;3. &lt;strong&gt;容器生命周期管理&lt;/strong&gt;
+&lt;h3 id=&#34;容器生命周期管理&#34;&gt;容器生命周期管理
 &lt;/h3&gt;&lt;p&gt;&lt;code&gt;containerd&lt;/code&gt; 通过 &lt;code&gt;ttRPC&lt;/code&gt; 和 Unix 域套接字与 &lt;code&gt;containerd-shim&lt;/code&gt; 进行通信，以管理容器的生命周期：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;容器创建:
@@ -2830,7 +2830,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;4-容器与守护进程的分离&#34;&gt;4. &lt;strong&gt;容器与守护进程的分离&lt;/strong&gt;
+&lt;h3 id=&#34;容器与守护进程的分离&#34;&gt;容器与守护进程的分离
 &lt;/h3&gt;&lt;p&gt;&lt;code&gt;containerd-shim&lt;/code&gt; 的存在还使得容器与 &lt;code&gt;containerd&lt;/code&gt; 守护进程分离。这意味着：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;独立性:
@@ -2844,7 +2844,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;7-containerd-shim与container通信机制&#34;&gt;7 Containerd-shim与Container通信机制
+&lt;h2 id=&#34;containerd-shim与container通信机制&#34;&gt;Containerd-shim与Container通信机制
 &lt;/h2&gt;&lt;h3 id=&#34;通信流程&#34;&gt;通信流程
 &lt;/h3&gt;&lt;p&gt;&lt;code&gt;containerd&lt;/code&gt; 通过一个&lt;code&gt;runtime&lt;/code&gt;来实现对多个容器的控制，例如 create、start 和 stop。&lt;/p&gt;
 &lt;p&gt;通信流程如下：&lt;/p&gt;
@@ -3585,7 +3585,7 @@
 		data-flex-basis=&#34;1323px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;8-容器启动流程分析&#34;&gt;8 容器启动流程分析
+&lt;h2 id=&#34;容器启动流程分析&#34;&gt;容器启动流程分析
 &lt;/h2&gt;&lt;p&gt;分析流程图如下，task.Start没有往下分析，它的函数传递流程与Newtask类似。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98.png&#34;
 	width=&#34;4552&#34;
@@ -6619,7 +6619,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240827113414851&#34;
+		alt=&#34;监听uds&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -6629,7 +6629,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240826095151377&#34;
+		alt=&#34;serve函数&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -6645,7 +6645,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240826104113183&#34;
+		alt=&#34;外部插件&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -6655,7 +6655,7 @@
 	
 	loading=&#34;lazy&#34;
 	
-		alt=&#34;image-20240826104245632&#34;
+		alt=&#34;代理插件&#34;
 	
 	
 &gt;&lt;/p&gt;
@@ -6780,18 +6780,14 @@
 &lt;p&gt;&lt;strong&gt;（事实上containerd应该是不支持systemd的socket activation机制的，github也有人提出过在containerd中加入此机制：&lt;a class=&#34;link&#34; href=&#34;https://github.com/containerd/containerd/issues/164&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;add socket activation · Issue #164 · containerd/containerd (github.com)&lt;/a&gt;）&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;一般如果支持socket activation机制的话会有类似下图的逻辑，服务器会先调用sd_listen_fds函数，看systemd是否创建了socket文件，如果创建了就不会再创建了。所以如果使用system的socket activation启动进程，那么就一定是systemd创建socket文件。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240827232023457.png&#34;
-	width=&#34;888&#34;
-	height=&#34;555&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240827232023457_hu4741567155301719914.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240827232023457_hu7240352696813363171.png 1024w&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240827232023457.png&#34;
+	
+	
+	
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;socket activation代码逻辑&#34;
 	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;160&#34;
-		data-flex-basis=&#34;384px&#34;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;具体过程如下：&lt;/p&gt;
@@ -10288,15 +10284,23 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;Git要上传或执行的文件可以在文件夹中，右键空白地区点git bash here从而实现目录内操作。&lt;/li&gt;
 &lt;li&gt;在linux操作中（比如git）粘贴操作是shift+insert或单击鼠标的滚轮。而复制只要选中即可。&lt;/li&gt;
 &lt;li&gt;github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。&lt;/li&gt;
-&lt;li&gt;hugo命令 &lt;code&gt;hugo --baseUrl=&amp;quot;https://你的github名字.github.io/&amp;quot;&lt;/code&gt;执行完后，会生成一个public文件夹。&lt;/li&gt;
+&lt;li&gt;hugo命令 &lt;code&gt;hugo --baseURL=&amp;quot;https://你的github名字.github.io/&amp;quot;&lt;/code&gt;执行完后，会生成一个public文件夹。&lt;/li&gt;
 &lt;li&gt;用git推送的时候 &lt;code&gt;git pull --rebase origin master&lt;/code&gt;语句可能会出错显示没有文件，不用担心，这是因为此时目标仓库是空的，直接下一步最后，你只需要输入对应网址，即可看到博客了！&lt;/li&gt;
 &lt;li&gt;如果想将默认语言设置为中文，只要在config中设置一下defaultContentLanguage=&amp;ldquo;zh-cn&amp;quot;就行了，但可能会不生效，最好将其放在config.toml的第一行&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;更新博客&#34;&gt;更新博客
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;在博客目录下使用 hugo &amp;ndash;baseURL=&amp;ldquo;https://你的github名字.github.io/&amp;ldquo;覆盖原来的public文件夹&lt;/p&gt;
-&lt;/li&gt;
+&lt;p&gt;在博客目录下使用 hugo &amp;ndash;BaseURL=&amp;ldquo;https://你的github名字.github.io/&amp;ldquo;覆盖原来的public文件夹&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hugo --BaseURL=&amp;#34;https://chenyuan1125.github.io&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;进入public文件夹右键git bash
 分别执行&lt;/p&gt;

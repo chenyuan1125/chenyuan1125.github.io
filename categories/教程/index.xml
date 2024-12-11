@@ -191,15 +191,23 @@
 &lt;li&gt;Git要上传或执行的文件可以在文件夹中，右键空白地区点git bash here从而实现目录内操作。&lt;/li&gt;
 &lt;li&gt;在linux操作中（比如git）粘贴操作是shift+insert或单击鼠标的滚轮。而复制只要选中即可。&lt;/li&gt;
 &lt;li&gt;github的域名地址与用户名必须一致，比如你的github名字叫sakura，那么域名必须是sakura.github.io。&lt;/li&gt;
-&lt;li&gt;hugo命令 &lt;code&gt;hugo --baseUrl=&amp;quot;https://你的github名字.github.io/&amp;quot;&lt;/code&gt;执行完后，会生成一个public文件夹。&lt;/li&gt;
+&lt;li&gt;hugo命令 &lt;code&gt;hugo --baseURL=&amp;quot;https://你的github名字.github.io/&amp;quot;&lt;/code&gt;执行完后，会生成一个public文件夹。&lt;/li&gt;
 &lt;li&gt;用git推送的时候 &lt;code&gt;git pull --rebase origin master&lt;/code&gt;语句可能会出错显示没有文件，不用担心，这是因为此时目标仓库是空的，直接下一步最后，你只需要输入对应网址，即可看到博客了！&lt;/li&gt;
 &lt;li&gt;如果想将默认语言设置为中文，只要在config中设置一下defaultContentLanguage=&amp;ldquo;zh-cn&amp;quot;就行了，但可能会不生效，最好将其放在config.toml的第一行&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;更新博客&#34;&gt;更新博客
 &lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;
-&lt;p&gt;在博客目录下使用 hugo &amp;ndash;baseURL=&amp;ldquo;https://你的github名字.github.io/&amp;ldquo;覆盖原来的public文件夹&lt;/p&gt;
-&lt;/li&gt;
+&lt;p&gt;在博客目录下使用 hugo &amp;ndash;BaseURL=&amp;ldquo;https://你的github名字.github.io/&amp;ldquo;覆盖原来的public文件夹&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hugo --BaseURL=&amp;#34;https://chenyuan1125.github.io&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;进入public文件夹右键git bash
 分别执行&lt;/p&gt;
