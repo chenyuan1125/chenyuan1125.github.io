@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>加密算法 on 辰远</title>
+        <link>//localhost:1313/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
+        <description>Recent content in 加密算法 on 辰远</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Sun, 15 Dec 2024 17:59:53 +0800</lastBuildDate><atom:link href="//localhost:1313/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>加密算法调研</title>
+        <link>//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</link>
+        <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</guid>
+        <description>&lt;img src="//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg" alt="Featured image of post 加密算法调研" /&gt;&lt;h1 id=&#34;加密算法调研报告&#34;&gt;加密算法调研报告
+&lt;/h1&gt;&lt;h2 id=&#34;美密算法&#34;&gt;美密算法
+&lt;/h2&gt;&lt;h3 id=&#34;对称加密&#34;&gt;对称加密
+&lt;/h3&gt;&lt;p&gt;对称加密又叫做私钥加密，即信息的发送方和接收方使用同一个密钥去加密和解密数据。对称加密的特点是算法公开、加密和解密速度快，适合于对大数据量进行加密。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;加密过程如下&lt;/strong&gt;：明文+加密算法+私钥=&amp;gt;密文&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解密过程如下&lt;/strong&gt;：密文+解密算法+私钥=&amp;gt;明文&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53.png&#34;
+	width=&#34;977&#34;
+	height=&#34;423&#34;
+	srcset=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu1539050602817823707.png 480w, //localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu61028026875299665.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;对称加密&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;230&#34;
+		data-flex-basis=&#34;554px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;非对称加密&#34;&gt;非对称加密
+&lt;/h3&gt;&lt;p&gt;非对称加密也叫做公钥加密。非对称加密与对称加密相比，其安全性更好。对称加密的通信双方使用相同的密钥，如果一方的密钥遭泄露，那么整个通信就会被破解。而非对称加密使用一对密钥，即公钥和私钥，且二者成对出现。私钥被自己保存，不能对外泄露。公钥指的是公共的密钥，任何人都可以获得该密钥。用公钥或私钥中的任何一个进行加密，用另一个进行解密。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;被公钥加密过的密文只能被私钥解密，过程如下&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;明文+加密算法+公钥=&amp;gt;密文，密文+解密算法+私钥=&amp;gt;明文&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535.png&#34;
+	width=&#34;977&#34;
+	height=&#34;428&#34;
+	srcset=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu17533756092435017513.png 480w, //localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu1717627113123765504.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;非对称加密&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;228&#34;
+		data-flex-basis=&#34;547px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;常见加密算法&#34;&gt;常见加密算法
+&lt;/h3&gt;&lt;h4 id=&#34;md5算法&#34;&gt;MD5算法
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;MD5用的是哈希函数，它的典型应用是对一段信息产生信息摘要，以防止被篡改。严格来说，MD5不是一种加密算法而是摘要算法。无论是多长的输入，MD5都会输出长度为128bits的一个串(通常用16进制表示为32个字符)。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;sha1算法&#34;&gt;SHA1算法
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;SHA1是和MD5一样流行的消息摘要算法，然而SHA1比MD5的安全性更强。对于长度小于2^64位的消息，SHA1会产生一个160位的消息摘要。基于MD5、SHA1的信息摘要特性以及不可逆(一般而言)，可以被应用在检查文件完整性以及数字签名等场景。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;hmac算法&#34;&gt;HMAC算法
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;MAC是密钥相关的哈希运算消息认证码（Hash-basedMessageAuthenticationCode），HMAC运算利用哈希算法(MD5、SHA1等)，以一个密钥和一个消息为输入，生成一个消息摘要作为输出。HMAC发送方和接收方都有的key进行计算，而没有这把key的第三方，则是无法计算出正确的散列值的，这样就可以防止数据被篡改。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;aes算法&#34;&gt;AES算法
+&lt;/h4&gt;&lt;p&gt;ES、DES、3DES都是对称的块加密算法，加解密的过程是可逆的。常用的有AES128、AES192、AES256。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;DES加密算法是一种分组密码，以64位为分组对数据加密，它的密钥长度是56位，加密解密用同一算法。DES加密算法是对密钥进行保密，而公开算法，包括加密和解密算法。这样，只有掌握了和发送方相同密钥的人才能解读由DES加密算法加密的密文数据。因此，破译DES加密算法实际上就是搜索密钥的编码。对于56位长度的密钥来说，如果用穷举法来进行搜索的话，其运算次数为2^56次。3DES是基于DES的对称算法，对一块数据用三个不同的密钥进行三次加密，强度更高。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;rsa算法&#34;&gt;RSA算法
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;RSA加密算法是目前最有影响力的公钥加密算法，并且被普遍认为是目前最优秀的公钥方案之一。RSA是第一个能同时用于加密和数字签名的算法，它能够抵抗到目前为止已知的所有密码攻击，已被ISO推荐为公钥数据加密标准。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;RSA加密算法基于一个十分简单的数论事实：将两个大素数相乘十分容易，但想要对其乘积进行因式分解却极其困难，因此可以将乘积公开作为加密密钥。&lt;/p&gt;
+&lt;h4 id=&#34;ecc算法&#34;&gt;ECC算法
+&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;ECC也是一种非对称加密算法，主要优势是在某些情况下，它比其他的方法使用更小的密钥，比如RSA加密算法，提供相当的或更高等级的安全级别。不过一个缺点是加密和解密操作的实现比其他机制时间长(相比RSA算法，该算法对CPU消耗严重)。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;国密算法&#34;&gt;国密算法
+&lt;/h2&gt;&lt;h3 id=&#34;概述&#34;&gt;概述
+&lt;/h3&gt;&lt;p&gt;国密即国家密码局认定的国产密码算法。主要有SM1，SM2，SM3，SM4。密钥长度和分组长度均为128位。&lt;/p&gt;
+&lt;p&gt;国密算法是指国家密码管理局认定的一系列国产密码算法，包括SM1-SM9以及ZUC等。其中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SM1、SM4、SM5、SM6、SM7、SM8、ZUC等属于对称密码，&lt;/li&gt;
+&lt;li&gt;SM2、SM9等属于公钥密码(非对称加密)&lt;/li&gt;
+&lt;li&gt;SM3属于单向散列函数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://s.secrss.com/anquanneican/3fa933cfcd803924a2ad1ed7d8d35f57.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;校园信息系统国密改造路径探索-安全内参|决策者的网络安全知识库&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;目前我国主要使用公开的SM2、SM3、SM4作为商用密码算法。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其中SM1、SM7算法不公开，调用该算法时，需要通过加密芯片的接口进行调用&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;SM2是基于椭圆曲线的公钥密码算法，包括用于数字签名的SM2-1、用于密钥交换的SM2-2和用于公钥密码的SM2-3。&lt;/li&gt;
+&lt;li&gt;SM3是能够计算出256比特的散列值的单向散列函数，主要用于数字签名和消息认证码。&lt;/li&gt;
+&lt;li&gt;SM4是属于对称密码的一种分组密码算法，分组长度和密钥长度均为128比特。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;国密算法从SM1-SM4分别实现了对称、非对称、摘要等算法功能，目前已普遍应用于日常工作生活中的各个方面，如工作中使用的VPN，金融业务中的资金流转、刷卡支付，以及门禁设施、身份认证等。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;sm1&#34;&gt;SM1
+&lt;/h3&gt;&lt;p&gt;SM1算法是分组密码算法，分组长度为128位，密钥长度都为128比特，算法安全保密强度及相关软硬件实现性能与AES相当，算法不公开，仅以IP核的形式存在于芯片中。&lt;/p&gt;
+&lt;p&gt;采用该算法已经研制了系列芯片、智能IC卡、智能密码钥匙、加密卡、加密机等安全产品，广泛应用于电子政务、电子商务及国民经济的各个应用领域（包括国家政务通、警务通等重要领域）。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;sm2&#34;&gt;SM2
+&lt;/h3&gt;&lt;p&gt;可以理解为国产RSA。非对称加密，基于ECC。该算法已公开。由于该算法基于ECC，故其签名速度与秘钥生成速度都快于RSA。&lt;/p&gt;
+&lt;p&gt;SM2椭圆曲线公钥密码算法是我国自主设计的公钥密码算法，包括SM2-1椭圆曲线数字签名算法，SM2-2椭圆曲线密钥交换协议，SM2-3椭圆曲线公钥加密算法，分别用于实现数字签名密钥协商和数据加密等功能。SM2算法与RSA算法不同的是，SM2算法是基于椭圆曲线上点群离散对数难题，相对于RSA算法，256位的SM2密码强度已经比2048位的RSA密码强度要高，但运算速度快于RSA。&lt;/p&gt;
+&lt;h3 id=&#34;sm3&#34;&gt;SM3
+&lt;/h3&gt;&lt;p&gt;可以理解为国产MD5。消息摘要。可以用MD5作为对比理解。该算法已公开。校验结果为256位。&lt;/p&gt;
+&lt;h3 id=&#34;sm4&#34;&gt;SM4
+&lt;/h3&gt;&lt;p&gt;可以理解为国产AES。无线局域网标准的分组数据算法。对称加密，密钥长度和分组长度均为128位。&lt;/p&gt;
+&lt;h3 id=&#34;sm9&#34;&gt;SM9
+&lt;/h3&gt;&lt;p&gt;一种标识密码(IBE)算法，由国家密码管理局于2016年3月28日发布，相关标准为“GM/T0044-2016SM9标识密码算法”。主要用于用户的身份认证。SM9的加密强度等同于3072位密钥的RSA加密算法。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;使用经验&#34;&gt;使用经验
+&lt;/h3&gt;&lt;p&gt;一般数据发送端都是用SM4对数据内容加密，使用SM3对内容进行摘要，再使用SM2对摘要进行签名。&lt;/p&gt;
+&lt;p&gt;一般接收端，先用SM2对摘要进行验签，验签成功后就做到了防抵赖，对发送过来的内容进行SM3摘要，看下生成的摘要和验签后的摘要是否一致，用于防篡改。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;另外SM4在加密解密需要相同的密钥，这个我们可以通过编写密钥交换模块实现生成相同的密钥。用于SM4对称加密。&lt;/p&gt;
+&lt;p&gt;关于非对称还要注意几点：&lt;/p&gt;
+&lt;p&gt;（1）公钥是通过私钥产生的；&lt;/p&gt;
+&lt;p&gt;（2）公钥加密，私钥解密是加密的过程&lt;/p&gt;
+&lt;p&gt;（3）私钥加密，公钥解密是签名的过程；&lt;/p&gt;
+&lt;p&gt;由于SM1、SM4加解密的分组大小为128bit，故对消息进行加解密时，若消息长度过长，需要进行分组，要消息长度不足，则要进行填充。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;国密算法的安全性&#34;&gt;国密算法的安全性
+&lt;/h3&gt;&lt;p&gt;国密算法，作为国家层面推广的密码算法标准，其安全性经过了严格的审查和评估。&lt;/p&gt;
+&lt;p&gt;以下是对SM2、SM3和SM4算法安全性的进一步分析：&lt;/p&gt;
+&lt;h4 id=&#34;sm2算法的安全性&#34;&gt;SM2算法的安全性
+&lt;/h4&gt;&lt;p&gt;SM2算法是一个基于椭圆曲线的公钥密码算法，其安全性主要依赖于椭圆曲线离散对数问题的难度。与RSA算法相比，SM2算法在相同的安全强度下，所需的密钥长度更短，因此，在加密和签名速度上具有一定的优势。此外，SM2算法在设计时也考虑了多种攻击手段，并采用了相应的防护措施，从而确保了其在实际应用中的安全性。&lt;/p&gt;
+&lt;h4 id=&#34;sm3算法的安全性&#34;&gt;SM3算法的安全性
+&lt;/h4&gt;&lt;p&gt;SM3算法是一个密码杂凑算法，主要用于数字签名和消息认证等场景。其安全性主要体现在以下几个方面：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;输出长度：SM3算法的输出长度为256比特，相比MD5（128比特）和SHA-1（160比特）算法，其输出长度更长，因此具有更高的安全性。&lt;/li&gt;
+&lt;li&gt;碰撞攻击：SM3算法在设计时考虑了碰撞攻击的问题，并采用了相应的防护措施。目前，尚未有公开的针对SM3算法的碰撞攻击方法。&lt;/li&gt;
+&lt;li&gt;雪崩效应：SM3算法具有雪崩效应，即输入数据的微小变化会导致输出结果的巨大差异。这一特性使得攻击者难以通过猜测或穷举的方式来破解SM3算法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;sm4算法的安全性&#34;&gt;SM4算法的安全性
+&lt;/h4&gt;&lt;p&gt;SM4算法是一个分组密码算法，主要用于数据的加密和解密。其安全性主要体现在以下几个方面：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;密钥长度：SM4算法的密钥长度为128比特，与AES算法相同。这一长度的密钥足以抵抗目前已知的所有密码攻击方法。&lt;/li&gt;
+&lt;li&gt;分组长度：SM4算法的分组长度也为128比特，这意味着每次加密或解密的数据块大小为128比特。这一分组长度可以确保数据的机密性和完整性。&lt;/li&gt;
+&lt;li&gt;加密轮数：SM4算法采用了多轮加密的方式，每轮加密都使用了不同的密钥和加密函数。这种加密方式可以使得攻击者难以通过分析加密过程来破解算法。&lt;/li&gt;
+&lt;li&gt;安全性评估：SM4算法已经经过了多轮的安全性评估和审查，其安全性得到了广泛的认可。目前，尚未有公开的针对SM4算法的有效攻击方法。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;综上所述，国密算法中的SM2、SM3和SM4算法都具有较高的安全性，可以满足不同场景下的密码应用需求。在实际应用中，可以根据具体的需求和场景选择合适的算法进行使用。&lt;/p&gt;
+&lt;h2 id=&#34;实验过程&#34;&gt;实验过程
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;本实验使用北京大学自主开发的国产商用密码开源库GmSSL，这个库实现了对国密算法、标准和安全通信协议的全面功能覆盖，支持包括移动端在内的主流操作系统和处理器，支持密码钥匙、密码卡等典型国产密码硬件，提供功能丰富的命令行工具及多种编译语言编程接口。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;下载&#34;&gt;下载
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;GmSSL的主分支版本为 &lt;a class=&#34;link&#34; href=&#34;https://github.com/guanzhi/GmSSL/releases/tag/v3.1.1&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;GmSSL-3.1.1&lt;/a&gt;，主要增加跨平台特性，特别是对Windows/Visual Studio的支持，Windows、Android、iOS平台的开发者需要使用该版本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git clone https://github.com/guanzhi/GmSSL.git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;编译与安装&#34;&gt;编译与安装
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir build
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; build
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cmake ..
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;make
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;make &lt;span class=&#34;nb&#34;&gt;test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;安装gmssl-python&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pip install gmssl-python
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;验证安装成功&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;注意&lt;code&gt;gmssl-python&lt;/code&gt;包中只包含一个&lt;code&gt;gmssl&lt;/code&gt;模块（而不是&lt;code&gt;gmssl_python&lt;/code&gt;模块）。&lt;/p&gt;
+&lt;p&gt;可以在Python交互环境中做简单的测试&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt;&amp;gt; import gmssl
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt;&amp;gt; gmssl.GMSSL_PYTHON_VERSION
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&amp;gt;&amp;gt;&amp;gt; gmssl.GMSSL_LIBRARY_VERSION
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;gmssl基本指令&#34;&gt;gmssl基本指令
+&lt;/h3&gt;&lt;h4 id=&#34;sm4加密解密&#34;&gt;&lt;strong&gt;SM4加密解密&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;环境变量&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;KEY&lt;/code&gt;：加密和解密使用的密钥，长度为16字节（128位）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;IV&lt;/code&gt;：初始化向量，用于某些加密模式（如 CBC 和 CTR），长度为16字节（128位）。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nv&#34;&gt;KEY&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;11223344556677881122334455667788&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nv&#34;&gt;IV&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;11223344556677881122334455667788&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;使用 CBC 模式加密&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; hello &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gmssl sm4_cbc -encrypt -key &lt;span class=&#34;nv&#34;&gt;$KEY&lt;/span&gt; -iv &lt;span class=&#34;nv&#34;&gt;$IV&lt;/span&gt; -out sm4.cbc
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;使用 CBC 模式解密&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# gmssl sm4_cbc -decrypt -key &lt;span class=&#34;nv&#34;&gt;$KEY&lt;/span&gt; -iv &lt;span class=&#34;nv&#34;&gt;$IV&lt;/span&gt; -in sm4.cbc
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hello
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;使用 CTR 模式加密&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; hello &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gmssl sm4_ctr -encrypt -key &lt;span class=&#34;nv&#34;&gt;$KEY&lt;/span&gt; -iv &lt;span class=&#34;nv&#34;&gt;$IV&lt;/span&gt; -out sm4.ctr
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;使用 CTR 模式解密&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# gmssl sm4_ctr -decrypt -key &lt;span class=&#34;nv&#34;&gt;$KEY&lt;/span&gt; -iv &lt;span class=&#34;nv&#34;&gt;$IV&lt;/span&gt; -in sm4.ctr
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hello
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;sm3摘要&#34;&gt;&lt;strong&gt;SM3摘要&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;计算 SM3 哈希值&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; -n abc &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gmssl sm3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;生成 SM2 密钥对&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2keygen&lt;/code&gt;：生成一个 SM2 密钥对。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-pass 1234&lt;/code&gt;：指定用于加密私钥的密码为 &lt;code&gt;1234&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-out sm2.pem&lt;/code&gt;：将生成的私钥保存到 &lt;code&gt;sm2.pem&lt;/code&gt; 文件中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-pubout sm2pub.pem&lt;/code&gt;：将生成的公钥保存到 &lt;code&gt;sm2pub.pem&lt;/code&gt; 文件中。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# gmssl sm2keygen -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out sm2.pem -pubout sm2pub.pem
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;使用公钥和 ID 计算 SM3 哈希值&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo -n abc&lt;/code&gt;：输出字符串 &lt;code&gt;abc&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;| gmssl sm3 -pubkey sm2pub.pem -id 1234567812345678&lt;/code&gt;：将字符串 &lt;code&gt;abc&lt;/code&gt; 通过管道传输给 &lt;code&gt;gmssl&lt;/code&gt; 工具。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sm3&lt;/code&gt;：指定使用 SM3 哈希算法。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-pubkey sm2pub.pem&lt;/code&gt;：使用 &lt;code&gt;sm2pub.pem&lt;/code&gt; 文件中的 SM2 公钥。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-id 1234567812345678&lt;/code&gt;：指定 ID（用户标识），在某些加密操作中用于唯一标识用户。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; -n &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gmssl sm3 -pubkey sm2pub.pem -id &lt;span class=&#34;m&#34;&gt;1234567812345678&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;59cf08de46459c87ee8f5f114b09a9fb10900133ad7ceb0cb181c1b617d088e6
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;使用 HMAC-SM3 进行哈希计算&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo -n abc&lt;/code&gt;：输出字符串 &lt;code&gt;abc&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;| gmssl sm3hmac -key 11223344556677881122334455667788&lt;/code&gt;：将字符串 &lt;code&gt;abc&lt;/code&gt; 通过管道传输给 &lt;code&gt;gmssl&lt;/code&gt; 工具。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sm3hmac&lt;/code&gt;：指定使用 HMAC-SM3 算法。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-key 11223344556677881122334455667788&lt;/code&gt;：指定用于 HMAC 的密钥，长度为 16 字节（128 位）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;root@ecs-5123:~# &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; -n eab &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;gmssl sm3hmac -key &lt;span class=&#34;m&#34;&gt;11223344556677881122334455667788&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;a6d4a86e315a097a8981d9943ddf6a5144b1b4e8052ab3eb9534e0b4b0752cf0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;sm2签名及验签&#34;&gt;&lt;strong&gt;SM2签名及验签&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;生成密钥对&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2keygen&lt;/code&gt;: 使用 GMSSL 工具生成 SM2 密钥对。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 指定密钥对加密时使用的密码（1234）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out sm2.pem&lt;/code&gt;: 将生成的私钥保存到 &lt;code&gt;sm2.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pubout sm2pub.pem&lt;/code&gt;: 将生成的公钥保存到 &lt;code&gt;sm2pub.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out sm2.pem -pubout sm2pub.pem
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;对消息进行签名&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo hello&lt;/code&gt;: 输出 &amp;ldquo;hello&amp;rdquo; 字符串。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;|&lt;/code&gt;: 管道符，将前一个命令的输出作为下一个命令的输入。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2sign&lt;/code&gt;: 使用 GMSSL 工具对输入消息进行签名。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key sm2.pem&lt;/code&gt;: 指定用于签名的私钥文件 &lt;code&gt;sm2.pem&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 私钥文件的密码。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out sm2.sig&lt;/code&gt;: 将签名结果保存到 &lt;code&gt;sm2.sig&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;#-id 1234567812345678&lt;/code&gt;: （注释掉的）用户 ID（可选项）。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; hello &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gmssl sm2sign -key sm2.pem -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out sm2.sig
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;验证签名&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo hello&lt;/code&gt;: 输出 &amp;ldquo;hello&amp;rdquo; 字符串。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;|&lt;/code&gt;: 管道符，将前一个命令的输出作为下一个命令的输入。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2verify&lt;/code&gt;: 使用 GMSSL 工具验证签名。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pubkey sm2pub.pem&lt;/code&gt;: 指定用于验证签名的公钥文件 &lt;code&gt;sm2pub.pem&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-sig sm2.sig&lt;/code&gt;: 指定要验证的签名文件 &lt;code&gt;sm2.sig&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-id 1234567812345678&lt;/code&gt;: 用户 ID（与签名时使用的 ID 一致）。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; hello &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig -id &lt;span class=&#34;m&#34;&gt;123467812345678&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/home/hacker/secret_test/GmSSL/src/sm2_sign.c:265:sm2_fast_verify&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/home/hacker/secret_test/GmSSL/src/sm2_sign.c:671:sm2_verify_finish&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;gmssl sm2verify: inner error
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; hello &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt;gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;verify : success
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;sm2加密及解密&#34;&gt;&lt;strong&gt;SM2加密及解密&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;加密消息&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;echo hello&lt;/code&gt;: 输出 &amp;ldquo;hello&amp;rdquo; 字符串。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;|&lt;/code&gt;: 管道符，将前一个命令的输出作为下一个命令的输入。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2encrypt&lt;/code&gt;: 使用 GMSSL 工具加密输入消息。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pubkey sm2pub.pem&lt;/code&gt;: 指定用于加密的公钥文件 &lt;code&gt;sm2pub.pem&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out sm2.der&lt;/code&gt;: 将加密结果保存到 &lt;code&gt;sm2.der&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ &lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; hello &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; gmssl sm2encrypt -pubkey sm2pub.pem -out sm2.der
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;解密消息&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2decrypt&lt;/code&gt;: 使用 GMSSL 工具解密消息。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key sm2.pem&lt;/code&gt;: 指定用于解密的私钥文件 &lt;code&gt;sm2.pem&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 私钥文件的密码。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-in sm2.der&lt;/code&gt;: 指定要解密的加密文件 &lt;code&gt;sm2.der&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl sm2decrypt -key sm2.pem -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -in sm2.der
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hello
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;生成sm2根证书rootcakeypem及ca证书cakeypem&#34;&gt;&lt;strong&gt;生成SM2根证书rootcakey.pem及CA证书cakey.pem&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;生成根 CA 密钥对&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2keygen&lt;/code&gt;: 使用 GMSSL 工具生成 SM2 密钥对。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 指定密钥加密时使用的密码（1234）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out rootcakey.pem&lt;/code&gt;: 将生成的私钥保存到 &lt;code&gt;rootcakey.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out rootcakey.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----BEGIN PUBLIC KEY-----
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEpy9tv+rCp6t1aEgFHaDuI30rSKh5
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;737ZVu0ReHqVyhqtXo2bGVIoTsR+daHXo4yO2mxxh9lTR8cBalUfBKKH5A&lt;span class=&#34;o&#34;&gt;==&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;生成根 CA 证书&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl certgen&lt;/code&gt;: 使用 GMSSL 工具生成证书。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-C CN&lt;/code&gt;: 指定国家代码为中国。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-ST Beijing&lt;/code&gt;: 指定省/市为北京。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-L Haidian&lt;/code&gt;: 指定地区为海淀区。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-O PKU&lt;/code&gt;: 指定组织名为 PKU（北京大学）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-OU CS&lt;/code&gt;: 指定组织单位为 CS（计算机科学）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-CN ROOTCA&lt;/code&gt;: 指定通用名为 ROOTCA。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-days 3650&lt;/code&gt;: 证书有效期为3650天（约10年）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key rootcakey.pem&lt;/code&gt;: 使用 &lt;code&gt;rootcakey.pem&lt;/code&gt; 文件中的私钥。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 私钥文件的密码。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out rootcacert.pem&lt;/code&gt;: 将生成的证书保存到 &lt;code&gt;rootcacert.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key_usage keyCertSign&lt;/code&gt;: 指定密钥用法为证书签名。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key_usage cRLSign&lt;/code&gt;: 指定密钥用法为 CRL（证书吊销列表）签名。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN ROOTCA -days &lt;span class=&#34;m&#34;&gt;3650&lt;/span&gt; -key rootcakey.pem -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out rootcacert.pem -key_usage cRLSign
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;解析根 CA 证书&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl certparse&lt;/code&gt;: 使用 GMSSL 工具解析证书。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-in rootcacert.pem&lt;/code&gt;: 指定要解析的证书文件 &lt;code&gt;rootcacert.pem&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl certparse -in rootcacert.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Certificate
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    tbsCertificate
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        version: v3 &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;2&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        serialNumber: 61AF7B8350DC52B74CC1F44E
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        signature
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            algorithm: sm2sign-with-sm3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        issuer
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            countryName: CN
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            stateOrProvinceName: Beijing
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            localityName: Haidian
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            organizationName: PKU
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            organizationalUnitName: CS
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            commonName: ROOTCA
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        validity
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            notBefore: Fri Jul &lt;span class=&#34;m&#34;&gt;12&lt;/span&gt; 23:25:33 &lt;span class=&#34;m&#34;&gt;2024&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            notAfter: Mon Jul &lt;span class=&#34;m&#34;&gt;10&lt;/span&gt; 23:25:33 &lt;span class=&#34;m&#34;&gt;2034&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        subject
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            countryName: CN
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            stateOrProvinceName: Beijing
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            localityName: Haidian
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            organizationName: PKU
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            organizationalUnitName: CS
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            commonName: ROOTCA
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        subjectPulbicKeyInfo
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            algorithm
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                algorithm: ecPublicKey
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                namedCurve: sm2p256v1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            subjectPublicKey
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                ECPoint: 04A72F6DBFEAC2A7AB756848051DA0EE237D2B48A879EF7ED956ED11787A95CA1AAD5E8D9B1952284EC47E75A1D7A38C8EDA6C7187D95347C7016A551F04A287E4
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        extensions
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            Extension
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                extnID: KeyUsage &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;2.5.29.15&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                critical: &lt;span class=&#34;nb&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                KeyUsage: cRLSign
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    signatureAlgorithm
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        algorithm: sm2sign-with-sm3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    signatureValue: 3045022100E8927FD23F8B92EDE9ABA2F2664F8A814B82C4A5AC1637ED1AE325FEF5705A01022054750BE9E20D7FF2707DBF59A3BAFCD2D2B0D21703C215659335209B8F5365DF
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----BEGIN CERTIFICATE-----
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;MIIBxjCCAWygAwIBAgIMYa97g1DcUrdMwfROMAoGCCqBHM9VAYN1MF0xCzAJBgNV
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;BAYTAkNOMRAwDgYDVQQIEwdCZWlqaW5nMRAwDgYDVQQHEwdIYWlkaWFuMQwwCgYD
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;VQQKEwNQS1UxCzAJBgNVBAsTAkNTMQ8wDQYDVQQDEwZST09UQ0EwHhcNMjQwNzEy
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;MTUyNTMzWhcNMzQwNzEwMTUyNTMzWjBdMQswCQYDVQQGEwJDTjEQMA4GA1UECBMH
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;QmVpamluZzEQMA4GA1UEBxMHSGFpZGlhbjEMMAoGA1UEChMDUEtVMQswCQYDVQQL
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;EwJDUzEPMA0GA1UEAxMGUk9PVENBMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;py9tv+rCp6t1aEgFHaDuI30rSKh5737ZVu0ReHqVyhqtXo2bGVIoTsR+daHXo4yO
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2mxxh9lTR8cBalUfBKKH5KMSMBAwDgYDVR0PAQH/BAQDAgECMAoGCCqBHM9VAYN1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;A0gAMEUCIQDokn/SP4uS7emrovJmT4qBS4LEpawWN+0a4yX+9XBaAQIgVHUL6eIN
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;f/Jwfb9Zo7r80tKw0hcDwhVlkzUgm49TZd8&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----END CERTIFICATE-----
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;生成子 CA 密钥对&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl sm2keygen&lt;/code&gt;: 使用 GMSSL 工具生成 SM2 密钥对。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 指定密钥加密时使用的密码（1234）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out cakey.pem&lt;/code&gt;: 将生成的私钥保存到 &lt;code&gt;cakey.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out cakey.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----BEGIN PUBLIC KEY-----
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEe/KYB6V6WoHvlfLr8k859ZgQeZVW
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;Dgc7flWYxo8OyRTAOT1jr9NRdt4e7kS0nMzWYJGZfqGVeapIfuwWv8fZvA&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;==&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;-----END PUBLIC KEY-----
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;生成子 CA 证书请求&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl reqgen&lt;/code&gt;: 使用 GMSSL 工具生成证书请求。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-C CN&lt;/code&gt;: 指定国家代码为中国。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-ST Beijing&lt;/code&gt;: 指定省/市为北京。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-L Haidian&lt;/code&gt;: 指定地区为海淀区。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-O PKU&lt;/code&gt;: 指定组织名为 PKU（北京大学）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-OU CS&lt;/code&gt;: 指定组织单位为 CS（计算机科学）。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-CN &amp;quot;Sub CA&amp;quot;&lt;/code&gt;: 指定通用名为 &amp;ldquo;Sub CA&amp;rdquo;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key cakey.pem&lt;/code&gt;: 使用 &lt;code&gt;cakey.pem&lt;/code&gt; 文件中的私钥。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 私钥文件的密码。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out careq.pem&lt;/code&gt;: 将生成的证书请求保存到 &lt;code&gt;careq.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN &lt;span class=&#34;s2&#34;&gt;&amp;#34;Sub CA&amp;#34;&lt;/span&gt; -key cakey.pem -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out careq.pem
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;签署子 CA 证书请求&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gmssl reqsign&lt;/code&gt;: 使用 GMSSL 工具签署证书请求。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-in careq.pem&lt;/code&gt;: 指定要签署的证书请求文件 &lt;code&gt;careq.pem&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-days 365&lt;/code&gt;: 生成的子 CA 证书有效期为365天。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key_usage keyCertSign&lt;/code&gt;: 指定密钥用法为证书签名。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-path_len_constraint 0&lt;/code&gt;: 限制路径长度为0，即此子 CA 不能再签发子证书。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-cacert rootcacert.pem&lt;/code&gt;: 使用 &lt;code&gt;rootcacert.pem&lt;/code&gt; 文件中的根 CA 证书。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-key rootcakey.pem&lt;/code&gt;: 使用 &lt;code&gt;rootcakey.pem&lt;/code&gt; 文件中的根 CA 私钥。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-pass 1234&lt;/code&gt;: 根 CA 私钥文件的密码。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;-out cacert.pem&lt;/code&gt;: 将生成的子 CA 证书保存到 &lt;code&gt;cacert.pem&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hacker@LAPTOP-V47UU71B:~$ gmssl reqsign -in careq.pem -days &lt;span class=&#34;m&#34;&gt;365&lt;/span&gt; -key_usage keyCertSign -path_len_constraint &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt; -cacert rootcacert.pem -key rootcakey.pem -pass &lt;span class=&#34;m&#34;&gt;1234&lt;/span&gt; -out cacert.pem
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;gmssl-python测试&#34;&gt;gmssl-python测试
+&lt;/h3&gt;&lt;p&gt;sm3算法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;gmssl&lt;/span&gt; &lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sm3&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Sm3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;sm3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;update&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;abc&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;dgst&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sm3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;digest&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;sm3(&amp;#39;abc&amp;#39;) : &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dgst&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hex&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;参考文献&#34;&gt;参考文献
+&lt;/h3&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https_blog.csdn.net/?url=https%3A%2F%2Fblog.csdn.net%2Fm0_59598029%2Farticle%2Fdetails%2F135173059&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;通俗易懂的对称加密与非对称加密原理浅析(csdn.net)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://cloud.tencent.com/developer/article/2421525&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PKI-一文读懂SM1、SM2、SM3、SM4等国密算法-腾讯云开发者社区-腾讯云(tencent.com)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/GmSSL/GmSSL-Python&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Releases · GmSSL/GmSSL-Python (github.com)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;http://gmssl.org/docs/quickstart.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;快速上手 (gmssl.org)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/guanzhi/GmSSL?tab=readme-ov-file&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;guanzhi/GmSSL: 支持国密SM2/SM3/SM4/SM9/SSL的密码工具箱 (github.com)&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

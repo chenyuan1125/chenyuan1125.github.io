@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="对现有、常见的加密算法做一些总结和对比工作">
+<meta name="keywords" content="加密算法、国密、美密"><title>加密算法调研</title>
+
+<link rel='canonical' href='//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/'>
+
+<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="加密算法调研">
+<meta property='og:description' content="对现有、常见的加密算法做一些总结和对比工作">
+<meta property='og:url' content='//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='加密算法' /><meta property='article:published_time' content='2024-07-20T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-15T17:59:53&#43;08:00'/><meta property='og:image' content='//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg' />
+<meta name="twitter:title" content="加密算法调研">
+<meta name="twitter:description" content="对现有、常见的加密算法做一些总结和对比工作"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg' />
+
+<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="//localhost:1313/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="//localhost:1313/en/" >English</option>
+                                
+                                    <option value="//localhost:1313/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#美密算法">美密算法</a>
+      <ol>
+        <li><a href="#对称加密">对称加密</a></li>
+        <li><a href="#非对称加密">非对称加密</a></li>
+        <li><a href="#常见加密算法">常见加密算法</a>
+          <ol>
+            <li><a href="#md5算法">MD5算法</a></li>
+            <li><a href="#sha1算法">SHA1算法</a></li>
+            <li><a href="#hmac算法">HMAC算法</a></li>
+            <li><a href="#aes算法">AES算法</a></li>
+            <li><a href="#rsa算法">RSA算法</a></li>
+            <li><a href="#ecc算法">ECC算法</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#国密算法">国密算法</a>
+      <ol>
+        <li><a href="#概述">概述</a></li>
+        <li><a href="#sm1">SM1</a></li>
+        <li><a href="#sm2">SM2</a></li>
+        <li><a href="#sm3">SM3</a></li>
+        <li><a href="#sm4">SM4</a></li>
+        <li><a href="#sm9">SM9</a></li>
+        <li><a href="#使用经验">使用经验</a></li>
+        <li><a href="#国密算法的安全性">国密算法的安全性</a>
+          <ol>
+            <li><a href="#sm2算法的安全性">SM2算法的安全性</a></li>
+            <li><a href="#sm3算法的安全性">SM3算法的安全性</a></li>
+            <li><a href="#sm4算法的安全性">SM4算法的安全性</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#实验过程">实验过程</a>
+      <ol>
+        <li><a href="#下载">下载</a></li>
+        <li><a href="#编译与安装">编译与安装</a></li>
+        <li><a href="#gmssl基本指令">gmssl基本指令</a>
+          <ol>
+            <li><a href="#sm4加密解密"><strong>SM4加密解密</strong></a></li>
+            <li><a href="#sm3摘要"><strong>SM3摘要</strong></a></li>
+            <li><a href="#sm2签名及验签"><strong>SM2签名及验签</strong></a></li>
+            <li><a href="#sm2加密及解密"><strong>SM2加密及解密</strong></a></li>
+            <li><a href="#生成sm2根证书rootcakeypem及ca证书cakeypem"><strong>生成SM2根证书rootcakey.pem及CA证书cakey.pem</strong></a></li>
+          </ol>
+        </li>
+        <li><a href="#gmssl-python测试">gmssl-python测试</a></li>
+        <li><a href="#参考文献">参考文献</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/">
+                <img src="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu11007880451925640313.jpg"
+                        srcset="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu11007880451925640313.jpg 800w, /p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu8572034579044090110.jpg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post 加密算法调研" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/" style="background-color: #364073; color: #fff;">
+                日常研究
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/">加密算法调研</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            对现有、常见的加密算法做一些总结和对比工作
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-07-20</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 13 分钟
+                </time>
+            </div>
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+                <time class="article-words">
+                    6323字
+                </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="加密算法调研报告">加密算法调研报告
+</h1><h2 id="美密算法">美密算法
+</h2><h3 id="对称加密">对称加密
+</h3><p>对称加密又叫做私钥加密，即信息的发送方和接收方使用同一个密钥去加密和解密数据。对称加密的特点是算法公开、加密和解密速度快，适合于对大数据量进行加密。</p>
+<blockquote>
+<p><strong>加密过程如下</strong>：明文+加密算法+私钥=&gt;密文</p>
+<p><strong>解密过程如下</strong>：密文+解密算法+私钥=&gt;明文</p>
+</blockquote>
+<p><img src="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53.png"
+	width="977"
+	height="423"
+	srcset="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu1539050602817823707.png 480w, /p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu61028026875299665.png 1024w"
+	loading="lazy"
+	
+		alt="对称加密"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="554px"
+	
+></p>
+<h3 id="非对称加密">非对称加密
+</h3><p>非对称加密也叫做公钥加密。非对称加密与对称加密相比，其安全性更好。对称加密的通信双方使用相同的密钥，如果一方的密钥遭泄露，那么整个通信就会被破解。而非对称加密使用一对密钥，即公钥和私钥，且二者成对出现。私钥被自己保存，不能对外泄露。公钥指的是公共的密钥，任何人都可以获得该密钥。用公钥或私钥中的任何一个进行加密，用另一个进行解密。</p>
+<blockquote>
+<p><strong>被公钥加密过的密文只能被私钥解密，过程如下</strong>：</p>
+<p>明文+加密算法+公钥=&gt;密文，密文+解密算法+私钥=&gt;明文</p>
+</blockquote>
+<p><img src="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535.png"
+	width="977"
+	height="428"
+	srcset="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu17533756092435017513.png 480w, /p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu1717627113123765504.png 1024w"
+	loading="lazy"
+	
+		alt="非对称加密"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="547px"
+	
+></p>
+<h3 id="常见加密算法">常见加密算法
+</h3><h4 id="md5算法">MD5算法
+</h4><blockquote>
+<p>MD5用的是哈希函数，它的典型应用是对一段信息产生信息摘要，以防止被篡改。严格来说，MD5不是一种加密算法而是摘要算法。无论是多长的输入，MD5都会输出长度为128bits的一个串(通常用16进制表示为32个字符)。</p>
+</blockquote>
+<h4 id="sha1算法">SHA1算法
+</h4><blockquote>
+<p>SHA1是和MD5一样流行的消息摘要算法，然而SHA1比MD5的安全性更强。对于长度小于2^64位的消息，SHA1会产生一个160位的消息摘要。基于MD5、SHA1的信息摘要特性以及不可逆(一般而言)，可以被应用在检查文件完整性以及数字签名等场景。</p>
+</blockquote>
+<h4 id="hmac算法">HMAC算法
+</h4><blockquote>
+<p>MAC是密钥相关的哈希运算消息认证码（Hash-basedMessageAuthenticationCode），HMAC运算利用哈希算法(MD5、SHA1等)，以一个密钥和一个消息为输入，生成一个消息摘要作为输出。HMAC发送方和接收方都有的key进行计算，而没有这把key的第三方，则是无法计算出正确的散列值的，这样就可以防止数据被篡改。</p>
+</blockquote>
+<h4 id="aes算法">AES算法
+</h4><p>ES、DES、3DES都是对称的块加密算法，加解密的过程是可逆的。常用的有AES128、AES192、AES256。</p>
+<blockquote>
+<p>DES加密算法是一种分组密码，以64位为分组对数据加密，它的密钥长度是56位，加密解密用同一算法。DES加密算法是对密钥进行保密，而公开算法，包括加密和解密算法。这样，只有掌握了和发送方相同密钥的人才能解读由DES加密算法加密的密文数据。因此，破译DES加密算法实际上就是搜索密钥的编码。对于56位长度的密钥来说，如果用穷举法来进行搜索的话，其运算次数为2^56次。3DES是基于DES的对称算法，对一块数据用三个不同的密钥进行三次加密，强度更高。</p>
+</blockquote>
+<h4 id="rsa算法">RSA算法
+</h4><blockquote>
+<p>RSA加密算法是目前最有影响力的公钥加密算法，并且被普遍认为是目前最优秀的公钥方案之一。RSA是第一个能同时用于加密和数字签名的算法，它能够抵抗到目前为止已知的所有密码攻击，已被ISO推荐为公钥数据加密标准。</p>
+</blockquote>
+<p>RSA加密算法基于一个十分简单的数论事实：将两个大素数相乘十分容易，但想要对其乘积进行因式分解却极其困难，因此可以将乘积公开作为加密密钥。</p>
+<h4 id="ecc算法">ECC算法
+</h4><blockquote>
+<p>ECC也是一种非对称加密算法，主要优势是在某些情况下，它比其他的方法使用更小的密钥，比如RSA加密算法，提供相当的或更高等级的安全级别。不过一个缺点是加密和解密操作的实现比其他机制时间长(相比RSA算法，该算法对CPU消耗严重)。</p>
+</blockquote>
+<h2 id="国密算法">国密算法
+</h2><h3 id="概述">概述
+</h3><p>国密即国家密码局认定的国产密码算法。主要有SM1，SM2，SM3，SM4。密钥长度和分组长度均为128位。</p>
+<p>国密算法是指国家密码管理局认定的一系列国产密码算法，包括SM1-SM9以及ZUC等。其中</p>
+<ul>
+<li>SM1、SM4、SM5、SM6、SM7、SM8、ZUC等属于对称密码，</li>
+<li>SM2、SM9等属于公钥密码(非对称加密)</li>
+<li>SM3属于单向散列函数。</li>
+</ul>
+<p><img src="https://s.secrss.com/anquanneican/3fa933cfcd803924a2ad1ed7d8d35f57.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="校园信息系统国密改造路径探索-安全内参|决策者的网络安全知识库"
+	
+	
+></p>
+<p>目前我国主要使用公开的SM2、SM3、SM4作为商用密码算法。</p>
+<blockquote>
+<p>其中SM1、SM7算法不公开，调用该算法时，需要通过加密芯片的接口进行调用</p>
+</blockquote>
+<ul>
+<li>SM2是基于椭圆曲线的公钥密码算法，包括用于数字签名的SM2-1、用于密钥交换的SM2-2和用于公钥密码的SM2-3。</li>
+<li>SM3是能够计算出256比特的散列值的单向散列函数，主要用于数字签名和消息认证码。</li>
+<li>SM4是属于对称密码的一种分组密码算法，分组长度和密钥长度均为128比特。</li>
+</ul>
+<p>国密算法从SM1-SM4分别实现了对称、非对称、摘要等算法功能，目前已普遍应用于日常工作生活中的各个方面，如工作中使用的VPN，金融业务中的资金流转、刷卡支付，以及门禁设施、身份认证等。</p>
+<hr>
+<h3 id="sm1">SM1
+</h3><p>SM1算法是分组密码算法，分组长度为128位，密钥长度都为128比特，算法安全保密强度及相关软硬件实现性能与AES相当，算法不公开，仅以IP核的形式存在于芯片中。</p>
+<p>采用该算法已经研制了系列芯片、智能IC卡、智能密码钥匙、加密卡、加密机等安全产品，广泛应用于电子政务、电子商务及国民经济的各个应用领域（包括国家政务通、警务通等重要领域）。</p>
+<hr>
+<h3 id="sm2">SM2
+</h3><p>可以理解为国产RSA。非对称加密，基于ECC。该算法已公开。由于该算法基于ECC，故其签名速度与秘钥生成速度都快于RSA。</p>
+<p>SM2椭圆曲线公钥密码算法是我国自主设计的公钥密码算法，包括SM2-1椭圆曲线数字签名算法，SM2-2椭圆曲线密钥交换协议，SM2-3椭圆曲线公钥加密算法，分别用于实现数字签名密钥协商和数据加密等功能。SM2算法与RSA算法不同的是，SM2算法是基于椭圆曲线上点群离散对数难题，相对于RSA算法，256位的SM2密码强度已经比2048位的RSA密码强度要高，但运算速度快于RSA。</p>
+<h3 id="sm3">SM3
+</h3><p>可以理解为国产MD5。消息摘要。可以用MD5作为对比理解。该算法已公开。校验结果为256位。</p>
+<h3 id="sm4">SM4
+</h3><p>可以理解为国产AES。无线局域网标准的分组数据算法。对称加密，密钥长度和分组长度均为128位。</p>
+<h3 id="sm9">SM9
+</h3><p>一种标识密码(IBE)算法，由国家密码管理局于2016年3月28日发布，相关标准为“GM/T0044-2016SM9标识密码算法”。主要用于用户的身份认证。SM9的加密强度等同于3072位密钥的RSA加密算法。</p>
+<hr>
+<h3 id="使用经验">使用经验
+</h3><p>一般数据发送端都是用SM4对数据内容加密，使用SM3对内容进行摘要，再使用SM2对摘要进行签名。</p>
+<p>一般接收端，先用SM2对摘要进行验签，验签成功后就做到了防抵赖，对发送过来的内容进行SM3摘要，看下生成的摘要和验签后的摘要是否一致，用于防篡改。</p>
+<hr>
+<p>另外SM4在加密解密需要相同的密钥，这个我们可以通过编写密钥交换模块实现生成相同的密钥。用于SM4对称加密。</p>
+<p>关于非对称还要注意几点：</p>
+<p>（1）公钥是通过私钥产生的；</p>
+<p>（2）公钥加密，私钥解密是加密的过程</p>
+<p>（3）私钥加密，公钥解密是签名的过程；</p>
+<p>由于SM1、SM4加解密的分组大小为128bit，故对消息进行加解密时，若消息长度过长，需要进行分组，要消息长度不足，则要进行填充。</p>
+<hr>
+<h3 id="国密算法的安全性">国密算法的安全性
+</h3><p>国密算法，作为国家层面推广的密码算法标准，其安全性经过了严格的审查和评估。</p>
+<p>以下是对SM2、SM3和SM4算法安全性的进一步分析：</p>
+<h4 id="sm2算法的安全性">SM2算法的安全性
+</h4><p>SM2算法是一个基于椭圆曲线的公钥密码算法，其安全性主要依赖于椭圆曲线离散对数问题的难度。与RSA算法相比，SM2算法在相同的安全强度下，所需的密钥长度更短，因此，在加密和签名速度上具有一定的优势。此外，SM2算法在设计时也考虑了多种攻击手段，并采用了相应的防护措施，从而确保了其在实际应用中的安全性。</p>
+<h4 id="sm3算法的安全性">SM3算法的安全性
+</h4><p>SM3算法是一个密码杂凑算法，主要用于数字签名和消息认证等场景。其安全性主要体现在以下几个方面：</p>
+<ol>
+<li>输出长度：SM3算法的输出长度为256比特，相比MD5（128比特）和SHA-1（160比特）算法，其输出长度更长，因此具有更高的安全性。</li>
+<li>碰撞攻击：SM3算法在设计时考虑了碰撞攻击的问题，并采用了相应的防护措施。目前，尚未有公开的针对SM3算法的碰撞攻击方法。</li>
+<li>雪崩效应：SM3算法具有雪崩效应，即输入数据的微小变化会导致输出结果的巨大差异。这一特性使得攻击者难以通过猜测或穷举的方式来破解SM3算法。</li>
+</ol>
+<h4 id="sm4算法的安全性">SM4算法的安全性
+</h4><p>SM4算法是一个分组密码算法，主要用于数据的加密和解密。其安全性主要体现在以下几个方面：</p>
+<ol>
+<li>密钥长度：SM4算法的密钥长度为128比特，与AES算法相同。这一长度的密钥足以抵抗目前已知的所有密码攻击方法。</li>
+<li>分组长度：SM4算法的分组长度也为128比特，这意味着每次加密或解密的数据块大小为128比特。这一分组长度可以确保数据的机密性和完整性。</li>
+<li>加密轮数：SM4算法采用了多轮加密的方式，每轮加密都使用了不同的密钥和加密函数。这种加密方式可以使得攻击者难以通过分析加密过程来破解算法。</li>
+<li>安全性评估：SM4算法已经经过了多轮的安全性评估和审查，其安全性得到了广泛的认可。目前，尚未有公开的针对SM4算法的有效攻击方法。</li>
+</ol>
+<p>综上所述，国密算法中的SM2、SM3和SM4算法都具有较高的安全性，可以满足不同场景下的密码应用需求。在实际应用中，可以根据具体的需求和场景选择合适的算法进行使用。</p>
+<h2 id="实验过程">实验过程
+</h2><blockquote>
+<p>本实验使用北京大学自主开发的国产商用密码开源库GmSSL，这个库实现了对国密算法、标准和安全通信协议的全面功能覆盖，支持包括移动端在内的主流操作系统和处理器，支持密码钥匙、密码卡等典型国产密码硬件，提供功能丰富的命令行工具及多种编译语言编程接口。</p>
+</blockquote>
+<h3 id="下载">下载
+</h3><ul>
+<li>GmSSL的主分支版本为 <a class="link" href="https://github.com/guanzhi/GmSSL/releases/tag/v3.1.1"  target="_blank" rel="noopener"
+    >GmSSL-3.1.1</a>，主要增加跨平台特性，特别是对Windows/Visual Studio的支持，Windows、Android、iOS平台的开发者需要使用该版本。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/guanzhi/GmSSL.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="编译与安装">编译与安装
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir build
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> build
+</span></span><span class="line"><span class="cl">cmake ..
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">make <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">sudo make install
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>安装gmssl-python</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install gmssl-python
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>验证安装成功</strong></p>
+<p>注意<code>gmssl-python</code>包中只包含一个<code>gmssl</code>模块（而不是<code>gmssl_python</code>模块）。</p>
+<p>可以在Python交互环境中做简单的测试</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt;&gt;&gt; import gmssl
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; gmssl.GMSSL_PYTHON_VERSION
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; gmssl.GMSSL_LIBRARY_VERSION
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="gmssl基本指令">gmssl基本指令
+</h3><h4 id="sm4加密解密"><strong>SM4加密解密</strong>
+</h4><p>环境变量</p>
+<p><code>KEY</code>：加密和解密使用的密钥，长度为16字节（128位）。</p>
+<p><code>IV</code>：初始化向量，用于某些加密模式（如 CBC 和 CTR），长度为16字节（128位）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nv">KEY</span><span class="o">=</span><span class="m">11223344556677881122334455667788</span>
+</span></span><span class="line"><span class="cl">root@ecs-5123:~# <span class="nv">IV</span><span class="o">=</span><span class="m">11223344556677881122334455667788</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 CBC 模式加密</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm4_cbc -encrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -out sm4.cbc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 CBC 模式解密</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm4_cbc -decrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -in sm4.cbc
+</span></span><span class="line"><span class="cl">hello
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 CTR 模式加密</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm4_ctr -encrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -out sm4.ctr
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用 CTR 模式解密</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm4_ctr -decrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -in sm4.ctr
+</span></span><span class="line"><span class="cl">hello
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="sm3摘要"><strong>SM3摘要</strong>
+</h4><p><strong>计算 SM3 哈希值</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n abc <span class="p">|</span> gmssl sm3
+</span></span><span class="line"><span class="cl">66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>生成 SM2 密钥对</strong></p>
+<p><code>gmssl sm2keygen</code>：生成一个 SM2 密钥对。</p>
+<ul>
+<li><code>-pass 1234</code>：指定用于加密私钥的密码为 <code>1234</code>。</li>
+<li><code>-out sm2.pem</code>：将生成的私钥保存到 <code>sm2.pem</code> 文件中。</li>
+<li><code>-pubout sm2pub.pem</code>：将生成的公钥保存到 <code>sm2pub.pem</code> 文件中。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm2keygen -pass <span class="m">1234</span> -out sm2.pem -pubout sm2pub.pem
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用公钥和 ID 计算 SM3 哈希值</strong></p>
+<p><code>echo -n abc</code>：输出字符串 <code>abc</code>。</p>
+<p><code>| gmssl sm3 -pubkey sm2pub.pem -id 1234567812345678</code>：将字符串 <code>abc</code> 通过管道传输给 <code>gmssl</code> 工具。</p>
+<ul>
+<li><code>sm3</code>：指定使用 SM3 哈希算法。</li>
+<li><code>-pubkey sm2pub.pem</code>：使用 <code>sm2pub.pem</code> 文件中的 SM2 公钥。</li>
+<li><code>-id 1234567812345678</code>：指定 ID（用户标识），在某些加密操作中用于唯一标识用户。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n <span class="p">|</span> gmssl sm3 -pubkey sm2pub.pem -id <span class="m">1234567812345678</span>
+</span></span><span class="line"><span class="cl">59cf08de46459c87ee8f5f114b09a9fb10900133ad7ceb0cb181c1b617d088e6
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用 HMAC-SM3 进行哈希计算</strong></p>
+<p><code>echo -n abc</code>：输出字符串 <code>abc</code>。</p>
+<p><code>| gmssl sm3hmac -key 11223344556677881122334455667788</code>：将字符串 <code>abc</code> 通过管道传输给 <code>gmssl</code> 工具。</p>
+<ul>
+<li><code>sm3hmac</code>：指定使用 HMAC-SM3 算法。</li>
+<li><code>-key 11223344556677881122334455667788</code>：指定用于 HMAC 的密钥，长度为 16 字节（128 位）。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n eab <span class="p">|</span>gmssl sm3hmac -key <span class="m">11223344556677881122334455667788</span>
+</span></span><span class="line"><span class="cl">a6d4a86e315a097a8981d9943ddf6a5144b1b4e8052ab3eb9534e0b4b0752cf0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="sm2签名及验签"><strong>SM2签名及验签</strong>
+</h4><p><strong>生成密钥对</strong></p>
+<p><code>gmssl sm2keygen</code>: 使用 GMSSL 工具生成 SM2 密钥对。</p>
+<p><code>-pass 1234</code>: 指定密钥对加密时使用的密码（1234）。</p>
+<p><code>-out sm2.pem</code>: 将生成的私钥保存到 <code>sm2.pem</code> 文件中。</p>
+<p><code>-pubout sm2pub.pem</code>: 将生成的公钥保存到 <code>sm2pub.pem</code> 文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out sm2.pem -pubout sm2pub.pem
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>对消息进行签名</strong></p>
+<p><code>echo hello</code>: 输出 &ldquo;hello&rdquo; 字符串。</p>
+<p><code>|</code>: 管道符，将前一个命令的输出作为下一个命令的输入。</p>
+<p><code>gmssl sm2sign</code>: 使用 GMSSL 工具对输入消息进行签名。</p>
+<p><code>-key sm2.pem</code>: 指定用于签名的私钥文件 <code>sm2.pem</code>。</p>
+<p><code>-pass 1234</code>: 私钥文件的密码。</p>
+<p><code>-out sm2.sig</code>: 将签名结果保存到 <code>sm2.sig</code> 文件中。</p>
+<p><code>#-id 1234567812345678</code>: （注释掉的）用户 ID（可选项）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm2sign -key sm2.pem -pass <span class="m">1234</span> -out sm2.sig
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>验证签名</strong></p>
+<p><code>echo hello</code>: 输出 &ldquo;hello&rdquo; 字符串。</p>
+<p><code>|</code>: 管道符，将前一个命令的输出作为下一个命令的输入。</p>
+<p><code>gmssl sm2verify</code>: 使用 GMSSL 工具验证签名。</p>
+<p><code>-pubkey sm2pub.pem</code>: 指定用于验证签名的公钥文件 <code>sm2pub.pem</code>。</p>
+<p><code>-sig sm2.sig</code>: 指定要验证的签名文件 <code>sm2.sig</code>。</p>
+<p><code>-id 1234567812345678</code>: 用户 ID（与签名时使用的 ID 一致）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span>gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig -id <span class="m">123467812345678</span>
+</span></span><span class="line"><span class="cl">/home/hacker/secret_test/GmSSL/src/sm2_sign.c:265:sm2_fast_verify<span class="o">()</span>:
+</span></span><span class="line"><span class="cl">/home/hacker/secret_test/GmSSL/src/sm2_sign.c:671:sm2_verify_finish<span class="o">()</span>:
+</span></span><span class="line"><span class="cl">gmssl sm2verify: inner error
+</span></span><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span>gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig
+</span></span><span class="line"><span class="cl">verify : success
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="sm2加密及解密"><strong>SM2加密及解密</strong>
+</h4><p><strong>加密消息</strong></p>
+<p><code>echo hello</code>: 输出 &ldquo;hello&rdquo; 字符串。</p>
+<p><code>|</code>: 管道符，将前一个命令的输出作为下一个命令的输入。</p>
+<p><code>gmssl sm2encrypt</code>: 使用 GMSSL 工具加密输入消息。</p>
+<p><code>-pubkey sm2pub.pem</code>: 指定用于加密的公钥文件 <code>sm2pub.pem</code>。</p>
+<p><code>-out sm2.der</code>: 将加密结果保存到 <code>sm2.der</code> 文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm2encrypt -pubkey sm2pub.pem -out sm2.der
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>解密消息</strong></p>
+<p><code>gmssl sm2decrypt</code>: 使用 GMSSL 工具解密消息。</p>
+<p><code>-key sm2.pem</code>: 指定用于解密的私钥文件 <code>sm2.pem</code>。</p>
+<p><code>-pass 1234</code>: 私钥文件的密码。</p>
+<p><code>-in sm2.der</code>: 指定要解密的加密文件 <code>sm2.der</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2decrypt -key sm2.pem -pass <span class="m">1234</span> -in sm2.der
+</span></span><span class="line"><span class="cl">hello
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="生成sm2根证书rootcakeypem及ca证书cakeypem"><strong>生成SM2根证书rootcakey.pem及CA证书cakey.pem</strong>
+</h4><p><strong>生成根 CA 密钥对</strong></p>
+<p><code>gmssl sm2keygen</code>: 使用 GMSSL 工具生成 SM2 密钥对。</p>
+<p><code>-pass 1234</code>: 指定密钥加密时使用的密码（1234）。</p>
+<p><code>-out rootcakey.pem</code>: 将生成的私钥保存到 <code>rootcakey.pem</code> 文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out rootcakey.pem
+</span></span><span class="line"><span class="cl">-----BEGIN PUBLIC KEY-----
+</span></span><span class="line"><span class="cl">MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEpy9tv+rCp6t1aEgFHaDuI30rSKh5
+</span></span><span class="line"><span class="cl">737ZVu0ReHqVyhqtXo2bGVIoTsR+daHXo4yO2mxxh9lTR8cBalUfBKKH5A<span class="o">==</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>生成根 CA 证书</strong></p>
+<p><code>gmssl certgen</code>: 使用 GMSSL 工具生成证书。</p>
+<p><code>-C CN</code>: 指定国家代码为中国。</p>
+<p><code>-ST Beijing</code>: 指定省/市为北京。</p>
+<p><code>-L Haidian</code>: 指定地区为海淀区。</p>
+<p><code>-O PKU</code>: 指定组织名为 PKU（北京大学）。</p>
+<p><code>-OU CS</code>: 指定组织单位为 CS（计算机科学）。</p>
+<p><code>-CN ROOTCA</code>: 指定通用名为 ROOTCA。</p>
+<p><code>-days 3650</code>: 证书有效期为3650天（约10年）。</p>
+<p><code>-key rootcakey.pem</code>: 使用 <code>rootcakey.pem</code> 文件中的私钥。</p>
+<p><code>-pass 1234</code>: 私钥文件的密码。</p>
+<p><code>-out rootcacert.pem</code>: 将生成的证书保存到 <code>rootcacert.pem</code> 文件中。</p>
+<p><code>-key_usage keyCertSign</code>: 指定密钥用法为证书签名。</p>
+<p><code>-key_usage cRLSign</code>: 指定密钥用法为 CRL（证书吊销列表）签名。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN ROOTCA -days <span class="m">3650</span> -key rootcakey.pem -pass <span class="m">1234</span> -out rootcacert.pem -key_usage cRLSign
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>解析根 CA 证书</strong></p>
+<p><code>gmssl certparse</code>: 使用 GMSSL 工具解析证书。</p>
+<p><code>-in rootcacert.pem</code>: 指定要解析的证书文件 <code>rootcacert.pem</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl certparse -in rootcacert.pem
+</span></span><span class="line"><span class="cl">Certificate
+</span></span><span class="line"><span class="cl">    tbsCertificate
+</span></span><span class="line"><span class="cl">        version: v3 <span class="o">(</span>2<span class="o">)</span>
+</span></span><span class="line"><span class="cl">        serialNumber: 61AF7B8350DC52B74CC1F44E
+</span></span><span class="line"><span class="cl">        signature
+</span></span><span class="line"><span class="cl">            algorithm: sm2sign-with-sm3
+</span></span><span class="line"><span class="cl">        issuer
+</span></span><span class="line"><span class="cl">            countryName: CN
+</span></span><span class="line"><span class="cl">            stateOrProvinceName: Beijing
+</span></span><span class="line"><span class="cl">            localityName: Haidian
+</span></span><span class="line"><span class="cl">            organizationName: PKU
+</span></span><span class="line"><span class="cl">            organizationalUnitName: CS
+</span></span><span class="line"><span class="cl">            commonName: ROOTCA
+</span></span><span class="line"><span class="cl">        validity
+</span></span><span class="line"><span class="cl">            notBefore: Fri Jul <span class="m">12</span> 23:25:33 <span class="m">2024</span>
+</span></span><span class="line"><span class="cl">            notAfter: Mon Jul <span class="m">10</span> 23:25:33 <span class="m">2034</span>
+</span></span><span class="line"><span class="cl">        subject
+</span></span><span class="line"><span class="cl">            countryName: CN
+</span></span><span class="line"><span class="cl">            stateOrProvinceName: Beijing
+</span></span><span class="line"><span class="cl">            localityName: Haidian
+</span></span><span class="line"><span class="cl">            organizationName: PKU
+</span></span><span class="line"><span class="cl">            organizationalUnitName: CS
+</span></span><span class="line"><span class="cl">            commonName: ROOTCA
+</span></span><span class="line"><span class="cl">        subjectPulbicKeyInfo
+</span></span><span class="line"><span class="cl">            algorithm
+</span></span><span class="line"><span class="cl">                algorithm: ecPublicKey
+</span></span><span class="line"><span class="cl">                namedCurve: sm2p256v1
+</span></span><span class="line"><span class="cl">            subjectPublicKey
+</span></span><span class="line"><span class="cl">                ECPoint: 04A72F6DBFEAC2A7AB756848051DA0EE237D2B48A879EF7ED956ED11787A95CA1AAD5E8D9B1952284EC47E75A1D7A38C8EDA6C7187D95347C7016A551F04A287E4
+</span></span><span class="line"><span class="cl">        extensions
+</span></span><span class="line"><span class="cl">            Extension
+</span></span><span class="line"><span class="cl">                extnID: KeyUsage <span class="o">(</span>2.5.29.15<span class="o">)</span>
+</span></span><span class="line"><span class="cl">                critical: <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">                KeyUsage: cRLSign
+</span></span><span class="line"><span class="cl">    signatureAlgorithm
+</span></span><span class="line"><span class="cl">        algorithm: sm2sign-with-sm3
+</span></span><span class="line"><span class="cl">    signatureValue: 3045022100E8927FD23F8B92EDE9ABA2F2664F8A814B82C4A5AC1637ED1AE325FEF5705A01022054750BE9E20D7FF2707DBF59A3BAFCD2D2B0D21703C215659335209B8F5365DF
+</span></span><span class="line"><span class="cl">-----BEGIN CERTIFICATE-----
+</span></span><span class="line"><span class="cl">MIIBxjCCAWygAwIBAgIMYa97g1DcUrdMwfROMAoGCCqBHM9VAYN1MF0xCzAJBgNV
+</span></span><span class="line"><span class="cl">BAYTAkNOMRAwDgYDVQQIEwdCZWlqaW5nMRAwDgYDVQQHEwdIYWlkaWFuMQwwCgYD
+</span></span><span class="line"><span class="cl">VQQKEwNQS1UxCzAJBgNVBAsTAkNTMQ8wDQYDVQQDEwZST09UQ0EwHhcNMjQwNzEy
+</span></span><span class="line"><span class="cl">MTUyNTMzWhcNMzQwNzEwMTUyNTMzWjBdMQswCQYDVQQGEwJDTjEQMA4GA1UECBMH
+</span></span><span class="line"><span class="cl">QmVpamluZzEQMA4GA1UEBxMHSGFpZGlhbjEMMAoGA1UEChMDUEtVMQswCQYDVQQL
+</span></span><span class="line"><span class="cl">EwJDUzEPMA0GA1UEAxMGUk9PVENBMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE
+</span></span><span class="line"><span class="cl">py9tv+rCp6t1aEgFHaDuI30rSKh5737ZVu0ReHqVyhqtXo2bGVIoTsR+daHXo4yO
+</span></span><span class="line"><span class="cl">2mxxh9lTR8cBalUfBKKH5KMSMBAwDgYDVR0PAQH/BAQDAgECMAoGCCqBHM9VAYN1
+</span></span><span class="line"><span class="cl">A0gAMEUCIQDokn/SP4uS7emrovJmT4qBS4LEpawWN+0a4yX+9XBaAQIgVHUL6eIN
+</span></span><span class="line"><span class="cl">f/Jwfb9Zo7r80tKw0hcDwhVlkzUgm49TZd8<span class="o">=</span>
+</span></span><span class="line"><span class="cl">-----END CERTIFICATE-----
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>生成子 CA 密钥对</strong></p>
+<p><code>gmssl sm2keygen</code>: 使用 GMSSL 工具生成 SM2 密钥对。</p>
+<p><code>-pass 1234</code>: 指定密钥加密时使用的密码（1234）。</p>
+<p><code>-out cakey.pem</code>: 将生成的私钥保存到 <code>cakey.pem</code> 文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out cakey.pem
+</span></span><span class="line"><span class="cl">-----BEGIN PUBLIC KEY-----
+</span></span><span class="line"><span class="cl">MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEe/KYB6V6WoHvlfLr8k859ZgQeZVW
+</span></span><span class="line"><span class="cl"><span class="nv">Dgc7flWYxo8OyRTAOT1jr9NRdt4e7kS0nMzWYJGZfqGVeapIfuwWv8fZvA</span><span class="o">==</span>
+</span></span><span class="line"><span class="cl">-----END PUBLIC KEY-----
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>生成子 CA 证书请求</strong></p>
+<p><code>gmssl reqgen</code>: 使用 GMSSL 工具生成证书请求。</p>
+<p><code>-C CN</code>: 指定国家代码为中国。</p>
+<p><code>-ST Beijing</code>: 指定省/市为北京。</p>
+<p><code>-L Haidian</code>: 指定地区为海淀区。</p>
+<p><code>-O PKU</code>: 指定组织名为 PKU（北京大学）。</p>
+<p><code>-OU CS</code>: 指定组织单位为 CS（计算机科学）。</p>
+<p><code>-CN &quot;Sub CA&quot;</code>: 指定通用名为 &ldquo;Sub CA&rdquo;。</p>
+<p><code>-key cakey.pem</code>: 使用 <code>cakey.pem</code> 文件中的私钥。</p>
+<p><code>-pass 1234</code>: 私钥文件的密码。</p>
+<p><code>-out careq.pem</code>: 将生成的证书请求保存到 <code>careq.pem</code> 文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN <span class="s2">&#34;Sub CA&#34;</span> -key cakey.pem -pass <span class="m">1234</span> -out careq.pem
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>签署子 CA 证书请求</strong></p>
+<p><code>gmssl reqsign</code>: 使用 GMSSL 工具签署证书请求。</p>
+<p><code>-in careq.pem</code>: 指定要签署的证书请求文件 <code>careq.pem</code>。</p>
+<p><code>-days 365</code>: 生成的子 CA 证书有效期为365天。</p>
+<p><code>-key_usage keyCertSign</code>: 指定密钥用法为证书签名。</p>
+<p><code>-path_len_constraint 0</code>: 限制路径长度为0，即此子 CA 不能再签发子证书。</p>
+<p><code>-cacert rootcacert.pem</code>: 使用 <code>rootcacert.pem</code> 文件中的根 CA 证书。</p>
+<p><code>-key rootcakey.pem</code>: 使用 <code>rootcakey.pem</code> 文件中的根 CA 私钥。</p>
+<p><code>-pass 1234</code>: 根 CA 私钥文件的密码。</p>
+<p><code>-out cacert.pem</code>: 将生成的子 CA 证书保存到 <code>cacert.pem</code> 文件中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl reqsign -in careq.pem -days <span class="m">365</span> -key_usage keyCertSign -path_len_constraint <span class="m">0</span> -cacert rootcacert.pem -key rootcakey.pem -pass <span class="m">1234</span> -out cacert.pem
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="gmssl-python测试">gmssl-python测试
+</h3><p>sm3算法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">gmssl</span> <span class="kn">import</span> <span class="o">*</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">sm3</span> <span class="o">=</span> <span class="n">Sm3</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">sm3</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abc&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">dgst</span> <span class="o">=</span> <span class="n">sm3</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;sm3(&#39;abc&#39;) : &#34;</span> <span class="o">+</span> <span class="n">dgst</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="参考文献">参考文献
+</h3><p><a class="link" href="https_blog.csdn.net/?url=https%3A%2F%2Fblog.csdn.net%2Fm0_59598029%2Farticle%2Fdetails%2F135173059"  target="_blank" rel="noopener"
+    >通俗易懂的对称加密与非对称加密原理浅析(csdn.net)</a></p>
+<p><a class="link" href="https://cloud.tencent.com/developer/article/2421525"  target="_blank" rel="noopener"
+    >PKI-一文读懂SM1、SM2、SM3、SM4等国密算法-腾讯云开发者社区-腾讯云(tencent.com)</a></p>
+<p><a class="link" href="https://github.com/GmSSL/GmSSL-Python"  target="_blank" rel="noopener"
+    >Releases · GmSSL/GmSSL-Python (github.com)</a></p>
+<p><a class="link" href="http://gmssl.org/docs/quickstart.html"  target="_blank" rel="noopener"
+    >快速上手 (gmssl.org)</a></p>
+<p><a class="link" href="https://github.com/guanzhi/GmSSL?tab=readme-ov-file"  target="_blank" rel="noopener"
+    >guanzhi/GmSSL: 支持国密SM2/SM3/SM4/SM9/SSL的密码工具箱 (github.com)</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/">加密算法</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2024-12-15
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/">
+        
+        
+            <div class="article-image">
+                <img src="/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/1.accea6f5271e3d195e76bf7dc0ce31bf_hu18051829005473063406.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Unix Domain Socket源码实现分析(OLK 6.6)"
+                        
+                        data-hash="md5-rM6m9ScePRledr99wM4xvw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Unix Domain Socket源码实现分析(OLK 6.6)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/">
+        
+        
+            <div class="article-image">
+                <img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1.dc5e838b8c6aae5fdbcc6d3483dda94f_hu11388172370948836222.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 进程间通信（IPC）源码分析及总结"
+                        
+                        data-hash="md5-3F6Di4xqrl/bzG00g92pTw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">进程间通信（IPC）源码分析及总结</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://chenyuan1125.top","visitor":true});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2024 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -1,0 +1,3441 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="计算机体系结构课程笔记">
+<meta name="keywords" content="课程、体系结构、流水线"><title>计算机体系结构课程笔记</title>
+
+<link rel='canonical' href='//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/'>
+
+<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="计算机体系结构课程笔记">
+<meta property='og:description' content="计算机体系结构课程笔记">
+<meta property='og:url' content='//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='体系结构' /><meta property='article:published_time' content='2023-12-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-15T21:31:58&#43;08:00'/><meta property='og:image' content='//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1.jpg' />
+<meta name="twitter:title" content="计算机体系结构课程笔记">
+<meta name="twitter:description" content="计算机体系结构课程笔记"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1.jpg' />
+
+<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="//localhost:1313/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="//localhost:1313/en/" >English</option>
+                                
+                                    <option value="//localhost:1313/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#一流水线">一、流水线</a>
+      <ol>
+        <li><a href="#11risc处理器的五段流水线">1.1RISC处理器的五段流水线</a></li>
+        <li><a href="#12冲突hazards">1.2冲突（hazards）</a></li>
+        <li><a href="#13-mips流水线实现">1.3 MIPS流水线实现</a></li>
+        <li><a href="#14-复杂流水线">1.4 复杂流水线</a></li>
+        <li><a href="#15-动态调度流水线">1.5 动态调度流水线</a></li>
+        <li><a href="#16-计分板算法">1.6 计分板算法</a></li>
+        <li><a href="#17-寄存器重命名tomasulo算法">1.7 寄存器重命名(Tomasulo算法)</a></li>
+        <li><a href="#18-猜测执行">1.8 猜测执行</a></li>
+        <li><a href="#19-分支预测">1.9 分支预测</a></li>
+        <li><a href="#110-超标量">1.10 超标量</a></li>
+      </ol>
+    </li>
+    <li><a href="#二高速缓存结构">二、高速缓存结构</a>
+      <ol>
+        <li><a href="#24-cache一致性问题不一致产生的原因">2.4 Cache一致性问题（不一致产生的原因）</a></li>
+        <li><a href="#25-cache一致性协议">2.5 cache一致性协议</a></li>
+      </ol>
+    </li>
+    <li><a href="#三内存一致性模型">三、内存一致性模型</a>
+      <ol>
+        <li><a href="#内存一致性模型分类"><strong>内存一致性模型分类</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#四多线程">四、多线程</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#并行的分类"><strong>并行的分类</strong></a></li>
+            <li><a href="#系统结构的flynn分类"><strong>系统结构的Flynn分类</strong></a></li>
+            <li><a href="#指令级并行ilp无关的指令重叠执行"><strong>指令级并行（ILP）：无关的指令重叠执行</strong></a></li>
+            <li><a href="#多线程multithreading">多线程（Multithreading）</a></li>
+            <li><a href="#并行计算">并行计算</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#五simd和向量处理器">五、SIMD和向量处理器</a>
+      <ol>
+        <li><a href="#向量处理器模型">向量处理器模型</a></li>
+      </ol>
+    </li>
+    <li><a href="#六gpu">六、GPU</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#gpu概述">GPU概述</a></li>
+            <li><a href="#gpu的基本硬件结构">GPU的基本硬件结构</a></li>
+            <li><a href="#gpu编程模型">GPU编程模型</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#七硬件加速器">七、硬件加速器</a>
+      <ol>
+        <li><a href="#加速器概述">加速器概述</a></li>
+        <li><a href="#深度学习加速器">深度学习加速器</a></li>
+        <li><a href="#图计算加速器">图计算加速器</a></li>
+      </ol>
+    </li>
+    <li><a href="#八微码和超长指令字">八、微码和超长指令字</a>
+      <ol>
+        <li><a href="#微码处理器">微码处理器</a></li>
+        <li><a href="#超长指令字vliw处理器"><strong>超长指令字VLIW处理器</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#九云计算概述和虚拟化">九、云计算概述和虚拟化</a></li>
+    <li><a href="#十片上互联网络">十、片上互联网络</a>
+      <ol>
+        <li><a href="#拓扑结构"><strong>拓扑结构</strong></a></li>
+        <li><a href="#路由routing"><strong>路由Routing</strong></a></li>
+        <li><a href="#流量控制-buffering-and-flow-control"><strong>流量控制 Buffering and Flow Control</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#十一仓库级计算机和分布式文件系统">十一、仓库级计算机和分布式文件系统</a>
+      <ol>
+        <li><a href="#warehouse-scale-computer-wsc">Warehouse-scale computer (WSC)</a></li>
+        <li><a href="#分布式文件系统">分布式文件系统</a></li>
+        <li><a href="#nosql数据库-bigtable">NoSQL数据库 BigTable</a></li>
+        <li><a href="#分布式编程框架mapredue"><strong>分布式编程框架</strong>MapRedue****</a></li>
+        <li><a href="#数据中心网络data-center-networks"><strong>数据中心网络Data Center Networks</strong></a></li>
+        <li><a href="#云计算安全">云计算安全</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">
+                <img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu5401575686687084846.jpg"
+                        srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu5401575686687084846.jpg 800w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu1327738414784943126.jpg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post 计算机体系结构课程笔记" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AF%BE%E7%A8%8B/" style="background-color: #D38152; color: #fff;">
+                课程
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">计算机体系结构课程笔记</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            计算机体系结构课程笔记
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2023-12-26</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 50 分钟
+                </time>
+            </div>
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+                <time class="article-words">
+                    24694字
+                </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="计算机体系结构课程笔记">计算机体系结构课程笔记
+</h1><h2 id="一流水线">一、流水线
+</h2><h3 id="11risc处理器的五段流水线">1.1RISC处理器的五段流水线
+</h3><p>RISC指令集执行的五个周期</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">周期</th>
+          <th style="text-align: center">名称</th>
+          <th style="text-align: left">操作</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">1</td>
+          <td style="text-align: center">IF  <br />(Instruction fetch)</td>
+          <td style="text-align: left">•发送PC到内存单元，取回下一条指令；<br />•更新PC=PC+4，为取下一条指令做准备。</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">2</td>
+          <td style="text-align: center">ID  <br />(Instruction decode/register fetch)</td>
+          <td style="text-align: left">•根据指令中的源操作数标识符，从寄存器文件中读取源操作数；<br />•对读取的源操作数进行比较，以为可能的跳转做准备； <br />•对指令中的偏移量进行符号扩展，以防可能用到<br />•计算可能的跳转目的地址。</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">3</td>
+          <td style="text-align: center">EX  (Execution/effective address)</td>
+          <td style="text-align: left">•对于访存指令：将基址寄存器和偏移量相加形成访存地址；<br />•寄存器-寄存器运算指令：对读取的2个源操作数执行指定操作；  <br />•寄存器-立即数运算指令：对读取的第一个源操作数和立即数执行指定的操作。<br />•分支指令：判断是否跳转，若成功，则把转移目标地址送至PC。</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">4</td>
+          <td style="text-align: center">MEM <br /> (Memory  access)</td>
+          <td style="text-align: left">•Load：使用前一个周期计算出的访存地址读取内存； <br /> •Store：将数据写入由前一个周期计算出的访存地址指向的内存。</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">5</td>
+          <td style="text-align: center">WB<br />  (Write back)</td>
+          <td style="text-align: left">•对于寄存器-寄存器运算指令和load指令：将结果写入寄存器文件。</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>注意：寄存器可以在ID和WB阶段同时分别进行读和写，因为它的读写分成了两个部分</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432.png"
+	width="915"
+	height="735"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432_hu8084766764802780753.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432_hu6620702985449991580.png 1024w"
+	loading="lazy"
+	
+		alt="五段流水线"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="124"
+		data-flex-basis="298px"
+	
+></p>
+<p>关于分支指令：</p>
+<p>RISC指令集的分支指令需要三个时钟周期。</p>
+<p>MIPS指令集的分支指令未改进前需要四个时钟周期，改进后只需两个时钟周期，在ID段增加一个加法器，并且将分支判断和目标结果提前到ID/EX站前</p>
+<p>减少流水线分支指令的损失还可以通过stall，分支预测，延迟分支(延迟槽)</p>
+<h3 id="12冲突hazards">1.2冲突（hazards）
+</h3><p><strong>依赖分类</strong></p>
+<ul>
+<li>数据依赖（data dependency）：指令之间有数据流动，也叫真依赖</li>
+<li>名字依赖（name dependency）：两条指令使用相同的寄存器或引用了相同的内存位置
+<ul>
+<li>antidependency反向依赖</li>
+<li>output dependency输出依赖</li>
+</ul>
+</li>
+<li>控制依赖（control dependency）：主要是分支指令对后续指令的影响</li>
+</ul>
+<p><strong>冲突分类</strong></p>
+<ul>
+<li>
+<p>结构冲突（structural hazards）：硬件无法支撑并发指令的各种可能组合，资源部件不够。</p>
+<p>解决办法：</p>
+<ul>
+<li>停顿</li>
+</ul>
+</li>
+<li>
+<p>数据冲突（data hazards）</p>
+<ul>
+<li>RAW（read after write）本来是先写后读，读取写入后的值，但先读后写了，读了写入前的值。对应于数据依赖</li>
+<li>WAW（write after write）写后写，但本来先写入的值变成了后写入的值。对应于输出依赖</li>
+<li>WAR（wirte after read）先读后写，读取写入前的值，但先写后读了，读了写入后的值。对应于反向依赖</li>
+</ul>
+<p><u>WAW/WAR冲突只会在乱序执行流水线中出现，WAW能出现在复杂流水线中，但WAR只出现在动态调度的乱序流水线中，因为复杂流水线仍是静态流水线，所有指令都是按序发射的，不可能存在后一条指令执行完毕了，前一条指令还未读取操作数</u></p>
+<p>解决办法</p>
+<ul>
+<li>前送（forwarding/bypassing）</li>
+<li>计分板（scoreboarding）</li>
+<li>Tomasulo</li>
+</ul>
+</li>
+<li>
+<p>控制冲突（control hazards）：分支指令带来的PC取值的不确定性</p>
+<p>解决办法</p>
+<ul>
+<li>延迟槽（delayed slot）</li>
+<li>分支预测（branch prediction）</li>
+<li>高级分支预测（correlating branch predictors, tournament predictors）</li>
+<li>跳转地址预测（branch target buffers)</li>
+<li>返回地址预测（return address predictors）</li>
+</ul>
+</li>
+</ul>
+<p>加速比的计算：</p>
+<p>$Speedup=Pipeline depth/(Ideal CPI+Structural stalls+Data hazard stalls+Control stalls)$</p>
+<h3 id="13-mips流水线实现">1.3 MIPS流水线实现
+</h3><h3 id="14-复杂流水线">1.4 复杂流水线
+</h3><h3 id="15-动态调度流水线">1.5 动态调度流水线
+</h3><p>什么是静态调度流水线？</p>
+<p>​	就是完全依赖编译器执行指令调度、硬件完全按照程序顺序（program order）发射指令的流水线。这种流水线中，一旦有指令因资源冲突或数据依赖而停顿，后续指令都不允许发射，即使它们完全不依赖于流水线中的任何指令，如前面所提到的调度。</p>
+<p>静态调度流水线所存在的问题</p>
+<ul>
+<li>对编译器开发人员的要求太高</li>
+<li>有些依赖关系编译时无法确定</li>
+<li>编译器的通用性太差</li>
+<li>代码的通用性太差</li>
+<li>受cache miss影响太大</li>
+</ul>
+<p>动态调度的核心思想</p>
+<ul>
+<li>乱序执行</li>
+<li>ID阶段按序执行，并将ID阶段分为两个阶段：
+<ul>
+<li>Issue阶段：对应之前的ID阶段，但精简操作，只做最必要的事：如指令译码、资源冲突检测</li>
+<li>Read operands阶段：等待数据冲突消除，然后读取操作数</li>
+</ul>
+</li>
+</ul>
+<p><strong>动态调度流水线中所有类型的冲突都存在</strong></p>
+<h3 id="16-计分板算法">1.6 计分板算法
+</h3><p>算法的核心是一个计分板，它记录着所有必要的信息，用来控制以下事情：</p>
+<ul>
+<li>每条指令何时可以读取操作数并投入运行（对应着RAW冲突的检测）</li>
+<li>每条指令何时可以写入结果（对应着WAR冲突的检测）</li>
+</ul>
+<p>WAW冲突在issue阶段检测，还是会导致整个流水线的停顿。</p>
+<p>指令执行的四个阶段</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: center">阶段</th>
+          <th style="text-align: left">操作</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">Issue</td>
+          <td style="text-align: left">如果指令所需的功能部件空闲，并且与已执行的指令没有相同的目标寄存器，计分板发射指令到功能部件，并更新内部数据结构。  （WAW冲突）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Read operands</td>
+          <td style="text-align: left">计分板检测源操作数是否可用，是否等待前面指令写入。当源操作数可用时，计分板通知功能部件执行，从寄存器中读取操作数，并开始执行。 （RAW冲突）</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Execute</td>
+          <td style="text-align: left">功能部件在接收到操作数之后开始执行，执行完成出结果后通知计分板。</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Write result</td>
+          <td style="text-align: left">计分板知道功能部件执行完成后，检查WAR冲突，如果有必要还需stall当前指令。（WAR冲突）</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>缺点：</p>
+<ul>
+<li>计分板算法没有处理控制冲突，乱序执行仅局限在一个基本块内</li>
+<li>没有消除WAR/WAW冲突，这些冲突仍会导致停顿</li>
+</ul>
+<h3 id="17-寄存器重命名tomasulo算法">1.7 寄存器重命名(Tomasulo算法)
+</h3><p>核心思想：通过寄存器重命名，可彻底消除WAR/WAW冲突.</p>
+<ul>
+<li>每个功能部件有自己的保留站</li>
+<li>保留站中的每一行保存着一条发射到相应功能部件的指令，并缓存了已就绪的操作数，和未就绪操作数的标签（即生产指令所在的保留站行号）</li>
+<li>CDB(common data bus)不仅把结果送到寄存器中，也送到所有正在等待该结果的保留站中
+<ul>
+<li>每个结果会附带一个标签（即生产指令所在的保留站行号），用来和保留站中的标签相匹配</li>
+<li>CDB相当于实现了前送功能</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">阶段</th>
+          <th style="text-align: left">操作</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Issue</td>
+          <td style="text-align: left">取出下一条指令，检查资源冲突（即是否还有空闲的保留站），并在有空闲保留站时，将指令连同就绪的操作数发射到一个空闲的保留站中（对于未就绪的操作数，在保留站中记录生产指令所在的保留站编号），否则停顿当前及后续指令的发射。（WAR，WAW）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Execute</td>
+          <td style="text-align: left">监控CDB，等待所有操作数均就绪，然后开始执行该指令。  •Load/store指令的执行分为两个步骤：1）计算访存地址（各指令按照程序顺序执行这一步，以防止通过内存发生的数据冲突）；2）访问内存（对于load指令），或者等待要写入内存的操作数（对于store指令）。  •为了保证精确例外，任何指令都必须等待前面的分支指令执行完毕后才能开始执行。（RAW）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Write result</td>
+          <td style="text-align: left">当结果产生后，将其连同标签（即生产指令的保留站编号）广播到CDB上，进而写入寄存器文件和所有需要它的保留站和store  buffer中。  •Store指令在这一阶段访问内存。</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>缺点：</p>
+<ul>
+<li>仍没有处理控制冲突，乱序执行仍局限在一个基本块内</li>
+</ul>
+<h3 id="18-猜测执行">1.8 猜测执行
+</h3><p>核心思想：为了解决跳转条件及目的地址的计算出结果太晚的问题，提前对跳转指令及目的地址的结果做预测，假设预测正确并直接从预测的目的地址开始取指，就好像这条分支指令不存在一样，为了避免预测错误所造成的影响，指令执行完毕后，先不更新寄存器和内存，而是暂存在一个缓冲区内，直到能够确定预测结果是否正确。</p>
+<ul>
+<li>暂存指令结果的缓冲区称为<strong>Reorder Buffer(ROB)</strong>；Write Result调整为向ROB写入</li>
+<li>Write Result后面需要增加一个阶段，用来等待分支结果并真正更新寄存器，称为Commit阶段</li>
+<li>ROB也是数据源之一：保存在ROB中的结果数据需要前送给后续指令</li>
+<li>ROB中的结果是按照程序顺序Commit的</li>
+<li>猜测错误时，通过清除ROB中的相关条目进行回滚</li>
+</ul>
+<p>与Tomasulo算法的结构基本相同，区别主要有四点：</p>
+<ul>
+<li>引入了Reorder Buffer
+<ul>
+<li>CDB不再直接写寄存器文件，而是写入到ROB中</li>
+<li>保留站不仅从寄存器文件中读取源操作数，也从ROB中读取</li>
+</ul>
+</li>
+<li>取消了Store Buffer（其功能改由ROB承担）</li>
+<li>CDB上的数据标签有变化
+<ul>
+<li>生产指令的保留站编号-&gt;生产指令的ROB编号</li>
+</ul>
+</li>
+<li>保留站数据结构有变化
+<ul>
+<li>需要增加一个字段，记录与之关联的ROB编号，作为将来放置到CDB上的数据标签</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">阶段</th>
+          <th style="text-align: left">操作</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">Issue</td>
+          <td style="text-align: left">1）从指令队列取出下一条指令 <br />2）分配一个空闲的保留站和ROB（如果没有则停顿整个流水线）<br />3）将指令信息填入所分配的保留站和ROB<br />4）从寄存器文件或ROB中读取已就绪的操作数，放入保留站中，或在保留站中记录未就绪的操作数所在的ROB编号</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Execute</td>
+          <td style="text-align: left">监控CDB，等待所有操作数均就绪，然后开始执行该指令。<br />•Load指令的执行仍分为两个步骤：1）计算访存地址；2）访问内存  <br />•Store指令只需要计算访存地址  <br />•Load/store指令仍按照程序顺序计算访存地址</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Write result</td>
+          <td style="text-align: left">•对于store指令：监控CDB，等待要写入内存的数据，收到后将其写入自身ROB，并释放保留站  <br />•对于其它指令，等待结果产生，将其连同标签（即生产指令的ROB编号）广播到CDB上，进而写入对应ROB和所有需要它的保留站，最后释放保留站</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">Commit</td>
+          <td style="text-align: left">等待此指令到达ROB队列头部，然后根据指令类型分别处理： <br /> •对于分支指令：如果预测正确，释放ROB即可，否则清空所有其它ROB和保留站（相当于放弃所有猜测执行的指令）  <br />•对于store指令：更新内存，并释放ROB  <br />•对于其它指令：更新寄存器文件，并释放ROB</td>
+      </tr>
+  </tbody>
+</table></div>
+<ul>
+<li>
+<p>WAR/WAW：不存在</p>
+<ul>
+<li>当一条store指令提交时，所有前序指令均已提交完毕，不可能存在尚未完成读取的load指令，也不可能存在尚未完成写出的store指令</li>
+</ul>
+</li>
+<li>
+<p>RAW：可能存在</p>
+<ul>
+<li>Load指令在进入Execute阶段第二步之前，需要确认ROB中不存在指向相同内存位置的前序store指令</li>
+</ul>
+</li>
+</ul>
+<p>猜测执行的代价</p>
+<ul>
+<li>
+<p>因预测错误导致本不该执行的指令被实际的执行了，带来了无用功耗</p>
+</li>
+<li>
+<p>对不该执行的指令进行回滚，也需要消耗时间和功耗</p>
+</li>
+<li>
+<p>处理猜测执行的指令导致的例外，也可能会引入不必要的开销</p>
+</li>
+</ul>
+<p>代价的度量：misspeculation（因猜测错误导致的本不该执行的指令所占的比例）</p>
+<p><strong>疑问：</strong></p>
+<p>为什么第一条load进入Commit阶段，也就是在Write Back阶段完成后，第二条load才能进入execute阶段？</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323.png"
+	width="1344"
+	height="326"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323_hu1253984752940033758.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323_hu11944057755838000441.png 1024w"
+	loading="lazy"
+	
+		alt="image-20231012204200323"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="412"
+		data-flex-basis="989px"
+	
+></p>
+<h3 id="19-分支预测">1.9 分支预测
+</h3><p>（1）静态预测</p>
+<p>​	要进行分支预测，就要预测分支跳还是不跳。最朴素的想法是预测一直跳或者一直不跳，这样的方法虽然简单，但是也比完全不预测要高明。完全不预测是100%地要阻断流水线，而预测一直跳或者预测一直不跳还有机会预测对，预测到就是赚到。预想一个1000次的for循环，这个循环前999次都是跳转而最后一次不跳转，如果处理器设置为预测一定跳转，那么在执行这段指令的时候其准确率高达99.9%，性能远远高于不做预测的处理器。</p>
+<p>​	基于量化研究方法的思想，HP在他们的著作中说当前世界上大概有20%的代码是分支指令，其中跳转和不跳转的比例是1：1 。把这个数据代入到上一段说的预测方法中去，处理器的CPI = 0.8 + 0.1 × 1 + 0.1 × 4 = 1.3 *，*效果显著优于完全不做预测的机器。</p>
+<p>​	在上面的基础上略加思考，我们发现很多分支指令是有规律的，比如for代码段的最后一条分支指令，这条分支指令绝大部分时间是向后跳转的，而for代码又总是出现，因此提出这么一个方法：向后跳转的分支总是执行，向前跳转的分支总是不执行。这样的假设是基于实际代码情景的，事实证明这样做的效果不错。</p>
+<p>（2）根据最后一次结果进行预测</p>
+<p>​	静态分支预测的方法虽然比不预测要好，但是性能并不能让人满意。比如预测一定跳转，如果碰到分支指令执行情况为NNNNNN（N表示Not taken，不分支），那么错误率就高达100%，这样的情况是有可能发生的。静态就意味着不灵活，我们需要灵活一些的方法来解决问题，灵活的方法可繁可简，简单的方法就是根据上一次分支指令的执行情况来预测当前分支指令，如果上一次指令不跳转，那么下一次碰到这条指令就预测不跳转，用这个方法来预测NNNNNN的话，正确率可能高达100%，这样的结果让人满意。</p>
+<p>（3）基于两位饱和计数器的预测</p>
+<p>​	根据最后一次结果进行预测确实有一些效果，但是当它碰到TNTNTN这样的情况，正确率又可能会下降到0%，还不如静态预测，静态预测还可能有50%及以上的正确率。</p>
+<p>既要满足NNNNNN这样的情况，又要让TNTNTN这样的情况的结果不至于太难看，解决的办法是基于两位饱和计数器的预测。<strong>两位饱和计数器用一个状态机来表示</strong>，状态机如下图。</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w.png"
+	width="634"
+	height="156"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w_hu9123858064831117996.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w_hu11822808642559265429.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="406"
+		data-flex-basis="975px"
+	
+></p>
+<p>​	两位饱和计数器包含四个状态：00、01、10、11 。其中00、01表示不跳转，10、11表示跳转。00表示强不跳转，当计数器处于这个状态，分支预测不跳转，如果预测正确，计数器保持计数值，如果预测错误，那么状态转换成01，即弱不跳转，此时仍然预测分支不跳转，如果预测正确，状态转变回00，如果预测错误，状态转变为弱跳转10。在弱跳转10的状态下，分支预测跳转，如果预测正确，状态转变为强跳转11，如果预测错误，状态转变为弱不跳转01.在强跳转11的状态下，分支预测跳转，如果预测正确，状态保持不变，如果预测错误，状态转变为弱跳转10.</p>
+<p>​	上述的两位饱和计数器只是一种预测方法，其他的预测方法包括修改两位计数器的状态转移情况、增大计数器位数，对于两位饱和计数器自身而言，我们也可以通过设置不同的初始状态来区别别的两位饱和计数器。</p>
+<p>（4）基于局部历史的分支预测</p>
+<p>（5）基于全局历史的分支预测</p>
+<p>（6）竞争的分支预测</p>
+<p>详细参考博客：</p>
+<p><a class="link" href="https://blog.csdn.net/fencecat/article/details/127427226"  target="_blank" rel="noopener"
+    >分支指令与分支预测_Zkaisen的博客-CSDN博客</a></p>
+<p><a class="link" href="https://zhuanlan.zhihu.com/p/490749315"  target="_blank" rel="noopener"
+    >https://zhuanlan.zhihu.com/p/490749315</a></p>
+<p><strong>精确例外</strong></p>
+<p>指在处理例外的时候，发生例外指令之前所有的指令都已经执行完了，例外指令后面的所有指令都还没执行。</p>
+<p>参考博客：[计算机体系结构——精确例外 &amp; ROB详解 - 知乎 (zhihu.com)](<a class="link" href="https://zhuanlan.zhihu.com/p/586221956#:~:text="  target="_blank" rel="noopener"
+    >https://zhuanlan.zhihu.com/p/586221956#:~:text=</a>上一篇文章提到的Tomasulo算法，是一个非精确的例外，也就是说一旦发生例外，硬件就很难处理，因为是乱序执行，怎么才能给软件一个干净的现场呢？ 所以操作系统就希望动态流水线提供精确例外。,精确例外 ：指在处理例外的时候，发生例外指令之前所有的指令都已经执行完了，例外指令后面的所有指令都还没执行。)</p>
+<ul>
+<li>2-位预测器：仅利用分支指令自身的历史行为来预测它的未来行为</li>
+<li>关联预测器：综合考虑不同分支指令的历史行为来进行预测
+<ul>
+<li>(m, n)关联预测器：利用m个最近执行的分支指令的行为，从2^m个n-bit预测器中选择一个，用来对当前分支指令进行预测</li>
+<li>2-bit预测器实际上是一个（0, 2）预测器</li>
+</ul>
+</li>
+<li>锦标赛预测器
+<ul>
+<li>设置两个预测器，一个使用全局历史进行预测，一个使用局部历史进行预测，再设置一个选择器，用来决定具体使用哪个预测器来对当前分支指令进行预测</li>
+<li>全局预测器：使用最近12个分支的跳转情况作为索引，查找一个4096入口的全局预测器，每个入口都是一个标准的2位预测器</li>
+<li>局部预测器：分为两层，上面一层是一个1024入口的局部历史记录表，用PC最低10位作为索引，每个入口记录着相应分支最近10次的跳转情况；下面一层是一个1024入口的3位预测器，用上层检索出的10位局部历史索引</li>
+<li>选择器：是一个4096入口的2位预测器，用PC最低12位作为索引。预测器的当前取值决定了是采用全局预测器的结果，还是采用局部预测器的结果.</li>
+</ul>
+</li>
+<li>返回地址预测器
+<ul>
+<li>通常用栈来实现</li>
+<li>Call指令执行时，将返回地址push到栈中</li>
+<li>Ret指令执行时，从栈中pop一个返回地址，作为predicted PC</li>
+</ul>
+</li>
+<li>分支指令的延时来自两个方面，一是分支条件的计算，二是目的地址的计算</li>
+<li>分支预测技术（也称为BHT技术）只对第一个问题有所帮助</li>
+<li>为了快速得到目的地址 ，人们提出了Branch Target Buffer（BTB）
+<ul>
+<li>BTB的结构类似于cache：每行保存一个分支指令地址和一个预测的PC</li>
+<li>用当前PC的低k位作为索引，取出一个表项，然后进行精确匹配，最后得到预测的PC</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140.png"
+	width="639"
+	height="343"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140_hu3740523336481540113.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140_hu2183452186444717105.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240108205233140"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="447px"
+	
+></p>
+<ul>
+<li>在IF阶段，利用当前PC同时检索BHT和BTB，但以BHT的结果为主</li>
+</ul>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left"></th>
+          <th style="text-align: left">BTB命中</th>
+          <th style="text-align: left">BTB未命中</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">BHT预测跳转</td>
+          <td style="text-align: left">Predicted  PC</td>
+          <td style="text-align: left">stall</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">BHT预测不跳转</td>
+          <td style="text-align: left">PC+4（以BHT的预测为准）</td>
+          <td style="text-align: left">PC+4</td>
+      </tr>
+  </tbody>
+</table></div>
+<ul>
+<li>在相应分支指令commit时进行BTB/BHT的更新</li>
+</ul>
+<h3 id="110-超标量">1.10 超标量
+</h3><p>核心：通过多发射来进一步降低CPI</p>
+<p>技术路线：</p>
+<ul>
+<li>静态调度的超标量处理器</li>
+<li>每个周期发射多条指令，并使用静态调度流水线执行它们</li>
+<li>多用在嵌入式领域：MIPS和ARM，包括ARM Cortex-A8</li>
+<li>VLIW(Very Long Instruction Word)处理器
+<ul>
+<li>每个周期发射一个包含多条指令的超长指令包</li>
+<li>指令间的依赖关系在指令包中明确给出，不需要硬件进行检测</li>
+<li>必须有专用编译器的配合</li>
+<li>多用于专用处理器领域，如TI C6x</li>
+</ul>
+</li>
+<li>动态调度的超标量处理器
+<ul>
+<li>每个周期发射多条指令，并使用动态调度流水线执行它们</li>
+<li>Intel Core i3, i5, i7; AMD Phenom; IBM Power 7</li>
+</ul>
+</li>
+</ul>
+<p>多发射对流水线控制逻辑的改造主要有两点：</p>
+<ul>
+<li>
+<p>Issue阶段：每个周期要将多条指令发射到保留站和ROB中</p>
+<ul>
+<li>为指令包中的指令分配保留站和ROB入口</li>
+<li>分析指令包中各指令之间的依赖关系</li>
+<li>根据依赖关系初始化所分配的保留站和ROB</li>
+</ul>
+</li>
+<li>
+<p>Commit阶段：每个周期要提交多条指令</p>
+<p>​	如果提交速度小于发射速度，流水线最终也会堵住。这里难度较小，毕竟不需要分析依赖关系</p>
+</li>
+</ul>
+<p>Issue阶段的处理方式：</p>
+<ul>
+<li>方式1：在时钟周期上半段发射指令#1，在下半段发射指令#2
+<ul>
+<li>简单，但难以实现更多的指令</li>
+</ul>
+</li>
+<li>方式2：构建一个能够同时处理多条指令发射的逻辑
+<ul>
+<li>能同时处理多条指令，但太复杂</li>
+</ul>
+</li>
+<li>方式3：构建一个能同时处理多条指令发射的局部流水线
+<ul>
+<li>分为分配资源、分析依赖和更新表格三个阶段</li>
+</ul>
+</li>
+</ul>
+<p>CPI=Ideal CPI + Structural stalls + Data hazard stalls + Control stalls</p>
+<p>ILP的极限</p>
+<h2 id="二高速缓存结构">二、高速缓存结构
+</h2><p>1、存储层次结构</p>
+<p>2、cache基本结构</p>
+<p>3、存储系统的结构模型</p>
+<ul>
+<li>共享存储系统（多核处理器）
+<ul>
+<li>集中式共享存储结构（SMP，也被称为UMA，uniform memory access）</li>
+<li>分布式共享存储结构（DSM，也被称为NUMA，non-uniform memory access）多数情况下要优于集中式共享存储结构</li>
+</ul>
+</li>
+<li>非共享式存储系统（分布式计算机）</li>
+</ul>
+<h3 id="24-cache一致性问题不一致产生的原因">2.4 Cache一致性问题（不一致产生的原因）
+</h3><ul>
+<li>
+<p>I/O操作</p>
+<ul>
+<li>Cache中的内容可能与由I/O子系统输入输出形成的存储器对应部分的内容不同</li>
+</ul>
+</li>
+<li>
+<p>共享数据</p>
+<ul>
+<li>不同处理器的Cache都保存有对应存储单元的内容</li>
+<li>如何保持同一数据单元在Cache及主存中的多个备份的一致性，避免获取陈旧数据</li>
+</ul>
+</li>
+</ul>
+<p><strong>Cache的写机制</strong></p>
+<ul>
+<li><strong>Write-back：写回模式：数据被换出cache时，被修改的数据才更新到内存</strong></li>
+<li><strong>Write-through：写直达模式：CPU向cache写入数据时，同时向memory写</strong></li>
+<li><strong>Write-miss：写失效：所要写的地址不在cache中时</strong>
+<ul>
+<li><strong>no write allocate policy:将要写的内容直接写回memory;</strong></li>
+<li><strong>write allocate policy:将要写的地址所在的块先从memory调入cache中，然后写cache；</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="25-cache一致性协议">2.5 cache一致性协议
+</h3><p><strong>关键：跟踪共享数据块的状态</strong></p>
+<p>跟踪共享数据块状态的cache协议有两种：</p>
+<p><strong>（1）Snooping-based protocols（基于监听的协议）：每个Cache除了包含物理存储器</strong></p>
+<p><strong>中块的数据拷贝之外，也保存着各个块的共享状态信息。</strong></p>
+<p>实现监听一致性协议的两种策略：Write Update和Write Invalidate</p>
+<p>Write Invalidate（写作废策略）：在一个处理器写某个数据项之前保证它对该数据项有唯一的访问权，将共享单元的其它备份作废。</p>
+<p>Write Update（写更新策略）：当一个处理器更新某共享单元时，把更新的内容传播给所有拥有该共享单元备份的处理器。</p>
+<ul>
+<li>
+<p>协议核心：通过广播维护一致性</p>
+<ul>
+<li>
+<p>写入数据的处理器把新写的值或所需的存储行地址通过总线广播出去</p>
+</li>
+<li>
+<p>其他处理器监听广播，当广播中的内容与自己有关时，接受新值或提供数据</p>
+</li>
+</ul>
+</li>
+<li>
+<p>适合多个处理器通过总线相连的集中式共享存储系统</p>
+</li>
+<li>
+<p>局限性</p>
+<ul>
+<li>共享总线存在竞争使用问题</li>
+<li>在由大量处理器构成的多处理器系统中，监听带宽会成为瓶颈</li>
+<li>总线上能够连接的处理器数目有限，难扩展到处理器规模较大的系统</li>
+<li>只适用于可伸缩性差的共享总线结构</li>
+</ul>
+</li>
+<li>
+<p>基于监听协议、写作废、写更新策略的实现技术</p>
+</li>
+<li>
+<p>总线是广播的媒介</p>
+</li>
+<li>
+<p>Cache控制器监听（snoop）共享总线上的所有事务</p>
+</li>
+</ul>
+<p><strong>1、Valid/Invalid协议</strong></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190.png"
+	width="1080"
+	height="495"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190_hu5070507278156677354.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190_hu13158640009597064964.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111130857190"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="218"
+		data-flex-basis="523px"
+	
+></p>
+<p><strong>存在的问题</strong></p>
+<ul>
+<li>
+<p>每次写入都会更新主存</p>
+</li>
+<li>
+<p>每次写入都需要广播和监听共享数据块状态</p>
+</li>
+</ul>
+<p><strong>2、MSI协议</strong></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421.png"
+	width="1149"
+	height="530"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421_hu7827027918543884775.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421_hu1680836290018927249.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111131010421"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="216"
+		data-flex-basis="520px"
+	
+></p>
+<p>特点：</p>
+<ul>
+<li>允许cache在不更新内存的情况下为写操作提供服务</li>
+<li>主存中可能有陈旧的数据</li>
+<li>Cache必须覆盖来自主存的响应</li>
+</ul>
+<p>问题：</p>
+<ul>
+<li>对私有数据执行读-修改-写的序列操作</li>
+</ul>
+<p><strong>3、MESI协议</strong></p>
+<ul>
+<li>
+<p>引入E状态：独占，没有其他处理器缓存了该数据备份，可以直接修改，不必马上同</p>
+<p>步到主存中</p>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040.png"
+	width="1126"
+	height="339"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040_hu457708427723003522.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040_hu5927945532434313139.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111131548040"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="332"
+		data-flex-basis="797px"
+	
+></p>
+<p>一致性协议所面临的问题：假共享问题，参考：<a class="link" href="https://mp.weixin.qq.com/s/zeGxBx77TFGtVeMRBVR-Lg"  target="_blank" rel="noopener"
+    >字节面：什么是伪共享？ (qq.com)</a></p>
+<ul>
+<li>Cache一致性是在块级别实现</li>
+<li>一个Cache块中包含多个数据字</li>
+<li>多个处理器并发访问同一数据块的不同数据字时
+<ul>
+<li>假设处理器P1写字i，处理器P2写字k，且两个字有相同的块地址</li>
+<li>由于地址在同一块中，该块可能会产生多次不必要的失效（ ping-pong问题）</li>
+</ul>
+</li>
+</ul>
+<p>解决方案：原子操作</p>
+<ul>
+<li>代价高、耗费大，严重影响并行计算的性能</li>
+</ul>
+<p><strong>（2）Directory-based protocols（基于目录的协议）：物理存储器中共享数据块的状态及相关信息均被保存在一个称为目录的地方。</strong></p>
+<ul>
+<li>
+<p>为每一存储块维持一目录项，记录所有当前持有此存储行备份的处理器ID以及此行是否已经被改写等信息</p>
+</li>
+<li>
+<p>当某个处理器改写某行时，根据目录内容只向持有此行备份的处理器发送信号，避免了广播。</p>
+</li>
+</ul>
+<p>适用于分布式共享存储系统</p>
+<p><strong>1、MSI目录协议</strong></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367.png"
+	width="1100"
+	height="584"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367_hu2929865835773093366.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367_hu8622466368921826160.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111150839367"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="188"
+		data-flex-basis="452px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541.png"
+	width="1392"
+	height="756"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541_hu6891473958932273725.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541_hu12152907200203306716.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111153141541"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="441px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153.png"
+	width="1361"
+	height="740"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153_hu9078152756334766783.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153_hu5796724093721351021.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111153252153"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="183"
+		data-flex-basis="441px"
+	
+></p>
+<p><strong>2、 缺失状态保持寄存器（MSHR）</strong></p>
+<p>MSHR：用于存储缓存未命中（cache miss）的状态信息</p>
+<ul>
+<li>发起对内存的访问以获取缺失的数据，并在数据返回后将其存储到缓存中</li>
+</ul>
+<p>MSHR：在Cache外保持加载失败（load misses）和写入</p>
+<ul>
+<li>
+<p>每个MSHR entry对应一个缓存未命中事件，并包含与该事件相关的状态</p>
+<p>和元数据</p>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740.png"
+	width="469"
+	height="155"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740_hu15505158965530610649.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740_hu746138996564141579.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111153535740"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="302"
+		data-flex-basis="726px"
+	
+></p>
+<p>On eviction / writeback</p>
+<ul>
+<li>没有空闲的MSHR entry：stall</li>
+<li>分配新的MSHR entry</li>
+</ul>
+<p><strong>3、目录结构</strong></p>
+<ul>
+<li>
+<p>基于内存的扁平目录结构（Flat）</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308.png"
+	width="819"
+	height="269"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308_hu10991488651636626459.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308_hu9864215244843025270.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111210124308"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="304"
+		data-flex-basis="730px"
+	
+></p>
+<ul>
+<li>使用主存的少量空间来存储每一个CacheLine的状态和共享者</li>
+<li>使用位向量来编码共享者</li>
+</ul>
+<p>实现简单，速度慢，处理器数量多的情况下效率非常低（~P bits/line）</p>
+</li>
+<li>
+<p>稀疏全映射(Full-Map)目录</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346.png"
+	width="1104"
+	height="221"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346_hu5188484954115488022.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346_hu16105412076906285943.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111205940346"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="499"
+		data-flex-basis="1198px"
+	
+></p>
+<ul>
+<li>我们不需要记录系统中的每一个Cache line——只需要记录私有缓存的位置</li>
+<li>将目录组织成一个Cache</li>
+</ul>
+<p>低延迟，能效更高，扩展性问题&ndash;&gt;位向量增长的速度随着处理器核心的数量增长，有限关联度&ndash;&gt; 目录引发的失效</p>
+</li>
+<li>
+<p>优化技术：共享者集合的不精确表示</p>
+<ul>
+<li>
+<p>粗粒度位向量（如，每 4 个处理器核心使用1 bit表示）</p>
+</li>
+<li>
+<p>有限指针：保留有限的共享者指针，在溢出时标记“all&quot;并进行广播（或使其他共享者无效）</p>
+</li>
+<li>
+<p>多级层次结构中的一致性：可以使用相同或不同的协议来保持跨多个层次的一致性</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503.png"
+	width="954"
+	height="420"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503_hu11162766353135305442.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503_hu10274698162854938105.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111211602503"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="545px"
+	
+></p>
+</li>
+<li>
+<p>In-Cache目录</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932.png"
+	width="664"
+	height="429"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932_hu13462140246637935768.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932_hu10785171852340681913.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111211855932"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="154"
+		data-flex-basis="371px"
+	
+></p>
+<ul>
+<li>通用的多核内存层次结构：
+<ul>
+<li>1+ level 的Private Cache</li>
+<li>共享的last-level Cache</li>
+<li>需要加强Private Cache之间的一致性</li>
+</ul>
+</li>
+<li>方法：将目录信息嵌入在共享的cache tags中
+<ul>
+<li>共享Cache必须inclusive</li>
+</ul>
+</li>
+<li><strong>避免了tag开销和单独的查找，如果共享Cache的大小 &raquo; sum(私有Cache的大小)，效率可能会非常低</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>一致性协议面临的问题</p>
+<p>即使网络是无死锁的，协议也会导致死锁！</p>
+<p>比如，两个节点都通过相互请求让所有的中间缓冲区饱和，阻塞响应进入网络。</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667.png"
+	width="696"
+	height="206"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667_hu10157320501138606406.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667_hu18274752225129082853.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240111212043667"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="337"
+		data-flex-basis="810px"
+	
+></p>
+<p>解决方案：独立的虚拟网络</p>
+<ul>
+<li>不同的虚拟通道集合和endpoint缓冲集合</li>
+<li>相同的物理路由器和链接</li>
+</ul>
+<h2 id="三内存一致性模型">三、内存一致性模型
+</h2><p><strong>内存一致性模型是面向多核处理器的共享存储系统</strong></p>
+<ul>
+<li>
+<p>系统设计者与应用程序之间的一种约定, 它给出了正确编写程序的标准, 使得程序员无须考虑具体访存次序就能编写正确程序, 而系统设计者则可以根据这个约定来优化设计提高性能。</p>
+</li>
+<li>
+<p>系统设计者通过对各处理器的访存操作完成次序加以必要的约束来满足内存一致性模型的要求</p>
+<ul>
+<li>内存一致性模型对访存事件次序施加的限制越弱, 越有利于提高性能, 但编程越难</li>
+</ul>
+</li>
+</ul>
+<p><strong>Coherence vs Consistency</strong></p>
+<ul>
+<li>缓存一致性（Cache Coherence）
+<ul>
+<li>缓存一致性关注共享存储系统中多个处理器对<strong>同一内存位置</strong>进行读写的情况</li>
+<li>软件无需显式地管理私有缓存，这一切都由硬件来处理</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>内存一致性（Memory consistency）
+<ul>
+<li>定义：内存一致性模型定义了多处理器系统中的内存访问规则，以确保多个处理器在读写共享内存时能够获得一致的结果</li>
+<li>内存一致性模型涉及到对<strong>多个内存位置</strong>的读写操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="内存一致性模型分类"><strong>内存一致性模型分类</strong>
+</h3><p>（1） 放松W-&gt;R顺序：我们就得到了TSO(total store ordering)模型，它允许CPU先执行读操作然后在执行写操作而不严格按照代码的指示顺序来进行。由于这种模型保持了写入操作之间的顺序，所以很多在Sequential模型下能够运行的代码也能在TSO模型下正常运行。</p>
+<p>（2） 放松W-&gt;W顺序：我们就得到了PSO(partial store ordering)模型，允许多个写操作也被打乱顺序。</p>
+<p>（3） 放松R-&gt;W和R-&gt;R顺序：将会得到很多模型，包括weak模型，released模型等。</p>
+<ul>
+<li>
+<p><strong>顺序一致性模型（Sequential Consistency）</strong></p>
+<ul>
+<li>该模型要求所有处理器的读、写和交换(swap)操作以某种序执行所形成的全局存储器次序、符合各处理器的原有程序次序。即“无论指令流如何交叠执行，全局序必须保持所有进程的程序</li>
+<li>所有读写以某种顺序执行，每个处理器看到的操作顺序是相同的</li>
+<li>顺序执行指令</li>
+<li>对于存储器的访问是是原子级的loads 和stores</li>
+<li>容易理解，但架构师和编译器编写人员希望在性能方面有所提升，意味着需要违背顺序一致性模型的要求</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938.png"
+	width="977"
+	height="514"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938_hu3902897913116456403.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938_hu10978758880247436749.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114201856938"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="190"
+		data-flex-basis="456px"
+	
+></p>
+<ul>
+<li>优化技术提交存储缓冲区（Committed store buffer）
+<ul>
+<li>当已提交的store指令在内存系统里执行传播时，CPU可以继续执行</li>
+<li>Local loads can bypass values from buffered stores to the same address</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>完全存储定序模型（Total Store Order）</strong></p>
+<ul>
+<li>全局顺序存储：store操作存在一个全局的顺序</li>
+<li>Store缓冲：允许处理器使用Store buffer来缓存即将写入内存的数据，但必须确保缓冲中的数据在全局上有序提交</li>
+<li>load同样按顺序执行，但可穿插到多个store执行过程中
+<ul>
+<li>若存在一组store-&gt;load操作，如果由同一处理器执行且地址相关，则TSO允许该load操作在store操作完成之前就执行；但如果由多个core执行且地址相关，那TSO要求load指令在store执行完成后才能执行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>部分存储定序模型（Partial Store Order）</strong></p>
+<ul>
+<li>在TSO的基础上放松访问内存访问限制，允许CPU以非FIFO来处理store buffer缓冲区的指令;</li>
+<li>局部存储顺序松散：store操作的顺序可以在全局范围内更加灵活地重排序，这允许更大的并发性；</li>
+<li>CPU只保证地址相关指令在store buffer中以FIFO的形式进行处理，而其他的则可以乱序处理;</li>
+<li>要求
+<ul>
+<li>同一core中地址不相关的store-&gt;store指令可以互相穿插执行</li>
+<li>load按顺序执行，但可穿插到多个store执行过程中</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329.png"
+	width="997"
+	height="551"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329_hu16313289129652585352.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329_hu14980691732099865603.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114205728329"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="434px"
+	
+></p>
+<ul>
+<li>
+<p><strong>弱内存一致性模型（Weak Memory Consistency）</strong></p>
+<ul>
+<li>基本思想：同步操作（synchronization ）和普通访存操作区分开来
+<ul>
+<li>通过显式的同步操作来确保对共享数据的一致性，而不是依赖于隐式的规则和顺序</li>
+<li>同步操作： 程序员使用特定的同步操作（例如锁、屏障等）来明确指定临界区域，确保在该区域内的对共享数据的访问是互斥的。这样可以避免并发写入引起的问题</li>
+<li>普通访存操作： 对于非临界区域的访问，程序员不依赖于隐式的规则，而是通过显式同步来确保一致性。普通访存操作可以按照更灵活的顺序进行，以提高性能。</li>
+</ul>
+</li>
+<li>弱内存一致性模型施加的限制:
+<ul>
+<li>同步操作的执行满足顺序一致性条件;</li>
+<li>在任意普通访存操作被允许执行之前, 所有在同一处理器中先于这一访存操作的同步操作都已完成</li>
+<li>在任一同步操作被允许执行之前,所有在同一处理器中先于这一同步操作的普通访存操作都已完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>释放一致性模型（ Release Consistency ）</strong></p>
+</li>
+<li>
+<p>对于临界区域共享数据的访问，弱内存一致性模型有一个问题：就是无法区分进程是准备进入临界区还是已经完成对共享变量的操作而准备退出临界区，其后果就是进程在以下两种情况下都必须采取同步操作：</p>
+</li>
+<li>
+<p>进入临界区：如果一个进程准备进入临界区，其他进程无法确切知道它是否已经完成对共享变量的写入。因此其他进程可能需要采取同步操作以确保它们不会读取到不完整或无效的数据– 退出临界区：当一个进程准备退出临界区时，其他进程无法确切知道该进程是否已经完成对共享变量的操作。因此，其他进程可能需要采取同步操作以确保它们不会在不完整或无效的数据上执行操作</p>
+</li>
+<li>
+<p>如果能将进入和退出临界区这两个动作区分开来，则能实现一种更为高效的存储一致性模型─释放一致性模型</p>
+</li>
+<li>
+<p>这种模型是对弱一致性模型的改进, 它把同步操作进一步分成获取操作 acquire 和释放操作 release</p>
+<ul>
+<li>acquire 用于获取对某些共享存储单元的独占性访问权</li>
+<li>release 则用于释放这种访问权</li>
+<li>执行的顺序为：acquire-&gt; load/store -&gt;release</li>
+</ul>
+</li>
+<li>
+<p>释放一致性模型施加的限制</p>
+<ul>
+<li>同步操作的执行满足顺序一致性条件</li>
+<li>在任一普通访存操作允许被执行之前，所有在同一处理器中先于这一访存操作的Acquire操作都已完成</li>
+<li>在任一Release操作允许被执行之前，所有在同一处理机中先于这一Release的普通访存操作都已完成</li>
+</ul>
+</li>
+<li>
+<p><strong>注意, 这其中任意一个操作, 都只保证了一半的顺序:</strong></p>
+<ul>
+<li>对于Acquire来说, 并没保证Acquire前的读写操作不会发生在Acquire动作之后.</li>
+<li>对于Release来说, 并没保证Release后的读写操作不会发生在Release动作之前.</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912.png"
+	width="886"
+	height="255"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912_hu6142075784502661470.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912_hu3091746035143724591.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114205548912"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="347"
+		data-flex-basis="833px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333.png"
+	width="910"
+	height="326"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333_hu11837432339664932489.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333_hu12273354568996879354.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114205643333"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="279"
+		data-flex-basis="669px"
+	
+></p>
+<h2 id="四多线程">四、多线程
+</h2><h4 id="并行的分类"><strong>并行的分类</strong>
+</h4><ul>
+<li>指令级并行（ILP Instruction-level Parallelism）
+<ul>
+<li>定义：在单个处理器上同时执行多条指令的能力</li>
+<li>实现方式：通过在一个时钟周期内执行多个指令的部分，例如流水线处理、超标量处理和乱序执行等技术</li>
+</ul>
+</li>
+<li>数据级并行（DLP Data-level Parallelism）
+<ul>
+<li>定义：同时处理多个数据元素的能力</li>
+<li>实现方式：通过向量处理器、SIMD（单指令多数据）架构等技术，在单个指令下并行处理多个数据元素</li>
+</ul>
+</li>
+<li>线程级并行（ TLP Thread-level Parallelism ）
+<ul>
+<li>定义：任务被组织成多个线程，在多线程环境中同时执行多个线程的能力</li>
+<li>实现方式：通过多核处理器、多处理器系统或者通过超线程技术，在不同的执行单元上并行执行多个线程</li>
+</ul>
+</li>
+</ul>
+<h4 id="系统结构的flynn分类"><strong>系统结构的Flynn分类</strong>
+</h4><ul>
+<li>
+<p>单指令流单数据流（Single instruction stream, single data stream ，SISD）</p>
+<ul>
+<li>单处理器模式，一条指令处理一条数据</li>
+</ul>
+</li>
+<li>
+<p>单指令流多数据流（Single instruction stream, single data stream ，SIMD）</p>
+<ul>
+<li>相同的指令作用在不同的数据，常用语挖掘DLP</li>
+</ul>
+</li>
+<li>
+<p>多指令流单数据流（Multiple instruction streams, single data stream，MISD）</p>
+<ul>
+<li>No commercial implementation，多用于容错系统</li>
+</ul>
+</li>
+<li>
+<p>多指令流多数据流（Multiple instruction streams, multiple data streams，MIMD）</p>
+<ul>
+<li>多个处理器同时执行不同的指令，同时操作不同的数据流</li>
+<li>通用性最强的一种结构，可用来挖掘线程级并行、数据级并行…</li>
+</ul>
+</li>
+</ul>
+<h4 id="指令级并行ilp无关的指令重叠执行"><strong>指令级并行（ILP）：无关的指令重叠执行</strong>
+</h4><p>常见技术：流水线处理</p>
+<p>依赖关系、数据冲突和控制相关性等问题可能导致一些指令无法同时执行</p>
+<p>通过减少数据相关和控制相关，使得CPI = 1( CPI接近1），是否能够使CPI&lt;1？</p>
+<p>两种基本方法：Superscalar、VLIW</p>
+<ul>
+<li>Superscalar:
+<ul>
+<li>特点：具有多个执行单元，能够在同一时钟周期内同时发射和执行多条指令</li>
+<li>硬件结构复杂：需要支持动态调度和处理指令之间的相关性</li>
+<li>IBM PowerPC, Sun UltraSparc, DEC Alpha, HP 8000</li>
+<li>该方法对目前通用计算是最成功的方法</li>
+</ul>
+</li>
+<li>Very Long Instruction Words (VLIW）
+<ul>
+<li>特点：每个时钟周期流出的指令数是固定的</li>
+<li>硬件结构简单：指令的执行顺序在编译时已知，处理器只需要静态调度逻辑</li>
+</ul>
+</li>
+</ul>
+<p>对于大多数应用，大多数执行单元在超标量处理器中处于空闲状态，处理器的有效利用率不足20%！</p>
+<h4 id="多线程multithreading">多线程（Multithreading）
+</h4><p>背景：难以从单一线程控制序列中提取指令级并行（ILP）和数据级并行（DLP）</p>
+<p>前提：许多工作负载可以使用线程级并行来完成（TLP）</p>
+<p>基本思想：多线程使用TLP来提高单个处理器的利用率。针对单个处理器：多个线程以重叠方式共享单个处理器的功能单元</p>
+<ul>
+<li>多线程策略
+<ul>
+<li>如何保证一条流水线上的指令之间不存在数据依赖关系？</li>
+<li>在相同的流水线中交叉执行来自不同线程的指令</li>
+</ul>
+</li>
+<li>多线程处理器分类
+<ul>
+<li>Chip Multiprocessing（CMP）</li>
+<li>Coarse-Grain Multithreading</li>
+<li>Fine-Grain Multithreading</li>
+<li>Simultaneous Multithreading</li>
+</ul>
+</li>
+</ul>
+<p><strong>Chip Multiprocessing（CMP）</strong></p>
+<ul>
+<li>同一时钟周期可以运行不同线程的指令</li>
+<li>由于发射宽度在核间进行了静态分配，导致时间和空间维度浪费减少</li>
+</ul>
+<p><strong>粗粒度多线程（Coarse-Grained MT）</strong></p>
+<ul>
+<li>当线程运行时存在较长时间延时时，切换到另一线程，例如：cache失效时，线程等待同步结束。</li>
+<li>每隔几个周期在线程之间进行一次上下文切换，隐藏较长的stall</li>
+<li>优点：线程间切换速度快&lt;10cycle</li>
+<li>缺点：无法应对线程间有很多小的stall</li>
+</ul>
+<p><strong>细粒度多线程（Fine-Grained MT）</strong></p>
+<ul>
+<li>多个线程的指令交叉执行,每个周期在线程之间进行上下文切换，即使线程可以连续执行</li>
+<li>线程切换的频率高、周期短</li>
+<li>牺牲单线程执行性能，换取多线程吞吐量的提升</li>
+</ul>
+<p><strong>同步多线程（Simultaneous Multithreading (SMT)）</strong></p>
+<ul>
+<li>SMT 使用OoO Superscalar细粒度控制技术在相同时钟周期运行多个线程的指令，以更好的利用系统资源</li>
+<li>更好的资源利用：多个线程可以共享同一个核心的执行资源</li>
+<li>隐藏内存延迟：当一个线程在等待内存访问时，其他线程的指令可以在同一核心上继续执行，从而减少了内存访问的延迟对整体性能的影响</li>
+<li>更好的响应时间： SMT有助于提高系统对多任务工作负载的响应时间，因为可以同时执行多个线程</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733.png"
+	width="871"
+	height="631"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733_hu758587810665713918.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733_hu11741234905493091603.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112161337733"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="138"
+		data-flex-basis="331px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122.png"
+	width="1156"
+	height="454"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122_hu4728741667910847787.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122_hu818227017221055368.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112161505122"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="254"
+		data-flex-basis="611px"
+	
+></p>
+<h4 id="并行计算">并行计算
+</h4><p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193.png"
+	width="1089"
+	height="589"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193_hu8545976969808814794.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193_hu1383311410595701029.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114160702193"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="184"
+		data-flex-basis="443px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939.png"
+	width="1085"
+	height="601"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939_hu4920910443179984350.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939_hu16457777573995766026.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114160711939"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+></p>
+<h2 id="五simd和向量处理器">五、SIMD和向量处理器
+</h2><p>动机：传统指令级并行技术的问题</p>
+<p>提高性能的传统方法（挖掘指令级并行）的主要缺陷：</p>
+<ul>
+<li>程序内在的并行性，有些程序不具备足够的并行性</li>
+<li>提高流水线的时钟频率，提高时钟频率有时候会导致CPI的增加</li>
+<li>指令预取和译码，有时候在每个时钟周期很难预取和译码多条指令</li>
+<li>提高Cache的命中率，在有些计算量较大的应用（如科学计算）中，需要大量的数据，其局部性较差；有些程序处理的是连续的媒体流（multimedia），其局部性也较差</li>
+</ul>
+<p>SIMD的优势</p>
+<ul>
+<li>图形、机器视觉、语音识别、机器学习等新的应用均需要大量的数值计算，其算法通常具有数据并行特征，而SIMD-based结构（vector-SIMD，SIMD/GPUs）是执行这些算法的最有效途径</li>
+<li>SIMD结构可有效地挖掘数据级并行</li>
+<li>SIMD比MIMD更节能</li>
+<li>SIMD允许程序员继续以串行模式思考</li>
+</ul>
+<p>SIMD的三种变体</p>
+<ul>
+<li>
+<p>向量体系结构</p>
+</li>
+<li>
+<p>SIMD/Multimedia指令级扩展</p>
+</li>
+<li>
+<p>Graphics Processor Units (GPUs)</p>
+</li>
+</ul>
+<h3 id="向量处理器模型">向量处理器模型
+</h3><p>向量处理器具有更高层次的操作，一条向量指令可以同时处理N个或N对操作数（处理对象是向量）</p>
+<p><strong>向量处理器的基本特征</strong></p>
+<ul>
+<li>基本思想：两个向量的对应分量进行运算，产生一个结果向量</li>
+<li>简单的一条向量指令包含了多个操作 -&gt; fewer instruction fetches</li>
+<li>每一条结果独立于前面的结果
+<ul>
+<li>长流水线，编译器保证操作间没有相关性</li>
+<li>硬件仅需检测两条向量指令间的相关性</li>
+<li>较高的时钟频率</li>
+</ul>
+</li>
+<li>向量指令以已知的模式访问存储器
+<ul>
+<li>可有效发挥多体交叉存储器的优势</li>
+<li>不需要数据Cache（仅使用指令Cache）</li>
+</ul>
+</li>
+<li>在流水线控制中减少了控制Hazard
+<ul>
+<li>有效利用流水线并发执行指令</li>
+</ul>
+</li>
+</ul>
+<p><strong>向量处理器的基本结构</strong></p>
+<p>memory-memory vector processors（存储器型）</p>
+<ul>
+<li>
+<p>所有的向量操作都是存储器到存储器</p>
+</li>
+<li>
+<p>需要更高的存储带宽</p>
+</li>
+<li>
+<p>多个向量操作重叠执行较为困难</p>
+</li>
+<li>
+<p>启动时间很长</p>
+<ul>
+<li>CDC Star-100 在向量元素小于100时，标量代码的性能高于向量化代码</li>
+</ul>
+</li>
+</ul>
+<p>vector-register processors（寄存器型）</p>
+<ul>
+<li>Load/Store体系结构</li>
+<li>除了Load和store操作外，所有的操作是向量寄存器与向量寄存器的操作（目前的向量处理器都是这种结构）</li>
+</ul>
+<p><strong>向量处理器的基本组成单元</strong></p>
+<ul>
+<li>
+<p>**Vector Register：**固定长度的一块区域，存放单个向量</p>
+<ul>
+<li>
+<p>至少2个读端口和1个写端口（一般最少16个读端口，8个写端口）</p>
+</li>
+<li>
+<p>典型的有8-32个向量寄存器，每个寄存器长度为32、64等</p>
+</li>
+</ul>
+</li>
+<li>
+<p>**Vector Functional Units (FUs)：**全流水化的，每一个clock启动一个新的操作</p>
+<ul>
+<li>一般4到8个FUs：FP add，FP mult，FP reciprocal (1/X)，integer add，logical，shift；可能有些重复设置的部件</li>
+</ul>
+</li>
+<li>
+<p>**Vector Load-Store Units (LSUs)：**全流水化地load或store一个向量，可能会配置多个LSU部件</p>
+</li>
+<li>
+<p>**Scalar registers：**存放单个元素用于标量处理或存储地址</p>
+<ul>
+<li>用交叉开关连接（Cross-bar）FUs， LSUs， registers</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770.png"
+	width="644"
+	height="499"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770_hu16168591223550465983.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770_hu1799677006674024407.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112172147770"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="129"
+		data-flex-basis="309px"
+	
+></p>
+<p><strong>向量指令集的优势</strong></p>
+<ul>
+<li>格式紧凑一跳指令包含N个操作
+<ul>
+<li>表达能力强，一条指令能告诉硬件诸多信息</li>
+</ul>
+</li>
+<li>N个操作之间无相关性
+<ul>
+<li>使用同样的功能部件</li>
+<li>访问不相交的寄存器</li>
+<li>与前面的操作以相同模式访问寄存器</li>
+<li>访问存储器中的连续块 (unit-stride load/store)</li>
+<li>以已知的模式访问存储器 (strided load/store)</li>
+</ul>
+</li>
+<li>可扩展性好
+<ul>
+<li>支持在多个并行的流水线上运行同样的代码</li>
+</ul>
+</li>
+</ul>
+<p><strong>向量处理器的缺点和瓶颈</strong></p>
+<ul>
+<li>当并行不规则的时候，向量处理器就会显得效率非常低比如搜索一个链表中的key，大家可以想象一下向量处理器应该怎么运算，实际上此时约等于标量处理器，浪费了大量部件。这一缺点和VLIW有类似之处，当找不到那么多并行的运算的时候，效率自然会降低。</li>
+<li>向量处理器最典型的性能瓶颈就是Memory（Bandwith）。
+<ul>
+<li>1、运算和内存操作的比例没掌控好的情况（比如实际运算量很少，内存操作过多）</li>
+<li>2、数据没有放在多个Memory Bank当中</li>
+</ul>
+</li>
+</ul>
+<p><strong>向量处理器单元结构</strong></p>
+<ul>
+<li>采用多流水线lane设计
+<ul>
+<li>lane：包含向量寄存器堆的一部分和来自每个向量功能单元的一个执行流水线</li>
+<li>对于可以存储64个元素的寄存器，6段乘法流水线，计算V3需要多久？</li>
+<li>T=流水线启动时间+N=6+63=69cycles</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915.png"
+	width="400"
+	height="542"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915_hu3700503112577550391.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915_hu5777776251768541451.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112203605915"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="73"
+		data-flex-basis="177px"
+	
+></p>
+<p><strong>向量指令执行</strong></p>
+<ul>
+<li>Memory Banking
+<ul>
+<li>独立存储体方式：由多个互相独立的存储体（Bank）构成存储器组织
+<ul>
+<li>可独立访问存储器，各存储器共享数据和地址总线（minimize pin cost）</li>
+</ul>
+</li>
+<li>每个周期启动和完成一个bank的访问</li>
+<li>如果N个存储器访问不同的bank可以并行执行</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695.png"
+	width="737"
+	height="330"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695_hu4347091005255392339.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695_hu456179441572297255.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112201435695"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="536px"
+	
+></p>
+<p><strong>Interleaved Vector Memory System</strong></p>
+<ul>
+<li>BANK的数量要大于等Bank busy time（bank准备好接收下一个请求之前的时间）</li>
+<li>允许N个并行（如果数据在不同的bank中）</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949.png"
+	width="834"
+	height="344"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949_hu9917375359004826069.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949_hu11833566847266132588.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112201759949"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="581px"
+	
+></p>
+<p><strong>Vector Opt #1: Vector Chaining</strong>（相当于Vector中的forwarding）</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095.png"
+	width="774"
+	height="401"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095_hu1511280667341067244.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095_hu6463297628229070328.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240112201943095"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="193"
+		data-flex-basis="463px"
+	
+></p>
+<p><strong>Vector Opt #2: Conditional Execution</strong></p>
+<ul>
+<li>通过增加向量掩码（标志）寄存器和可屏蔽向量指令对使用条件语句的循环进行矢量化
+<ul>
+<li>vector-mask control 使用长度为MVL的布尔向量控制向量指令的执行</li>
+<li>向量运算在掩码位为0的元素处变为NOP ，即仅对vector-mask register对应位为1
+的分量起作用</li>
+</ul>
+</li>
+<li>缺陷：
+<ul>
+<li>简单实现时，条件不满足时向量指令仍然需要花费时间</li>
+<li>有些向量处理器针对带条件的向量执行时，仅控制向目标寄存器的写操作，可能会有除法错误</li>
+</ul>
+</li>
+</ul>
+<p><strong>Vector Opt #3: 分段开采（Strip mining）</strong></p>
+<ul>
+<li>将循环拆解成适合寄存器的片段 -&gt; Strip mining来解决操作的向量长度大于向量寄存器长度的问题</li>
+<li>比如有527个元素，向量寄存器只有64个Elements，即最大并行度只有64，此时通过8次迭代即可</li>
+</ul>
+<p><strong>Array  Processors vs Vector Processors</strong></p>
+<ul>
+<li>Array Processor，又称为并行处理机，一个cycle可以同时计算多组元素，也就是并行。</li>
+<li>Vector Processor需要对向量功能单元outstanding成流水线，本文用的是Vector Processor</li>
+</ul>
+<p><strong>SIMD/Multimedia扩展</strong></p>
+<ul>
+<li>在已有ISA中添加一些向量长度很短的向量操作指令</li>
+<li>将已有的64-bit寄存器拆分为2<em>32b、4</em>16b、8*8b</li>
+<li>单条指令可实现寄存器中所有向量元素的操作</li>
+</ul>
+<h2 id="六gpu">六、GPU
+</h2><h4 id="gpu概述">GPU概述
+</h4><p><strong>21世纪以来：时钟频率、单核的性能增加有限；性能提升主要依赖于单片上的“core”的数量；需要探索更加有效的硬件结构</strong></p>
+<ul>
+<li>独立显卡
+<ul>
+<li>基于PCIe的加速器</li>
+<li>拥有独立显存</li>
+</ul>
+</li>
+<li>集成显卡
+<ul>
+<li>用于处理2D和3D图像的固定功能加速器
+<ul>
+<li>三角形设定和光栅化，纹理映射和着色</li>
+</ul>
+</li>
+<li>编程方式：
+<ul>
+<li>OpenGL 和 DirectX API</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>GPU与CPU的比较</p>
+<ul>
+<li>GPU的访存带宽明显高于CPU</li>
+</ul>
+<ul>
+<li>GPU具有更高的能效优势</li>
+</ul>
+<ul>
+<li>与cpu相比，gpu提供了更高的32位浮点数性能</li>
+</ul>
+<h4 id="gpu的基本硬件结构">GPU的基本硬件结构
+</h4><ul>
+<li>
+<p>CPU+GPU异构体系结构</p>
+<ul>
+<li>
+<p>推动异构计算的发展</p>
+</li>
+<li>
+<p>针对每个任务选择合适的处理器和存储器</p>
+</li>
+<li>
+<p>GPU弱控制强计算，CPU强控制弱计算</p>
+</li>
+</ul>
+</li>
+<li>
+<p>通用CPU 适合执行一些串行的线程</p>
+</li>
+<li>
+<p>GPU适合执行大量并行线程</p>
+<ul>
+<li>可扩展的并行执行</li>
+<li>高带宽的并行存取</li>
+</ul>
+</li>
+</ul>
+<h4 id="gpu编程模型">GPU编程模型
+</h4><p><strong>GPU基于SIMD引擎</strong></p>
+<ul>
+<li>
+<p>指令流水线类似于SIMD的流水线</p>
+<ul>
+<li>不是用SIMD指令编程</li>
+<li>基于一般的指令，应用由一组线程构成</li>
+</ul>
+</li>
+<li>
+<p>编程模型：指程序员如何描述应用（从程序员角度看到的机器模型）</p>
+<ul>
+<li>例如, 顺序模型 (von Neumann), 数据并行(SIMD), 数据流模型、多线程模型(MIMD, SPMD)</li>
+</ul>
+</li>
+</ul>
+<p><strong>三种编程模式来挖掘程序的并行性:</strong></p>
+<ul>
+<li>Sequential (SISD)</li>
+<li>Data-Parallel (SIMD)</li>
+<li>Multithreaded (MIMD/SPMD)</li>
+</ul>
+<p><strong>编程模型1: Sequential SISD</strong></p>
+<ul>
+<li>可以采用多种类型处理器执行</li>
+<li>Pipelined processor</li>
+<li>Out-of-order execution processor
+<ul>
+<li>就绪的相互无关指令；</li>
+<li>不同循环的指令缓存在指令窗口中，多个功能部件可以并行执行；</li>
+<li>通过硬件实现循环展开</li>
+</ul>
+</li>
+<li>Superscalar or VLIW processor
+<ul>
+<li>每个周期可以存取和读取多条指令</li>
+</ul>
+</li>
+</ul>
+<p><strong>编程模型2: Data Parallel（SIMD）</strong></p>
+<p>Realization: 各循环之间相互独立的，没有数据依赖</p>
+<p>Idea:程序员或编译器生成SIMD指令，所有的循环执行相同</p>
+<p>的指令，处理不同的数据</p>
+<p><strong>编程模型3:多线程</strong></p>
+<p>Realization:各循环之间相互独立的，没有数据依赖</p>
+<p>Idea: 程序员或编译器为每次循环生成一个线程。每个线程执行同样的指令流（代码路径），处理不同的数据</p>
+<p><strong>SPMD</strong></p>
+<ul>
+<li>
+<p>Single procedure/program, multiple data</p>
+<ul>
+<li>它是一种编程模型而不是计算机组织</li>
+</ul>
+</li>
+<li>
+<p>每个处理单元执行同样的过程，处理不同的数据</p>
+<ul>
+<li>这些过程可以在程序中的某个点上同步，例如 barriers</li>
+</ul>
+</li>
+<li>
+<p>多条指令流执行相同的程序</p>
+<ul>
+<li>每个程序/过程
+<ul>
+<li>操作不同的数据</li>
+<li>运行时可以执行不同的控制流路径</li>
+<li>多科学计算应用以这种方式编程，运行在MIMD硬件结构上 (multiprocessors)</li>
+</ul>
+</li>
+<li>现代通用 GPUs 以这种类似的方式编程，运行在SIMD硬件上</li>
+</ul>
+</li>
+</ul>
+<p><strong>GPU编程语言</strong></p>
+<ul>
+<li>
+<p>CUDA （Nvidia研制的专用模型）</p>
+</li>
+<li>
+<p>OpenCL （开放标准）</p>
+</li>
+</ul>
+<p><strong>SIMD vs. SIMT Execution Model</strong></p>
+<ul>
+<li>SIMD: 一条指令流（一串顺序的SIMD指令），每条指令对应多个数据输入（向量指令）</li>
+<li>SIMT: 多个指令流（标量指令）构成线程， 这些线程动态构成warp。一个Warp处理多个数据元素</li>
+</ul>
+<h2 id="七硬件加速器">七、硬件加速器
+</h2><h3 id="加速器概述">加速器概述
+</h3><p><strong>加速器是面向特定领域、针对有限算法定制设计的专用计算架构，其目的是提升特定计算的性能或减少功耗需求</strong></p>
+<p>主要作用如下：</p>
+<ol>
+<li><strong>提高性能：</strong> 硬件加速器能够执行特定类型的计算任务比通用处理器更高效。通过将特定工作负载分配给硬件加速器，可以显著提高计算性能，缩短任务执行时间。</li>
+<li><strong>降低能耗：</strong> 相对于通用处理器，硬件加速器通常专门优化了某些计算任务，因此在执行这些任务时能够更有效地利用能源，降低整体系统的能耗。</li>
+<li><strong>加速特定应用：</strong> 硬件加速器通常设计用于处理特定类型的应用或工作负载，如图形处理单元 (GPU) 用于图形渲染、张量处理单元 (TPU) 用于深度学习任务等。这使得硬件加速器能够在特定领域内取得更好的性能。</li>
+<li><strong>并行计算：</strong> 许多硬件加速器是为并行计算而设计的，能够同时处理多个数据点或任务。这种并行性能有助于加速大规模数据处理和复杂计算任务。</li>
+<li><strong>支持新技术：</strong> 硬件加速器通常与新兴技术和标准一起推出，以支持特定应用的发展。例如，专门用于机器学习的加速器可能支持新的深度学习框架和算法。</li>
+<li><strong>解放CPU资源：</strong> 通过将特定工作负载转移到硬件加速器，可以释放主处理器（通常是CPU）的计算资源，使其能够更专注于执行其他任务。</li>
+</ol>
+<p>总体而言，硬件加速器的主要作用是通过专门优化和并行计算，提高特定工作负载的执行效率和性能，从而在各种领域中取得更好的计算结果</p>
+<p>加速器的设计和实现主要有两类：</p>
+<ul>
+<li>
+<p>设计专用集成电路（ASIC）</p>
+<ul>
+<li>ASIC 是最高效的</li>
+</ul>
+</li>
+<li>
+<p>基于可重构器件开发（如FPGA）</p>
+<ul>
+<li>设计灵活，开发周期更短</li>
+<li>Xilinx和Altera</li>
+</ul>
+</li>
+</ul>
+<h3 id="深度学习加速器">深度学习加速器
+</h3><ul>
+<li>卷积神经网络
+<ul>
+<li>卷积计算</li>
+<li>非线性激活层</li>
+<li>池化层
+<ul>
+<li>池化层作用：减少数据量，常见的有Average Pooling和Max Pooling</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788.png"
+	width="1087"
+	height="446"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788_hu4793172232729361680.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788_hu13403669985562444564.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113105217788"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="243"
+		data-flex-basis="584px"
+	
+></p>
+<ul>
+<li>稀疏张量（Sparse Tensor）</li>
+</ul>
+<h3 id="图计算加速器">图计算加速器
+</h3><h2 id="八微码和超长指令字">八、微码和超长指令字
+</h2><h3 id="微码处理器">微码处理器
+</h3><p>目前的处理器大多都是硬布线设计（Hardwired）：通过微体系结构直接实现ISA中的所有指令</p>
+<p>微码处理器增加了一个解释层：每条ISA指令都采用一系列更简单的微指令表达（被解释为一系列微指令的序列）</p>
+<p>部署实施更简单，指令执行灵活、可控</p>
+<p><strong>Microcontrol Unit</strong></p>
+<p>处理器设计可以分为datapath和Control设计两部分</p>
+<ul>
+<li>datapath, 存储数据、算术逻辑运算单元</li>
+<li>control, 控制数据通路上的一系列操作</li>
+</ul>
+<p>微指令</p>
+<ul>
+<li>
+<p><em>next</em> ：increments µPC</p>
+</li>
+<li>
+<p><em>spin</em> ：waits for memory</p>
+</li>
+<li>
+<p><em>fetch</em> ：jumps to start of instruction fetch</p>
+</li>
+<li>
+<p><em>dispatch</em> ：jumps to start of decoded opcode group</p>
+</li>
+<li>
+<p><em>ftrue/ffalse</em> *：*jumps to fetch if Cond? true/false</p>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930.png"
+	width="735"
+	height="426"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930_hu17899222786590168784.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930_hu12980119376796965034.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113111719930"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="172"
+		data-flex-basis="414px"
+	
+></p>
+<p><strong>现代微处理器中微程序控制扮演辅助的角色</strong></p>
+<ul>
+<li>e.g., AMD Bulldozer, Intel Ivy Bridge, Intel Atom, IBM PowerPC, …</li>
+<li>大多数指令采用硬布线逻辑控制</li>
+<li>不常用的指令或者复杂的指令采用微程序控制</li>
+</ul>
+<p><strong>芯片bug的漏洞修复（基于微码的修复和升级）</strong></p>
+<ul>
+<li>Intel处理器在 bootup阶段可装载微代码方式的patches</li>
+<li>英特尔不得不重新启用微代码工具，并寻找原来的微码工程师来修补熔断/幽灵安全漏洞</li>
+</ul>
+<h3 id="超长指令字vliw处理器"><strong>超长指令字VLIW处理器</strong>
+</h3><p><strong>提高指令级并行（ILP）的有效方法</strong></p>
+<ul>
+<li>流水线，多处理器，超标量处理器，超长指令字VLIW</li>
+</ul>
+<p>定义：VLIW指的是一种被设计为可以利用指令级并行（ILP）优势的CPU体系结构，由于在一条指令中封装了多个并行操作，其指令的长度比RISC或CISC的指令要长，因此起名为超长指令集</p>
+<p>与超标量处理器的比较</p>
+<ul>
+<li>相同：一次发射并完成多个操作，提高ILP</li>
+<li>不同：
+<ul>
+<li>超标量：要复杂逻辑发现指令之间的数据依赖关系，以及乱序执行逻辑和超标量架构来实现多指令的并行发射</li>
+<li>VLIW：通过编译器对并发操作进行了编码，这种显式编码极大地降低了硬件的复杂性</li>
+</ul>
+</li>
+</ul>
+<p><strong>VLIW: Very Long Instruction Word</strong></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759.png"
+	width="852"
+	height="307"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759_hu11820384506603701885.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759_hu1261648922202267399.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113113714759"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="277"
+		data-flex-basis="666px"
+	
+></p>
+<ul>
+<li>定长指令，将多个相互无依赖关系的指令封装到一条超长的指令字中</li>
+<li>每个操作槽（slot）均用于固定的功能</li>
+<li>每个功能单元的operation都声明了固定的延迟</li>
+</ul>
+<p><strong>VLIW处理器设计原则</strong></p>
+<p>架构设计</p>
+<ul>
+<li>允许一个指令内多个Operations的并行执行</li>
+<li>处理器中需要有对应数量的ALU单元完成相应的Operations</li>
+<li>为所有Operation提供确定性延迟
+<ul>
+<li>在指定的延迟之前不允许使用数据，无需数据互锁</li>
+</ul>
+</li>
+</ul>
+<p>编译器</p>
+<ul>
+<li>进行依赖性的检查，保证指令内各Operations的并行性</li>
+<li>通过编译器的调度（重新排序）Operations，以最大限度的提高并行性</li>
+<li>通过编译器调度以避免数据竞争（无interlocks）
+<ul>
+<li>编译器需要找到N个独立的Operations，不足则插入NOP</li>
+</ul>
+</li>
+</ul>
+<p>VLIW  Loop</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015.png"
+	width="967"
+	height="412"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015_hu1538942487435066451.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015_hu7346972886623747566.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113115813015"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="234"
+		data-flex-basis="563px"
+	
+></p>
+<p>VLIW  Loop Unrolling</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307.png"
+	width="782"
+	height="451"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307_hu1200409661677572640.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307_hu414722667351764544.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113115833307"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="416px"
+	
+></p>
+<p>Software Pipeling</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218.png"
+	width="806"
+	height="531"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218_hu17304773250863527386.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218_hu17606842934711032652.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113115857218"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="364px"
+	
+></p>
+<p>经典VLIW的问题</p>
+<ul>
+<li>对于分支概率的了解
+<ul>
+<li>代码分析需要在构建过程中执行额外的步骤</li>
+</ul>
+</li>
+<li>对静态不可预测的分支进行调度
+<ul>
+<li>最佳调度方式会因分支路径而不同，增加编译时间</li>
+</ul>
+</li>
+<li>增加了目标代码量
+<ul>
+<li>指令填充浪费指令内存/缓存（无法找到彼此独立的Operations）</li>
+<li>循环展开/软件流水线这些技术需要复制大量代码</li>
+</ul>
+</li>
+<li>调度内存操作
+<ul>
+<li>缓存和/或内存访问有时候会带来静态不可预测的memory Operation</li>
+</ul>
+</li>
+<li>目标代码兼容性
+<ul>
+<li>必须为每台机器重新编译所有代码</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726.png"
+	width="786"
+	height="586"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726_hu14771969702908570572.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726_hu14717481823647506314.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113120047726"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="321px"
+	
+></p>
+<h2 id="九云计算概述和虚拟化">九、云计算概述和虚拟化
+</h2><p><strong>Why run applications on cloud and not on “bare metal” servers?</strong></p>
+<ul>
+<li>**资源共享：**通过虚拟化，多个虚拟机可以共享系统资源，提高资源的利用率</li>
+</ul>
+<ul>
+<li>
+<p><strong>降低维护成本：</strong> 由云服务提供商负责硬件和软件的维护，降低了用户的运维负担</p>
+</li>
+<li>
+<p><strong>灵活性：</strong> 虚拟机可以在需要时迁移到另一台机器，增加了系统的弹性</p>
+</li>
+<li>
+<p><strong>按需付费：</strong> 如果使用较轻，无需投资购买服务器，按使用量付费，节省成本</p>
+</li>
+</ul>
+<p><strong>Disadvantages of running applications on cloud</strong></p>
+<ul>
+<li>
+<p><strong>性能：</strong> 通过互联网访问服务器可能导致较长的延迟，降低了性能</p>
+</li>
+<li>
+<p><strong>成本：</strong> 在高度使用的情况下，云计算可能成本较高，尤其是大规模的应用</p>
+</li>
+</ul>
+<p>Hypervisor的分类</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563.png"
+	width="949"
+	height="541"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563_hu5622351675933054432.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563_hu11351666830853887341.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113121638563"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="420px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986.png"
+	width="1070"
+	height="615"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986_hu7675745657078962030.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986_hu12311068038912294591.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113150936986"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="173"
+		data-flex-basis="417px"
+	
+></p>
+<h2 id="十片上互联网络">十、片上互联网络
+</h2><p><strong>系统设计中的重点问题</strong></p>
+<ul>
+<li>拓扑Topology
+<ul>
+<li>网络中结点和通道之间的物理布局和连接</li>
+<li>会影响路由效率、可靠性、吞吐量、延迟、系统构建难度</li>
+</ul>
+</li>
+<li>路由Router
+<ul>
+<li>给定拓扑结构，决定从源节点到目的节点的路径，直接影响网络的吞吐量和性能</li>
+<li>静态或动态</li>
+</ul>
+</li>
+<li>流量控制 Buffering and Flow Control
+<ul>
+<li>信号通过网络时如何分配资源，如缓冲和通道带宽</li>
+<li>在网络怎样存储数据</li>
+<li>拥塞控制</li>
+</ul>
+</li>
+</ul>
+<p><strong>互联系统的评测指标</strong></p>
+<ul>
+<li>关键指标
+<ul>
+<li>成本 Cost</li>
+<li>延迟 Latency</li>
+</ul>
+</li>
+<li>重要指标
+<ul>
+<li>能耗 Energy</li>
+<li>带宽 Bandwidth</li>
+<li>网络竞争 Contention</li>
+<li>整体系统性能 Overall System Performance</li>
+</ul>
+</li>
+</ul>
+<h3 id="拓扑结构"><strong>拓扑结构</strong>
+</h3><ul>
+<li>
+<p>总线             Bus（Simplest）</p>
+</li>
+<li>
+<p>点对点         Point-to-point connection (Ideal and most costly)</p>
+</li>
+<li>
+<p>交叉开关     Crossbar (Less costly)</p>
+</li>
+<li>
+<p>环                 Ring</p>
+</li>
+<li>
+<p>树                 Tree</p>
+</li>
+<li>
+<p>网格             Mesh</p>
+</li>
+<li>
+<p>环面             Torus</p>
+</li>
+<li>
+<p>超立方          Hypercube</p>
+</li>
+<li>
+<p>欧米伽网络  Omega</p>
+</li>
+</ul>
+<p><strong>拓扑结构的基本概念</strong></p>
+<ul>
+<li>路径多样性 Path Diversity</li>
+</ul>
+<p>在给定源节点和目的节点的前提下，如果这个节点对在某个拓扑中拥有多条最短路径，而在另一个拓扑中只有一条最短路径，则认为前者的拓扑具有更大的路径多样性。拓扑中的路径多样性使路由算法在处理负载均衡问题时具有更大的灵活性，从而通过减小通道负载，提高了网络吞吐量。路径多样性还使得数据包能够拥有绕过网络中故障的潜力。影响性能的因素</p>
+<ul>
+<li>对分带宽（Bisection Bandwidth）</li>
+</ul>
+<p>将网络划分为两个相同部分后，两部分之间的通信带宽</p>
+<ul>
+<li>直连网络和间接网络
+<ul>
+<li>比如mesh，所有节点都有一个endpoint和一个switch</li>
+</ul>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240.png"
+	width="781"
+	height="374"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240_hu14590853041605534294.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240_hu2436677003060041045.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113161215240"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="208"
+		data-flex-basis="501px"
+	
+></p>
+<ul>
+<li>阻塞型和非阻塞型</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748.png"
+	width="700"
+	height="561"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748_hu9785375746782860853.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748_hu5546181843062075768.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113161509748"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="124"
+		data-flex-basis="299px"
+	
+></p>
+<p><strong>总线Bus</strong></p>
+<p>所有节点都连在一个连接上</p>
+<ul>
+<li>简单，Simple</li>
+<li>小规模下低成本，Cost effective for a small number of nodes</li>
+<li>一致性保持成本低，Easy to implement coherence (snooping and serialization)</li>
+<li>扩展性差，Not scalable to large number of nodes (limited bandwidth)</li>
+<li>网络竞争高，High contention -&gt; fast saturation</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047.png"
+	width="836"
+	height="184"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047_hu9387408265085493212.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047_hu1952079061134859785.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113162016047"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="454"
+		data-flex-basis="1090px"
+	
+></p>
+<p><strong>点对点网络Point-to-Point</strong></p>
+<p>所有节点与其他节点直接连接</p>
+<ul>
+<li>
+<p>低竞争 Lowest contention</p>
+</li>
+<li>
+<p>低延迟 Potentially lowest latency</p>
+</li>
+<li>
+<p>非常理想，Ideal</p>
+</li>
+<li>
+<p>最高的成本，Highest cost</p>
+<ul>
+<li>Connections/node：O(N)</li>
+<li>inks：O(N2)</li>
+</ul>
+</li>
+<li>
+<p>扩展性差 Not scalable</p>
+</li>
+<li>
+<p>布线难度大 How to lay out on chip?</p>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738.png"
+	width="654"
+	height="579"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738_hu12495677601800724805.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738_hu10400005870603657979.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113162237738"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="112"
+		data-flex-basis="271px"
+	
+></p>
+<p><strong>交叉开关Crossbar</strong></p>
+<p>每个节点均通过共享链路相连，Every node connected to every other with a shared link for each destination</p>
+<p>不同目的地之间可并行传输，Enables concurrent transfers to non-conflicting destinations</p>
+<p>小规模低成本，Could be cost-effective for small number of nodes</p>
+<ul>
+<li>低延迟高吞吐 Low latency and high througput</li>
+<li>高成本 Expensive</li>
+<li>扩展性差 Not scalable -&gt;O(N^2) cost</li>
+<li>大规模仲裁困难 Difficult to arbitrate as N increases</li>
+<li>比如IBM POWER5、Sun Niagara I/II</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408.png"
+	width="410"
+	height="409"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408_hu18380841937774865341.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408_hu12658606561327170983.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113164520408"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="100"
+		data-flex-basis="240px"
+	
+></p>
+<p><strong>环Ring</strong></p>
+<ul>
+<li>
+<p>简单</p>
+</li>
+<li>
+<p>便宜 O(N) cost</p>
+</li>
+<li>
+<p>高延迟：O(N)</p>
+</li>
+<li>
+<p>对分带宽在添加节点时保持不变 （扩展性问题）</p>
+</li>
+<li>
+<p>比如Core i7</p>
+</li>
+</ul>
+<p>单向Ring：Unidirectional Ring</p>
+<p>双向Ring：Bidirectional Rings</p>
+<p>层次Ring：Hierarchical Rings</p>
+<p><strong>网格Mesh</strong></p>
+<ul>
+<li>
+<p>直连网络</p>
+</li>
+<li>
+<p>在基于网格的应用中有局部性</p>
+</li>
+<li>
+<p>O(N) cost</p>
+</li>
+<li>
+<p>平均延迟 O(sqrt(N))</p>
+</li>
+<li>
+<p>易于布线</p>
+</li>
+<li>
+<p>具有路径多样性</p>
+</li>
+<li>
+<p>比如：Tiera processor，prototype Intel chips</p>
+</li>
+</ul>
+<p><strong>圆环面</strong> <strong>Torus</strong></p>
+<ul>
+<li>Mesh is not symmetric on edges: performance very sensitive to placement of task on edge vs. middle</li>
+<li>Torus avoids this problem
+<ul>
+<li>Higher path diversity (and bisection bandwidth) than mesh</li>
+<li>Higher cost
+<ul>
+<li>Harder to lay out on-chip</li>
+<li>Unequal link lengths</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>树</strong> <strong>Trees</strong></p>
+<p>平面、分层的拓扑结构</p>
+<ul>
+<li>
+<p>延迟 O(logN)</p>
+</li>
+<li>
+<p>利于局部通信</p>
+</li>
+<li>
+<p>便宜：O(N) cost</p>
+</li>
+<li>
+<p>易于布线</p>
+</li>
+<li>
+<p>根节点将成为瓶颈，但Fat Tree能解决这个问题</p>
+</li>
+</ul>
+<p><strong>超立方</strong> <strong>Hypercube</strong></p>
+<ul>
+<li>“N-dimensional cube” or “N-cube”</li>
+<li>Latency: O(logN)</li>
+<li>links: O(NlogN)</li>
+<li>Low latency</li>
+<li>Hard to lay out in 2D/3D</li>
+</ul>
+<p><strong>多级网络Multistage Networks</strong></p>
+<p>Indirect networks with multiple layers of switches between terminals/nodes</p>
+<ul>
+<li>成本: O(NlogN)， 延迟：O(logN)</li>
+<li>Many variations (Omega, Butterfly, Benes, Banyan, …)</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249.png"
+	width="1084"
+	height="697"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249_hu4645732669758562781.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249_hu6826422005677592258.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113173857249"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="155"
+		data-flex-basis="373px"
+	
+></p>
+<h3 id="路由routing"><strong>路由Routing</strong>
+</h3><p>路由算法（三种类型）</p>
+<ul>
+<li>
+<p>确定性路由 Deterministic：所有相同的源-目标对选择相同路径</p>
+<ul>
+<li>简单</li>
+<li>无死锁</li>
+<li>可能会有高竞争</li>
+<li>不能利用路径多样性</li>
+</ul>
+</li>
+<li>
+<p>流量无关路由 Oblivious：选择不同的路径，无需考虑网络状态</p>
+<ul>
+<li>Valiant 算法： An example of oblivious algorithm</li>
+<li>目标: Balance network load</li>
+<li>基础思路: Randomly choose an intermediate destination,route to it first, then route from there to destination</li>
+<li>Randomizes/balances network load</li>
+<li>Non minimal (packet latency can increase)</li>
+<li>Optimizations:
+<ul>
+<li>Do this on high load</li>
+<li>Restrict the intermediate node to be close (in the same quadrant)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>无缓冲偏转路由 Bufferless Deflection Routing</p>
+<ul>
+<li>Key idea: Packets are never buffered in the network. When two packets contend for the same link, one is deflected</li>
+<li>Input buffers are eliminated: packets are buffered in pipeline latches and on network links</li>
+</ul>
+</li>
+<li>
+<p>自适应路由 Adaptive：能选择不同的路径，适应网络的状态</p>
+<ul>
+<li>最小化自适应路由 Minimal adaptive
+<ul>
+<li>Router uses network state (e.g., downstream buffer occupancy) to pick which “productive” output port to send a packet to</li>
+<li>Productive output port: port that gets the packet closer to its destination</li>
+<li>Aware of local congestion</li>
+<li>Minimality restricts achievable link utilization (load balance)</li>
+</ul>
+</li>
+<li>非最小化方案 Non-minimal (fully) adaptive
+<ul>
+<li>“Misroute” packets to non-productive output ports based on network state</li>
+<li>Can achieve better network utilization and load balance</li>
+<li>Need to guarantee livelock freedom</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>死锁问题</strong> <strong>Deadlock</strong></p>
+<ul>
+<li>没有转发进程 No forward progress</li>
+<li>由资源的循环依赖所导致 Caused by circular dependencies on resources</li>
+<li>每个包都等待另一个包释放所占有的缓冲区 Each packet waits for a buffer occupied by another packet downstream</li>
+</ul>
+<p><strong>解决方案</strong></p>
+<ul>
+<li>
+<p>在路由中避免循环 Avoid cycles in routing</p>
+<ul>
+<li>维度顺序路由 Dimension order routing
+<ul>
+<li>Cannot build a circular dependency</li>
+</ul>
+</li>
+<li>转向记录与限制 Restrict the “turns” each packet can take</li>
+</ul>
+</li>
+<li>
+<p>加缓冲 Avoid deadlock by adding more buffering (escape paths)</p>
+</li>
+<li>
+<p>监测和打破死锁 Detect and break deadlock</p>
+<ul>
+<li>可抢占缓冲区 Preemption of buffers</li>
+</ul>
+</li>
+<li>
+<p>转向模型 Turn Model to Avoid Deadlock</p>
+<ul>
+<li>Idea
+<ul>
+<li>分析数据包在网络中可以转向的方向 Analyze directions in which packets can turn in the network</li>
+<li>确定这些转向可以形成的循环 Determine the cycles that such turns can form</li>
+<li>禁止足够数量的转向以阻止可能的循环 Prohibit just enough turns to break possible cycles</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="流量控制-buffering-and-flow-control"><strong>流量控制 Buffering and Flow Control</strong>
+</h3><p><strong>流量控制的基础思路</strong></p>
+<ul>
+<li>Circuit switching</li>
+<li>Bufferless (Packet/flit based)</li>
+<li>Store and forward (Packet based)</li>
+<li>Virtual cut through (Packet based)</li>
+<li>Wormhole (Flit based)</li>
+</ul>
+<h2 id="十一仓库级计算机和分布式文件系统">十一、仓库级计算机和分布式文件系统
+</h2><h3 id="warehouse-scale-computer-wsc">Warehouse-scale computer (WSC)
+</h3><ul>
+<li>Provides Internet services
+<ul>
+<li>Search, social networking, online maps, video sharing, online</li>
+<li>hopping, email, cloud computing, etc.</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>
+<p>Differences with HPC “clusters”:</p>
+<ul>
+<li>Clusters have higher performance processors and network</li>
+<li>Clusters emphasize thread-level parallelism, WSCs emphasize request-level parallelism</li>
+</ul>
+</li>
+<li>
+<p>Differences with datacenters:</p>
+<ul>
+<li>
+<p>Datacenters consolidate different machines and software intoone location</p>
+</li>
+<li>
+<p>Datacenters emphasize virtual machines and hardware heterogeneity in order to serve varied customers</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>WSC的分布式系统和软件</p>
+<ul>
+<li>
+<p>编程框架Program Framework：MapReduce（Google）</p>
+</li>
+<li>
+<p>文件系统File systems: GFS（Google）</p>
+</li>
+<li>
+<p>数据库Database: Dynamo（Amazon） 、BigTable（Google）、Haystack（Facebook）</p>
+</li>
+<li>
+<p>缓存系统Cache：Memcache（@Facebook）</p>
+<p>Google WSC “三驾马车”：MapReduce、bigTable、GFS，其开源版本：Hadoop、Hbase（Java）、HDFS</p>
+</li>
+</ul>
+<h3 id="分布式文件系统">分布式文件系统
+</h3><p><strong>GFS系统架构</strong></p>
+<ul>
+<li>GFS中有三种节点：GFS client，GFS master，GFS chunkserver</li>
+<li>GFS client：维持专用接口，与应用交互</li>
+<li>GFS master：维持元数据，统一管理chunk位置与租约</li>
+<li>GFS chunkserver：存储数据</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718.png"
+	width="935"
+	height="405"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718_hu13863537571416621331.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718_hu14626121263931717963.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113202733718"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="230"
+		data-flex-basis="554px"
+	
+></p>
+<p><strong>GFS存储设计</strong></p>
+<ul>
+<li>考虑到Google业务需要存储的文件(几个GB)可能非常大，并且大小不均，GFS没有选择直接以文件为单位进行存储，而是把文件分为一个个的chunk来存储，每个chunk为64MB
+<ul>
+<li>较大的chunk可以有效减少系统内部的寻址和交互次数</li>
+<li>较大的chunk也意味着client可能在一个chunk上执行多次操作，这样可以服用TCP连接，节省网络开销</li>
+<li>更大的chunk也可以减少chunk的数量，从而节省元数据存储开销，相当于节省了系统内最珍贵的内存资源</li>
+</ul>
+</li>
+<li>系统通过分割存储来将文件分散存储在多台服务器上</li>
+<li>采用更大的chunk以及配套的一致性策略来支持大文件存储</li>
+</ul>
+<p><strong>GFS的Master设计</strong></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186.png"
+	width="1176"
+	height="259"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186_hu14181316977467049400.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186_hu4420256021086114329.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113203644186"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="454"
+		data-flex-basis="1089px"
+	
+></p>
+<p>GFS采用单Master节点，用来存储整个文件系统的三类元数据</p>
+<ul>
+<li>所有文件和chunk的namespace【持久化】</li>
+<li>文件到chunk的映射【持久化】</li>
+<li>每个chunk的位置【不持久化】
+<ul>
+<li>为什么位置不需要持久化，因为master在重启的时候可以从各个chunkserver处收集chunk的位置信息</li>
+</ul>
+</li>
+</ul>
+<p>GFS采取的一系列措施来确保master不会成为整个系统的瓶颈</p>
+<ul>
+<li>GFS所有的数据流不经过Master，而是直接由client和chunkserver直接交互（数据流和控制流分离）</li>
+<li>GFS的client会缓存master的元数据，在大部分情况下，都无需访问master</li>
+<li>采取一系列手段来节省master的内存，包括增大chunk的大小以节省chunk的数量、对元数据进行定制化的压缩等</li>
+</ul>
+<p>如何实现自动扩缩容？&ndash;&gt;在master节点上增减、调整chunk的元数据即可</p>
+<p>怎样知道一个文件存储在哪台机器上？&ndash;&gt;根据master中文件到chunk再到chunk位置的映射来定位具体的chunkserver</p>
+<p><strong>考试重点，题目应该是64B，打错了</strong></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518.png"
+	width="1231"
+	height="416"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518_hu2676652174271680683.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518_hu9583582959516248960.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113204349518"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="295"
+		data-flex-basis="710px"
+	
+></p>
+<p><strong>GFS的高可用设计</strong></p>
+<ul>
+<li>
+<p>master的高可用设计</p>
+<ul>
+<li>除了primary master以外，还维持一个shadow master作为备份master</li>
+<li>master在正常运行时，对元数据所做的所有修改操作，都要先记录日志(WAL)，再真正去修改内存中的元数据</li>
+<li>同时primary master会实时向shadow master同步WAL，只有shadow master同步日志完成，元数据修改操作才算成功</li>
+</ul>
+<p>如何实现自动切换</p>
+<ul>
+<li>如果master宕机，会通过Google的Chubby(本质时共识算法)来识别并切换到shadow master，这个切换时秒级的</li>
+</ul>
+</li>
+<li>
+<p>chunk的高可用设计</p>
+<ul>
+<li>文件被拆为一个个的chunk来进行存储的，每个chunk都有三个副本，由master维持副本信息</li>
+<li>对一个chunk的每次写入都必须保证在三个副本中的写入都完成，才算写入完成</li>
+<li>如果一个chunkserver宕机，还有两个副本保存这个chunk的信息</li>
+<li>如果宕机的副本在一段时间后没有恢复，那么master会在另一个chunksever重建一个副本，从而将chunk的副本数目维持在3个</li>
+<li>master对副本位置的选择策略要遵循以下三点
+<ul>
+<li>新副本所在的chunkserver的资源利用率要低</li>
+<li>新副本所在的chunkserver最近创建的chunk副本不多，防止其瞬间成为热点</li>
+<li>不能和chunk其它副本在同一机架</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>GFS的读写流程</strong></p>
+<p>GFS的写入</p>
+<ul>
+<li>采用流水线技术</li>
+<li>数据流与控制流分离的技术</li>
+</ul>
+<p>GFS的写入流程</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266.png"
+	width="531"
+	height="492"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266_hu14255304534219377146.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266_hu13408714252862244260.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113212300266"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="107"
+		data-flex-basis="259px"
+	
+></p>
+<ul>
+<li>1,2.Client向Master询问要写入chunk的租约在哪个chunkserve上(Primary Replica)，以及其他副本(Secondary Replicas)的位置(通常Client中直接就有缓存)</li>
+<li>3.Client将数据推送到所有的副本上，这一步就会用到流水线技术，也是写入过程中唯一的数据流操作。</li>
+<li>4.确认所有副本都收到了数据之后，client发送正式写入的请求到Primary Replica。Primary Replica接收到这个请求后，会对这个Chunk上所有的操作排序，然后按照顺序执行写入。</li>
+</ul>
+<p><code>这里很关键，Primary Replica唯一确定写入顺序，保证副本一致性。</code></p>
+<ul>
+<li>5.Primary Replica把Chunk写入的顺序同步给SecondaryReplica。</li>
+</ul>
+<p><code>注意，如果执行到这一步，Primary Replica上写入已经成功了.</code></p>
+<ul>
+<li>6.所有的Secondary Replica返回Primary Replica写入完成·7.Primary Replica返回写入结果给Client。</li>
+</ul>
+<p><code>所有副本都写入成功: Client确认写入完成</code></p>
+<p><code>一部分Secondary Replica写入失败 (没有响应) :Client认为写入失败，并从第3步开始重新执行。</code></p>
+<p><code>如果一个写入操作涉及到多个chunk，client会把它们分为多个写入来执行。</code></p>
+<p>改写的问题在于一个改写操作可能涉及到多个chunk而如果部分chunk成功，部分chunk失败，我们读到的文件就是不正确的。</p>
+<p>改写大概率是一个分布式操作，如果要保证改写的强致性，代价就要大很多了。论文中一再强调，GFS推荐使用追加的方式写入文件并且Google内部使用GFS的应用，它们的绝大多数写入也都是追加。</p>
+<p>GFS的读取流程</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198.png"
+	width="622"
+	height="462"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198_hu15782604705934360405.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198_hu18397393842572029900.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240113213230198"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="134"
+		data-flex-basis="323px"
+	
+></p>
+<ul>
+<li>
+<ol>
+<li>client收到读取一个文件的请求后，首先会查看自身的缓存中有没有此文件的元数据信息。如果没有，则请求master(或shadow master)获取元数据信息并缓存。</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>client计算文件偏移量对应的chunk。</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>然后client向离自身最近的chunkserver发送读请求。如果在这个过程中，发现这个chunkserver没有自己所需的chunk，说明缓存失效，就再请求master获取最新的元数据</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>读取时会进行chunk校验和的确认如果校验和验证不通过，选择其他副本进行读取</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>Client返回应用读取结果</li>
+</ol>
+</li>
+</ul>
+<p><strong>总体上GFS是三写一读的模式。写入采用了流水线技术和数据流与控制流分离技术保证性能;追加对一致性的保证更简单，也更加高效，所以写入多采用追加的形式。读取则所有副本都可读在就近读取的情况下性能非常高</strong></p>
+<p><strong>GFS的一致性模型</strong></p>
+<p>GFS把文件数据的一致性大体上分为三个层次：inconsistent，consistent，defined</p>
+<ul>
+<li>consistent：一致的，表示文件无论从哪个副本读取，结果都是一样的</li>
+<li>defined：已定义的，文件发生修改操作后，读取时一致的，且client可以看到最新修改的内容</li>
+</ul>
+<p>串行改写成功: defined。因为所有副本都完成改写后才能返回成功，并且重复执行改写也不会产生副本间不一致，所以串行改写成功数据是defined。</p>
+<p>写入失败:inconsistent。这通常发生在重试了一定次数仍无法在所有副本都写入成功时意味着大概率有个副本宕机了，这种情况下一定是不一致的，Client也不会返回成功。</p>
+<p>并发改写成功: consistent but undefined。对于单个改写操作而言，成功就意味着副本间是一致的。但并发改写操作可能会涉及多个chunk，不同chunk对改写的执行顺序不一定相同，而这有可能造成应用读取不到预期的结果。</p>
+<p>追加写成功: defined interspersed with inconsistent (已定义但有可能存在副本间不一致interspersed with inconsistent，追加的重复执行会造成副本间的不一致。</p>
+<h3 id="nosql数据库-bigtable">NoSQL数据库 BigTable
+</h3><h3 id="分布式编程框架mapredue"><strong>分布式编程框架</strong>MapRedue****
+</h3><h3 id="数据中心网络data-center-networks"><strong>数据中心网络Data Center Networks</strong>
+</h3><h3 id="云计算安全">云计算安全
+</h3><p><strong>安全计算模式一：可信计算</strong></p>
+<p><strong>可信计算的含义</strong></p>
+<ul>
+<li>可信计算组织TCG：如果一个实体的行为是以预期的方式，符合预期的目标，则该实体是可信的</li>
+<li>ISO/IEC 15408标准：参与计算的组件、操作或过程在任意的条件下是可预测的，并能够抵御病毒和一定程度的物理干扰</li>
+<li>沈昌祥院士：可信≈安全+可靠，可信计算系统是能够提供系统的可靠性、可用性、信息和行为安全性的计算机系统</li>
+</ul>
+<p><strong>工作原理</strong></p>
+<ul>
+<li>建立信任根：信任根的可信性由物理安全、技术安全与管理安全共同确保</li>
+<li>建立信任链：从信任根开始到硬件平台，到操作系统再到应用，一级认证一级，一级信任一级</li>
+</ul>
+<p><strong>局限性</strong></p>
+<p>可信计算对数据的保护偏弱，仅限密钥和关键数据</p>
+<p><strong>安全计算模式二：机密计算</strong></p>
+<p><strong>机密计算的定义</strong></p>
+<ul>
+<li>IBM：机密计算是一种云计算技术，它在处理过程中将敏感数据隔离在受保护的CPU Enclave中</li>
+<li>机密计算联盟CCC：机密计算是通过在基于硬件可信执行环境中执行计算来保护使用中的数据</li>
+<li>冯登国院士：机密计算是一种保护使用中的数据安全的计算范式</li>
+</ul>
+<p><strong>工作原理</strong></p>
+<ul>
+<li>机密计算利用基于硬件的可信执行环境将数据、特定功能或整个应用程序与操作系统、虚拟机管理程
+序、虚拟机管理器以及其他特权进程隔离开来，从而保护敏感数据</li>
+</ul>
+<p><strong>局限性</strong></p>
+<ul>
+<li>机密计算支撑技术SGX等存在侧信道攻击，依赖对硬件厂商的信任，且机密计算缺乏统一的技术标准</li>
+</ul>
+<p><strong>可信执行环境TEE</strong></p>
+<ul>
+<li>
+<p>TEE 是一种具有运算和储存功能，能提供安全性和完整性保护的独立处理环境</p>
+</li>
+<li>
+<p>在硬件中为敏感数据单独分配一块隔离的内存，所有敏感数据的计算均在这块内存中进行</p>
+</li>
+</ul>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846.png"
+	width="657"
+	height="376"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846_hu8243842397846565507.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846_hu8347067823630328760.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114103755846"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<p><strong>安全计算模式三：密态计算</strong></p>
+<p>以密文为计算对象，其安全性不依赖于隔离和访问控制、不依赖于硬件和软件安全性</p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160.png"
+	width="519"
+	height="297"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160_hu13596468201324214824.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160_hu15079976299738960635.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114103701160"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="174"
+		data-flex-basis="419px"
+	
+></p>
+<p><img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391.png"
+	width="725"
+	height="132"
+	srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391_hu4737260487164093017.png 480w, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391_hu1630467894130397190.png 1024w"
+	loading="lazy"
+	
+		alt="image-20240114103732391"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="549"
+		data-flex-basis="1318px"
+	
+></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/">体系结构</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2024-12-15
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/">
+        
+        
+            <div class="article-image">
+                <img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1.f7ae469786d96c6c22e608388a0ec675_hu14900298762321332357.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 操作系统大作业：内存故障检测和处理"
+                        
+                        data-hash="md5-965Gl4bZbGwi5gg4ig7GdQ==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">操作系统大作业：内存故障检测和处理</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://chenyuan1125.top","visitor":true});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2024 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

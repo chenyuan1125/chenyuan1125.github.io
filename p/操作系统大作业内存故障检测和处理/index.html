@@ -1,0 +1,2100 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="测试操作系统内存毒化和故障检测相关功能">
+<meta name="keywords" content="内存故障检测、内存毒化"><title>操作系统大作业：内存故障检测和处理</title>
+
+<link rel='canonical' href='//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/'>
+
+<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="操作系统大作业：内存故障检测和处理">
+<meta property='og:description' content="测试操作系统内存毒化和故障检测相关功能">
+<meta property='og:url' content='//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='os' /><meta property='article:published_time' content='2024-06-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-15T21:28:19&#43;08:00'/><meta property='og:image' content='//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1.jpg' />
+<meta name="twitter:title" content="操作系统大作业：内存故障检测和处理">
+<meta name="twitter:description" content="测试操作系统内存毒化和故障检测相关功能"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1.jpg' />
+
+<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="//localhost:1313/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="//localhost:1313/en/" >English</option>
+                                
+                                    <option value="//localhost:1313/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#实验环境">实验环境</a></li>
+    <li><a href="#hwpoison">hwpoison</a>
+      <ol>
+        <li><a href="#具体功能和工作原理">具体功能和工作原理</a></li>
+        <li><a href="#hwpoison-的工作流程">hwpoison 的工作流程</a></li>
+        <li><a href="#使用场景">使用场景</a></li>
+        <li><a href="#内核参数和配置">内核参数和配置</a></li>
+        <li><a href="#检查内核模块">检查内核模块</a></li>
+        <li><a href="#检查-hwpoison-子目录">检查 hwpoison 子目录</a></li>
+        <li><a href="#检查内核日志">检查内核日志</a></li>
+        <li><a href="#验证内存毒化功能">验证内存毒化功能</a>
+          <ol>
+            <li><a href="#内存错误注入">内存错误注入</a></li>
+            <li><a href="#验证内存毒化功能-1">验证内存毒化功能</a></li>
+            <li><a href="#恢复内存毒化页面">恢复内存毒化页面</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#edac">EDAC</a>
+      <ol>
+        <li><a href="#edac-的主要功能">EDAC 的主要功能</a></li>
+        <li><a href="#edac-util的使用edac-utils已经被弃用">EDAC-util的使用(EDAC-utils已经被弃用)</a></li>
+      </ol>
+    </li>
+    <li><a href="#rasdaemon目前主流的检错纠错工具">Rasdaemon(目前主流的检错纠错工具)</a>
+      <ol>
+        <li><a href="#rasdaemon-的主要功能">Rasdaemon 的主要功能</a></li>
+        <li><a href="#rasdaemon-的使用需要edac支持">Rasdaemon 的使用（需要EDAC支持）</a></li>
+        <li><a href="#利用rasdaemon实现错误内存的软下线">利用Rasdaemon实现错误内存的软下线</a></li>
+      </ol>
+    </li>
+    <li><a href="#问题汇总">问题汇总：</a></li>
+    <li><a href="#相关知识">相关知识</a>
+      <ol>
+        <li><a href="#error-correction-code-ecc"><strong>Error correction code (ECC)</strong></a></li>
+        <li><a href="#edac和rasdaemon的关系">EDAC和Rasdaemon的关系</a></li>
+      </ol>
+    </li>
+    <li><a href="#参考资料">参考资料：</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/">
+                <img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu1503609835515304808.jpg"
+                        srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu1503609835515304808.jpg 800w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu14339452462483989038.jpg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post 操作系统大作业：内存故障检测和处理" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E8%AF%BE%E7%A8%8B/" style="background-color: #D38152; color: #fff;">
+                课程
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/">操作系统大作业：内存故障检测和处理</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            测试操作系统内存毒化和故障检测相关功能
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2024-06-05</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 15 分钟
+                </time>
+            </div>
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+                <time class="article-words">
+                    7440字
+                </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="内存故障检测和处理">内存故障检测和处理
+</h1><p>实验内容：</p>
+<ol>
+<li>模拟内存硬件错误，在x86上验证hwpoison“内存毒化”功能和EDAC（Error Detection And  Correction）的检错和纠错功能</li>
+<li>使用Rasdaemon捕获错误位置，并在操作系统级别完成错误内存的软下线</li>
+</ol>
+<p>评分标准（折算为百分制）</p>
+<ol>
+<li>（20分）在X86平台上模拟内存错误 （内存故障 injection）</li>
+<li>（20分）在X86平台上捕获内存错误的日志信息</li>
+<li>（20分）在X86平台上验证EDAC的检测和纠错功能</li>
+<li>（30分）在X86平台上根据捕获的内存错误信息，完成对应内存页或多个临近内存页的软下线</li>
+<li>（10分）书面&amp;口头实验报告</li>
+</ol>
+<p>平台不限，选择其一，调研edac在不同硬件暴露的信息类别和量级都不一样（接口），找出内存出错位置，做内存隔离，Linux有一套完整的内存隔离机制</p>
+<h2 id="实验环境">实验环境
+</h2><p>采用VMware虚拟机</p>
+<p>操作系统：ubuntu 20.04</p>
+<p>内核版本：5.15.0</p>
+<h2 id="hwpoison">hwpoison
+</h2><p><code>hwpoison</code> 是 Linux 内核中的一种机制，用于处理硬件内存错误。其主要功能是检测并隔离有缺陷的内存页，以防止这些缺陷对系统稳定性和数据完整性产生负面影响。</p>
+<h3 id="具体功能和工作原理">具体功能和工作原理
+</h3><ol>
+<li><strong>检测硬件错误</strong>：<code>hwpoison</code> 依赖于硬件错误检测机制，例如 ECC（错误校正码）内存或现代 CPU 的内存控制器。这些硬件组件能够检测内存错误，如位翻转等。</li>
+<li><strong>报告和标记错误页面</strong>：当硬件检测到内存错误时，会向操作系统报告。Linux 内核中的 <code>hwpoison</code> 机制会收到这些报告，并标记受影响的内存页为“损坏”（poisoned）。</li>
+<li><strong>隔离损坏页面</strong>：标记为损坏的内存页将被隔离，不再被系统使用。对于正在使用的页面，内核会尝试将其内容迁移到健康的内存区域，并确保应用程序能够继续运行而不会读取到损坏的数据。</li>
+<li><strong>通知用户空间应用</strong>：内核还可以通过信号机制（如 SIGBUS）通知用户空间应用程序，让它们可以采取相应的措施，如保存工作状态或尝试恢复数据。</li>
+</ol>
+<h3 id="hwpoison-的工作流程">hwpoison 的工作流程
+</h3><ol>
+<li><strong>错误检测</strong>：内存控制器（Memory Controller）检测到内存错误，并生成错误报告。</li>
+<li><strong>错误报告处理</strong>：错误报告通过机器检查异常（MCE，Machine Check Exception）或其他硬件机制传递给操作系统内核。</li>
+<li>标记有毒页: hwpoison模块接收到错误报告后，将出错的内存页标记为有毒，具体操作包括：
+<ul>
+<li>从页表中移除该页。</li>
+<li>将该页添加到内存故障隔离列表中。</li>
+</ul>
+</li>
+<li><strong>内存隔离</strong>：有毒页不再被分配给任何进程或用于内核分配，确保系统不再使用出错的内存。</li>
+<li><strong>错误记录与通知</strong>：错误信息被记录在系统日志中，并通知用户态应用程序进行进一步处理。</li>
+</ol>
+<h3 id="使用场景">使用场景
+</h3><p><code>hwpoison</code> 主要用于以下几种场景：</p>
+<ul>
+<li><strong>服务器环境</strong>：在高可靠性要求的服务器中，<code>hwpoison</code> 可以帮助检测和隔离内存硬件错误，确保服务器的长期稳定运行。</li>
+<li><strong>数据中心</strong>：对于数据中心中的大规模服务器集群，<code>hwpoison</code> 有助于维护整个系统的稳定性和数据完整性。</li>
+<li><strong>关键任务应用</strong>：在一些对稳定性要求极高的关键任务应用中，如金融系统、航空控制系统等，<code>hwpoison</code> 能提供额外的一层保护。</li>
+</ul>
+<h3 id="内核参数和配置">内核参数和配置
+</h3><p>在实际应用中，可以通过以下命令和参数来配置和使用 <code>hwpoison</code>：</p>
+<h3 id="检查内核模块">检查内核模块
+</h3><p>某些功能可能需要加载特定的内核模块。你可以尝试加载相关模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo modprobe hwpoison-inject
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>检查模块是否加载成功：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsmod | grep hwpoison
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>你的内核配置已经启用了 <code>CONFIG_MEMORY_FAILURE</code> 和 <code>CONFIG_DEBUG_FS</code>。但是，如果你仍然找不到 <code>/sys/kernel/debug/hwpoison/corrupt-pfn</code>，请按照以下步骤检查和解决问题。</p>
+<h3 id="检查-hwpoison-子目录">检查 hwpoison 子目录
+</h3><p>挂载 DebugFS 后，检查是否存在 <code>hwpoison</code> 子目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls /sys/kernel/debug/hwpoison
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>你应该看到类似 <code>corrupt-pfn</code> 的文件。如果没有，可能是内核版本或配置问题。</p>
+<h3 id="检查内核日志">检查内核日志
+</h3><p>如果 <code>hwpoison</code> 目录仍然不存在，检查内核日志，看看是否有相关信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dmesg | grep hwpoison
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="验证内存毒化功能">验证内存毒化功能
+</h3><p>一般来说，用户态程序导致的页错误（如访问无效内存地址）会触发 SIGSEGV 信号，而不是直接导致内核对该页面进行内存毒化。内存毒化通常是为了处理硬件内存错误，而不是普通的页错误。</p>
+<p>为了验证内存毒化功能，还是需要通过特定方法制造可以被内核识别并处理的内存错误，以下是制作内存错误的一些方法。</p>
+<h4 id="内存错误注入">内存错误注入
+</h4><ul>
+<li>
+<p>1、使用内核模块强制制造内存错误。编写一个内核模块，强制将某个物理页面标记为硬件毒化。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mm.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pfn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">module_param</span><span class="p">(</span><span class="n">pfn</span><span class="p">,</span> <span class="n">ulong</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_PARM_DESC</span><span class="p">(</span><span class="n">pfn</span><span class="p">,</span> <span class="s">&#34;Page Frame Number&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">hwpoison_test_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Injecting hwpoison to PFN: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">memory_failure</span><span class="p">(</span><span class="n">pfn</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pr_err</span><span class="p">(</span><span class="s">&#34;Failed to inject hwpoison to PFN: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Successfully injected hwpoison to PFN: %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">hwpoison_test_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;hwpoison_test module exited</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">module_init</span><span class="p">(</span><span class="n">hwpoison_test_init</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">module_exit</span><span class="p">(</span><span class="n">hwpoison_test_exit</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_LICENSE</span><span class="p">(</span><span class="s">&#34;GPL&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&#34;HWPoison Test Module&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&#34;Lijun&#34;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>
+<p>保存代码为 <code>hwpoison_test.c</code>。</p>
+</li>
+<li>
+<p>创建一个 <code>Makefile</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nv">obj-m</span> <span class="o">+=</span> hwpoison_test.o
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">all</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	make -C /lib/modules/<span class="k">$(</span>shell uname -r<span class="k">)</span>/build <span class="nv">M</span><span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span> modules
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">clean</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">	make -C /lib/modules/<span class="k">$(</span>shell uname -r<span class="k">)</span>/build <span class="nv">M</span><span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span> clean
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>编译内核模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">make
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>加载内核模块，并传递一个有效的 PFN（Page Frame Number）。可以通过之前获取物理页框号的方法获取有效的 PFN：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo insmod hwpoison_test.ko pfn=0x12345
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+</li>
+<li>
+<p>2、<strong>使用 <code>madvise</code> 触发内存错误</strong></p>
+<p>在用户空间，使用 <code>madvise</code> 系统调用可以请求内核对内存页执行特定的操作，例如毒化内存页。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define PAGE_SIZE 4096
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">trigger_hwpoison</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">madvise</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">MADV_HWPOISON</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;madvise&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Memory poisoning triggered at address %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">addr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">addr</span> <span class="o">=</span> <span class="nf">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">,</span> <span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">PROT_WRITE</span><span class="p">,</span> <span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_ANONYMOUS</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">addr</span> <span class="o">==</span> <span class="n">MAP_FAILED</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;mmap&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Allocated memory at address %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">addr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Fill the allocated memory with some data
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">memset</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mh">0xAA</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Trigger memory poisoning
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">trigger_hwpoison</span><span class="p">(</span><span class="n">addr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Access the poisoned memory to cause a fault
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Accessing poisoned memory at address %p</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">addr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">addr</span><span class="p">)</span> <span class="o">=</span> <span class="mh">0xBB</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Cleanup
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">munmap</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="n">PAGE_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>3、<strong>编写和运行 C 程序获取物理页框号，再使用命令注入内存错误</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define PAGE_SHIFT 12
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define PAGE_SIZE (1UL &lt;&lt; PAGE_SHIFT)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">virt_addr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">page_addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">page_offset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">page_entry</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">ptr</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="n">PAGE_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;malloc&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">virt_addr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="p">)</span><span class="n">ptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">fd</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="s">&#34;/proc/self/pagemap&#34;</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;open&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">lseek</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="p">(</span><span class="n">virt_addr</span> <span class="o">&gt;&gt;</span> <span class="n">PAGE_SHIFT</span><span class="p">)</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">),</span> <span class="n">SEEK_SET</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;lseek&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">page_entry</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;read&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">page_entry</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1ULL</span> <span class="o">&lt;&lt;</span> <span class="mi">63</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Page not present</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">page_addr</span> <span class="o">=</span> <span class="p">(</span><span class="n">page_entry</span> <span class="o">&amp;</span> <span class="p">((</span><span class="mi">1ULL</span> <span class="o">&lt;&lt;</span> <span class="mi">55</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="n">PAGE_SHIFT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">page_offset</span> <span class="o">=</span> <span class="n">virt_addr</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">PAGE_SIZE</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pfn</span> <span class="o">=</span> <span class="n">page_addr</span> <span class="o">&gt;&gt;</span> <span class="n">PAGE_SHIFT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Virtual address: 0x%lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">virt_addr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Physical page frame number: 0x%lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">free</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译并运行该程序：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc -o get_pfn get_pfn.c
+</span></span><span class="line"><span class="cl">./get_pfn
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该程序将输出虚拟地址和物理页框号:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Virtual address: 0x55556e3ac2a0
+</span></span><span class="line"><span class="cl">Physical page frame number: 0x0
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用获取到的物理页框号注入内存错误：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ <span class="nb">echo</span> 0x0 <span class="p">|</span> sudo tee /sys/kernel/debug/hwpoison/corrupt-pfn
+</span></span><span class="line"><span class="cl">0x0
+</span></span><span class="line"><span class="cl">tee: /sys/kernel/debug/hwpoison/corrupt-pfn: Memory page has hardware error
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>4、直接使用命令注入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 将物理地址转换为页帧号 (PFN)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">physical_address</span><span class="o">=</span>0x12345678
+</span></span><span class="line"><span class="cl"><span class="nv">pfn</span><span class="o">=</span><span class="k">$((</span><span class="nv">$physical_address</span> &gt;&gt; <span class="m">12</span><span class="k">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 注入 hwpoison</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$pfn</span> <span class="p">|</span> sudo tee /sys/kernel/debug/hwpoison/corrupt-pfn
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="验证内存毒化功能-1">验证内存毒化功能
+</h4><p>检查内核日志以确认内存错误已被检测和处理：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span> 2481.576496<span class="o">]</span> Injecting memory failure at pfn 0x0
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 2481.576516<span class="o">]</span> Memory failure: 0x0: already hardware poisoned
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 2392.437856<span class="o">]</span> Injecting memory failure at pfn 0x12345
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 2392.439018<span class="o">]</span> Memory failure: 0x12345: recovery action <span class="k">for</span> clean LRU page: Recovered
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>总的来说，<code>hwpoison</code> 是一个用于提高系统稳定性和可靠性的关键机制，特别是在需要处理硬件内存错误的环境中。</p>
+<h4 id="恢复内存毒化页面">恢复内存毒化页面
+</h4><p>1、使用 echo写入 /sys/kernel/debug/hwpoison/unpoison-pfn</p>
+<ul>
+<li>在PFN的Software-unpoison页面对应到这个文件。这样，一个页面可以再次被复用。这只对Linux注入的故障起作用，对真正的内存故障不起作用。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> 0x12345 &gt; /sys/kernel/mm/page_poison/unpoison-pfn
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、使用madvice系统调用</p>
+<ul>
+<li>madvise 系统调用可用于通知内核某些内存页面的期望使用方式，但不能直接解除 hwpoison 状态。然而，结合 madvise 和重启系统，可以间接帮助恢复内存状态。</li>
+</ul>
+<p>3、或者通过内核模块恢复毒化的内存页</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mm.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/page-flags.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">pfn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">module_param</span><span class="p">(</span><span class="n">pfn</span><span class="p">,</span> <span class="n">ulong</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_PARM_DESC</span><span class="p">(</span><span class="n">pfn</span><span class="p">,</span> <span class="s">&#34;Page Frame Number to be unpoisoned&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">unpoison_page_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">page</span> <span class="o">*</span><span class="n">page</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">pfn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pr_err</span><span class="p">(</span><span class="s">&#34;Invalid PFN</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">page</span> <span class="o">=</span> <span class="nf">pfn_to_page</span><span class="p">(</span><span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">page</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pr_err</span><span class="p">(</span><span class="s">&#34;Invalid page</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Unpoisoning page at PFN: 0x%lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">ClearPageHWPoison</span><span class="p">(</span><span class="n">page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">unpoison_page_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;unpoison_page module exited</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">module_init</span><span class="p">(</span><span class="n">unpoison_page_init</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">module_exit</span><span class="p">(</span><span class="n">unpoison_page_exit</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_LICENSE</span><span class="p">(</span><span class="s">&#34;GPL&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&#34;Your Name&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&#34;A simple module to unpoison a memory page&#34;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编译和加载内核模块</p>
+<ol>
+<li>
+<p>保存代码为 <code>unpoison_page.c</code>。</p>
+</li>
+<li>
+<p>创建一个 <code>Makefile</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ma" data-lang="ma"><span class="line"><span class="cl"><span class="n">obj</span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nv">unpoison_page</span><span class="err">.</span><span class="n">o</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">all</span><span class="err">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">make</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="err">$</span><span class="p">(</span><span class="n">shell</span><span class="w"> </span><span class="n">uname</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="n">build</span><span class="w"> </span><span class="n">M</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">PWD</span><span class="p">)</span><span class="w"> </span><span class="n">modules</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">clean</span><span class="err">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">make</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="err">$</span><span class="p">(</span><span class="n">shell</span><span class="w"> </span><span class="n">uname</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="n">build</span><span class="w"> </span><span class="n">M</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">PWD</span><span class="p">)</span><span class="w"> </span><span class="n">clean</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>编译内核模块</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">make
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>加载内核模块，并传递需要恢复的 PFN（从之前获取的 PFN）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo insmod unpoison_page.ko <span class="nv">pfn</span><span class="o">=</span>0x12345
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<p><strong>验证内核日志</strong></p>
+<p>通过 <code>dmesg</code> 命令查看内核日志，确认内存页是否已恢复：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dmesg <span class="p">|</span> grep poison
+</span></span><span class="line"><span class="cl"><span class="o">[</span> 1234.567890<span class="o">]</span> Unpoisoning page at PFN: 0x12345
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="edac">EDAC
+</h2><p>EDAC (Error Detection and Correction) 是一种硬件和软件结合的技术，用于检测和纠正计算机内存中的错误。它特别适用于服务器和其他高可靠性计算环境。EDAC 通过检测内存中的错误并在可能的情况下自动纠正这些错误，帮助确保系统稳定性和数据完整性。</p>
+<h3 id="edac-的主要功能">EDAC 的主要功能
+</h3><ol>
+<li><strong>错误检测：</strong>
+<ul>
+<li>EDAC 能够检测内存中的错误，例如单比特错误（Single-Bit Errors，SBE）和多比特错误（Multi-Bit Errors，MBE）。</li>
+</ul>
+</li>
+<li><strong>错误纠正：</strong>
+<ul>
+<li>对于单比特错误，EDAC 通常能够自动纠正。
+<ul>
+<li>对于多比特错误，EDAC 会记录错误并发出警告，提醒管理员采取进一步行动。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>错误报告：</strong>
+<ul>
+<li>EDAC 会记录并报告检测到的内存错误，提供详细的错误信息，包括错误类型、发生时间和位置等。</li>
+</ul>
+</li>
+<li><strong>硬件支持</strong>：依赖于硬件，通常需要支持ECC（Error Correction Code）内存或其他类型的错误检测和纠正机制。</li>
+</ol>
+<h3 id="edac-util的使用edac-utils已经被弃用">EDAC-util的使用(EDAC-utils已经被弃用)
+</h3><p>1、<strong>确认系统支持 EDAC：</strong></p>
+<ul>
+<li>确保你的硬件和操作系统支持 EDAC。现代的服务器和一些高端工作站通常支持 ECC（Error-Correcting Code）内存，这是 EDAC 功能的基础，下面检测电脑是否支持ECC内存</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# dmidecode -t memory
+</span></span><span class="line"><span class="cl"><span class="c1"># dmidecode 3.4</span>
+</span></span><span class="line"><span class="cl">Getting SMBIOS data from sysfs.
+</span></span><span class="line"><span class="cl">SMBIOS 2.8 present.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Handle 0x1000, DMI <span class="nb">type</span> 16, <span class="m">23</span> bytes
+</span></span><span class="line"><span class="cl">Physical Memory Array
+</span></span><span class="line"><span class="cl">        Location: Other
+</span></span><span class="line"><span class="cl">        Use: System Memory
+</span></span><span class="line"><span class="cl">        Error Correction Type: Multi-bit ECC
+</span></span><span class="line"><span class="cl">        Maximum Capacity: <span class="m">16</span> GB
+</span></span><span class="line"><span class="cl">        Error Information Handle: Not Provided
+</span></span><span class="line"><span class="cl">        Number Of Devices: <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>查询系统所支持的EDAC模块，选择与机器硬件所适配的EDAC模块安装。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ ls /lib/modules/<span class="o">{</span>对应的内核版本<span class="o">}</span>/kernel/drivers/edac/
+</span></span><span class="line"><span class="cl">amd64_edac.ko    i3000_edac.ko  i5400_edac.ko    ie31200_edac.ko  skx_edac.ko
+</span></span><span class="line"><span class="cl">e752x_edac.ko    i3200_edac.ko  i7300_edac.ko    igen6_edac.ko    x38_edac.ko
+</span></span><span class="line"><span class="cl">edac_mce_amd.ko  i5000_edac.ko  i7core_edac.ko   pnd2_edac.ko
+</span></span><span class="line"><span class="cl">i10nm_edac.ko    i5100_edac.ko  i82975x_edac.ko  sb_edac.ko
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、<strong>加载EDAC模块</strong>：</p>
+<p>在现代的Linux内核中，EDAC模块通常已经包含在内核中。你可以通过以下命令加载相应的模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo modprobe i7core_edac
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>3、<strong>安装和配置 EDAC 工具：</strong></p>
+<ul>
+<li>
+<p>在 Linux 系统上，可以使用 <code>edac-utils</code> 来管理和监控 EDAC。安装方法如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install edac-utils
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>4、<strong>检查 EDAC 状态：</strong></p>
+<ul>
+<li>
+<p>使用以下命令检查 EDAC 状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo edac-util --status
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>5、<strong>模拟内存错误：</strong></p>
+<ul>
+<li>在没有实际硬件支持的情况下，模拟内存错误是比较困难的。一般情况下，可以通过修改内核参数或使用一些专门的工具来模拟内存错误。以下是一些可能的方法：</li>
+<li><strong>通过内核调试功能：</strong>
+<ul>
+<li>有些系统允许通过内核调试功能来插入内存错误。这通常需要编写内核模块或者使用一些内核调试工具。</li>
+</ul>
+</li>
+<li><strong>使用内存测试工具：</strong>
+<ul>
+<li>像 <code>memtest86+</code> 这样的工具可以用于测试内存是否存在错误，但它们通常不会主动模拟错误。</li>
+</ul>
+</li>
+</ul>
+<p>6、<strong>验证 EDAC 的工作：</strong></p>
+<ul>
+<li>
+<p>在模拟内存错误后，可以通过 <code>dmesg</code> 命令查看内核日志，确认 EDAC 是否检测到错误并进行纠正。例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dmesg <span class="p">|</span> grep -i edac
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h2 id="rasdaemon目前主流的检错纠错工具">Rasdaemon(目前主流的检错纠错工具)
+</h2><p><code>Rasdaemon</code> (Reliability, Availability, and Serviceability daemon) 是一个开源的系统服务，用于捕获和报告硬件错误事件，特别是与内存、处理器和其他关键硬件相关的错误。它支持 Linux 系统，能够监控和记录硬件错误，提供详细的错误信息，有助于系统管理员进行诊断和故障排除。Rasdaemon 利用硬件提供的错误报告机制，通过内核事件追踪 (kernel trace) 系统收集硬件错误事件。</p>
+<h3 id="rasdaemon-的主要功能">Rasdaemon 的主要功能
+</h3><ol>
+<li><strong>错误监控和报告</strong>：
+<ul>
+<li>捕获和记录内存错误、处理器错误、PCIe 错误等。</li>
+<li>提供详细的错误信息，包括错误类型、发生时间、位置等。</li>
+</ul>
+</li>
+<li><strong>与 EDAC 集成</strong>：
+<ul>
+<li>兼容 EDAC (Error Detection And Correction) 框架，能够捕获内存控制器错误。</li>
+</ul>
+</li>
+<li><strong>数据持久性</strong>：
+<ul>
+<li>将错误事件持久化存储到数据库中，便于后续分析。</li>
+</ul>
+</li>
+<li><strong>用户空间工具</strong>：
+<ul>
+<li>提供用户空间工具，用于查询和分析错误数据。</li>
+</ul>
+</li>
+</ol>
+<h3 id="rasdaemon-的使用需要edac支持">Rasdaemon 的使用（需要EDAC支持）
+</h3><p><strong>1、安装rasdaemon</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install rasdaemon
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>2、配置rasdaemon</strong></p>
+<ul>
+<li>启动rasdaemon</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# rasdaemon --enable
+</span></span><span class="line"><span class="cl">rasdaemon: ras:mc_event event enabled
+</span></span><span class="line"><span class="cl">rasdaemon: ras:aer_event event enabled
+</span></span><span class="line"><span class="cl">rasdaemon: mce:mce_record event enabled
+</span></span><span class="line"><span class="cl">rasdaemon: ras:extlog_mem_event event enabled
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>需要启动两个systemd服务: <code>ras-mc-ctl.service</code> 和 <code>rasdaemon.service</code> :</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl <span class="nb">enable</span> ras-mc-ctl.service
+</span></span><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl <span class="nb">enable</span> rasdaemon.service
+</span></span><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl start ras-mc-ctl.service
+</span></span><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl start rasdaemon.service
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Synchronizing state of rasdaemon.service with SysV service script with /lib/systemd/systemd-sysv-install.
+</span></span><span class="line"><span class="cl">Executing: /lib/systemd/systemd-sysv-install <span class="nb">enable</span> rasdaemon
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>3、检查 <code>rasdaemon</code> 状态</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl status rasdaemon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">systemctl status ras-mc-ctl
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出信息:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># rasdaemon 服务状态</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">●</span> <span class="n">rasdaemon</span><span class="o">.</span><span class="n">service</span> <span class="o">-</span> <span class="n">RAS</span> <span class="n">daemon</span> <span class="n">to</span> <span class="nb">log</span> <span class="n">the</span> <span class="n">RAS</span> <span class="n">events</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Loaded</span><span class="p">:</span> <span class="n">loaded</span> <span class="p">(</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">rasdaemon</span><span class="o">.</span><span class="n">service</span><span class="p">;</span> <span class="n">enabled</span><span class="p">;</span> <span class="n">vendor</span> <span class="n">preset</span><span class="p">:</span> <span class="n">disabled</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Active</span><span class="p">:</span> <span class="n">active</span> <span class="p">(</span><span class="n">running</span><span class="p">)</span> <span class="n">since</span> <span class="n">Tue</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">CST</span><span class="p">;</span> <span class="mi">5</span><span class="n">s</span> <span class="n">ago</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Process</span><span class="p">:</span> <span class="mi">181029</span> <span class="n">ExecStartPost</span><span class="o">=/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">rasdaemon</span> <span class="o">--</span><span class="n">enable</span> <span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">exited</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">0</span><span class="o">/</span><span class="n">SUCCESS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="n">Main</span> <span class="n">PID</span><span class="p">:</span> <span class="mi">181014</span> <span class="p">(</span><span class="n">rasdaemon</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Memory</span><span class="p">:</span> <span class="mf">8.0</span><span class="n">M</span>
+</span></span><span class="line"><span class="cl">   <span class="n">CGroup</span><span class="p">:</span> <span class="o">/</span><span class="n">system</span><span class="o">.</span><span class="n">slice</span><span class="o">/</span><span class="n">rasdaemon</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl">           <span class="err">└─</span><span class="mi">181014</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">sbin</span><span class="o">/</span><span class="n">rasdaemon</span> <span class="o">-</span><span class="n">f</span> <span class="o">-</span><span class="n">r</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">Enabled</span> <span class="n">event</span> <span class="n">ras</span><span class="p">:</span><span class="n">aer_event</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">Family</span> <span class="mi">6</span> <span class="n">Model</span> <span class="mi">55</span> <span class="n">CPU</span><span class="p">:</span> <span class="n">only</span> <span class="n">decoding</span> <span class="n">architectural</span> <span class="n">errors</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">mce</span><span class="p">:</span><span class="n">mce_record</span> <span class="n">event</span> <span class="n">enabled</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">Enabled</span> <span class="n">event</span> <span class="n">mce</span><span class="p">:</span><span class="n">mce_record</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">ras</span><span class="p">:</span><span class="n">extlog_mem_event</span> <span class="n">event</span> <span class="n">enabled</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">Enabled</span> <span class="n">event</span> <span class="n">ras</span><span class="p">:</span><span class="n">extlog_mem_event</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">rasdaemon</span><span class="p">:</span> <span class="n">Recording</span> <span class="n">mc_event</span> <span class="n">events</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">rasdaemon</span><span class="p">:</span> <span class="n">Recording</span> <span class="n">aer_event</span> <span class="n">events</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">rasdaemon</span><span class="p">:</span> <span class="n">Recording</span> <span class="n">extlog_event</span> <span class="n">events</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">22</span><span class="p">:</span><span class="mi">16</span> <span class="n">alipay</span><span class="o">-</span><span class="n">srm011233163091</span><span class="o">.</span><span class="n">et15</span> <span class="n">rasdaemon</span><span class="p">[</span><span class="mi">181014</span><span class="p">]:</span> <span class="n">rasdaemon</span><span class="p">:</span> <span class="n">Recording</span> <span class="n">mce_record</span> <span class="n">events</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl 服务状态</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">●</span> <span class="n">ras</span><span class="o">-</span><span class="n">mc</span><span class="o">-</span><span class="n">ctl</span><span class="o">.</span><span class="n">service</span> <span class="o">-</span> <span class="n">Initialize</span> <span class="n">EDAC</span> <span class="n">v3</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">Drivers</span> <span class="n">For</span> <span class="n">Machine</span> <span class="n">Hardware</span>
+</span></span><span class="line"><span class="cl">     <span class="n">Loaded</span><span class="p">:</span> <span class="n">loaded</span> <span class="p">(</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">ras</span><span class="o">-</span><span class="n">mc</span><span class="o">-</span><span class="n">ctl</span><span class="o">.</span><span class="n">service</span><span class="p">;</span> <span class="n">enabled</span><span class="p">;</span> <span class="n">vendor</span> <span class="n">preset</span><span class="p">:</span> <span class="n">enabled</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">     <span class="n">Active</span><span class="p">:</span> <span class="n">active</span> <span class="p">(</span><span class="n">exited</span><span class="p">)</span> <span class="n">since</span> <span class="n">Tue</span> <span class="mi">2023</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">CST</span><span class="p">;</span> <span class="mi">9</span><span class="nb">min</span> <span class="n">ago</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Main</span> <span class="n">PID</span><span class="p">:</span> <span class="mi">2772415</span> <span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">exited</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="mi">0</span><span class="o">/</span><span class="n">SUCCESS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">CPU</span><span class="p">:</span> <span class="mi">53</span><span class="n">ms</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">zcloud</span><span class="o">.</span><span class="n">staging</span><span class="o">.</span><span class="n">huatai</span><span class="o">.</span><span class="n">me</span> <span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Starting</span> <span class="n">Initialize</span> <span class="n">EDAC</span> <span class="n">v3</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">Drivers</span> <span class="n">For</span> <span class="n">Machine</span> <span class="n">Hardware</span><span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">zcloud</span><span class="o">.</span><span class="n">staging</span><span class="o">.</span><span class="n">huatai</span><span class="o">.</span><span class="n">me</span> <span class="n">ras</span><span class="o">-</span><span class="n">mc</span><span class="o">-</span><span class="n">ctl</span><span class="p">[</span><span class="mi">2772415</span><span class="p">]:</span> <span class="n">ras</span><span class="o">-</span><span class="n">mc</span><span class="o">-</span><span class="n">ctl</span><span class="p">:</span> <span class="n">Error</span><span class="p">:</span> <span class="n">No</span> <span class="n">dimm</span> <span class="n">labels</span> <span class="k">for</span> <span class="n">HP</span> <span class="n">model</span> <span class="n">ProLiant</span> <span class="n">DL360</span> <span class="n">Gen9</span>
+</span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">zcloud</span><span class="o">.</span><span class="n">staging</span><span class="o">.</span><span class="n">huatai</span><span class="o">.</span><span class="n">me</span> <span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Finished</span> <span class="n">Initialize</span> <span class="n">EDAC</span> <span class="n">v3</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">Drivers</span> <span class="n">For</span> <span class="n">Machine</span> <span class="n">Hardware</span><span class="o">.</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里有一个错误提示: <code>ras-mc-ctl: Error: No dimm labels for XXXX</code> ，实际上在各种服务器上初始时都能看到，需要进一步配置。</p>
+<p><strong>4、检查EDAC信息</strong>（如果使用ECC内存）： 可以使用<code>ras-mc-ctl</code>工具（通常包含在<code>rasdaemon</code>包中）来检查详细的EDAC信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ras-mc-ctl --status
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330.png"
+	width="516"
+	height="72"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu16192268445492714901.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu17610843283354955925.png 1024w"
+	loading="lazy"
+	
+		alt="检查EDAC信息"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="716"
+		data-flex-basis="1720px"
+	
+></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ras-mc-ctl --layout
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096.png"
+	width="594"
+	height="67"
+	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15194108421477439709.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15958066638407402994.png 1024w"
+	loading="lazy"
+	
+		alt="检查EDAC信息"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="886"
+		data-flex-basis="2127px"
+	
+></p>
+<p>5、<strong>使用rasdaemon</strong></p>
+<ul>
+<li>在后台运行<code>rasdaemon</code>，直接输入rasdaemon就行。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在前台运行<code>rasdaemon</code>，此时输出显示 rasdaemon 初始化并监听事件，此时就可以等待出现的硬件异常。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon -f
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果希望同时将错误记录到数据库(编译时使用了参数 <code>--enable-sqlite3</code>)，则可以增加一个 <code>-r</code> 参数:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon -f -r
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置 DIMM labels</p>
+<p>ras-mc-ctl 是RAS内存控制器管理工具，用于执行一些针对EDAC(Error Detection and Correction)驱动的RAS管理任务。</p>
+<ul>
+<li>
+<p><code>ras-mc-ctl</code> 可以查询检测到的错误，例如 <code>--error-count</code> 可以获取主机错误计数:</p>
+</li>
+<li>
+<p><code>ras-mc-ctl</code> 使用 <code>--error-count</code> 获取错误计数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl --error-count</span>
+</span></span><span class="line"><span class="cl">Label                 CE      UE
+</span></span><span class="line"><span class="cl">mc#0csrow#2channel#0  <span class="m">0</span>   <span class="m">0</span>
+</span></span><span class="line"><span class="cl">mc#0csrow#2channel#1  <span class="m">0</span>   <span class="m">0</span>
+</span></span><span class="line"><span class="cl">mc#0csrow#3channel#1  <span class="m">0</span>   <span class="m">0</span>
+</span></span><span class="line"><span class="cl">mc#0csrow#3channel#0  <span class="m">0</span>   <span class="m">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>使用 <code>ras-mc-ctl</code> 打印出被记录的所有错误。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl --summary</span>
+</span></span><span class="line"><span class="cl">Memory controller events summary:
+</span></span><span class="line"><span class="cl">  Corrected on DIMM Label<span class="o">(</span>s<span class="o">)</span>: <span class="s1">&#39;DIMM_B1&#39;</span> location: 0:2:0:-1 errors: <span class="m">5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PCIe AER events summary:
+</span></span><span class="line"><span class="cl">  <span class="m">1</span> Uncorrected <span class="o">(</span>Non-Fatal<span class="o">)</span> errors: BIT21
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">No Extlog errors.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">No devlink errors.
+</span></span><span class="line"><span class="cl">Disk errors summary:
+</span></span><span class="line"><span class="cl">  0:0 has <span class="m">6646</span> errors
+</span></span><span class="line"><span class="cl">No MCE errors.
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="利用rasdaemon实现错误内存的软下线">利用Rasdaemon实现错误内存的软下线
+</h3><p><strong>由于缺乏ecc内存，导致edac模块无法正常运行，所以rasdaemon也无法正常捕获到错误，因此我们只做了对指定页面的软下线。</strong></p>
+<ol>
+<li>
+<p><strong>使用 Rasdaemon 监控和处理错误</strong></p>
+<p>Rasdaemon 会自动监控和记录内存错误，并在检测到内存错误时，尝试对相关页面进行软下线。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ras-mc-ctl --errors | grep &lt;error_address&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>检查日志</strong></p>
+<p>你可以查看 Rasdaemon 生成的日志，以确认内存错误和软下线事件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ras-mc-ctl --summary
+</span></span><span class="line"><span class="cl">sudo journalctl -u rasdaemon
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><strong>编写内核模块对页面进行软下线</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mm.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mmzone.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/pfn.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">target_pfn</span> <span class="o">=</span> <span class="mh">0x12345</span><span class="p">;</span> <span class="c1">// 替换为你要下线的页框号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">soft_offline_page_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">page</span> <span class="o">*</span><span class="n">page</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">flags</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Soft offline page at PFN %lu</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">target_pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">page</span> <span class="o">=</span> <span class="nf">pfn_to_page</span><span class="p">(</span><span class="n">target_pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">PageReserved</span><span class="p">(</span><span class="n">page</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 获取所在的内存区域（zone）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">struct</span> <span class="n">zone</span> <span class="o">*</span><span class="n">zone</span> <span class="o">=</span> <span class="nf">page_zone</span><span class="p">(</span><span class="n">page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nf">spin_lock_irqsave</span><span class="p">(</span><span class="o">&amp;</span><span class="n">zone</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">SetPageReserved</span><span class="p">(</span><span class="n">page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">spin_unlock_irqrestore</span><span class="p">(</span><span class="o">&amp;</span><span class="n">zone</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">,</span> <span class="n">flags</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Page at PFN %lu successfully offlined</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">target_pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">pr_warn</span><span class="p">(</span><span class="s">&#34;Page at PFN %lu is already reserved, cannot offline</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">target_pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ret</span> <span class="o">=</span> <span class="o">-</span><span class="n">EBUSY</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="n">__exit</span> <span class="nf">soft_offline_page_exit</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">pr_info</span><span class="p">(</span><span class="s">&#34;Module unloaded</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">module_init</span><span class="p">(</span><span class="n">soft_offline_page_init</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">module_exit</span><span class="p">(</span><span class="n">soft_offline_page_exit</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_LICENSE</span><span class="p">(</span><span class="s">&#34;GPL&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&#34;Lijun&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&#34;Soft offline specified page frame number&#34;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h2 id="问题汇总">问题汇总：
+</h2><p>1、apt install 报错</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">hacker</span><span class="err">@</span><span class="n">ubuntu</span><span class="p">:</span><span class="o">~/</span><span class="n">Desktop</span><span class="o">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">edac</span><span class="o">-</span><span class="n">utils</span>
+</span></span><span class="line"><span class="cl"><span class="n">E</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">get</span> <span class="n">lock</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">lock</span><span class="o">-</span><span class="n">frontend</span><span class="o">.</span> <span class="n">It</span> <span class="n">is</span> <span class="n">held</span> <span class="n">by</span> <span class="n">process</span> <span class="mi">4700</span> <span class="p">(</span><span class="n">unattended</span><span class="o">-</span><span class="n">upgr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">N</span><span class="p">:</span> <span class="n">Be</span> <span class="n">aware</span> <span class="n">that</span> <span class="n">removing</span> <span class="n">the</span> <span class="n">lock</span> <span class="n">file</span> <span class="n">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">solution</span> <span class="ow">and</span> <span class="n">may</span> <span class="k">break</span> <span class="n">your</span> <span class="n">system</span><span class="o">.</span>
+</span></span><span class="line"><span class="cl"><span class="n">E</span><span class="p">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">acquire</span> <span class="n">the</span> <span class="n">dpkg</span> <span class="n">frontend</span> <span class="n">lock</span> <span class="p">(</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">lock</span><span class="o">-</span><span class="n">frontend</span><span class="p">),</span> <span class="n">is</span> <span class="n">another</span> <span class="n">process</span> <span class="n">using</span> <span class="n">it</span><span class="err">?</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决方法：删除锁定文件</p>
+<p>在某些情况下，根本原因可能是锁文件。锁文件阻止两个或多个进程访问相同的数据。当您运行 apt 或 apt-get 命令时，通常会创建一个锁文件。但是，如果最新的 apt 命令没有成功执行(即突然终止)，锁文件将继续存在并阻止任何后续的 apt 或 apt-get 实例。</p>
+<p>解决 “Could not get lock /var/lib/apt/lists/lock”错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">apt</span><span class="o">/</span><span class="nx">lists</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解决 “Could not get lock /var/lib/dpkg/lock”错误</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其他时候，您可能会遇到 “/var/lib/dpkg/lock-frontend error”的错误。这意味着当前正在运行使用 APT / DPKG 的图形应用程序，这可能是使用 Gdebi 或 Synaptic 包管理器造成的。</p>
+<p>即时的补救措施是退出或关闭程序，并再次尝试。如果没有效果，可是尝试删除 /var/lib/dpkg/lock-frontend 文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span><span class="o">-</span><span class="nx">frontend</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>删除 lock-frontend 文件可能会再次导致“Could not get lock /var/lib/dpkg/lock”错误，因此，您将不得不继续删除相关锁定文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果您碰巧会出现有关 apt-cache lock 的错误，例如 /var/cache/apt/archives/lock，请删除相关锁定文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">cache</span><span class="o">/</span><span class="nx">apt</span><span class="o">/</span><span class="nx">archives</span><span class="o">/</span><span class="nx">lock</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>2、edac-util无法使用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ edac-util -v
+</span></span><span class="line"><span class="cl">edac-util: Error: No memory controller data found.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>原因可能是我的电脑不支持ecc()，一般来说内存条的Datawidth比Totalwidth小才支持ecc。在Windows下运行以下命令可查看是否支持ecc，Linux下可用<code>sudo dmidecode -t memory</code>命令查看</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#Windows下</span>
+</span></span><span class="line"><span class="cl">C:<span class="se">\U</span>sers<span class="se">\L</span>&gt;wmic memorychip get datawidth,totalwidth
+</span></span><span class="line"><span class="cl">DataWidth  TotalWidth
+</span></span><span class="line"><span class="cl"><span class="m">64</span>         <span class="m">64</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#Linux下</span>
+</span></span><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ sudo dmidecode -t memory
+</span></span><span class="line"><span class="cl"><span class="c1"># dmidecode 3.2</span>
+</span></span><span class="line"><span class="cl">Getting SMBIOS data from sysfs.
+</span></span><span class="line"><span class="cl">SMBIOS 2.7 present.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Handle 0x0084, DMI <span class="nb">type</span> 5, <span class="m">46</span> bytes
+</span></span><span class="line"><span class="cl">Memory Controller Information
+</span></span><span class="line"><span class="cl">	Error Detecting Method: None
+</span></span><span class="line"><span class="cl">	Error Correcting Capabilities:
+</span></span><span class="line"><span class="cl">		None
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="相关知识">相关知识
+</h2><h3 id="error-correction-code-ecc"><strong>Error correction code (ECC)</strong>
+</h3><p>纠错码 （ECC） 是一种用于检测和纠正由于环境干扰和物理缺陷导致的内存数据错误的机制。ECC 内存用于无法容忍因数据损坏而导致故障的高可靠性应用，例如医疗设备、飞机控制系统或银行数据库服务器。</p>
+<p>大多数内存错误是由软错误（例如宇宙射线、α 射线、电磁干扰）引起的单个（1 位）错误，但有些可能是由于硬件故障（例如行锤故障）引起的。对于在较高高度运行的系统（例如商用飞机）而言，软错误更为普遍。据说，在大约10公里的高度，诱导宇宙射线的比特误差要高出300倍。</p>
+<p>这种单位错误可以通过ECC存储器系统来纠正。多位错误也可以被检测和/或纠正，这取决于错误符号的数量。</p>
+<p>内存错误的症状包括数据损坏、系统崩溃和/或安全漏洞，使非特权代码能够访问内核。众所周知，内存错误是导致大型数据中心机器崩溃的最常见硬件原因之一。</p>
+<h3 id="edac和rasdaemon的关系">EDAC和Rasdaemon的关系
+</h3><p>EDAC（Error Detection and Correction）和 <code>rasdaemon</code> 在功能上有密切的关系，<code>rasdaemon</code> 是一个用户空间的工具，用于收集和记录由内核的EDAC子系统以及其他硬件错误检测子系统报告的错误。</p>
+<p>具体来说：</p>
+<ol>
+<li><strong>EDAC 子系统</strong>：这是Linux内核中的一个模块，专门用于检测和报告ECC（Error-Correcting Code）内存错误。EDAC能够捕捉和记录内存错误信息，如可纠正错误（CE，Correctable Errors）和不可纠正错误（UE，Uncorrectable Errors）。</li>
+<li><strong>rasdaemon</strong>：这是一个用户空间的守护进程，利用内核中的RAS（Reliability, Availability, and Serviceability）功能来收集和记录硬件错误，包括内存错误、CPU错误、PCIe错误等。<code>rasdaemon</code> 可以从内核的EDAC子系统获取内存错误数据，并将这些数据记录到系统日志或数据库中，便于进一步分析和监控。</li>
+</ol>
+<p>以下是EDAC和<code>rasdaemon</code>的工作流程：</p>
+<ol>
+<li><strong>硬件错误检测</strong>：当ECC内存检测到错误时，EDAC子系统会捕获这些错误并记录下来。</li>
+<li><strong>错误上报</strong>：EDAC子系统将错误信息上报给内核日志系统。</li>
+<li><strong>错误收集</strong>：<code>rasdaemon</code> 作为用户空间的工具，从内核日志系统中收集这些错误信息。</li>
+<li><strong>错误记录和报告</strong>：<code>rasdaemon</code> 将收集到的错误信息记录到系统日志中，并且可以选择将这些信息存储在数据库中或通过其他方式进行报告。</li>
+</ol>
+<h2 id="参考资料">参考资料：
+</h2><p><a class="link" href="https://cloud-atlas.readthedocs.io/zh-cn/latest/linux/server/hardware/edac.html"  target="_blank" rel="noopener"
+    >EDAC 诊断系统硬件故障 — Cloud Atlas beta 文档 (cloud-atlas.readthedocs.io)</a></p>
+<p><a class="link" href="https://www.cnblogs.com/vivotech/p/16516881.html"  target="_blank" rel="noopener"
+    >服务器内存故障预测居然可以这样做！ - vivo互联网技术 - 博客园 (cnblogs.com)</a></p>
+<p><a class="link" href="https://www.kernel.org/doc/html/v6.6/driver-api/edac.html"  target="_blank" rel="noopener"
+    >Error Detection And Correction (EDAC) Devices — The Linux Kernel documentation</a></p>
+<p><a class="link" href="https://github.com/wangxiaoq/notes/blob/master/kernel/hwpoison.md"  target="_blank" rel="noopener"
+    >notes/kernel/hwpoison.md at master · wangxiaoq/notes (github.com)</a></p>
+<p><a class="link" href="https://kernel-doc.readthedocs.io/zh-cn/latest/vm/hwpoison.html"  target="_blank" rel="noopener"
+    >hwpoison — The Linux Kernel v4.20.0 文档 (kernel-doc.readthedocs.io)</a></p>
+<p><a class="link" href="https://www.kernel.org/doc/html/next/translations/zh_CN/mm/hwpoison.html"  target="_blank" rel="noopener"
+    >hwpoison — The Linux Kernel documentation</a></p>
+<p><a class="link" href="https://blog.ioncomputer.com/2019/05/06/linux-edac-modules-on-server-systems/"  target="_blank" rel="noopener"
+    >Linux EDAC modules on Server Systems - ION Server Blog (ioncomputer.com)</a></p>
+<p><a class="link" href="https://www.memtest86.com/ecc.htm"  target="_blank" rel="noopener"
+    >MemTest86 - ECC Technical Details</a></p>
+<p><a class="link" href="https://github.com/mchehab/rasdaemon"  target="_blank" rel="noopener"
+    >mchehab/rasdaemon)</a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/os/">Os</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2024-12-15
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">
+        
+        
+            <div class="article-image">
+                <img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1.43b3acfc881733913c3b1e6139873876_hu9146290118491386225.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 计算机体系结构课程笔记"
+                        
+                        data-hash="md5-Q7Os/IgXM5E8Ox5hOYc4dg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">计算机体系结构课程笔记</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://chenyuan1125.top","visitor":true});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2024 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
