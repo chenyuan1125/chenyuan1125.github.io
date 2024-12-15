@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>实验 on 尘</title>
+        <title>实验 on 辰远</title>
         <link>https://chenyuan1125.github.io/categories/%E5%AE%9E%E9%AA%8C/</link>
-        <description>Recent content in 实验 on 尘</description>
+        <description>Recent content in 实验 on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright><atom:link href="https://chenyuan1125.github.io/categories/%E5%AE%9E%E9%AA%8C/index.xml" rel="self" type="application/rss+xml" /><item>
@@ -1635,7 +1635,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;仅从函数调用的角度来看，&lt;code&gt;phase_1&lt;/code&gt;的参数存在1st argument寄存器中：&lt;code&gt;%rdi&lt;/code&gt;，然后这个参数作为第一个参数，与&lt;code&gt;0x402400&lt;/code&gt;作为第二个参数一起被传入到&lt;code&gt;strings_not_equal&lt;/code&gt;中，进行一些判定操作。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;0x402400&lt;/code&gt;像一个地址，使用gdb对程序进行debug，设置断点查看``0x402400&lt;code&gt;的值，发现是&lt;/code&gt;Border relations with Canada have never been better.`，答案已找到&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;0x402400&lt;/code&gt;像一个地址，使用gdb对程序进行debug，设置断点查看&lt;code&gt;0x402400&lt;/code&gt;的值，发现是&lt;code&gt;Border relations with Canada have never been better.&lt;/code&gt;，答案已找到&lt;/p&gt;
 &lt;h3 id=&#34;phase_2&#34;&gt;Phase_2
 &lt;/h3&gt;&lt;p&gt;关键代码如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -1697,7 +1697,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;可以看出这个阶段读取六个数字，并通过一个循环将其与对应的值对比，这些对应值的规律就是&lt;code&gt;1 2 4 8 16 32&lt;/code&gt;，答案已出。&lt;/p&gt;
-&lt;p&gt;（&lt;code&gt;lea 0x18(%rsp),%rbp&lt;/code&gt;指令是将%rsp+40传给%rbp，lea指令用于计算有效地址，以及加法和有限的乘法运算，而其余如mov    -0x4(%rbx),%eax则是取(%rbx-4)的值再传给%eax）&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;（lea 0x18(%rsp),%rbp&lt;/code&gt;指令是将%rsp+40传给%rbp，lea指令用于计算有效地址，以及加法和有限的乘法运算，而其余如mov    -0x4(%rbx),%eax则是取(%rbx-4)的值再传给%eax）&lt;/p&gt;
 &lt;h3 id=&#34;phase_3&#34;&gt;Phase_3
 &lt;/h3&gt;&lt;p&gt;关键代码如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;

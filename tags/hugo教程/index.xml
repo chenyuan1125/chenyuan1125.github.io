@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Hugo教程 on 尘</title>
+        <title>Hugo教程 on 辰远</title>
         <link>https://chenyuan1125.github.io/tags/hugo%E6%95%99%E7%A8%8B/</link>
-        <description>Recent content in Hugo教程 on 尘</description>
+        <description>Recent content in Hugo教程 on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 11 Dec 2024 19:55:55 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/hugo%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 15 Dec 2024 16:49:11 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/hugo%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>个人博客搭建</title>
         <link>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
@@ -239,6 +239,7 @@
 &lt;p&gt;如果评论无法正常显示，则可能是引文vercel.app被DNS污染导致无法使用，需要自行配置域名，具体解决方案可查看这篇博客。&lt;/p&gt;
 &lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://izumi.vip/2022/11/12/Waline%e5%9b%bd%e5%86%85IP%e6%97%a0%e6%b3%95%e8%af%84%e8%ae%ba%e7%9a%84%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88/index.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Waline国内IP无法评论的解决方案(LeanCloud国际版/Vercel) | 泉子的理想乡 (izumi.vip)&lt;/a&gt;&lt;/p&gt;
+&lt;iframe src=&#34;//player.bilibili.com/player.html?isOutside=true&amp;aid=113639365280345&amp;bvid=BV1Bzq8YEESh&amp;cid=27304332061&amp;p=1&#34; scrolling=&#34;no&#34; border=&#34;0&#34; frameborder=&#34;no&#34; framespacing=&#34;0&#34; allowfullscreen=&#34;true&#34;&gt;&lt;/iframe&gt;
 &lt;h2 id=&#34;参考资料&#34;&gt;参考资料
 &lt;/h2&gt;&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://brume.top/p/build-your-personal-blog-with-hugo/#%e4%b8%8b%e8%bd%bd%e5%b9%b6%e5%ae%89%e8%a3%85-hugo&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;从零到一，用 Hugo 打造你的个人网站 (brume.top)&lt;/a&gt;&lt;/p&gt;

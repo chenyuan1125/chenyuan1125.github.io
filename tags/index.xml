@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Tags on 尘</title>
+        <title>Tags on 辰远</title>
         <link>https://chenyuan1125.github.io/tags/</link>
-        <description>Recent content in Tags on 尘</description>
+        <description>Recent content in Tags on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 11 Dec 2024 19:55:55 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 15 Dec 2024 21:31:58 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>IPC</title>
+        <link>https://chenyuan1125.github.io/tags/ipc/</link>
+        <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://chenyuan1125.github.io/tags/ipc/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Containerd</title>
         <link>https://chenyuan1125.github.io/tags/containerd/</link>
         <pubDate>Wed, 23 Oct 2024 00:00:00 +0000</pubDate>
@@ -29,6 +37,30 @@
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
         <guid>https://chenyuan1125.github.io/tags/ctf/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>加密算法</title>
+        <link>https://chenyuan1125.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
+        <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://chenyuan1125.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Os</title>
+        <link>https://chenyuan1125.github.io/tags/os/</link>
+        <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://chenyuan1125.github.io/tags/os/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>体系结构</title>
+        <link>https://chenyuan1125.github.io/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
+        <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
+        
+        <guid>https://chenyuan1125.github.io/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</guid>
         <description></description>
         </item>
         <item>
