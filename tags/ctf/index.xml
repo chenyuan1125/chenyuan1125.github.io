@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>CTF on 辰远</title>
-        <link>//localhost:1313/tags/ctf/</link>
+        <link>https://chenyuan1125.github.io/tags/ctf/</link>
         <description>Recent content in CTF on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 06 Oct 2024 22:47:24 +0800</lastBuildDate><atom:link href="//localhost:1313/tags/ctf/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 06 Oct 2024 22:47:24 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/ctf/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>bandit实验</title>
-        <link>//localhost:1313/p/bandit%E5%AE%9E%E9%AA%8C/</link>
+        <link>https://chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/bandit%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="//localhost:1313/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post bandit实验" /&gt;&lt;p&gt;&lt;strong&gt;参考博客&lt;/strong&gt;：&lt;a class=&#34;link&#34; href=&#34;https://overthewire.org/wargames/bandit/bandit13.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+        <guid>https://chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post bandit实验" /&gt;&lt;p&gt;&lt;strong&gt;参考博客&lt;/strong&gt;：&lt;a class=&#34;link&#34; href=&#34;https://overthewire.org/wargames/bandit/bandit13.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;OverTheWire: Level Goal: Bandit Level 12 → Level 13&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;level12-13&#34;&gt;&lt;strong&gt;level12-13&lt;/strong&gt;
 &lt;/h3&gt;&lt;p&gt;主要思路： 先将文件转化为二进制文件，再利用file命令查看文件类型，根据文件类型来解压缩&lt;/p&gt;

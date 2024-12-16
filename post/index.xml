@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Posts on 辰远</title>
-        <link>//localhost:1313/post/</link>
+        <link>https://chenyuan1125.github.io/post/</link>
         <description>Recent content in Posts on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 15 Dec 2024 21:31:58 +0800</lastBuildDate><atom:link href="//localhost:1313/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 15 Dec 2024 21:31:58 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Unix Domain Socket源码实现分析(OLK 6.6)</title>
-        <link>//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/</link>
+        <link>https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/</link>
         <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/</guid>
-        <description>&lt;img src="//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/1.jpg" alt="Featured image of post Unix Domain Socket源码实现分析(OLK 6.6)" /&gt;&lt;h2 id=&#34;unix-domain-socket源码实现分析olk-66&#34;&gt;Unix Domain Socket源码实现分析(OLK 6.6)
+        <guid>https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/1.jpg" alt="Featured image of post Unix Domain Socket源码实现分析(OLK 6.6)" /&gt;&lt;h2 id=&#34;unix-domain-socket源码实现分析olk-66&#34;&gt;Unix Domain Socket源码实现分析(OLK 6.6)
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;对于正常的uds通信的创建一般分为两个部分：server和client，我们分别从server和client构建代码的关键函数来分析uds的源码实现&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -275,10 +275,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;源码分析结构图如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%871.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%871.png&#34;
 	width=&#34;4389&#34;
 	height=&#34;2211&#34;
-	srcset=&#34;//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%871_hu6564432392964446896.png 480w, //localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%871_hu9100531612404831662.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%871_hu6564432392964446896.png 480w, https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%871_hu9100531612404831662.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;源码分析结构图1&#34;
@@ -289,10 +289,10 @@
 		data-flex-basis=&#34;476px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%872.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%872.png&#34;
 	width=&#34;3264&#34;
 	height=&#34;2164&#34;
-	srcset=&#34;//localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%872_hu14611210765363944589.png 480w, //localhost:1313/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%872_hu7793714986617602277.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%872_hu14611210765363944589.png 480w, https://chenyuan1125.github.io/p/unix-domain-socket%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90olk-6.6/assets/%E5%9B%BE%E7%89%872_hu7793714986617602277.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;源码分析结构图1&#34;
@@ -4177,11 +4177,11 @@
         </item>
         <item>
         <title>containerd通信机制分析</title>
-        <link>//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</link>
+        <link>https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</link>
         <pubDate>Wed, 23 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</guid>
-        <description>&lt;img src="//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg" alt="Featured image of post containerd通信机制分析" /&gt;&lt;h1 id=&#34;containerd通信机制&#34;&gt;containerd通信机制
+        <guid>https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg" alt="Featured image of post containerd通信机制分析" /&gt;&lt;h1 id=&#34;containerd通信机制&#34;&gt;containerd通信机制
 &lt;/h1&gt;&lt;h2 id=&#34;简述&#34;&gt;简述
 &lt;/h2&gt;&lt;p&gt;Containerd 是一个云原生（容器）领域行业标准容器运行时。以操作系统守护进程方式提供服务，管理一台机器上每个容器生命周期，包括：&lt;/p&gt;
 &lt;ul&gt;
@@ -7045,10 +7045,10 @@
     &gt;OCI 运行时规范&lt;/a&gt;）的不同运行时。ttRPC 协议可以通过一个&lt;code&gt;runtime shim&lt;/code&gt;进行处理，而可以使用不同的运行时引擎实现，只要它们实现 OCI 运行时规范即可。&lt;/p&gt;
 &lt;p&gt;最常用的运行时引擎是 runc，它实施 OCI 运行时规范。由于这是一个运行时引擎，因此 &lt;code&gt;containerd&lt;/code&gt; 不会直接调用它;相反，它由 Shim 调用，该 Shim 侦听套接字并调用运行时引擎。&lt;/p&gt;
 &lt;p&gt;以下序列图显示了执行 &lt;code&gt;ctr run&lt;/code&gt; 命令时的操作流程。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949.png&#34;
 	width=&#34;1601&#34;
 	height=&#34;3024&#34;
-	srcset=&#34;//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu14605848158616288619.png 480w, //localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu1695372946056556433.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu14605848158616288619.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu1695372946056556433.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ctr run操作流程&#34;
@@ -7740,10 +7740,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;注：shim创建的与containerd通信的sock文件的mode为0600，实际情况与源码一致。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734.png&#34;
 	width=&#34;728&#34;
 	height=&#34;132&#34;
-	srcset=&#34;//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu1991328956554458519.png 480w, //localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu9702084743628895238.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu1991328956554458519.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu9702084743628895238.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;sock文件权限&#34;
@@ -7756,10 +7756,10 @@
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;容器启动流程分析&#34;&gt;容器启动流程分析
 &lt;/h2&gt;&lt;p&gt;分析流程图如下，task.Start没有往下分析，它的函数传递流程与Newtask类似。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98.png&#34;
 	width=&#34;4552&#34;
 	height=&#34;3158&#34;
-	srcset=&#34;//localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu3418511777243317462.png 480w, //localhost:1313/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu7513606798315144493.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu3418511777243317462.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu7513606798315144493.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ctr指令解析图&#34;
@@ -10782,7 +10782,7 @@
 &lt;p&gt;&lt;strong&gt;3、2.1.4 以及 3.1 分别提到：“守护进程与外部客户端（如 ctr 工具或 Docker 引擎）之间的通信 ”使用 gRPC/UDS ？&lt;/strong&gt;
 &lt;strong&gt;特别是 3.1 如何理解？3.1 后面提到一个例子，Docker引擎通过 gRPC 连接到守护进程的UDS地址，以请求管理容器、镜像、快照等操作。问：gRPC 如何连接的这个 UDS 地址（技术原理）？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;答：这个问题理解的关键点在于uds是如何与gRPC结合使用的，containerd在服务启动的时候使用 &lt;code&gt;sys.GetLocalListener&lt;/code&gt; 来监听一个 Unix Domain Socket。然后将监听器传递给 &lt;code&gt;serve&lt;/code&gt;函数处理grpc请求。（具体的代码可以在4.1中找到）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/assets/image-20240827113414851.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240827113414851.png&#34;
 	
 	
 	
@@ -10792,7 +10792,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/assets/image-20240826095151377.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240826095151377.png&#34;
 	
 	
 	
@@ -10808,7 +10808,7 @@
 &lt;p&gt;&lt;strong&gt;5、3.3 提到“插件可能作为外部服务运行，需要通过 UDS 与 containerd 通信。”，例子介绍中说：“外部存储插件可能独立运行并通过 UDS 暴露其 gRPC 服务，containerd 通过连接这个 UDS 来调用插件的服务。”&lt;/strong&gt;
 &lt;strong&gt;问：containerd 通过 UDS 连接外部插件，外部插件暴露的 gRPC 给谁？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;答：这是containerd官方文档查到的，containerd通过gRPC连接外部插件，那外部插件暴露的gRPC肯定是给containerd的配置文件。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/assets/image-20240826104113183.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240826104113183.png&#34;
 	
 	
 	
@@ -10818,7 +10818,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/assets/image-20240826104245632.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240826104245632.png&#34;
 	
 	
 	
@@ -10949,7 +10949,7 @@
 &lt;p&gt;&lt;strong&gt;（事实上containerd应该是不支持systemd的socket activation机制的，github也有人提出过在containerd中加入此机制：&lt;a class=&#34;link&#34; href=&#34;https://github.com/containerd/containerd/issues/164&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;add socket activation · Issue #164 · containerd/containerd (github.com)&lt;/a&gt;）&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;一般如果支持socket activation机制的话会有类似下图的逻辑，服务器会先调用sd_listen_fds函数，看systemd是否创建了socket文件，如果创建了就不会再创建了。所以如果使用system的socket activation启动进程，那么就一定是systemd创建socket文件。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/assets/image-20240827232023457.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240827232023457.png&#34;
 	
 	
 	
@@ -11086,11 +11086,11 @@
         </item>
         <item>
         <title>bandit实验</title>
-        <link>//localhost:1313/p/bandit%E5%AE%9E%E9%AA%8C/</link>
+        <link>https://chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/bandit%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="//localhost:1313/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post bandit实验" /&gt;&lt;p&gt;&lt;strong&gt;参考博客&lt;/strong&gt;：&lt;a class=&#34;link&#34; href=&#34;https://overthewire.org/wargames/bandit/bandit13.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+        <guid>https://chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post bandit实验" /&gt;&lt;p&gt;&lt;strong&gt;参考博客&lt;/strong&gt;：&lt;a class=&#34;link&#34; href=&#34;https://overthewire.org/wargames/bandit/bandit13.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;OverTheWire: Level Goal: Bandit Level 12 → Level 13&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id=&#34;level12-13&#34;&gt;&lt;strong&gt;level12-13&lt;/strong&gt;
 &lt;/h3&gt;&lt;p&gt;主要思路： 先将文件转化为二进制文件，再利用file命令查看文件类型，根据文件类型来解压缩&lt;/p&gt;
@@ -11512,11 +11512,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>CSAPP:buffer实验</title>
-        <link>//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/</link>
+        <link>https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:buffer实验" /&gt;&lt;h1 id=&#34;buffer实验&#34;&gt;buffer实验
+        <guid>https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:buffer实验" /&gt;&lt;h1 id=&#34;buffer实验&#34;&gt;buffer实验
 &lt;/h1&gt;&lt;h3 id=&#34;level-0-candle&#34;&gt;Level 0: Candle
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;目标：执行 smoke()，而不是让 getbuf() 返回 1。&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -11797,10 +11797,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;00 00 00 00 86 07 ce 2b 
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937.png&#34;
 	width=&#34;1663&#34;
 	height=&#34;185&#34;
-	srcset=&#34;//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu4346268438043317495.png 480w, //localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu10660655700515630377.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu4346268438043317495.png 480w, https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu10660655700515630377.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图3&#34;
@@ -11979,10 +11979,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;运行结果如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205.png&#34;
 	width=&#34;1656&#34;
 	height=&#34;180&#34;
-	srcset=&#34;//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu11419975026370298406.png 480w, //localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu2703723239893593598.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu11419975026370298406.png 480w, https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu2703723239893593598.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图4&#34;
@@ -12121,10 +12121,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;最后的运行结果为：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167.png&#34;
 	width=&#34;1659&#34;
 	height=&#34;154&#34;
-	srcset=&#34;//localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu15423384204403914886.png 480w, //localhost:1313/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu13687697589192297713.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu15423384204403914886.png 480w, https://chenyuan1125.github.io/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu13687697589192297713.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图5&#34;
@@ -12323,11 +12323,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>CSAPP:attack实验</title>
-        <link>//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
+        <link>https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg" alt="Featured image of post CSAPP:attack实验" /&gt;&lt;h1 id=&#34;attack-lab&#34;&gt;Attack lab
+        <guid>https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg" alt="Featured image of post CSAPP:attack实验" /&gt;&lt;h1 id=&#34;attack-lab&#34;&gt;Attack lab
 &lt;/h1&gt;&lt;p&gt;该实验在我电脑的wsl的ubuntu操作系统下无法正常运行，在debian环境下能正常运行，注意运行时要加上-q&lt;/p&gt;
 &lt;h2 id=&#34;part-icode-injection-attacks&#34;&gt;Part I:Code Injection Attacks
 &lt;/h2&gt;&lt;h3 id=&#34;level-1&#34;&gt;Level 1
@@ -12389,10 +12389,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/div&gt;&lt;h3 id=&#34;level-2&#34;&gt;Level 2
 &lt;/h3&gt;&lt;p&gt;level2需要将vlevel的值改成cookie值，再return到touch2函数入口处。&lt;/p&gt;
 &lt;p&gt;修改后的rsp寄存器如下所示：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2.png&#34;
 	width=&#34;743&#34;
 	height=&#34;584&#34;
-	srcset=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu13663029604867286409.png 480w, //localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu11577064378276042830.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu13663029604867286409.png 480w, https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2_hu11577064378276042830.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图1&#34;
@@ -12626,10 +12626,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;针对这些防御措施，文档提供了攻击策略，即&lt;strong&gt;ROP：面向返回的程序设计&lt;/strong&gt;，就是在已经存在的程序中找到特定的以&lt;code&gt;ret&lt;/code&gt;结尾的指令序列为我们所用，称这样的代码段为&lt;code&gt;gadget&lt;/code&gt;，把要用到部分的地址压入栈中，每次&lt;code&gt;ret&lt;/code&gt;后又会取出一个新的&lt;code&gt;gadget&lt;/code&gt;，于是这样就能形成一个程序链，实现我们的目的。&lt;strong&gt;我喜欢将这种攻击方式称作“就地取材，拼凑代码”&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733.png&#34;
 	width=&#34;1029&#34;
 	height=&#34;582&#34;
-	srcset=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu7106984471997724594.png 480w, //localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu16357492657825526984.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu7106984471997724594.png 480w, https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165336733_hu16357492657825526984.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图5&#34;
@@ -12641,10 +12641,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;同时也给出指令编码表&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601.png&#34;
 	width=&#34;1117&#34;
 	height=&#34;1141&#34;
-	srcset=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu3870573879609345137.png 480w, //localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu11996603093128378326.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu3870573879609345137.png 480w, https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/image-20240224165427601_hu11996603093128378326.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图6&#34;
@@ -12729,10 +12729,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;ret&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp&#34;
 	width=&#34;1241&#34;
 	height=&#34;726&#34;
-	srcset=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu2488226402346328207.webp 480w, //localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu10118464121499149602.webp 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu2488226402346328207.webp 480w, https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu10118464121499149602.webp 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图7&#34;
@@ -12989,10 +12989,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;按理说后面是91不是90(nop)，所以不能取，但在x86汇编中，0x91 表示 xchg eax, ecx 指令。这条指令的作用是交换 %eax 和 %ecx 寄存器的值。不影响寄存器的值，所以可以。&lt;/p&gt;
 &lt;h3 id=&#34;栈帧讲解-1&#34;&gt;栈帧讲解
-&lt;/h3&gt;&lt;p&gt;为节省空间，每一行代码都省略了后面的&lt;code&gt;ret&lt;/code&gt;，&lt;img src=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp&#34;
+&lt;/h3&gt;&lt;p&gt;为节省空间，每一行代码都省略了后面的&lt;code&gt;ret&lt;/code&gt;，&lt;img src=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp&#34;
 	width=&#34;1132&#34;
 	height=&#34;796&#34;
-	srcset=&#34;//localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu9797061224875917748.webp 480w, //localhost:1313/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu17673280219868860253.webp 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu9797061224875917748.webp 480w, https://chenyuan1125.github.io/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w_hu17673280219868860253.webp 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图8&#34;
@@ -13049,11 +13049,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>CSAPP:bomb实验</title>
-        <link>//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/</link>
+        <link>https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 29 Sep 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/</guid>
-        <description>&lt;img src="//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:bomb实验" /&gt;&lt;h1 id=&#34;bomb实验&#34;&gt;Bomb实验
+        <guid>https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" alt="Featured image of post CSAPP:bomb实验" /&gt;&lt;h1 id=&#34;bomb实验&#34;&gt;Bomb实验
 &lt;/h1&gt;&lt;h2 id=&#34;题目解析&#34;&gt;题目解析
 &lt;/h2&gt;&lt;p&gt;注意：本人所写的注释可能有些错误，有问题还请大家批评指正，注释中*的用法和C语言类似，有些寄存器名称没有带%&lt;/p&gt;
 &lt;p&gt;题目只给了一个main函数，我们可以大致看出来，它的模式是从某个地方读取字符串，然后作为参数输入每个关卡&lt;code&gt;phase_&lt;/code&gt;，进行验证。具体的情况没有显示，说明我们需要通过某种手段去进行探查：&lt;/p&gt;
@@ -13084,10 +13084,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;说明可以通过文件读取的方式进行读取。&lt;/p&gt;
 &lt;p&gt;寄存器说明：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png&#34;
 	width=&#34;1724&#34;
 	height=&#34;804&#34;
-	srcset=&#34;//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu9272793004077583584.png 480w, //localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu2869656510892282907.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu9272793004077583584.png 480w, https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu2869656510892282907.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图1:寄存器说明&#34;
@@ -13098,10 +13098,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;514px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png&#34;
 	width=&#34;1736&#34;
 	height=&#34;789&#34;
-	srcset=&#34;//localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu4644931881825792889.png 480w, //localhost:1313/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu14912383351731075300.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu4644931881825792889.png 480w, https://chenyuan1125.github.io/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu14912383351731075300.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;图2:寄存器说明&#34;
@@ -14270,11 +14270,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>进程间通信（IPC）源码分析及总结</title>
-        <link>//localhost:1313/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/</link>
+        <link>https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/</link>
         <pubDate>Thu, 08 Aug 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/</guid>
-        <description>&lt;img src="//localhost:1313/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1.jpg" alt="Featured image of post 进程间通信（IPC）源码分析及总结" /&gt;&lt;h2 id=&#34;进程间通信ipc源码分析&#34;&gt;进程间通信（IPC）源码分析
+        <guid>https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1.jpg" alt="Featured image of post 进程间通信（IPC）源码分析及总结" /&gt;&lt;h2 id=&#34;进程间通信ipc源码分析&#34;&gt;进程间通信（IPC）源码分析
 &lt;/h2&gt;&lt;p&gt;本调研报告主要分析6.6内核版本的IPC源码部分。&lt;/p&gt;
 &lt;p&gt;**进程间通信（IPC，InterProcess Communication）**是指在不同进程之间传播或交换信息。IPC的方式通常有管道（包括无名管道和命名管道）、消息队列、信号量、共享存储、Socket、Streams等。其中 Socket和Streams支持不同主机上的两个进程IPC。&lt;/p&gt;
 &lt;ol&gt;
@@ -14912,10 +14912,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;与&lt;code&gt;util.c&lt;/code&gt;相关的头文件。它声明了&lt;code&gt;util.c&lt;/code&gt;中定义的函数和变量，使它们对IPC子系统的其他部分可访问&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Linux 内核提供了多种 IPC 机制，其中System V IPC 包括：System V 信号量、System V消息队列、System V 共享内存。这三种通信机制有很多相似之处。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/assets/1642296-20231130110247534-1932712565.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/assets/1642296-20231130110247534-1932712565.png&#34;
 	width=&#34;897&#34;
 	height=&#34;321&#34;
-	srcset=&#34;//localhost:1313/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/assets/1642296-20231130110247534-1932712565_hu14328424408300395368.png 480w, //localhost:1313/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/assets/1642296-20231130110247534-1932712565_hu3407486723773563772.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/assets/1642296-20231130110247534-1932712565_hu14328424408300395368.png 480w, https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/assets/1642296-20231130110247534-1932712565_hu3407486723773563772.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;img&#34;
@@ -17177,11 +17177,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>加密算法调研</title>
-        <link>//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</link>
+        <link>https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</link>
         <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</guid>
-        <description>&lt;img src="//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg" alt="Featured image of post 加密算法调研" /&gt;&lt;h1 id=&#34;加密算法调研报告&#34;&gt;加密算法调研报告
+        <guid>https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg" alt="Featured image of post 加密算法调研" /&gt;&lt;h1 id=&#34;加密算法调研报告&#34;&gt;加密算法调研报告
 &lt;/h1&gt;&lt;h2 id=&#34;美密算法&#34;&gt;美密算法
 &lt;/h2&gt;&lt;h3 id=&#34;对称加密&#34;&gt;对称加密
 &lt;/h3&gt;&lt;p&gt;对称加密又叫做私钥加密，即信息的发送方和接收方使用同一个密钥去加密和解密数据。对称加密的特点是算法公开、加密和解密速度快，适合于对大数据量进行加密。&lt;/p&gt;
@@ -17189,10 +17189,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;&lt;strong&gt;加密过程如下&lt;/strong&gt;：明文+加密算法+私钥=&amp;gt;密文&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;解密过程如下&lt;/strong&gt;：密文+解密算法+私钥=&amp;gt;明文&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53.png&#34;
 	width=&#34;977&#34;
 	height=&#34;423&#34;
-	srcset=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu1539050602817823707.png 480w, //localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu61028026875299665.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu1539050602817823707.png 480w, https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/52a5fa8d8f21e0a4d6b1f60d43e69d53_hu61028026875299665.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;对称加密&#34;
@@ -17209,10 +17209,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;&lt;strong&gt;被公钥加密过的密文只能被私钥解密，过程如下&lt;/strong&gt;：&lt;/p&gt;
 &lt;p&gt;明文+加密算法+公钥=&amp;gt;密文，密文+解密算法+私钥=&amp;gt;明文&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535.png&#34;
 	width=&#34;977&#34;
 	height=&#34;428&#34;
-	srcset=&#34;//localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu17533756092435017513.png 480w, //localhost:1313/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu1717627113123765504.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu17533756092435017513.png 480w, https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/assets/014e9fe10c8fb5d2ac64e734a3673535_hu1717627113123765504.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;非对称加密&#34;
@@ -17830,11 +17830,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>操作系统大作业：内存故障检测和处理</title>
-        <link>//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</link>
+        <link>https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</link>
         <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</guid>
-        <description>&lt;img src="//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1.jpg" alt="Featured image of post 操作系统大作业：内存故障检测和处理" /&gt;&lt;h1 id=&#34;内存故障检测和处理&#34;&gt;内存故障检测和处理
+        <guid>https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1.jpg" alt="Featured image of post 操作系统大作业：内存故障检测和处理" /&gt;&lt;h1 id=&#34;内存故障检测和处理&#34;&gt;内存故障检测和处理
 &lt;/h1&gt;&lt;p&gt;实验内容：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;模拟内存硬件错误，在x86上验证hwpoison“内存毒化”功能和EDAC（Error Detection And  Correction）的检错和纠错功能&lt;/li&gt;
@@ -18833,10 +18833,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo ras-mc-ctl --status
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330.png&#34;
 	width=&#34;516&#34;
 	height=&#34;72&#34;
-	srcset=&#34;//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu16192268445492714901.png 480w, //localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu17610843283354955925.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu16192268445492714901.png 480w, https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu17610843283354955925.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;检查EDAC信息&#34;
@@ -18855,10 +18855,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ras-mc-ctl --layout
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096.png&#34;
 	width=&#34;594&#34;
 	height=&#34;67&#34;
-	srcset=&#34;//localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15194108421477439709.png 480w, //localhost:1313/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15958066638407402994.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15194108421477439709.png 480w, https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15958066638407402994.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;检查EDAC信息&#34;
@@ -19254,11 +19254,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>计算机体系结构课程笔记</title>
-        <link>//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</link>
+        <link>https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</guid>
-        <description>&lt;img src="//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1.jpg" alt="Featured image of post 计算机体系结构课程笔记" /&gt;&lt;h1 id=&#34;计算机体系结构课程笔记&#34;&gt;计算机体系结构课程笔记
+        <guid>https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1.jpg" alt="Featured image of post 计算机体系结构课程笔记" /&gt;&lt;h1 id=&#34;计算机体系结构课程笔记&#34;&gt;计算机体系结构课程笔记
 &lt;/h1&gt;&lt;h2 id=&#34;一流水线&#34;&gt;一、流水线
 &lt;/h2&gt;&lt;h3 id=&#34;11risc处理器的五段流水线&#34;&gt;1.1RISC处理器的五段流水线
 &lt;/h3&gt;&lt;p&gt;RISC指令集执行的五个周期&lt;/p&gt;
@@ -19299,10 +19299,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;注意：寄存器可以在ID和WB阶段同时分别进行读和写，因为它的读写分成了两个部分&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432.png&#34;
 	width=&#34;915&#34;
 	height=&#34;735&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432_hu8084766764802780753.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432_hu6620702985449991580.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432_hu8084766764802780753.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231011204939432_hu6620702985449991580.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;五段流水线&#34;
@@ -19552,10 +19552,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;代价的度量：misspeculation（因猜测错误导致的本不该执行的指令所占的比例）&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;疑问：&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;为什么第一条load进入Commit阶段，也就是在Write Back阶段完成后，第二条load才能进入execute阶段？&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323.png&#34;
 	width=&#34;1344&#34;
 	height=&#34;326&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323_hu1253984752940033758.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323_hu11944057755838000441.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323_hu1253984752940033758.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20231012204200323_hu11944057755838000441.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20231012204200323&#34;
@@ -19576,10 +19576,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;（3）基于两位饱和计数器的预测&lt;/p&gt;
 &lt;p&gt;​	根据最后一次结果进行预测确实有一些效果，但是当它碰到TNTNTN这样的情况，正确率又可能会下降到0%，还不如静态预测，静态预测还可能有50%及以上的正确率。&lt;/p&gt;
 &lt;p&gt;既要满足NNNNNN这样的情况，又要让TNTNTN这样的情况的结果不至于太难看，解决的办法是基于两位饱和计数器的预测。&lt;strong&gt;两位饱和计数器用一个状态机来表示&lt;/strong&gt;，状态机如下图。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w.png&#34;
 	width=&#34;634&#34;
 	height=&#34;156&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w_hu9123858064831117996.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w_hu11822808642559265429.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w_hu9123858064831117996.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/v2-c5c864e48fca698321d7cf2a3b49e940_720w_hu11822808642559265429.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -19634,10 +19634,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140.png&#34;
 	width=&#34;639&#34;
 	height=&#34;343&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140_hu3740523336481540113.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140_hu2183452186444717105.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140_hu3740523336481540113.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240108205233140_hu2183452186444717105.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240108205233140&#34;
@@ -19815,10 +19815,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;1、Valid/Invalid协议&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190.png&#34;
 	width=&#34;1080&#34;
 	height=&#34;495&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190_hu5070507278156677354.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190_hu13158640009597064964.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190_hu5070507278156677354.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111130857190_hu13158640009597064964.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111130857190&#34;
@@ -19839,10 +19839,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;2、MSI协议&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421.png&#34;
 	width=&#34;1149&#34;
 	height=&#34;530&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421_hu7827027918543884775.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421_hu1680836290018927249.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421_hu7827027918543884775.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131010421_hu1680836290018927249.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111131010421&#34;
@@ -19870,10 +19870,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;步到主存中&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040.png&#34;
 	width=&#34;1126&#34;
 	height=&#34;339&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040_hu457708427723003522.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040_hu5927945532434313139.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040_hu457708427723003522.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111131548040_hu5927945532434313139.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111131548040&#34;
@@ -19911,10 +19911,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;p&gt;适用于分布式共享存储系统&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;1、MSI目录协议&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367.png&#34;
 	width=&#34;1100&#34;
 	height=&#34;584&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367_hu2929865835773093366.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367_hu8622466368921826160.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367_hu2929865835773093366.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111150839367_hu8622466368921826160.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111150839367&#34;
@@ -19925,10 +19925,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;452px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541.png&#34;
 	width=&#34;1392&#34;
 	height=&#34;756&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541_hu6891473958932273725.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541_hu12152907200203306716.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541_hu6891473958932273725.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153141541_hu12152907200203306716.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111153141541&#34;
@@ -19939,10 +19939,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;441px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153.png&#34;
 	width=&#34;1361&#34;
 	height=&#34;740&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153_hu9078152756334766783.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153_hu5796724093721351021.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153_hu9078152756334766783.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153252153_hu5796724093721351021.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111153252153&#34;
@@ -19965,10 +19965,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;和元数据&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740.png&#34;
 	width=&#34;469&#34;
 	height=&#34;155&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740_hu15505158965530610649.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740_hu746138996564141579.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740_hu15505158965530610649.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111153535740_hu746138996564141579.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111153535740&#34;
@@ -19988,10 +19988,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;基于内存的扁平目录结构（Flat）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308.png&#34;
 	width=&#34;819&#34;
 	height=&#34;269&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308_hu10991488651636626459.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308_hu9864215244843025270.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308_hu10991488651636626459.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111210124308_hu9864215244843025270.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111210124308&#34;
@@ -20010,10 +20010,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;稀疏全映射(Full-Map)目录&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346.png&#34;
 	width=&#34;1104&#34;
 	height=&#34;221&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346_hu5188484954115488022.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346_hu16105412076906285943.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346_hu5188484954115488022.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111205940346_hu16105412076906285943.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111205940346&#34;
@@ -20041,10 +20041,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;多级层次结构中的一致性：可以使用相同或不同的协议来保持跨多个层次的一致性&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503.png&#34;
 	width=&#34;954&#34;
 	height=&#34;420&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503_hu11162766353135305442.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503_hu10274698162854938105.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503_hu11162766353135305442.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211602503_hu10274698162854938105.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111211602503&#34;
@@ -20058,10 +20058,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;In-Cache目录&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932.png&#34;
 	width=&#34;664&#34;
 	height=&#34;429&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932_hu13462140246637935768.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932_hu10785171852340681913.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932_hu13462140246637935768.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111211855932_hu10785171852340681913.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111211855932&#34;
@@ -20094,10 +20094,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;一致性协议面临的问题&lt;/p&gt;
 &lt;p&gt;即使网络是无死锁的，协议也会导致死锁！&lt;/p&gt;
 &lt;p&gt;比如，两个节点都通过相互请求让所有的中间缓冲区饱和，阻塞响应进入网络。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667.png&#34;
 	width=&#34;696&#34;
 	height=&#34;206&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667_hu10157320501138606406.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667_hu18274752225129082853.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667_hu10157320501138606406.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240111212043667_hu18274752225129082853.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240111212043667&#34;
@@ -20157,10 +20157,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;对于存储器的访问是是原子级的loads 和stores&lt;/li&gt;
 &lt;li&gt;容易理解，但架构师和编译器编写人员希望在性能方面有所提升，意味着需要违背顺序一致性模型的要求&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938.png&#34;
 	width=&#34;977&#34;
 	height=&#34;514&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938_hu3902897913116456403.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938_hu10978758880247436749.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938_hu3902897913116456403.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114201856938_hu10978758880247436749.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114201856938&#34;
@@ -20207,10 +20207,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329.png&#34;
 	width=&#34;997&#34;
 	height=&#34;551&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329_hu16313289129652585352.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329_hu14980691732099865603.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329_hu16313289129652585352.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205728329_hu14980691732099865603.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114205728329&#34;
@@ -20277,10 +20277,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912.png&#34;
 	width=&#34;886&#34;
 	height=&#34;255&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912_hu6142075784502661470.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912_hu3091746035143724591.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912_hu6142075784502661470.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205548912_hu3091746035143724591.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114205548912&#34;
@@ -20291,10 +20291,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;833px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333.png&#34;
 	width=&#34;910&#34;
 	height=&#34;326&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333_hu11837432339664932489.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333_hu12273354568996879354.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333_hu11837432339664932489.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114205643333_hu12273354568996879354.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114205643333&#34;
@@ -20422,10 +20422,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;隐藏内存延迟：当一个线程在等待内存访问时，其他线程的指令可以在同一核心上继续执行，从而减少了内存访问的延迟对整体性能的影响&lt;/li&gt;
 &lt;li&gt;更好的响应时间： SMT有助于提高系统对多任务工作负载的响应时间，因为可以同时执行多个线程&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733.png&#34;
 	width=&#34;871&#34;
 	height=&#34;631&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733_hu758587810665713918.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733_hu11741234905493091603.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733_hu758587810665713918.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161337733_hu11741234905493091603.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112161337733&#34;
@@ -20436,10 +20436,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;331px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122.png&#34;
 	width=&#34;1156&#34;
 	height=&#34;454&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122_hu4728741667910847787.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122_hu818227017221055368.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122_hu4728741667910847787.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112161505122_hu818227017221055368.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112161505122&#34;
@@ -20451,10 +20451,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 	
 &gt;&lt;/p&gt;
 &lt;h4 id=&#34;并行计算&#34;&gt;并行计算
-&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193.png&#34;
+&lt;/h4&gt;&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193.png&#34;
 	width=&#34;1089&#34;
 	height=&#34;589&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193_hu8545976969808814794.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193_hu1383311410595701029.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193_hu8545976969808814794.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160702193_hu1383311410595701029.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114160702193&#34;
@@ -20465,10 +20465,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;443px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939.png&#34;
 	width=&#34;1085&#34;
 	height=&#34;601&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939_hu4920910443179984350.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939_hu16457777573995766026.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939_hu4920910443179984350.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114160711939_hu16457777573995766026.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114160711939&#34;
@@ -20585,10 +20585,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770.png&#34;
 	width=&#34;644&#34;
 	height=&#34;499&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770_hu16168591223550465983.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770_hu1799677006674024407.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770_hu16168591223550465983.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112172147770_hu1799677006674024407.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112172147770&#34;
@@ -20641,10 +20641,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915.png&#34;
 	width=&#34;400&#34;
 	height=&#34;542&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915_hu3700503112577550391.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915_hu5777776251768541451.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915_hu3700503112577550391.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112203605915_hu5777776251768541451.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112203605915&#34;
@@ -20669,10 +20669,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695.png&#34;
 	width=&#34;737&#34;
 	height=&#34;330&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695_hu4347091005255392339.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695_hu456179441572297255.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695_hu4347091005255392339.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201435695_hu456179441572297255.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112201435695&#34;
@@ -20688,10 +20688,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;BANK的数量要大于等Bank busy time（bank准备好接收下一个请求之前的时间）&lt;/li&gt;
 &lt;li&gt;允许N个并行（如果数据在不同的bank中）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949.png&#34;
 	width=&#34;834&#34;
 	height=&#34;344&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949_hu9917375359004826069.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949_hu11833566847266132588.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949_hu9917375359004826069.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201759949_hu11833566847266132588.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112201759949&#34;
@@ -20703,10 +20703,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Vector Opt #1: Vector Chaining&lt;/strong&gt;（相当于Vector中的forwarding）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095.png&#34;
 	width=&#34;774&#34;
 	height=&#34;401&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095_hu1511280667341067244.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095_hu6463297628229070328.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095_hu1511280667341067244.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240112201943095_hu6463297628229070328.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240112201943095&#34;
@@ -20943,10 +20943,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788.png&#34;
 	width=&#34;1087&#34;
 	height=&#34;446&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788_hu4793172232729361680.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788_hu13403669985562444564.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788_hu4793172232729361680.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113105217788_hu13403669985562444564.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113105217788&#34;
@@ -20990,10 +20990,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;&lt;em&gt;ftrue/ffalse&lt;/em&gt; *：*jumps to fetch if Cond? true/false&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930.png&#34;
 	width=&#34;735&#34;
 	height=&#34;426&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930_hu17899222786590168784.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930_hu12980119376796965034.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930_hu17899222786590168784.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113111719930_hu12980119376796965034.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113111719930&#34;
@@ -21032,10 +21032,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;VLIW: Very Long Instruction Word&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759.png&#34;
 	width=&#34;852&#34;
 	height=&#34;307&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759_hu11820384506603701885.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759_hu1261648922202267399.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759_hu11820384506603701885.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113113714759_hu1261648922202267399.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113113714759&#34;
@@ -21073,10 +21073,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;VLIW  Loop&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015.png&#34;
 	width=&#34;967&#34;
 	height=&#34;412&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015_hu1538942487435066451.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015_hu7346972886623747566.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015_hu1538942487435066451.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115813015_hu7346972886623747566.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113115813015&#34;
@@ -21088,10 +21088,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;VLIW  Loop Unrolling&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307.png&#34;
 	width=&#34;782&#34;
 	height=&#34;451&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307_hu1200409661677572640.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307_hu414722667351764544.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307_hu1200409661677572640.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115833307_hu414722667351764544.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113115833307&#34;
@@ -21103,10 +21103,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;Software Pipeling&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218.png&#34;
 	width=&#34;806&#34;
 	height=&#34;531&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218_hu17304773250863527386.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218_hu17606842934711032652.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218_hu17304773250863527386.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113115857218_hu17606842934711032652.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113115857218&#34;
@@ -21146,10 +21146,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726.png&#34;
 	width=&#34;786&#34;
 	height=&#34;586&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726_hu14771969702908570572.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726_hu14717481823647506314.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726_hu14771969702908570572.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113120047726_hu14717481823647506314.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113120047726&#34;
@@ -21186,10 +21186,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Hypervisor的分类&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563.png&#34;
 	width=&#34;949&#34;
 	height=&#34;541&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563_hu5622351675933054432.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563_hu11351666830853887341.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563_hu5622351675933054432.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113121638563_hu11351666830853887341.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113121638563&#34;
@@ -21200,10 +21200,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;420px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986.png&#34;
 	width=&#34;1070&#34;
 	height=&#34;615&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986_hu7675745657078962030.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986_hu12311068038912294591.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986_hu7675745657078962030.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113150936986_hu12311068038912294591.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113150936986&#34;
@@ -21300,10 +21300,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240.png&#34;
 	width=&#34;781&#34;
 	height=&#34;374&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240_hu14590853041605534294.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240_hu2436677003060041045.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240_hu14590853041605534294.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161215240_hu2436677003060041045.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113161215240&#34;
@@ -21317,10 +21317,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;ul&gt;
 &lt;li&gt;阻塞型和非阻塞型&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748.png&#34;
 	width=&#34;700&#34;
 	height=&#34;561&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748_hu9785375746782860853.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748_hu5546181843062075768.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748_hu9785375746782860853.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113161509748_hu5546181843062075768.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113161509748&#34;
@@ -21340,10 +21340,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;扩展性差，Not scalable to large number of nodes (limited bandwidth)&lt;/li&gt;
 &lt;li&gt;网络竞争高，High contention -&amp;gt; fast saturation&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047.png&#34;
 	width=&#34;836&#34;
 	height=&#34;184&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047_hu9387408265085493212.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047_hu1952079061134859785.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047_hu9387408265085493212.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162016047_hu1952079061134859785.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113162016047&#34;
@@ -21380,10 +21380,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;布线难度大 How to lay out on chip?&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738.png&#34;
 	width=&#34;654&#34;
 	height=&#34;579&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738_hu12495677601800724805.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738_hu10400005870603657979.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738_hu12495677601800724805.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113162237738_hu10400005870603657979.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113162237738&#34;
@@ -21405,10 +21405,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;大规模仲裁困难 Difficult to arbitrate as N increases&lt;/li&gt;
 &lt;li&gt;比如IBM POWER5、Sun Niagara I/II&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408.png&#34;
 	width=&#34;410&#34;
 	height=&#34;409&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408_hu18380841937774865341.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408_hu12658606561327170983.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408_hu18380841937774865341.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113164520408_hu12658606561327170983.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113164520408&#34;
@@ -21512,10 +21512,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;成本: O(NlogN)， 延迟：O(logN)&lt;/li&gt;
 &lt;li&gt;Many variations (Omega, Butterfly, Benes, Banyan, …)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249.png&#34;
 	width=&#34;1084&#34;
 	height=&#34;697&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249_hu4645732669758562781.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249_hu6826422005677592258.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249_hu4645732669758562781.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113173857249_hu6826422005677592258.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113173857249&#34;
@@ -21686,10 +21686,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;GFS master：维持元数据，统一管理chunk位置与租约&lt;/li&gt;
 &lt;li&gt;GFS chunkserver：存储数据&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718.png&#34;
 	width=&#34;935&#34;
 	height=&#34;405&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718_hu13863537571416621331.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718_hu14626121263931717963.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718_hu13863537571416621331.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113202733718_hu14626121263931717963.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113202733718&#34;
@@ -21713,10 +21713,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;采用更大的chunk以及配套的一致性策略来支持大文件存储&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;GFS的Master设计&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186.png&#34;
 	width=&#34;1176&#34;
 	height=&#34;259&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186_hu14181316977467049400.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186_hu4420256021086114329.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186_hu14181316977467049400.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113203644186_hu4420256021086114329.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113203644186&#34;
@@ -21746,10 +21746,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;如何实现自动扩缩容？&amp;ndash;&amp;gt;在master节点上增减、调整chunk的元数据即可&lt;/p&gt;
 &lt;p&gt;怎样知道一个文件存储在哪台机器上？&amp;ndash;&amp;gt;根据master中文件到chunk再到chunk位置的映射来定位具体的chunkserver&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;考试重点，题目应该是64B，打错了&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518.png&#34;
 	width=&#34;1231&#34;
 	height=&#34;416&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518_hu2676652174271680683.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518_hu9583582959516248960.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518_hu2676652174271680683.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113204349518_hu9583582959516248960.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113204349518&#34;
@@ -21798,10 +21798,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;li&gt;数据流与控制流分离的技术&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;GFS的写入流程&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266.png&#34;
 	width=&#34;531&#34;
 	height=&#34;492&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266_hu14255304534219377146.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266_hu13408714252862244260.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266_hu14255304534219377146.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113212300266_hu13408714252862244260.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113212300266&#34;
@@ -21831,10 +21831,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;改写的问题在于一个改写操作可能涉及到多个chunk而如果部分chunk成功，部分chunk失败，我们读到的文件就是不正确的。&lt;/p&gt;
 &lt;p&gt;改写大概率是一个分布式操作，如果要保证改写的强致性，代价就要大很多了。论文中一再强调，GFS推荐使用追加的方式写入文件并且Google内部使用GFS的应用，它们的绝大多数写入也都是追加。&lt;/p&gt;
 &lt;p&gt;GFS的读取流程&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198.png&#34;
 	width=&#34;622&#34;
 	height=&#34;462&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198_hu15782604705934360405.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198_hu18397393842572029900.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198_hu15782604705934360405.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240113213230198_hu18397393842572029900.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240113213230198&#34;
@@ -21926,10 +21926,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;p&gt;在硬件中为敏感数据单独分配一块隔离的内存，所有敏感数据的计算均在这块内存中进行&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846.png&#34;
 	width=&#34;657&#34;
 	height=&#34;376&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846_hu8243842397846565507.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846_hu8347067823630328760.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846_hu8243842397846565507.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103755846_hu8347067823630328760.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114103755846&#34;
@@ -21942,10 +21942,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;安全计算模式三：密态计算&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;以密文为计算对象，其安全性不依赖于隔离和访问控制、不依赖于硬件和软件安全性&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160.png&#34;
 	width=&#34;519&#34;
 	height=&#34;297&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160_hu13596468201324214824.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160_hu15079976299738960635.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160_hu13596468201324214824.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103701160_hu15079976299738960635.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114103701160&#34;
@@ -21956,10 +21956,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 		data-flex-basis=&#34;419px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391.png&#34;
 	width=&#34;725&#34;
 	height=&#34;132&#34;
-	srcset=&#34;//localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391_hu4737260487164093017.png 480w, //localhost:1313/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391_hu1630467894130397190.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391_hu4737260487164093017.png 480w, https://chenyuan1125.github.io/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/assets/image-20240114103732391_hu1630467894130397190.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;image-20240114103732391&#34;
@@ -21974,11 +21974,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>个人博客搭建</title>
-        <link>//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
+        <link>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
-        <description>&lt;img src="//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
+        <guid>https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.jpg" alt="Featured image of post 个人博客搭建" /&gt;&lt;h2 id=&#34;hugo介绍&#34;&gt;Hugo介绍
 &lt;/h2&gt;&lt;p&gt;Hugo是由Go语言实现的静态网站生成器。简单、易用、高效、易扩展、快速部署。&lt;/p&gt;
 &lt;p&gt;Hugo中文文档地址： &lt;a class=&#34;link&#34; href=&#34;https://www.gohugo.org&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.gohugo.org&lt;/a&gt;&lt;/p&gt;
@@ -21993,10 +21993,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/ul&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png&#34;
 	width=&#34;1182&#34;
 	height=&#34;641&#34;
-	srcset=&#34;//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, //localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu11021774570254940286.png 480w, https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu12394334276154959691.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -22039,10 +22039,10 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;生成myblog文件夹&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771.png&#34;
 	width=&#34;818&#34;
 	height=&#34;166&#34;
-	srcset=&#34;//localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, //localhost:1313/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
+	srcset=&#34;https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu13276562593006187076.png 480w, https://chenyuan1125.github.io/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20230313114148771_hu7003390564660789143.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 	
@@ -22214,11 +22214,11 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
         </item>
         <item>
         <title>随想录</title>
-        <link>//localhost:1313/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</link>
+        <link>https://chenyuan1125.github.io/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>//localhost:1313/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</guid>
-        <description>&lt;img src="//localhost:1313/p/%E9%9A%8F%E6%83%B3%E5%BD%95/1.jpg" alt="Featured image of post 随想录" /&gt;&lt;h1 id=&#34;随想录&#34;&gt;随想录
+        <guid>https://chenyuan1125.github.io/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</guid>
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E9%9A%8F%E6%83%B3%E5%BD%95/1.jpg" alt="Featured image of post 随想录" /&gt;&lt;h1 id=&#34;随想录&#34;&gt;随想录
 &lt;/h1&gt;&lt;h2 id=&#34;一些很好的话&#34;&gt;一些很好的话
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;世界上没有直路，要准备走曲折的路。&lt;/li&gt;
