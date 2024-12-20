@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Containerd on 辰远</title>
-        <link>https://chenyuan1125.github.io/tags/containerd/</link>
+        <link>/tags/containerd/</link>
         <description>Recent content in Containerd on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 11 Dec 2024 19:43:23 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/containerd/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 11 Dec 2024 19:43:23 +0800</lastBuildDate><atom:link href="/tags/containerd/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>containerd通信机制分析</title>
-        <link>https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</link>
+        <link>/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</link>
         <pubDate>Wed, 23 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg" alt="Featured image of post containerd通信机制分析" /&gt;&lt;h1 id=&#34;containerd通信机制&#34;&gt;containerd通信机制
+        <guid>/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;img src="/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/1.jpg" alt="Featured image of post containerd通信机制分析" /&gt;&lt;h1 id=&#34;containerd通信机制&#34;&gt;containerd通信机制
 &lt;/h1&gt;&lt;h2 id=&#34;简述&#34;&gt;简述
 &lt;/h2&gt;&lt;p&gt;Containerd 是一个云原生（容器）领域行业标准容器运行时。以操作系统守护进程方式提供服务，管理一台机器上每个容器生命周期，包括：&lt;/p&gt;
 &lt;ul&gt;
@@ -2877,10 +2877,10 @@
     &gt;OCI 运行时规范&lt;/a&gt;）的不同运行时。ttRPC 协议可以通过一个&lt;code&gt;runtime shim&lt;/code&gt;进行处理，而可以使用不同的运行时引擎实现，只要它们实现 OCI 运行时规范即可。&lt;/p&gt;
 &lt;p&gt;最常用的运行时引擎是 runc，它实施 OCI 运行时规范。由于这是一个运行时引擎，因此 &lt;code&gt;containerd&lt;/code&gt; 不会直接调用它;相反，它由 Shim 调用，该 Shim 侦听套接字并调用运行时引擎。&lt;/p&gt;
 &lt;p&gt;以下序列图显示了执行 &lt;code&gt;ctr run&lt;/code&gt; 命令时的操作流程。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949.png&#34;
+&lt;p&gt;&lt;img src=&#34;/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949.png&#34;
 	width=&#34;1601&#34;
 	height=&#34;3024&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu14605848158616288619.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu1695372946056556433.png 1024w&#34;
+	srcset=&#34;/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu14605848158616288619.png 480w, /p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240909175413949_hu1695372946056556433.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ctr run操作流程&#34;
@@ -3572,10 +3572,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;注：shim创建的与containerd通信的sock文件的mode为0600，实际情况与源码一致。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734.png&#34;
+&lt;p&gt;&lt;img src=&#34;/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734.png&#34;
 	width=&#34;728&#34;
 	height=&#34;132&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu1991328956554458519.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu9702084743628895238.png 1024w&#34;
+	srcset=&#34;/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu1991328956554458519.png 480w, /p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/image-20240918162254734_hu9702084743628895238.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;sock文件权限&#34;
@@ -3588,10 +3588,10 @@
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;容器启动流程分析&#34;&gt;容器启动流程分析
 &lt;/h2&gt;&lt;p&gt;分析流程图如下，task.Start没有往下分析，它的函数传递流程与Newtask类似。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98.png&#34;
+&lt;p&gt;&lt;img src=&#34;/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98.png&#34;
 	width=&#34;4552&#34;
 	height=&#34;3158&#34;
-	srcset=&#34;https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu3418511777243317462.png 480w, https://chenyuan1125.github.io/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu7513606798315144493.png 1024w&#34;
+	srcset=&#34;/p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu3418511777243317462.png 480w, /p/containerd%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/assets/%E6%97%A0%E6%A0%87%E9%A2%98_hu7513606798315144493.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ctr指令解析图&#34;
@@ -6614,7 +6614,7 @@
 &lt;p&gt;&lt;strong&gt;3、2.1.4 以及 3.1 分别提到：“守护进程与外部客户端（如 ctr 工具或 Docker 引擎）之间的通信 ”使用 gRPC/UDS ？&lt;/strong&gt;
 &lt;strong&gt;特别是 3.1 如何理解？3.1 后面提到一个例子，Docker引擎通过 gRPC 连接到守护进程的UDS地址，以请求管理容器、镜像、快照等操作。问：gRPC 如何连接的这个 UDS 地址（技术原理）？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;答：这个问题理解的关键点在于uds是如何与gRPC结合使用的，containerd在服务启动的时候使用 &lt;code&gt;sys.GetLocalListener&lt;/code&gt; 来监听一个 Unix Domain Socket。然后将监听器传递给 &lt;code&gt;serve&lt;/code&gt;函数处理grpc请求。（具体的代码可以在4.1中找到）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240827113414851.png&#34;
+&lt;p&gt;&lt;img src=&#34;/assets/image-20240827113414851.png&#34;
 	
 	
 	
@@ -6624,7 +6624,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240826095151377.png&#34;
+&lt;p&gt;&lt;img src=&#34;/assets/image-20240826095151377.png&#34;
 	
 	
 	
@@ -6640,7 +6640,7 @@
 &lt;p&gt;&lt;strong&gt;5、3.3 提到“插件可能作为外部服务运行，需要通过 UDS 与 containerd 通信。”，例子介绍中说：“外部存储插件可能独立运行并通过 UDS 暴露其 gRPC 服务，containerd 通过连接这个 UDS 来调用插件的服务。”&lt;/strong&gt;
 &lt;strong&gt;问：containerd 通过 UDS 连接外部插件，外部插件暴露的 gRPC 给谁？&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;答：这是containerd官方文档查到的，containerd通过gRPC连接外部插件，那外部插件暴露的gRPC肯定是给containerd的配置文件。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240826104113183.png&#34;
+&lt;p&gt;&lt;img src=&#34;/assets/image-20240826104113183.png&#34;
 	
 	
 	
@@ -6650,7 +6650,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240826104245632.png&#34;
+&lt;p&gt;&lt;img src=&#34;/assets/image-20240826104245632.png&#34;
 	
 	
 	
@@ -6781,7 +6781,7 @@
 &lt;p&gt;&lt;strong&gt;（事实上containerd应该是不支持systemd的socket activation机制的，github也有人提出过在containerd中加入此机制：&lt;a class=&#34;link&#34; href=&#34;https://github.com/containerd/containerd/issues/164&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;add socket activation · Issue #164 · containerd/containerd (github.com)&lt;/a&gt;）&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;一般如果支持socket activation机制的话会有类似下图的逻辑，服务器会先调用sd_listen_fds函数，看systemd是否创建了socket文件，如果创建了就不会再创建了。所以如果使用system的socket activation启动进程，那么就一定是systemd创建socket文件。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://chenyuan1125.github.io/assets/image-20240827232023457.png&#34;
+&lt;p&gt;&lt;img src=&#34;/assets/image-20240827232023457.png&#34;
 	
 	
 	

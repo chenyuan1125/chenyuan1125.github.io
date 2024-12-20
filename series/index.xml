@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Series on 辰远</title>
-        <link>https://chenyuan1125.github.io/series/</link>
+        <link>/series/</link>
         <description>Recent content in Series on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 15 Dec 2024 21:31:58 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/series/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 15 Dec 2024 21:31:58 +0800</lastBuildDate><atom:link href="/series/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CTF</title>
-        <link>https://chenyuan1125.github.io/series/ctf/</link>
+        <link>/series/ctf/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/series/ctf/</guid>
+        <guid>/series/ctf/</guid>
         <description></description>
         </item>
         <item>
         <title>课程</title>
-        <link>https://chenyuan1125.github.io/series/%E8%AF%BE%E7%A8%8B/</link>
+        <link>/series/%E8%AF%BE%E7%A8%8B/</link>
         <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
         
-        <guid>https://chenyuan1125.github.io/series/%E8%AF%BE%E7%A8%8B/</guid>
+        <guid>/series/%E8%AF%BE%E7%A8%8B/</guid>
         <description></description>
         </item>
         
