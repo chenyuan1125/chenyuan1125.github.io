@@ -1,6 +1,0 @@
-# custom header fields
-["*"]
-    cache-control = "max-age=3600"
-    referrer-policy = "no-referrer"
-    strict-transport-security = "max-age=31536000; includeSubDomains"
-    Access-Control-Allow-Origin: *
