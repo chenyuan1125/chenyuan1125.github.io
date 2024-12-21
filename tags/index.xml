@@ -2,81 +2,81 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Tags on 辰远</title>
-        <link>/tags/</link>
+        <link>https://chenyuan1125.github.io/tags/</link>
         <description>Recent content in Tags on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 15 Dec 2024 21:31:58 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 21 Dec 2024 11:16:56 +0800</lastBuildDate><atom:link href="https://chenyuan1125.github.io/tags/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>IPC</title>
-        <link>/tags/ipc/</link>
+        <link>https://chenyuan1125.github.io/tags/ipc/</link>
         <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
         
-        <guid>/tags/ipc/</guid>
+        <guid>https://chenyuan1125.github.io/tags/ipc/</guid>
         <description></description>
         </item>
         <item>
         <title>Containerd</title>
-        <link>/tags/containerd/</link>
+        <link>https://chenyuan1125.github.io/tags/containerd/</link>
         <pubDate>Wed, 23 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>/tags/containerd/</guid>
+        <guid>https://chenyuan1125.github.io/tags/containerd/</guid>
         <description></description>
         </item>
         <item>
         <title>CSAPP</title>
-        <link>/tags/csapp/</link>
+        <link>https://chenyuan1125.github.io/tags/csapp/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>/tags/csapp/</guid>
+        <guid>https://chenyuan1125.github.io/tags/csapp/</guid>
         <description></description>
         </item>
         <item>
         <title>CTF</title>
-        <link>/tags/ctf/</link>
+        <link>https://chenyuan1125.github.io/tags/ctf/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
-        <guid>/tags/ctf/</guid>
+        <guid>https://chenyuan1125.github.io/tags/ctf/</guid>
         <description></description>
         </item>
         <item>
         <title>加密算法</title>
-        <link>/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
+        <link>https://chenyuan1125.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
         <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
         
-        <guid>/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</guid>
+        <guid>https://chenyuan1125.github.io/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</guid>
         <description></description>
         </item>
         <item>
         <title>Os</title>
-        <link>/tags/os/</link>
+        <link>https://chenyuan1125.github.io/tags/os/</link>
         <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
         
-        <guid>/tags/os/</guid>
+        <guid>https://chenyuan1125.github.io/tags/os/</guid>
         <description></description>
         </item>
         <item>
         <title>体系结构</title>
-        <link>/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
+        <link>https://chenyuan1125.github.io/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
         <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
         
-        <guid>/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</guid>
+        <guid>https://chenyuan1125.github.io/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</guid>
         <description></description>
         </item>
         <item>
         <title>Hugo教程</title>
-        <link>/tags/hugo%E6%95%99%E7%A8%8B/</link>
+        <link>https://chenyuan1125.github.io/tags/hugo%E6%95%99%E7%A8%8B/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>/tags/hugo%E6%95%99%E7%A8%8B/</guid>
+        <guid>https://chenyuan1125.github.io/tags/hugo%E6%95%99%E7%A8%8B/</guid>
         <description></description>
         </item>
         <item>
         <title>个人相关</title>
-        <link>/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</link>
+        <link>https://chenyuan1125.github.io/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</link>
         <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
         
-        <guid>/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</guid>
+        <guid>https://chenyuan1125.github.io/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</guid>
         <description></description>
         </item>
         
