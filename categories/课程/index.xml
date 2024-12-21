@@ -12,7 +12,7 @@
         <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
         
         <guid>https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</guid>
-        <description>&lt;img src="https://chenyuan1125.github.io/1.jpg" alt="Featured image of post 操作系统大作业：内存故障检测和处理" /&gt;&lt;h1 id=&#34;内存故障检测和处理&#34;&gt;内存故障检测和处理
+        <description>&lt;img src="https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/os.jpg" alt="Featured image of post 操作系统大作业：内存故障检测和处理" /&gt;&lt;h1 id=&#34;内存故障检测和处理&#34;&gt;内存故障检测和处理
 &lt;/h1&gt;&lt;p&gt;实验内容：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;模拟内存硬件错误，在x86上验证hwpoison“内存毒化”功能和EDAC（Error Detection And  Correction）的检错和纠错功能&lt;/li&gt;
