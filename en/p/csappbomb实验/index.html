@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://chenyuan1125.github.io/en/p/csappbomb%E5%AE%9E%E9%AA%8C/'>
 
-<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="CSAPP:bomb实验">
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="CSAPP:bomb实验">
 <meta property='og:description' content="bomb实验详细记录">
 <meta property='og:url' content='https://chenyuan1125.github.io/en/p/csappbomb%E5%AE%9E%E9%AA%8C/'>
 <meta property='og:site_name' content='Lee'>
@@ -14,6 +14,8 @@
 <meta name="twitter:title" content="CSAPP:bomb实验">
 <meta name="twitter:description" content="bomb实验详细记录"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -384,7 +386,7 @@
 
 
                 <time class="article-time--reading">
-                    18 minute read
+                    17 minute read
                 </time>
             </div>
         
@@ -394,7 +396,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    8579字
+                    8092字
                 </time>
         </div>
         
@@ -435,32 +437,14 @@
 </h1><h2 id="题目解析">题目解析
 </h2><p>注意：本人所写的注释可能有些错误，有问题还请大家批评指正，注释中*的用法和C语言类似，有些寄存器名称没有带%</p>
 <p>题目只给了一个main函数，我们可以大致看出来，它的模式是从某个地方读取字符串，然后作为参数输入每个关卡<code>phase_</code>，进行验证。具体的情况没有显示，说明我们需要通过某种手段去进行探查：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">objdump -d bomb &gt; bomb.s
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>同时看到<code>bomb.c</code>中：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* When run with no arguments, the bomb reads its input lines 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">objdump -d bomb &gt; bomb.s
+</span></span></code></pre></div><p>同时看到<code>bomb.c</code>中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* When run with no arguments, the bomb reads its input lines 
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * from standard input. */</span>
 </span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>  
 </span></span><span class="line"><span class="cl">    <span class="n">infile</span> <span class="o">=</span> <span class="n">stdin</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>说明可以通过文件读取的方式进行读取。</p>
+</span></span></code></pre></div><p>说明可以通过文件读取的方式进行读取。</p>
 <p>寄存器说明：</p>
 <p><img src="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png"
 	width="1724"
@@ -492,20 +476,7 @@
 ></p>
 <h3 id="phase_1">Phase_1
 </h3><p>关键代码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400ee0 &lt;phase_1&gt;:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400ee0 &lt;phase_1&gt;:
 </span></span><span class="line"><span class="cl">  400ee0:	48 83 ec 08          	sub    $0x8,%rsp   //将栈指针减少8，也就是入栈
 </span></span><span class="line"><span class="cl">  400ee4:	be 00 24 40 00       	mov    $0x402400,%esi
 </span></span><span class="line"><span class="cl">  400ee9:	e8 4a 04 00 00       	call   401338 &lt;strings_not_equal&gt; /*test指令同逻辑与and运算，但只设置条件码寄存器，不改变目的寄存器的值，test %eax,%eax用于测试寄存器%eax是否为空，由于寄存器%rax一般存放函数的返回值，此处应该存放的是函数 strings_not_equal的值，而%eax是%rax的低32位表示，所以不难分析出，当%eax值为0时，test的两个操作数相同且都为0，条件码ZF置位为1，即可满足下一行代码的跳转指令*/
@@ -514,43 +485,11 @@
 </span></span><span class="line"><span class="cl">  400ef2:	e8 43 05 00 00       	call   40143a &lt;explode_bomb&gt;  //调用explode-bomb函数，爆炸
 </span></span><span class="line"><span class="cl">  400ef7:	48 83 c4 08          	add    $0x8,%rsp     //出栈
 </span></span><span class="line"><span class="cl">  400efb:	c3                   	ret     
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>仅从函数调用的角度来看，<code>phase_1</code>的参数存在1st argument寄存器中：<code>%rdi</code>，然后这个参数作为第一个参数，与<code>0x402400</code>作为第二个参数一起被传入到<code>strings_not_equal</code>中，进行一些判定操作。</p>
+</span></span></code></pre></div><p>仅从函数调用的角度来看，<code>phase_1</code>的参数存在1st argument寄存器中：<code>%rdi</code>，然后这个参数作为第一个参数，与<code>0x402400</code>作为第二个参数一起被传入到<code>strings_not_equal</code>中，进行一些判定操作。</p>
 <p><code>0x402400</code>像一个地址，使用gdb对程序进行debug，设置断点查看``0x402400<code>的值，发现是</code>Border relations with Canada have never been better.`，答案已找到</p>
 <h3 id="phase_2">Phase_2
 </h3><p>关键代码如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400efc &lt;phase_2&gt;:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400efc &lt;phase_2&gt;:
 </span></span><span class="line"><span class="cl">  400efc:	55                   	push   %rbp
 </span></span><span class="line"><span class="cl">  400efd:	53                   	push   %rbx
 </span></span><span class="line"><span class="cl">  400efe:	48 83 ec 28          	sub    $0x28,%rsp    //入栈，栈指针减少40
@@ -576,54 +515,11 @@
 </span></span><span class="line"><span class="cl">  400f40:	5b                   	pop    %rbx
 </span></span><span class="line"><span class="cl">  400f41:	5d                   	pop    %rbp
 </span></span><span class="line"><span class="cl">  400f42:	c3                   	ret    
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>可以看出这个阶段读取六个数字，并通过一个循环将其与对应的值对比，这些对应值的规律就是<code>1 2 4 8 16 32</code>，答案已出。</p>
+</span></span></code></pre></div><p>可以看出这个阶段读取六个数字，并通过一个循环将其与对应的值对比，这些对应值的规律就是<code>1 2 4 8 16 32</code>，答案已出。</p>
 <p>（<code>lea 0x18(%rsp),%rbp</code>指令是将%rsp+40传给%rbp，lea指令用于计算有效地址，以及加法和有限的乘法运算，而其余如mov    -0x4(%rbx),%eax则是取(%rbx-4)的值再传给%eax）</p>
 <h3 id="phase_3">Phase_3
 </h3><p>关键代码如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400f43 &lt;phase_3&gt;:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400f43 &lt;phase_3&gt;:
 </span></span><span class="line"><span class="cl">  400f43:	48 83 ec 18          	sub    $0x18,%rsp //入栈，栈指针减少24
 </span></span><span class="line"><span class="cl">  400f47:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx //%rsp+12赋给%rcx 
 </span></span><span class="line"><span class="cl">  400f4c:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx //%rsp+8赋给%rdx 
@@ -660,33 +556,11 @@
 </span></span><span class="line"><span class="cl">  400fc4:	e8 71 04 00 00       	call   40143a &lt;explode_bomb&gt; //如果不相等，就爆炸
 </span></span><span class="line"><span class="cl">  400fc9:	48 83 c4 18          	add    $0x18,%rsp //出栈，栈指针增加24
 </span></span><span class="line"><span class="cl">  400fcd:	c3                   	ret    
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>注意：jg指令是后面的操作数大于前面的操作数，不要弄反了</code></p>
+</span></span></code></pre></div><p><code>注意：jg指令是后面的操作数大于前面的操作数，不要弄反了</code></p>
 <p>首先根据sscanf函数确定有两个参数，刚好%rsp+8和%rsp+12没有赋值，于是推测这两个值对应这两个变量，接着由于sscanf函数返回参数的数目，所以必须输入两个数，并且第一个参数要小于等于7，最后根据下面这条关键指令判断第二个参数取决于第一个参数的值，使用gdb遍历打印相应的跳转地址的值，得到以下列表。</p>
 <p>最关键的指令是：</p>
 <p><code>400f75:	ff 24 c5 70 24 40 00 	jmp    *0x402470(,%rax,8)</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402470  第一个参数为0，第二个参数为0xcf 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402470  第一个参数为0，第二个参数为0xcf 
 </span></span><span class="line"><span class="cl">0x400f7c &lt;phase_3+57&gt;:  <span class="s2">&#34;\270&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/s *0x402478  第一个参数为1，第二个参数为0x137 <span class="m">311</span>
 </span></span><span class="line"><span class="cl">0x400fb9 &lt;phase_3+118&gt;: <span class="s2">&#34;\270\067\001&#34;</span>
@@ -702,37 +576,8 @@
 </span></span><span class="line"><span class="cl">0x400f9f &lt;phase_3+92&gt;:  <span class="s2">&#34;\270\252\002&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x4024a8  第一个参数为7，第二个参数为0x147
 </span></span><span class="line"><span class="cl">0x400fa6 &lt;phase_3+99&gt;:  <span class="s2">&#34;\270G\001&#34;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="phase_4">Phase_4
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">000000000040100c &lt;phase_4&gt;:
+</span></span></code></pre></div><h3 id="phase_4">Phase_4
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">000000000040100c &lt;phase_4&gt;:
 </span></span><span class="line"><span class="cl">  40100c:	48 83 ec 18          	sub    $0x18,%rsp  //入栈，栈指针减少18
 </span></span><span class="line"><span class="cl">  401010:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx  //rcx=rsp+12
 </span></span><span class="line"><span class="cl">  401015:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx  //rdx=rsp+8
@@ -755,37 +600,8 @@
 </span></span><span class="line"><span class="cl">  401058:	e8 dd 03 00 00       	call   40143a &lt;explode_bomb&gt;
 </span></span><span class="line"><span class="cl">  40105d:	48 83 c4 18          	add    $0x18,%rsp  //出栈
 </span></span><span class="line"><span class="cl">  401061:	c3                   	ret    
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>很明显要通过此关必须在调用func4后返回0，而且第二个参数要等于0，所以只需通过调整第一个参数的值来使得func4函数返回0</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0000000000400fce &lt;func4&gt;:
+</span></span></code></pre></div><p>很明显要通过此关必须在调用func4后返回0，而且第二个参数要等于0，所以只需通过调整第一个参数的值来使得func4函数返回0</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0000000000400fce &lt;func4&gt;:
 </span></span><span class="line"><span class="cl">  400fce:	48 83 ec 08          	sub    $0x8,%rsp  //入栈
 </span></span><span class="line"><span class="cl">  400fd2:	89 d0                	mov    %edx,%eax  //eax=edx=14 rsi=0 edi=第一个参数
 </span></span><span class="line"><span class="cl">  400fd4:	29 f0                	sub    %esi,%eax  //eax=eax-esi=14
@@ -808,71 +624,11 @@
 </span></span><span class="line"><span class="cl">  401003:	8d 44 00 01          	lea    0x1(%rax,%rax,1),%eax  //eax=rax+rax+1 不能经过这条指令，edi必须小于等于7
 </span></span><span class="line"><span class="cl">  401007:	48 83 c4 08          	add    $0x8,%rsp  //出栈
 </span></span><span class="line"><span class="cl">  40100b:	c3                   	ret 
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>首先edi寄存器也就是我们输入的第一个参数必须小于等于7，</p>
+</span></span></code></pre></div><p>首先edi寄存器也就是我们输入的第一个参数必须小于等于7，</p>
 <p><code>lea 0x1(%rax,%rax,1),%eax</code>这条指令不能执行，一旦执行这条执行，那么eax寄存器就不可能等于0，同时我们观察到两个判断语句都有等于条件，于是我们把第一个参数设置为7，很顺利地使eax寄存器等于0，当然还有其它的可能性，可以一一去试。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">7 0 |
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="phase_5">Phase_5
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000401062 &lt;phase_5&gt;:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">7 0 |
+</span></span></code></pre></div><h3 id="phase_5">Phase_5
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000401062 &lt;phase_5&gt;:
 </span></span><span class="line"><span class="cl">  401062:	53                   	push   %rbx  //保存调用者寄存器
 </span></span><span class="line"><span class="cl">  401063:	48 83 ec 20          	sub    $0x20,%rsp  //入栈，栈指针减少32
 </span></span><span class="line"><span class="cl">  401067:	48 89 fb             	mov    %rdi,%rbx  //rbx=rdi 第一个参数
@@ -919,27 +675,8 @@
 </span></span><span class="line"><span class="cl">  4010ee:	48 83 c4 20          	add    $0x20,%rsp  //出栈，栈指针增加32
 </span></span><span class="line"><span class="cl">  4010f2:	5b                   	pop    %rbx
 </span></span><span class="line"><span class="cl">  4010f3:	c3                   	ret    
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>关键代码：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx  //从(rax+rbx)处读取的1字节数据零扩展到ecx中  ecx=0x69   eax=0
+</span></span></code></pre></div><p>关键代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx  //从(rax+rbx)处读取的1字节数据零扩展到ecx中  ecx=0x69   eax=0
 </span></span><span class="line"><span class="cl">  40108f:	88 0c 24             	mov    %cl,(%rsp)       //将cl的值存入rsp所指的地址中(rcx的低8位) *(%rsp)=0x69
 </span></span><span class="line"><span class="cl">  401092:	48 8b 14 24          	mov    (%rsp),%rdx      //rdx=*(rsp)=0x69
 </span></span><span class="line"><span class="cl">  401096:	83 e2 0f             	and    $0xf,%edx        //edx=edx&amp;0xf=9
@@ -952,28 +689,10 @@
 </span></span><span class="line"><span class="cl">        for(int rax=0;rax!=6;rax++){
 </span></span><span class="line"><span class="cl">            target[rax]=array[input[rax]&amp;0xf];
 </span></span><span class="line"><span class="cl">        }  
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>就是要使得所输入的字符串的十六进制取后四位，并作为array数组的下标，让array数组与目标字符串相等。</p>
+</span></span></code></pre></div><p>就是要使得所输入的字符串的十六进制取后四位，并作为array数组的下标，让array数组与目标字符串相等。</p>
 <p>目标字符串在0x40245e内存地址中，即0x666c79657273 &ldquo;flyers&rdquo;</p>
 <p>array数组在0x4024b0内存地址中,如下所示。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/16c 0x4024b0
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/16c 0x4024b0
 </span></span><span class="line"><span class="cl">0x4024b0 &lt;array.3449&gt;:  <span class="m">109</span> <span class="s1">&#39;m&#39;</span> <span class="m">97</span> <span class="s1">&#39;a&#39;</span>  <span class="m">100</span> <span class="s1">&#39;d&#39;</span> <span class="m">117</span> <span class="s1">&#39;u&#39;</span> <span class="m">105</span> <span class="s1">&#39;i&#39;</span> <span class="m">101</span> <span class="s1">&#39;e&#39;</span> <span class="m">114</span> <span class="s1">&#39;r&#39;</span> <span class="m">115</span> <span class="s1">&#39;s&#39;</span>
 </span></span><span class="line"><span class="cl">0x4024b8 &lt;array.3449+8&gt;:        <span class="m">110</span> <span class="s1">&#39;n&#39;</span> <span class="m">102</span> <span class="s1">&#39;f&#39;</span> <span class="m">111</span> <span class="s1">&#39;o&#39;</span> <span class="m">116</span> <span class="s1">&#39;t&#39;</span> <span class="m">118</span> <span class="s1">&#39;v&#39;</span> <span class="m">98</span> <span class="s1">&#39;b&#39;</span>  <span class="m">121</span> <span class="s1">&#39;y&#39;</span> <span class="m">108</span> <span class="s1">&#39;l&#39;</span>
 </span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/s 0x40245e
@@ -985,9 +704,7 @@
 </span></span><span class="line"><span class="cl">0x4024b5 e
 </span></span><span class="line"><span class="cl">0x4024b6 r
 </span></span><span class="line"><span class="cl">0x4024b7 s
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>array数组的表格如下</p>
+</span></span></code></pre></div><p>array数组的表格如下</p>
 <div class="table-wrapper"><table>
   <thead>
       <tr>
@@ -1081,154 +798,7 @@
 </table></div>
 <p>所以输入的字符串只需找到表格中对应flyers字符串的input[rax]任意组合即可，比如ionefg(0x69 0x6f 0x6e 0x65 0x66 0x67)</p>
 <h3 id="phase_6">Phase_6
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span><span class="lnt">113
-</span><span class="lnt">114
-</span><span class="lnt">115
-</span><span class="lnt">116
-</span><span class="lnt">117
-</span><span class="lnt">118
-</span><span class="lnt">119
-</span><span class="lnt">120
-</span><span class="lnt">121
-</span><span class="lnt">122
-</span><span class="lnt">123
-</span><span class="lnt">124
-</span><span class="lnt">125
-</span><span class="lnt">126
-</span><span class="lnt">127
-</span><span class="lnt">128
-</span><span class="lnt">129
-</span><span class="lnt">130
-</span><span class="lnt">131
-</span><span class="lnt">132
-</span><span class="lnt">133
-</span><span class="lnt">134
-</span><span class="lnt">135
-</span><span class="lnt">136
-</span><span class="lnt">137
-</span><span class="lnt">138
-</span><span class="lnt">139
-</span><span class="lnt">140
-</span><span class="lnt">141
-</span><span class="lnt">142
-</span><span class="lnt">143
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00000000004010f4 &lt;phase_6&gt;:
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00000000004010f4 &lt;phase_6&gt;:
 </span></span><span class="line"><span class="cl">  4010f4:	41 56                	push   %r14
 </span></span><span class="line"><span class="cl">  4010f6:	41 55                	push   %r13
 </span></span><span class="line"><span class="cl">  4010f8:	41 54                	push   %r12
@@ -1371,146 +941,9 @@
 </span></span><span class="line"><span class="cl">  4011ff:	41 5d                	pop    %r13
 </span></span><span class="line"><span class="cl">  401201:	41 5e                	pop    %r14
 </span></span><span class="line"><span class="cl">  401203:	c3                   	ret    
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>注释中一般都只写了第一次循环各寄存器所对应的值，若有多个值则是循环了多次，一般循环两三次就能看出整个函数的用意。整个phase_6调试所输入的参数为1 2 3 4 5 6</strong></p>
+</span></span></code></pre></div><p><strong>注释中一般都只写了第一次循环各寄存器所对应的值，若有多个值则是循环了多次，一般循环两三次就能看出整个函数的用意。整个phase_6调试所输入的参数为1 2 3 4 5 6</strong></p>
 <h3 id="bonus">Bonus
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span><span class="lnt">113
-</span><span class="lnt">114
-</span><span class="lnt">115
-</span><span class="lnt">116
-</span><span class="lnt">117
-</span><span class="lnt">118
-</span><span class="lnt">119
-</span><span class="lnt">120
-</span><span class="lnt">121
-</span><span class="lnt">122
-</span><span class="lnt">123
-</span><span class="lnt">124
-</span><span class="lnt">125
-</span><span class="lnt">126
-</span><span class="lnt">127
-</span><span class="lnt">128
-</span><span class="lnt">129
-</span><span class="lnt">130
-</span><span class="lnt">131
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00000000004015c4 &lt;phase_defused&gt;:
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00000000004015c4 &lt;phase_defused&gt;:
 </span></span><span class="line"><span class="cl">  4015c4:	48 83 ec 78          	sub    $0x78,%rsp
 </span></span><span class="line"><span class="cl">  4015c8:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
 </span></span><span class="line"><span class="cl">  4015cf:	00 00 
@@ -1641,9 +1074,7 @@
 </span></span><span class="line"><span class="cl">  401287:	e8 84 f8 ff ff       	call   400b10 &lt;puts@plt&gt;  
 </span></span><span class="line"><span class="cl">  40128c:	e8 33 03 00 00       	call   4015c4 &lt;phase_defused&gt;
 </span></span><span class="line"><span class="cl">  401291:	5b                   	pop    %rbx
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>注意：彩蛋要在输入6个关卡的答案后才会出现。</p>
+</span></span></code></pre></div><p>注意：彩蛋要在输入6个关卡的答案后才会出现。</p>
 
 </section>
 

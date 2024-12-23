@@ -6,14 +6,16 @@
 
 <link rel='canonical' href='https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/'>
 
-<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="加密算法调研">
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="加密算法调研">
 <meta property='og:description' content="对现有、常见的加密算法做一些总结和对比工作">
 <meta property='og:url' content='https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/'>
-<meta property='og:site_name' content='辰远'>
+<meta property='og:site_name' content='辰远同学'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='加密算法' /><meta property='article:published_time' content='2024-07-20T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-15T17:59:53&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg' />
 <meta name="twitter:title" content="加密算法调研">
 <meta name="twitter:description" content="对现有、常见的加密算法做一些总结和对比工作"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -72,7 +74,7 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h1 class="site-name"><a href="/">辰远同学</a></h1>
             <h2 class="site-description">天将降大任于斯人也</h2>
         </div>
     </header><ol class="menu-social">
@@ -202,7 +204,7 @@
         
         
         <li >
-            <a href='/%E9%93%BE%E6%8E%A5/' >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
                 
                 
                 
@@ -215,7 +217,7 @@
 
 
                 
-                <span>链接</span>
+                <span>友链</span>
             </a>
         </li>
         
@@ -434,7 +436,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    6323字
+                    6218字
                 </time>
         </div>
         
@@ -604,140 +606,52 @@
 <li>GmSSL的主分支版本为 <a class="link" href="https://github.com/guanzhi/GmSSL/releases/tag/v3.1.1"  target="_blank" rel="noopener"
     >GmSSL-3.1.1</a>，主要增加跨平台特性，特别是对Windows/Visual Studio的支持，Windows、Android、iOS平台的开发者需要使用该版本。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/guanzhi/GmSSL.git
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="编译与安装">编译与安装
-</h3><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir build
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/guanzhi/GmSSL.git
+</span></span></code></pre></div><h3 id="编译与安装">编译与安装
+</h3><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir build
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> build
 </span></span><span class="line"><span class="cl">cmake ..
 </span></span><span class="line"><span class="cl">make
 </span></span><span class="line"><span class="cl">make <span class="nb">test</span>
 </span></span><span class="line"><span class="cl">sudo make install
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>安装gmssl-python</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install gmssl-python
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>验证安装成功</strong></p>
+</span></span></code></pre></div><p><strong>安装gmssl-python</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install gmssl-python
+</span></span></code></pre></div><p><strong>验证安装成功</strong></p>
 <p>注意<code>gmssl-python</code>包中只包含一个<code>gmssl</code>模块（而不是<code>gmssl_python</code>模块）。</p>
 <p>可以在Python交互环境中做简单的测试</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt;&gt;&gt; import gmssl
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt;&gt;&gt; import gmssl
 </span></span><span class="line"><span class="cl">&gt;&gt;&gt; gmssl.GMSSL_PYTHON_VERSION
 </span></span><span class="line"><span class="cl">&gt;&gt;&gt; gmssl.GMSSL_LIBRARY_VERSION
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="gmssl基本指令">gmssl基本指令
+</span></span></code></pre></div><h3 id="gmssl基本指令">gmssl基本指令
 </h3><h4 id="sm4加密解密"><strong>SM4加密解密</strong>
 </h4><p>环境变量</p>
 <p><code>KEY</code>：加密和解密使用的密钥，长度为16字节（128位）。</p>
 <p><code>IV</code>：初始化向量，用于某些加密模式（如 CBC 和 CTR），长度为16字节（128位）。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nv">KEY</span><span class="o">=</span><span class="m">11223344556677881122334455667788</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nv">KEY</span><span class="o">=</span><span class="m">11223344556677881122334455667788</span>
 </span></span><span class="line"><span class="cl">root@ecs-5123:~# <span class="nv">IV</span><span class="o">=</span><span class="m">11223344556677881122334455667788</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>使用 CBC 模式加密</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm4_cbc -encrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -out sm4.cbc
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>使用 CBC 模式解密</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm4_cbc -decrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -in sm4.cbc
+</span></span></code></pre></div><p>使用 CBC 模式加密</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm4_cbc -encrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -out sm4.cbc
+</span></span></code></pre></div><p>使用 CBC 模式解密</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm4_cbc -decrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -in sm4.cbc
 </span></span><span class="line"><span class="cl">hello
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>使用 CTR 模式加密</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm4_ctr -encrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -out sm4.ctr
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>使用 CTR 模式解密</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm4_ctr -decrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -in sm4.ctr
+</span></span></code></pre></div><p>使用 CTR 模式加密</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm4_ctr -encrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -out sm4.ctr
+</span></span></code></pre></div><p>使用 CTR 模式解密</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm4_ctr -decrypt -key <span class="nv">$KEY</span> -iv <span class="nv">$IV</span> -in sm4.ctr
 </span></span><span class="line"><span class="cl">hello
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="sm3摘要"><strong>SM3摘要</strong>
+</span></span></code></pre></div><h4 id="sm3摘要"><strong>SM3摘要</strong>
 </h4><p><strong>计算 SM3 哈希值</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n abc <span class="p">|</span> gmssl sm3
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n abc <span class="p">|</span> gmssl sm3
 </span></span><span class="line"><span class="cl">66c7f0f462eeedd9d1f2d46bdc10e4e24167c4875cf2f7a2297da02b8f4ba8e0
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>生成 SM2 密钥对</strong></p>
+</span></span></code></pre></div><p><strong>生成 SM2 密钥对</strong></p>
 <p><code>gmssl sm2keygen</code>：生成一个 SM2 密钥对。</p>
 <ul>
 <li><code>-pass 1234</code>：指定用于加密私钥的密码为 <code>1234</code>。</li>
 <li><code>-out sm2.pem</code>：将生成的私钥保存到 <code>sm2.pem</code> 文件中。</li>
 <li><code>-pubout sm2pub.pem</code>：将生成的公钥保存到 <code>sm2pub.pem</code> 文件中。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm2keygen -pass <span class="m">1234</span> -out sm2.pem -pubout sm2pub.pem
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>使用公钥和 ID 计算 SM3 哈希值</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# gmssl sm2keygen -pass <span class="m">1234</span> -out sm2.pem -pubout sm2pub.pem
+</span></span></code></pre></div><p><strong>使用公钥和 ID 计算 SM3 哈希值</strong></p>
 <p><code>echo -n abc</code>：输出字符串 <code>abc</code>。</p>
 <p><code>| gmssl sm3 -pubkey sm2pub.pem -id 1234567812345678</code>：将字符串 <code>abc</code> 通过管道传输给 <code>gmssl</code> 工具。</p>
 <ul>
@@ -745,48 +659,25 @@
 <li><code>-pubkey sm2pub.pem</code>：使用 <code>sm2pub.pem</code> 文件中的 SM2 公钥。</li>
 <li><code>-id 1234567812345678</code>：指定 ID（用户标识），在某些加密操作中用于唯一标识用户。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n <span class="p">|</span> gmssl sm3 -pubkey sm2pub.pem -id <span class="m">1234567812345678</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n <span class="p">|</span> gmssl sm3 -pubkey sm2pub.pem -id <span class="m">1234567812345678</span>
 </span></span><span class="line"><span class="cl">59cf08de46459c87ee8f5f114b09a9fb10900133ad7ceb0cb181c1b617d088e6
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>使用 HMAC-SM3 进行哈希计算</strong></p>
+</span></span></code></pre></div><p><strong>使用 HMAC-SM3 进行哈希计算</strong></p>
 <p><code>echo -n abc</code>：输出字符串 <code>abc</code>。</p>
 <p><code>| gmssl sm3hmac -key 11223344556677881122334455667788</code>：将字符串 <code>abc</code> 通过管道传输给 <code>gmssl</code> 工具。</p>
 <ul>
 <li><code>sm3hmac</code>：指定使用 HMAC-SM3 算法。</li>
 <li><code>-key 11223344556677881122334455667788</code>：指定用于 HMAC 的密钥，长度为 16 字节（128 位）。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n eab <span class="p">|</span>gmssl sm3hmac -key <span class="m">11223344556677881122334455667788</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-5123:~# <span class="nb">echo</span> -n eab <span class="p">|</span>gmssl sm3hmac -key <span class="m">11223344556677881122334455667788</span>
 </span></span><span class="line"><span class="cl">a6d4a86e315a097a8981d9943ddf6a5144b1b4e8052ab3eb9534e0b4b0752cf0
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="sm2签名及验签"><strong>SM2签名及验签</strong>
+</span></span></code></pre></div><h4 id="sm2签名及验签"><strong>SM2签名及验签</strong>
 </h4><p><strong>生成密钥对</strong></p>
 <p><code>gmssl sm2keygen</code>: 使用 GMSSL 工具生成 SM2 密钥对。</p>
 <p><code>-pass 1234</code>: 指定密钥对加密时使用的密码（1234）。</p>
 <p><code>-out sm2.pem</code>: 将生成的私钥保存到 <code>sm2.pem</code> 文件中。</p>
 <p><code>-pubout sm2pub.pem</code>: 将生成的公钥保存到 <code>sm2pub.pem</code> 文件中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out sm2.pem -pubout sm2pub.pem
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>对消息进行签名</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out sm2.pem -pubout sm2pub.pem
+</span></span></code></pre></div><p><strong>对消息进行签名</strong></p>
 <p><code>echo hello</code>: 输出 &ldquo;hello&rdquo; 字符串。</p>
 <p><code>|</code>: 管道符，将前一个命令的输出作为下一个命令的输入。</p>
 <p><code>gmssl sm2sign</code>: 使用 GMSSL 工具对输入消息进行签名。</p>
@@ -794,89 +685,45 @@
 <p><code>-pass 1234</code>: 私钥文件的密码。</p>
 <p><code>-out sm2.sig</code>: 将签名结果保存到 <code>sm2.sig</code> 文件中。</p>
 <p><code>#-id 1234567812345678</code>: （注释掉的）用户 ID（可选项）。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm2sign -key sm2.pem -pass <span class="m">1234</span> -out sm2.sig
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>验证签名</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm2sign -key sm2.pem -pass <span class="m">1234</span> -out sm2.sig
+</span></span></code></pre></div><p><strong>验证签名</strong></p>
 <p><code>echo hello</code>: 输出 &ldquo;hello&rdquo; 字符串。</p>
 <p><code>|</code>: 管道符，将前一个命令的输出作为下一个命令的输入。</p>
 <p><code>gmssl sm2verify</code>: 使用 GMSSL 工具验证签名。</p>
 <p><code>-pubkey sm2pub.pem</code>: 指定用于验证签名的公钥文件 <code>sm2pub.pem</code>。</p>
 <p><code>-sig sm2.sig</code>: 指定要验证的签名文件 <code>sm2.sig</code>。</p>
 <p><code>-id 1234567812345678</code>: 用户 ID（与签名时使用的 ID 一致）。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span>gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig -id <span class="m">123467812345678</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span>gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig -id <span class="m">123467812345678</span>
 </span></span><span class="line"><span class="cl">/home/hacker/secret_test/GmSSL/src/sm2_sign.c:265:sm2_fast_verify<span class="o">()</span>:
 </span></span><span class="line"><span class="cl">/home/hacker/secret_test/GmSSL/src/sm2_sign.c:671:sm2_verify_finish<span class="o">()</span>:
 </span></span><span class="line"><span class="cl">gmssl sm2verify: inner error
 </span></span><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span>gmssl sm2verify -pubkey sm2pub.pem -sig sm2.sig
 </span></span><span class="line"><span class="cl">verify : success
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="sm2加密及解密"><strong>SM2加密及解密</strong>
+</span></span></code></pre></div><h4 id="sm2加密及解密"><strong>SM2加密及解密</strong>
 </h4><p><strong>加密消息</strong></p>
 <p><code>echo hello</code>: 输出 &ldquo;hello&rdquo; 字符串。</p>
 <p><code>|</code>: 管道符，将前一个命令的输出作为下一个命令的输入。</p>
 <p><code>gmssl sm2encrypt</code>: 使用 GMSSL 工具加密输入消息。</p>
 <p><code>-pubkey sm2pub.pem</code>: 指定用于加密的公钥文件 <code>sm2pub.pem</code>。</p>
 <p><code>-out sm2.der</code>: 将加密结果保存到 <code>sm2.der</code> 文件中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm2encrypt -pubkey sm2pub.pem -out sm2.der
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>解密消息</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ <span class="nb">echo</span> hello <span class="p">|</span> gmssl sm2encrypt -pubkey sm2pub.pem -out sm2.der
+</span></span></code></pre></div><p><strong>解密消息</strong></p>
 <p><code>gmssl sm2decrypt</code>: 使用 GMSSL 工具解密消息。</p>
 <p><code>-key sm2.pem</code>: 指定用于解密的私钥文件 <code>sm2.pem</code>。</p>
 <p><code>-pass 1234</code>: 私钥文件的密码。</p>
 <p><code>-in sm2.der</code>: 指定要解密的加密文件 <code>sm2.der</code>。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2decrypt -key sm2.pem -pass <span class="m">1234</span> -in sm2.der
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2decrypt -key sm2.pem -pass <span class="m">1234</span> -in sm2.der
 </span></span><span class="line"><span class="cl">hello
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="生成sm2根证书rootcakeypem及ca证书cakeypem"><strong>生成SM2根证书rootcakey.pem及CA证书cakey.pem</strong>
+</span></span></code></pre></div><h4 id="生成sm2根证书rootcakeypem及ca证书cakeypem"><strong>生成SM2根证书rootcakey.pem及CA证书cakey.pem</strong>
 </h4><p><strong>生成根 CA 密钥对</strong></p>
 <p><code>gmssl sm2keygen</code>: 使用 GMSSL 工具生成 SM2 密钥对。</p>
 <p><code>-pass 1234</code>: 指定密钥加密时使用的密码（1234）。</p>
 <p><code>-out rootcakey.pem</code>: 将生成的私钥保存到 <code>rootcakey.pem</code> 文件中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out rootcakey.pem
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out rootcakey.pem
 </span></span><span class="line"><span class="cl">-----BEGIN PUBLIC KEY-----
 </span></span><span class="line"><span class="cl">MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEpy9tv+rCp6t1aEgFHaDuI30rSKh5
 </span></span><span class="line"><span class="cl">737ZVu0ReHqVyhqtXo2bGVIoTsR+daHXo4yO2mxxh9lTR8cBalUfBKKH5A<span class="o">==</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>生成根 CA 证书</strong></p>
+</span></span></code></pre></div><p><strong>生成根 CA 证书</strong></p>
 <p><code>gmssl certgen</code>: 使用 GMSSL 工具生成证书。</p>
 <p><code>-C CN</code>: 指定国家代码为中国。</p>
 <p><code>-ST Beijing</code>: 指定省/市为北京。</p>
@@ -890,72 +737,11 @@
 <p><code>-out rootcacert.pem</code>: 将生成的证书保存到 <code>rootcacert.pem</code> 文件中。</p>
 <p><code>-key_usage keyCertSign</code>: 指定密钥用法为证书签名。</p>
 <p><code>-key_usage cRLSign</code>: 指定密钥用法为 CRL（证书吊销列表）签名。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN ROOTCA -days <span class="m">3650</span> -key rootcakey.pem -pass <span class="m">1234</span> -out rootcacert.pem -key_usage cRLSign
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>解析根 CA 证书</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl certgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN ROOTCA -days <span class="m">3650</span> -key rootcakey.pem -pass <span class="m">1234</span> -out rootcacert.pem -key_usage cRLSign
+</span></span></code></pre></div><p><strong>解析根 CA 证书</strong></p>
 <p><code>gmssl certparse</code>: 使用 GMSSL 工具解析证书。</p>
 <p><code>-in rootcacert.pem</code>: 指定要解析的证书文件 <code>rootcacert.pem</code>。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl certparse -in rootcacert.pem
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl certparse -in rootcacert.pem
 </span></span><span class="line"><span class="cl">Certificate
 </span></span><span class="line"><span class="cl">    tbsCertificate
 </span></span><span class="line"><span class="cl">        version: v3 <span class="o">(</span>2<span class="o">)</span>
@@ -1005,29 +791,16 @@
 </span></span><span class="line"><span class="cl">A0gAMEUCIQDokn/SP4uS7emrovJmT4qBS4LEpawWN+0a4yX+9XBaAQIgVHUL6eIN
 </span></span><span class="line"><span class="cl">f/Jwfb9Zo7r80tKw0hcDwhVlkzUgm49TZd8<span class="o">=</span>
 </span></span><span class="line"><span class="cl">-----END CERTIFICATE-----
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>生成子 CA 密钥对</strong></p>
+</span></span></code></pre></div><p><strong>生成子 CA 密钥对</strong></p>
 <p><code>gmssl sm2keygen</code>: 使用 GMSSL 工具生成 SM2 密钥对。</p>
 <p><code>-pass 1234</code>: 指定密钥加密时使用的密码（1234）。</p>
 <p><code>-out cakey.pem</code>: 将生成的私钥保存到 <code>cakey.pem</code> 文件中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out cakey.pem
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl sm2keygen -pass <span class="m">1234</span> -out cakey.pem
 </span></span><span class="line"><span class="cl">-----BEGIN PUBLIC KEY-----
 </span></span><span class="line"><span class="cl">MFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEe/KYB6V6WoHvlfLr8k859ZgQeZVW
 </span></span><span class="line"><span class="cl"><span class="nv">Dgc7flWYxo8OyRTAOT1jr9NRdt4e7kS0nMzWYJGZfqGVeapIfuwWv8fZvA</span><span class="o">==</span>
 </span></span><span class="line"><span class="cl">-----END PUBLIC KEY-----
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>生成子 CA 证书请求</strong></p>
+</span></span></code></pre></div><p><strong>生成子 CA 证书请求</strong></p>
 <p><code>gmssl reqgen</code>: 使用 GMSSL 工具生成证书请求。</p>
 <p><code>-C CN</code>: 指定国家代码为中国。</p>
 <p><code>-ST Beijing</code>: 指定省/市为北京。</p>
@@ -1038,15 +811,8 @@
 <p><code>-key cakey.pem</code>: 使用 <code>cakey.pem</code> 文件中的私钥。</p>
 <p><code>-pass 1234</code>: 私钥文件的密码。</p>
 <p><code>-out careq.pem</code>: 将生成的证书请求保存到 <code>careq.pem</code> 文件中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN <span class="s2">&#34;Sub CA&#34;</span> -key cakey.pem -pass <span class="m">1234</span> -out careq.pem
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>签署子 CA 证书请求</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl reqgen -C CN -ST Beijing -L Haidian -O PKU -OU CS -CN <span class="s2">&#34;Sub CA&#34;</span> -key cakey.pem -pass <span class="m">1234</span> -out careq.pem
+</span></span></code></pre></div><p><strong>签署子 CA 证书请求</strong></p>
 <p><code>gmssl reqsign</code>: 使用 GMSSL 工具签署证书请求。</p>
 <p><code>-in careq.pem</code>: 指定要签署的证书请求文件 <code>careq.pem</code>。</p>
 <p><code>-days 365</code>: 生成的子 CA 证书有效期为365天。</p>
@@ -1056,35 +822,16 @@
 <p><code>-key rootcakey.pem</code>: 使用 <code>rootcakey.pem</code> 文件中的根 CA 私钥。</p>
 <p><code>-pass 1234</code>: 根 CA 私钥文件的密码。</p>
 <p><code>-out cacert.pem</code>: 将生成的子 CA 证书保存到 <code>cacert.pem</code> 文件中。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl reqsign -in careq.pem -days <span class="m">365</span> -key_usage keyCertSign -path_len_constraint <span class="m">0</span> -cacert rootcacert.pem -key rootcakey.pem -pass <span class="m">1234</span> -out cacert.pem
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="gmssl-python测试">gmssl-python测试
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@LAPTOP-V47UU71B:~$ gmssl reqsign -in careq.pem -days <span class="m">365</span> -key_usage keyCertSign -path_len_constraint <span class="m">0</span> -cacert rootcacert.pem -key rootcakey.pem -pass <span class="m">1234</span> -out cacert.pem
+</span></span></code></pre></div><h3 id="gmssl-python测试">gmssl-python测试
 </h3><p>sm3算法</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">gmssl</span> <span class="kn">import</span> <span class="o">*</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">gmssl</span> <span class="kn">import</span> <span class="o">*</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">sm3</span> <span class="o">=</span> <span class="n">Sm3</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="n">sm3</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abc&#39;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">dgst</span> <span class="o">=</span> <span class="n">sm3</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;sm3(&#39;abc&#39;) : &#34;</span> <span class="o">+</span> <span class="n">dgst</span><span class="o">.</span><span class="n">hex</span><span class="p">())</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="参考文献">参考文献
+</span></span></code></pre></div><h3 id="参考文献">参考文献
 </h3><p><a class="link" href="https_blog.csdn.net/?url=https%3A%2F%2Fblog.csdn.net%2Fm0_59598029%2Farticle%2Fdetails%2F135173059"  target="_blank" rel="noopener"
     >通俗易懂的对称加密与非对称加密原理浅析(csdn.net)</a></p>
 <p><a class="link" href="https://cloud.tencent.com/developer/article/2421525"  target="_blank" rel="noopener"

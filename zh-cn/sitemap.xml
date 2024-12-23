@@ -261,7 +261,7 @@
                 />
   </url><url>
     <loc>https://chenyuan1125.github.io/page/</loc>
-    <lastmod>2024-10-03T12:15:29+08:00</lastmod>
+    <lastmod>2024-12-23T13:43:10+08:00</lastmod>
     <changefreq>daily</changefreq>
     <xhtml:link
                 rel="alternate"
@@ -352,20 +352,6 @@
     <lastmod>2024-12-15T21:28:48+08:00</lastmod>
     <changefreq>daily</changefreq>
   </url><url>
-    <loc>https://chenyuan1125.github.io/%E9%93%BE%E6%8E%A5/</loc>
-    <lastmod>2024-10-03T12:15:17+08:00</lastmod>
-    <changefreq>daily</changefreq>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://chenyuan1125.github.io/en/%E9%93%BE%E6%8E%A5/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://chenyuan1125.github.io/%E9%93%BE%E6%8E%A5/"
-                />
-  </url><url>
     <loc>https://chenyuan1125.github.io/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/</loc>
     <lastmod>2024-12-15T20:52:58+08:00</lastmod>
     <changefreq>daily</changefreq>
@@ -410,6 +396,20 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="https://chenyuan1125.github.io/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+                />
+  </url><url>
+    <loc>https://chenyuan1125.github.io/%E5%8F%8B%E9%93%BE/</loc>
+    <lastmod>2024-12-23T13:43:10+08:00</lastmod>
+    <changefreq>daily</changefreq>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://chenyuan1125.github.io/en/%E9%93%BE%E6%8E%A5/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://chenyuan1125.github.io/%E5%8F%8B%E9%93%BE/"
                 />
   </url>
 </urlset>

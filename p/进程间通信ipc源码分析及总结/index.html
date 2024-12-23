@@ -6,14 +6,16 @@
 
 <link rel='canonical' href='https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/'>
 
-<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="进程间通信（IPC）源码分析及总结">
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="进程间通信（IPC）源码分析及总结">
 <meta property='og:description' content="6.6内核下的IPC浅析">
 <meta property='og:url' content='https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/'>
-<meta property='og:site_name' content='辰远'>
+<meta property='og:site_name' content='辰远同学'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='IPC' /><meta property='article:published_time' content='2024-08-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-15T20:46:51&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1.jpg' />
 <meta name="twitter:title" content="进程间通信（IPC）源码分析及总结">
 <meta name="twitter:description" content="6.6内核下的IPC浅析"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -72,7 +74,7 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h1 class="site-name"><a href="/">辰远同学</a></h1>
             <h2 class="site-description">天将降大任于斯人也</h2>
         </div>
     </header><ol class="menu-social">
@@ -202,7 +204,7 @@
         
         
         <li >
-            <a href='/%E9%93%BE%E6%8E%A5/' >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
                 
                 
                 
@@ -215,7 +217,7 @@
 
 
                 
-                <span>链接</span>
+                <span>友链</span>
             </a>
         </li>
         
@@ -393,7 +395,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 25 分钟
+                    阅读时长: 23 分钟
                 </time>
             </div>
         
@@ -403,7 +405,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    12299字
+                    11149字
                 </time>
         </div>
         
@@ -498,23 +500,12 @@
 <p>2、<code>compat_ksys_ipc</code>函数</p>
 <p>与上面那个函数一样，不过是做了一些兼容性处理。</p>
 <p>3、这个宏定义了一个新的系统调用 <code>ipc</code>，它接收6个参数，并将这些参数传递给 <code>ksys_ipc</code> 函数进行处理。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">SYSCALL_DEFINE6</span><span class="p">(</span><span class="n">ipc</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">call</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">SYSCALL_DEFINE6</span><span class="p">(</span><span class="n">ipc</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">,</span> <span class="n">call</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">unsigned</span> <span class="kt">long</span><span class="p">,</span> <span class="n">third</span><span class="p">,</span> <span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="p">,</span> <span class="n">ptr</span><span class="p">,</span> <span class="kt">long</span><span class="p">,</span> <span class="n">fifth</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">ksys_ipc</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">,</span> <span class="n">third</span><span class="p">,</span> <span class="n">ptr</span><span class="p">,</span> <span class="n">fifth</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 </ul>
 <p><strong>util.c</strong>：</p>
 <ul>
@@ -524,39 +515,15 @@
 <li>
 <p>核心函数:</p>
 <p>1、结构体定义</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">ipc_proc_iface</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">ipc_proc_iface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">header</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">ids</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">show</span><span class="p">)(</span><span class="k">struct</span> <span class="n">seq_file</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_proc_iface</code> 结构体定义了在 <code>/proc</code> 文件系统中显示 IPC 信息的接口。</p>
+</span></span></code></pre></div><p><code>ipc_proc_iface</code> 结构体定义了在 <code>/proc</code> 文件系统中显示 IPC 信息的接口。</p>
 <p>2、初始化函数</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">ipc_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="n">__init</span> <span class="nf">ipc_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">proc_mkdir</span><span class="p">(</span><span class="s">&#34;sysvipc&#34;</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">sem_init</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">msg_init</span><span class="p">();</span>
@@ -564,47 +531,17 @@
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="nf">device_initcall</span><span class="p">(</span><span class="n">ipc_init</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_init</code> 函数用于初始化 IPC 子系统，创建 <code>/proc/sysvipc</code> 目录，并调用信号量、消息队列和共享内存的初始化函数。</p>
+</span></span></code></pre></div><p><code>ipc_init</code> 函数用于初始化 IPC 子系统，创建 <code>/proc/sysvipc</code> 目录，并调用信号量、消息队列和共享内存的初始化函数。</p>
 <p>3、哈希表参数</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">rhashtable_params</span> <span class="n">ipc_kht_params</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">rhashtable_params</span> <span class="n">ipc_kht_params</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="p">.</span><span class="n">head_offset</span> <span class="o">=</span> <span class="nf">offsetof</span><span class="p">(</span><span class="k">struct</span> <span class="n">kern_ipc_perm</span><span class="p">,</span> <span class="n">khtnode</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">	<span class="p">.</span><span class="n">key_offset</span> <span class="o">=</span> <span class="nf">offsetof</span><span class="p">(</span><span class="k">struct</span> <span class="n">kern_ipc_perm</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">	<span class="p">.</span><span class="n">key_len</span> <span class="o">=</span> <span class="nf">sizeof_field</span><span class="p">(</span><span class="k">struct</span> <span class="n">kern_ipc_perm</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl">	<span class="p">.</span><span class="n">automatic_shrinking</span> <span class="o">=</span> <span class="nb">true</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_kht_params</code> 定义了 IPC 对象哈希表的参数，包括头部偏移、键偏移和键长度。</p>
+</span></span></code></pre></div><p><code>ipc_kht_params</code> 定义了 IPC 对象哈希表的参数，包括头部偏移、键偏移和键长度。</p>
 <p>4、IPC ID 初始化</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">ipc_init_ids</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">ipc_init_ids</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="n">ids</span><span class="o">-&gt;</span><span class="n">in_use</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="n">ids</span><span class="o">-&gt;</span><span class="n">seq</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">init_rwsem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ids</span><span class="o">-&gt;</span><span class="n">rwsem</span><span class="p">);</span>
@@ -616,34 +553,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>	<span class="n">ids</span><span class="o">-&gt;</span><span class="n">next_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_init_ids</code> 函数初始化 IPC 标识符集，设置初始值并初始化哈希表和 ID 管理器。</p>
+</span></span></code></pre></div><p><code>ipc_init_ids</code> 函数初始化 IPC 标识符集，设置初始值并初始化哈希表和 ID 管理器。</p>
 <p>5、进程接口初始化</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#ifdef CONFIG_PROC_FS
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#ifdef CONFIG_PROC_FS
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">proc_ops</span> <span class="n">sysvipc_proc_ops</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">__init</span> <span class="nf">ipc_init_proc_interface</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">path</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">header</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ids</span><span class="p">,</span> <span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">show</span><span class="p">)(</span><span class="k">struct</span> <span class="n">seq_file</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">))</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">proc_dir_entry</span> <span class="o">*</span><span class="n">pde</span><span class="p">;</span>
@@ -662,26 +574,9 @@
 </span></span><span class="line"><span class="cl">		<span class="nf">kfree</span><span class="p">(</span><span class="n">iface</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_init_proc_interface</code> 函数创建 <code>/proc</code> 文件系统中的 IPC 信息接口。</p>
+</span></span></span></code></pre></div><p><code>ipc_init_proc_interface</code> 函数创建 <code>/proc</code> 文件系统中的 IPC 信息接口。</p>
 <p>6、查找 IPC 键</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="nf">ipc_findkey</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="kt">key_t</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="nf">ipc_findkey</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="kt">key_t</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="n">ipcp</span> <span class="o">=</span> <span class="nf">rhashtable_lookup_fast</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ids</span><span class="o">-&gt;</span><span class="n">key_ht</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="n">ipc_kht_params</span><span class="p">);</span>
@@ -692,50 +587,9 @@
 </span></span><span class="line"><span class="cl">	<span class="nf">ipc_lock_object</span><span class="p">(</span><span class="n">ipcp</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">ipcp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_findkey</code> 函数在哈希表中查找给定键的 IPC 对象，并返回该对象。</p>
+</span></span></code></pre></div><p><code>ipc_findkey</code> 函数在哈希表中查找给定键的 IPC 对象，并返回该对象。</p>
 <p>7、ID 分配</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">int</span> <span class="nf">ipc_idr_alloc</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">new</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kr">inline</span> <span class="kt">int</span> <span class="nf">ipc_idr_alloc</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">new</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">next_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#ifdef CONFIG_CHECKPOINT_RESTORE
@@ -770,62 +624,9 @@
 </span></span><span class="line"><span class="cl">		<span class="n">new</span><span class="o">-&gt;</span><span class="n">id</span> <span class="o">=</span> <span class="p">(</span><span class="n">new</span><span class="o">-&gt;</span><span class="n">seq</span> <span class="o">&lt;&lt;</span> <span class="nf">ipcmni_seq_shift</span><span class="p">())</span> <span class="o">+</span> <span class="n">idx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_idr_alloc</code> 函数将一个新的IPC对象添加到IDR中，并且分配新的 IPC ID和设置 IPC 对象的序列号。</p>
+</span></span></code></pre></div><p><code>ipc_idr_alloc</code> 函数将一个新的IPC对象添加到IDR中，并且分配新的 IPC ID和设置 IPC 对象的序列号。</p>
 <p>8、添加一个IPC对象</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">ipc_addid</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">new</span><span class="p">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">ipc_addid</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">new</span><span class="p">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">kuid_t</span> <span class="n">euid</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">kgid_t</span> <span class="n">egid</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">idx</span><span class="p">,</span> <span class="n">err</span><span class="p">;</span>
@@ -872,23 +673,9 @@
 </span></span><span class="line"><span class="cl">		<span class="n">ids</span><span class="o">-&gt;</span><span class="n">max_idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">idx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_addid</code> 函数将新的 IPC 对象添加到 IDR，并在哈希表中插入该对象。</p>
+</span></span></code></pre></div><p><code>ipc_addid</code> 函数将新的 IPC 对象添加到 IDR，并在哈希表中插入该对象。</p>
 <p>8、新建 IPC 对象</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">ipcget_new</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">ipcget_new</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nf">down_write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ids</span><span class="o">-&gt;</span><span class="n">rwsem</span><span class="p">);</span>
@@ -896,28 +683,9 @@
 </span></span><span class="line"><span class="cl">	<span class="nf">up_write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ids</span><span class="o">-&gt;</span><span class="n">rwsem</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipcget_new</code> 函数创建一个新的 IPC 对象。</p>
+</span></span></code></pre></div><p><code>ipcget_new</code> 函数创建一个新的 IPC 对象。</p>
 <p>9、检查 IPC 权限</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">ipc_check_perms</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">ipc_check_perms</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="nf">ipcperms</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="n">ipcp</span><span class="p">,</span> <span class="n">params</span><span class="o">-&gt;</span><span class="n">flg</span><span class="p">))</span>
@@ -930,39 +698,9 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_check_perms</code> 函数检查 IPC 对象的权限。</p>
+</span></span></code></pre></div><p><code>ipc_check_perms</code> 函数检查 IPC 对象的权限。</p>
 <p>10、获取公共 IPC 对象</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">ipcget_public</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">ipcget_public</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">flg</span> <span class="o">=</span> <span class="n">params</span><span class="o">-&gt;</span><span class="n">flg</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
@@ -986,51 +724,17 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipcget</code> 函数是 IPC 对象的入口函数，根据键值决定是获取现有对象还是创建新对象。</p>
+</span></span></code></pre></div><p><code>ipcget</code> 函数是 IPC 对象的入口函数，根据键值决定是获取现有对象还是创建新对象。</p>
 <p>11、从哈希表中移除ipc</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">ipc_kht_remove</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">ipc_kht_remove</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">ipcp</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">!=</span> <span class="n">IPC_PRIVATE</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">		<span class="nf">WARN_ON_ONCE</span><span class="p">(</span><span class="nf">rhashtable_remove_fast</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ids</span><span class="o">-&gt;</span><span class="n">key_ht</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ipcp</span><span class="o">-&gt;</span><span class="n">khtnode</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">				       <span class="n">ipc_kht_params</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_kht_remove</code>函数用于从哈希表移除ipc</p>
+</span></span></code></pre></div><p><code>ipc_kht_remove</code>函数用于从哈希表移除ipc</p>
 <p>12、删除ipc</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">ipc_rmid</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">ipc_rmid</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span> <span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="o">*</span><span class="n">ipcp</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="nf">ipcid_to_idx</span><span class="p">(</span><span class="n">ipcp</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
@@ -1046,9 +750,7 @@
 </span></span><span class="line"><span class="cl">		<span class="n">ids</span><span class="o">-&gt;</span><span class="n">max_idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ipc_rmid</code>函数用于移除ipc</p>
+</span></span></code></pre></div><p><code>ipc_rmid</code>函数用于移除ipc</p>
 <p><strong>其余函数未全部列出</strong></p>
 </li>
 </ul>
@@ -1097,20 +799,7 @@
 	
 ></p>
 <h5 id="原型">原型
-</h5><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#include &lt;sys/msg.h&gt;</span>
+</h5><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#include &lt;sys/msg.h&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="o">//</span> <span class="err">创建或打开消息队列：成功返回队列</span><span class="n">ID</span><span class="err">，失败返回</span><span class="o">-</span><span class="mi">1</span>
 </span></span><span class="line"><span class="cl"><span class="ne">int</span> <span class="n">msgget</span><span class="p">(</span><span class="n">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="ne">int</span> <span class="n">flag</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="o">//</span> <span class="err">添加消息：成功返回</span><span class="mi">0</span><span class="err">，失败返回</span><span class="o">-</span><span class="mi">1</span>
@@ -1119,9 +808,7 @@
 </span></span><span class="line"><span class="cl"><span class="ne">int</span> <span class="n">msgrcv</span><span class="p">(</span><span class="ne">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="n">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="n">long</span> <span class="n">type</span><span class="p">,</span><span class="ne">int</span> <span class="n">flag</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="o">//</span> <span class="err">控制消息队列：成功返回</span><span class="mi">0</span><span class="err">，失败返回</span><span class="o">-</span><span class="mi">1</span>
 </span></span><span class="line"><span class="cl"><span class="ne">int</span> <span class="n">msgctl</span><span class="p">(</span><span class="ne">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="ne">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">struct</span> <span class="n">msqid_ds</span> <span class="o">*</span><span class="n">buf</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>在以下两种情况下，<code>msgget</code>将创建一个新的消息队列：</p>
+</span></span></code></pre></div><p>在以下两种情况下，<code>msgget</code>将创建一个新的消息队列：</p>
 <ul>
 <li>如果没有与键值key相对应的消息队列，并且flag中包含了<code>IPC_CREAT</code>标志位。</li>
 <li>key参数为<code>IPC_PRIVATE</code>。</li>
@@ -1133,46 +820,7 @@
 <li><code>type &lt; 0</code>，返回队列中消息类型值小于或等于 type 绝对值的消息，如果有多个，则取类型值最小的消息。</li>
 </ul>
 <h5 id="主要结构体">主要结构体
-</h5><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* one msq_queue structure for each present queue on the system */</span>
+</h5><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* one msq_queue structure for each present queue on the system */</span>
 </span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">msg_queue</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="n">q_perm</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">time64_t</span> <span class="n">q_stime</span><span class="p">;</span>		<span class="cm">/* last msgsnd time */</span>
@@ -1207,31 +855,9 @@
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">task_struct</span>	<span class="o">*</span><span class="n">tsk</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">size_t</span>                  <span class="n">msgsz</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h5 id="核心函数">核心函数
+</span></span></code></pre></div><h5 id="核心函数">核心函数
 </h5><p><code>msgget</code>函数实现负责创建或打开消息队列</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">ksys_msgget</span><span class="p">(</span><span class="kt">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">msgflg</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">ksys_msgget</span><span class="p">(</span><span class="kt">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">msgflg</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="n">msg_ops</span> <span class="o">=</span> <span class="p">{</span>
@@ -1247,126 +873,8 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">ipcget</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="o">&amp;</span><span class="nf">msg_ids</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">msg_ops</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg_params</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>msgsnd</code>函数实际由<code>do_msgsnd</code>函数实现，负责对消息的发送。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">do_msgsnd</span><span class="p">(</span><span class="kt">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="kt">long</span> <span class="n">mtype</span><span class="p">,</span> <span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="n">mtext</span><span class="p">,</span>
+</span></span></code></pre></div><p><code>msgsnd</code>函数实际由<code>do_msgsnd</code>函数实现，负责对消息的发送。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">do_msgsnd</span><span class="p">(</span><span class="kt">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="kt">long</span> <span class="n">mtype</span><span class="p">,</span> <span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="n">mtext</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">		<span class="kt">size_t</span> <span class="n">msgsz</span><span class="p">,</span> <span class="kt">int</span> <span class="n">msgflg</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">msg_queue</span> <span class="o">*</span><span class="n">msq</span><span class="p">;</span>
@@ -1478,185 +986,8 @@
 </span></span><span class="line"><span class="cl">		<span class="nf">free_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>msgrcv</code>函数实际由<code>do_msgr</code>cv函数实现，实现对消息的接收。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span><span class="lnt">113
-</span><span class="lnt">114
-</span><span class="lnt">115
-</span><span class="lnt">116
-</span><span class="lnt">117
-</span><span class="lnt">118
-</span><span class="lnt">119
-</span><span class="lnt">120
-</span><span class="lnt">121
-</span><span class="lnt">122
-</span><span class="lnt">123
-</span><span class="lnt">124
-</span><span class="lnt">125
-</span><span class="lnt">126
-</span><span class="lnt">127
-</span><span class="lnt">128
-</span><span class="lnt">129
-</span><span class="lnt">130
-</span><span class="lnt">131
-</span><span class="lnt">132
-</span><span class="lnt">133
-</span><span class="lnt">134
-</span><span class="lnt">135
-</span><span class="lnt">136
-</span><span class="lnt">137
-</span><span class="lnt">138
-</span><span class="lnt">139
-</span><span class="lnt">140
-</span><span class="lnt">141
-</span><span class="lnt">142
-</span><span class="lnt">143
-</span><span class="lnt">144
-</span><span class="lnt">145
-</span><span class="lnt">146
-</span><span class="lnt">147
-</span><span class="lnt">148
-</span><span class="lnt">149
-</span><span class="lnt">150
-</span><span class="lnt">151
-</span><span class="lnt">152
-</span><span class="lnt">153
-</span><span class="lnt">154
-</span><span class="lnt">155
-</span><span class="lnt">156
-</span><span class="lnt">157
-</span><span class="lnt">158
-</span><span class="lnt">159
-</span><span class="lnt">160
-</span><span class="lnt">161
-</span><span class="lnt">162
-</span><span class="lnt">163
-</span><span class="lnt">164
-</span><span class="lnt">165
-</span><span class="lnt">166
-</span><span class="lnt">167
-</span><span class="lnt">168
-</span><span class="lnt">169
-</span><span class="lnt">170
-</span><span class="lnt">171
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">do_msgrcv</span><span class="p">(</span><span class="kt">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">bufsz</span><span class="p">,</span> <span class="kt">long</span> <span class="n">msgtyp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">msgflg</span><span class="p">,</span>
+</span></span></code></pre></div><p><code>msgrcv</code>函数实际由<code>do_msgr</code>cv函数实现，实现对消息的接收。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">do_msgrcv</span><span class="p">(</span><span class="kt">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">bufsz</span><span class="p">,</span> <span class="kt">long</span> <span class="n">msgtyp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">msgflg</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">	       <span class="kt">long</span> <span class="p">(</span><span class="o">*</span><span class="n">msg_handler</span><span class="p">)(</span><span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msg_msg</span> <span class="o">*</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">mode</span><span class="p">;</span>
@@ -1827,56 +1158,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">do_msgrcv</span><span class="p">(</span><span class="n">msqid</span><span class="p">,</span> <span class="n">msgp</span><span class="p">,</span> <span class="n">msgsz</span><span class="p">,</span> <span class="n">msgtyp</span><span class="p">,</span> <span class="n">msgflg</span><span class="p">,</span> <span class="n">do_msg_fill</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ksys_msgctl</code>函数负责控制消息队列，根据具体cmd选择不同的操作。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">ksys_msgctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msqid_ds</span> <span class="n">__user</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">version</span><span class="p">)</span>
+</span></span></code></pre></div><p><code>ksys_msgctl</code>函数负责控制消息队列，根据具体cmd选择不同的操作。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">ksys_msgctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">msqid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msqid_ds</span> <span class="n">__user</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">int</span> <span class="n">version</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">msqid64_ds</span> <span class="n">msqid64</span><span class="p">;</span>
@@ -1918,9 +1201,7 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span>  <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="信号量">信号量
+</span></span></code></pre></div><h4 id="信号量">信号量
 </h4><p>**信号量（semaphore）**与已经介绍过的 IPC 结构不同，它是一个计数器。信号量用于实现进程间的互斥与同步，而不是用于存储进程间通信数据。</p>
 <h5 id="特点"><strong>特点</strong>
 </h5><ol>
@@ -1941,44 +1222,7 @@
 ></p>
 <h5 id="结构体"><strong>结构体</strong>
 </h5><p>最简单的信号量是只能取 0 和 1 的变量，这也是信号量最常见的一种形式，叫做<strong>二值信号量（Binary Semaphore）</strong>。而可以取多个正整数的信号量被称为通用信号量。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* One semaphore structure for each semaphore in the system. */</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* One semaphore structure for each semaphore in the system. */</span>
 </span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">sem</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">int</span>	<span class="n">semval</span><span class="p">;</span>		<span class="cm">/* current value */</span>
 </span></span><span class="line"><span class="cl">	<span class="cm">/*
@@ -2011,36 +1255,9 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">sem</span>		<span class="n">sems</span><span class="p">[];</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">__randomize_layout</span><span class="p">;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h5 id="核心函数-1"><strong>核心函数</strong>
+</span></span></code></pre></div><h5 id="核心函数-1"><strong>核心函数</strong>
 </h5><p><code>semget</code>函数</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">ksys_semget</span><span class="p">(</span><span class="kt">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nsems</span><span class="p">,</span> <span class="kt">int</span> <span class="n">semflg</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">ksys_semget</span><span class="p">(</span><span class="kt">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nsems</span><span class="p">,</span> <span class="kt">int</span> <span class="n">semflg</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="n">sem_ops</span> <span class="o">=</span> <span class="p">{</span>
@@ -2061,97 +1278,8 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">ipcget</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="o">&amp;</span><span class="nf">sem_ids</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">sem_ops</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sem_params</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>perform_atomic_semop</code>函数，尝试在给定的数组上进行信号量操作（PV操作），遍历两次队列确保整个操作顺利完成。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span><span class="lnt">64
-</span><span class="lnt">65
-</span><span class="lnt">66
-</span><span class="lnt">67
-</span><span class="lnt">68
-</span><span class="lnt">69
-</span><span class="lnt">70
-</span><span class="lnt">71
-</span><span class="lnt">72
-</span><span class="lnt">73
-</span><span class="lnt">74
-</span><span class="lnt">75
-</span><span class="lnt">76
-</span><span class="lnt">77
-</span><span class="lnt">78
-</span><span class="lnt">79
-</span><span class="lnt">80
-</span><span class="lnt">81
-</span><span class="lnt">82
-</span><span class="lnt">83
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></code></pre></div><p><code>perform_atomic_semop</code>函数，尝试在给定的数组上进行信号量操作（PV操作），遍历两次队列确保整个操作顺利完成。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/**
 </span></span></span><span class="line"><span class="cl"><span class="cm"> * perform_atomic_semop[_slow] - Attempt to perform semaphore
 </span></span></span><span class="line"><span class="cl"><span class="cm"> *                               operations on a given array.
 </span></span></span><span class="line"><span class="cl"><span class="cm"> * @sma: semaphore array
@@ -2234,67 +1362,8 @@
 </span></span><span class="line"><span class="cl">	<span class="n">q</span><span class="o">-&gt;</span><span class="n">blocking</span> <span class="o">=</span> <span class="n">sop</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">sop</span><span class="o">-&gt;</span><span class="n">sem_flg</span> <span class="o">&amp;</span> <span class="n">IPC_NOWAIT</span> <span class="o">?</span> <span class="o">-</span><span class="nl">EAGAIN</span> <span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>ksys_semctl</code>函数，该函数用来控制信号量，它与共享内存的shmctl函数和消息队列的msgctl相似</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">ksys_semctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">semnum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">arg</span><span class="p">,</span> <span class="kt">int</span> <span class="n">version</span><span class="p">)</span>
+</span></span></code></pre></div><p><code>ksys_semctl</code>函数，该函数用来控制信号量，它与共享内存的shmctl函数和消息队列的msgctl相似</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">long</span> <span class="nf">ksys_semctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">semid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">semnum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">arg</span><span class="p">,</span> <span class="kt">int</span> <span class="n">version</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="n">__user</span> <span class="o">*</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span>
@@ -2347,9 +1416,7 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="共享内存">共享内存
+</span></span></code></pre></div><h4 id="共享内存">共享内存
 </h4><p><strong>共享内存（Shared Memory）</strong>，指两个或多个进程共享一个给定的存储区。</p>
 <h5 id="特点-1"><strong>特点</strong>
 </h5><ol>
@@ -2392,25 +1459,7 @@
 <h5 id="主要结构体-1"><strong>主要结构体</strong>
 </h5><p>结构体 <code>shmid_kernel</code></p>
 <p>共享内存段在内核中使用 <code>shmid_kernel</code> 结构体表示，该结构体定义如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">shmid_kernel</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">shmid_kernel</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">kern_ipc_perm</span> <span class="n">shm_perm</span><span class="p">;</span> <span class="cm">/* 权限结构体 */</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">shm_file</span><span class="p">;</span>         <span class="cm">/* 对应的文件 */</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">size_t</span> <span class="n">shm_segsz</span><span class="p">;</span>              <span class="cm">/* 段大小 */</span>
@@ -2424,51 +1473,17 @@
 </span></span><span class="line"><span class="cl">	<span class="kt">pid_t</span> <span class="n">shm_cprid</span><span class="p">;</span>              <span class="cm">/* 创建者 PID */</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">pid_t</span> <span class="n">shm_lprid</span><span class="p">;</span>              <span class="cm">/* 最后附加或分离的 PID */</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h5 id="详细分析"><strong>详细分析</strong>
+</span></span></code></pre></div><h5 id="详细分析"><strong>详细分析</strong>
 </h5><p>实际源码中的函数名需要加上ksys_前缀，原因大概是为了区分内核内部调用和用户空间接口，ksys_shmget函数封装的一层后变成了shmget函数。</p>
 <p>使用 <code>ksys_</code> 前缀可以清楚地将内核内部函数与用户空间系统调用接口区分开来。用户空间程序调用的是无前缀的系统调用（例如 <code>sys_open</code>），而内核内部模块或函数调用的是 <code>ksys_open</code>。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">shmget</span><span class="p">,</span> <span class="kt">key_t</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">shmflg</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">shmget</span><span class="p">,</span> <span class="kt">key_t</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">shmflg</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">ksys_shmget</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">shmflg</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>1、共享内存的创建</strong></p>
+</span></span></code></pre></div><p><strong>1、共享内存的创建</strong></p>
 <p>创建共享内存段的主要函数是 <code>shmget</code>。</p>
 <p>实际调用的函数是<code>ipcget()</code>。共享内存、信号量、消息队列三种对象创建的时候都会调用这个函数。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">ksys_shmget</span><span class="p">(</span><span class="kt">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">ksys_shmget</span><span class="p">(</span><span class="kt">key_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="n">shm_ops</span> <span class="o">=</span> <span class="p">{</span>
@@ -2486,9 +1501,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">ipcget</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="o">&amp;</span><span class="nf">shm_ids</span><span class="p">(</span><span class="n">ns</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">shm_ops</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">shm_params</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>参数:</p>
+</span></span></code></pre></div><p>参数:</p>
 <p>key: 类型 key_t 是个整形数，通过这个key可以创建或者打开一块共享内存，该参数的值一定要大于0</p>
 <p>size: 创建共享内存的时候，指定共享内存的大小，如果是打开一块存在的共享内存，size 是没有意义的</p>
 <p>shmflg：创建共享内存的时候指定的属性</p>
@@ -2498,19 +1511,7 @@
 </ul>
 <p>返回值：共享内存创建或者打开成功返回标识共享内存的唯一的 ID，失败返回 - 1.</p>
 <p>我们回头来看看<code>shmget()</code>究竟干了啥，首先看一下<code>ipcget()</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">ipcget</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">ipcget</span><span class="p">(</span><span class="k">struct</span> <span class="n">ipc_namespace</span> <span class="o">*</span><span class="n">ns</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_ids</span> <span class="o">*</span><span class="n">ids</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">            <span class="k">const</span> <span class="k">struct</span> <span class="n">ipc_ops</span> <span class="o">*</span><span class="n">ops</span><span class="p">,</span> <span class="k">struct</span> <span class="n">ipc_params</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">params</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">==</span> <span class="n">IPC_PRIVATE</span><span class="p">)</span>
@@ -2518,190 +1519,11 @@
 </span></span><span class="line"><span class="cl">    <span class="k">else</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">ipcget_public</span><span class="p">(</span><span class="n">ns</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">ops</span><span class="p">,</span> <span class="n">params</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>如果传进来的参数是<code>IPC_PRIVATE</code>（这个宏的值是0）的话，无论是什么mode，都会创建一块新的共享内存。如果非0，则会去已有的共享内存中找有没有这个key的，有就返回，没有就新建。</p>
+</span></span></code></pre></div><p>如果传进来的参数是<code>IPC_PRIVATE</code>（这个宏的值是0）的话，无论是什么mode，都会创建一块新的共享内存。如果非0，则会去已有的共享内存中找有没有这个key的，有就返回，没有就新建。</p>
 <p><strong>2、共享内存的关联</strong></p>
 <p>关联共享内存段的主要函数是 <code>shmat</code>，它的逻辑全在<code>do_shmat()</code>中，所以我们直接看这个函数。</p>
 <p>首先检查shmaddr的合法性并进行对齐，即调整为shmlba的整数倍。如果传入addr是0，前面检查部分只会加上一个MAP_SHARED标志，因为后面的mmap会自动为其分配地址。然后从那一段两行的注释开始，函数通过shmid尝试获取共享内存对象，并进行权限检查。然后修改shp中的一些数据，比如连接进程数加一。然后是通过<code>alloc_file_clone()</code>创建真正的要做mmap的file。在mmap之前还要对地址空间进行检查，检查是否和别的地址重叠，是否够用。实际的映射工作就在<code>do_mmap()</code>函数中做了。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span><span class="lnt">113
-</span><span class="lnt">114
-</span><span class="lnt">115
-</span><span class="lnt">116
-</span><span class="lnt">117
-</span><span class="lnt">118
-</span><span class="lnt">119
-</span><span class="lnt">120
-</span><span class="lnt">121
-</span><span class="lnt">122
-</span><span class="lnt">123
-</span><span class="lnt">124
-</span><span class="lnt">125
-</span><span class="lnt">126
-</span><span class="lnt">127
-</span><span class="lnt">128
-</span><span class="lnt">129
-</span><span class="lnt">130
-</span><span class="lnt">131
-</span><span class="lnt">132
-</span><span class="lnt">133
-</span><span class="lnt">134
-</span><span class="lnt">135
-</span><span class="lnt">136
-</span><span class="lnt">137
-</span><span class="lnt">138
-</span><span class="lnt">139
-</span><span class="lnt">140
-</span><span class="lnt">141
-</span><span class="lnt">142
-</span><span class="lnt">143
-</span><span class="lnt">144
-</span><span class="lnt">145
-</span><span class="lnt">146
-</span><span class="lnt">147
-</span><span class="lnt">148
-</span><span class="lnt">149
-</span><span class="lnt">150
-</span><span class="lnt">151
-</span><span class="lnt">152
-</span><span class="lnt">153
-</span><span class="lnt">154
-</span><span class="lnt">155
-</span><span class="lnt">156
-</span><span class="lnt">157
-</span><span class="lnt">158
-</span><span class="lnt">159
-</span><span class="lnt">160
-</span><span class="lnt">161
-</span><span class="lnt">162
-</span><span class="lnt">163
-</span><span class="lnt">164
-</span><span class="lnt">165
-</span><span class="lnt">166
-</span><span class="lnt">167
-</span><span class="lnt">168
-</span><span class="lnt">169
-</span><span class="lnt">170
-</span><span class="lnt">171
-</span><span class="lnt">172
-</span><span class="lnt">173
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">do_shmat</span><span class="p">(</span><span class="kt">int</span> <span class="n">shmid</span><span class="p">,</span> <span class="kt">char</span> <span class="n">__user</span> <span class="o">*</span><span class="n">shmaddr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">,</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="nf">do_shmat</span><span class="p">(</span><span class="kt">int</span> <span class="n">shmid</span><span class="p">,</span> <span class="kt">char</span> <span class="n">__user</span> <span class="o">*</span><span class="n">shmaddr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shmflg</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">	      <span class="n">ulong</span> <span class="o">*</span><span class="n">raddr</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">shmlba</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">struct</span> <span class="n">shmid_kernel</span> <span class="o">*</span><span class="n">shp</span><span class="p">;</span>
@@ -2874,138 +1696,10 @@
 </span></span><span class="line"><span class="cl"><span class="nl">out</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">err</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>3、共享内存的解除关联</strong></p>
+</span></span></code></pre></div><p><strong>3、共享内存的解除关联</strong></p>
 <p>当进程不需要再操作共享内存，可以让进程和共享内存解除关联，另外如果没有执行该操作，进程退出之后，结束的进程和共享内存的关联也就自动解除了。</p>
 <p>这个函数先找到传入的shmaddr对应的虚拟内存数据结构vma，检查它的地址是不是正确的，然后调用<code>do_vma_munmap()</code>函数断开对共享内存的连接。注意此操作并不会销毁共享内存，即使没有进程连接到它也不会，只有手动调用<code>shmctl(id, IPC_RMID, NULL)</code>才能销毁。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span><span class="lnt">113
-</span><span class="lnt">114
-</span><span class="lnt">115
-</span><span class="lnt">116
-</span><span class="lnt">117
-</span><span class="lnt">118
-</span><span class="lnt">119
-</span><span class="lnt">120
-</span><span class="lnt">121
-</span><span class="lnt">122
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">COMPAT_SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">shmat</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">shmid</span><span class="p">,</span> <span class="kt">compat_uptr_t</span><span class="p">,</span> <span class="n">shmaddr</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">shmflg</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">COMPAT_SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">shmat</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">shmid</span><span class="p">,</span> <span class="kt">compat_uptr_t</span><span class="p">,</span> <span class="n">shmaddr</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">shmflg</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">ret</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="kt">long</span> <span class="n">err</span><span class="p">;</span>
@@ -3127,33 +1821,11 @@
 </span></span><span class="line"><span class="cl">	<span class="nf">mmap_write_unlock</span><span class="p">(</span><span class="n">mm</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">retval</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>参数：shmat () 函数的返回值，共享内存的起始地址</p>
+</span></span></code></pre></div><p>参数：shmat () 函数的返回值，共享内存的起始地址</p>
 <p>返回值：关联解除成功返回 0，失败返回 - 1</p>
 <p><strong>4、删除共享内存</strong></p>
 <p>shmctl () 函数是一个多功能函数，可以设置、获取共享内存的状态也可以将共享内存标记为删除状态。当共享内存被标记为删除状态之后，并不会马上被删除，直到所有的进程全部和共享内存解除关联，共享内存才会被删除。因为通过 shmctl () 函数只是能够标记删除共享内存，所以在程序中多次调用该操作是没有关系的。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 共享内存控制函数
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 共享内存控制函数
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">shmctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">shmid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">shmid_ds</span> <span class="o">*</span><span class="n">buf</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// 参数 struct shmid_ds 结构体原型          
@@ -3169,9 +1841,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">shmatt_t</span>        <span class="n">shm_nattch</span><span class="p">;</span>  <span class="cm">/* 记录了有多少个进程和当前共享内存进行了管联 */</span>
 </span></span><span class="line"><span class="cl">    <span class="p">...</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>参数:</p>
+</span></span></code></pre></div><p>参数:</p>
 <p>shmid: 要操作的共享内存的 ID, 是 shmget () 函数的返回值</p>
 <p>cmd: 要做的操作，比如</p>
 <p>IPC_STAT: 得到当前共享内存的状态</p>
@@ -3187,21 +1857,11 @@
 <p><code>ipc_perm</code> 结构包含了用户 ID、组 ID 以及权限位，可以用来控制谁可以访问、修改或删除共享内存段。</p>
 <p><strong>2、安全模块（LSM）框架</strong></p>
 <p>Linux 内核中的安全模块（LSM）框架提供了钩子（hook），可以在各种系统调用和内核事件中插入自定义的安全检查。（在内核源码树/security/security.c中）例如，<code>shmat</code> 系统调用中的安全检查：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">int security_shmat(struct shmid_kernel *shp, char __user *shmaddr, int shmflg)
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">int security_shmat(struct shmid_kernel *shp, char __user *shmaddr, int shmflg)
 </span></span><span class="line"><span class="cl">{
 </span></span><span class="line"><span class="cl">    return call_int_hook(shmat, 0, shp, shmaddr, shmflg);
 </span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>3、命名空间隔离</strong></p>
+</span></span></code></pre></div><p><strong>3、命名空间隔离</strong></p>
 <p>使用命名空间（Namespace）来隔离 IPC 资源。每个 IPC 命名空间都有自己的共享内存段、消息队列和信号量集合。这可以防止不同容器或进程组之间的 IPC 资源冲突或未授权访问</p>
 <p><strong>4、地址空间随机化（ASLR）</strong></p>
 <p><strong>5、内存保护机制</strong></p>

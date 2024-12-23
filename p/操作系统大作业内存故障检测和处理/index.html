@@ -6,14 +6,16 @@
 
 <link rel='canonical' href='https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/'>
 
-<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="操作系统大作业：内存故障检测和处理">
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="操作系统大作业：内存故障检测和处理">
 <meta property='og:description' content="测试操作系统内存毒化和故障检测相关功能">
 <meta property='og:url' content='https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/'>
-<meta property='og:site_name' content='辰远'>
+<meta property='og:site_name' content='辰远同学'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='os' /><meta property='article:published_time' content='2024-06-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2024-12-21T12:25:22&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/os.jpg' />
 <meta name="twitter:title" content="操作系统大作业：内存故障检测和处理">
 <meta name="twitter:description" content="测试操作系统内存毒化和故障检测相关功能"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/os.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -72,7 +74,7 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h1 class="site-name"><a href="/">辰远同学</a></h1>
             <h2 class="site-description">天将降大任于斯人也</h2>
         </div>
     </header><ol class="menu-social">
@@ -202,7 +204,7 @@
         
         
         <li >
-            <a href='/%E9%93%BE%E6%8E%A5/' >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
                 
                 
                 
@@ -215,7 +217,7 @@
 
 
                 
-                <span>链接</span>
+                <span>友链</span>
             </a>
         </li>
         
@@ -423,7 +425,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    7440字
+                    7054字
                 </time>
         </div>
         
@@ -491,87 +493,25 @@
 </h3><p>在实际应用中，可以通过以下命令和参数来配置和使用 <code>hwpoison</code>：</p>
 <h3 id="检查内核模块">检查内核模块
 </h3><p>某些功能可能需要加载特定的内核模块。你可以尝试加载相关模块：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo modprobe hwpoison-inject
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>检查模块是否加载成功：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsmod | grep hwpoison
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>你的内核配置已经启用了 <code>CONFIG_MEMORY_FAILURE</code> 和 <code>CONFIG_DEBUG_FS</code>。但是，如果你仍然找不到 <code>/sys/kernel/debug/hwpoison/corrupt-pfn</code>，请按照以下步骤检查和解决问题。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo modprobe hwpoison-inject
+</span></span></code></pre></div><p>检查模块是否加载成功：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lsmod | grep hwpoison
+</span></span></code></pre></div><p>你的内核配置已经启用了 <code>CONFIG_MEMORY_FAILURE</code> 和 <code>CONFIG_DEBUG_FS</code>。但是，如果你仍然找不到 <code>/sys/kernel/debug/hwpoison/corrupt-pfn</code>，请按照以下步骤检查和解决问题。</p>
 <h3 id="检查-hwpoison-子目录">检查 hwpoison 子目录
 </h3><p>挂载 DebugFS 后，检查是否存在 <code>hwpoison</code> 子目录：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls /sys/kernel/debug/hwpoison
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>你应该看到类似 <code>corrupt-pfn</code> 的文件。如果没有，可能是内核版本或配置问题。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ls /sys/kernel/debug/hwpoison
+</span></span></code></pre></div><p>你应该看到类似 <code>corrupt-pfn</code> 的文件。如果没有，可能是内核版本或配置问题。</p>
 <h3 id="检查内核日志">检查内核日志
 </h3><p>如果 <code>hwpoison</code> 目录仍然不存在，检查内核日志，看看是否有相关信息：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dmesg | grep hwpoison
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="验证内存毒化功能">验证内存毒化功能
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dmesg | grep hwpoison
+</span></span></code></pre></div><h3 id="验证内存毒化功能">验证内存毒化功能
 </h3><p>一般来说，用户态程序导致的页错误（如访问无效内存地址）会触发 SIGSEGV 信号，而不是直接导致内核对该页面进行内存毒化。内存毒化通常是为了处理硬件内存错误，而不是普通的页错误。</p>
 <p>为了验证内存毒化功能，还是需要通过特定方法制造可以被内核识别并处理的内存错误，以下是制作内存错误的一些方法。</p>
 <h4 id="内存错误注入">内存错误注入
 </h4><ul>
 <li>
 <p>1、使用内核模块强制制造内存错误。编写一个内核模块，强制将某个物理页面标记为硬件毒化。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mm.h&gt;</span><span class="cp">
@@ -601,111 +541,34 @@
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_LICENSE</span><span class="p">(</span><span class="s">&#34;GPL&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&#34;HWPoison Test Module&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&#34;Lijun&#34;</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ol>
+</span></span></code></pre></div><ol>
 <li>
 <p>保存代码为 <code>hwpoison_test.c</code>。</p>
 </li>
 <li>
 <p>创建一个 <code>Makefile</code>：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nv">obj-m</span> <span class="o">+=</span> hwpoison_test.o
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nv">obj-m</span> <span class="o">+=</span> hwpoison_test.o
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">all</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">	make -C /lib/modules/<span class="k">$(</span>shell uname -r<span class="k">)</span>/build <span class="nv">M</span><span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span> modules
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">clean</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">	make -C /lib/modules/<span class="k">$(</span>shell uname -r<span class="k">)</span>/build <span class="nv">M</span><span class="o">=</span><span class="k">$(</span>PWD<span class="k">)</span> clean
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 <li>
 <p>编译内核模块：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">make
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">make
+</span></span></code></pre></div></li>
 <li>
 <p>加载内核模块，并传递一个有效的 PFN（Page Frame Number）。可以通过之前获取物理页框号的方法获取有效的 PFN：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo insmod hwpoison_test.ko pfn=0x12345
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo insmod hwpoison_test.ko pfn=0x12345
+</span></span></code></pre></div></li>
 </ol>
 </li>
 <li>
 <p>2、<strong>使用 <code>madvise</code> 触发内存错误</strong></p>
 <p>在用户空间，使用 <code>madvise</code> 系统调用可以请求内核对内存页执行特定的操作，例如毒化内存页。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
@@ -749,74 +612,10 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 <li>
 <p>3、<strong>编写和运行 C 程序获取物理页框号，再使用命令注入内存错误</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
@@ -874,144 +673,44 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>编译并运行该程序：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc -o get_pfn get_pfn.c
+</span></span></code></pre></div><p>编译并运行该程序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc -o get_pfn get_pfn.c
 </span></span><span class="line"><span class="cl">./get_pfn
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>该程序将输出虚拟地址和物理页框号:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Virtual address: 0x55556e3ac2a0
+</span></span></code></pre></div><p>该程序将输出虚拟地址和物理页框号:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Virtual address: 0x55556e3ac2a0
 </span></span><span class="line"><span class="cl">Physical page frame number: 0x0
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>使用获取到的物理页框号注入内存错误：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ <span class="nb">echo</span> 0x0 <span class="p">|</span> sudo tee /sys/kernel/debug/hwpoison/corrupt-pfn
+</span></span></code></pre></div><p>使用获取到的物理页框号注入内存错误：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ <span class="nb">echo</span> 0x0 <span class="p">|</span> sudo tee /sys/kernel/debug/hwpoison/corrupt-pfn
 </span></span><span class="line"><span class="cl">0x0
 </span></span><span class="line"><span class="cl">tee: /sys/kernel/debug/hwpoison/corrupt-pfn: Memory page has hardware error
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 </ul>
 <p>4、直接使用命令注入</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 将物理地址转换为页帧号 (PFN)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 将物理地址转换为页帧号 (PFN)</span>
 </span></span><span class="line"><span class="cl"><span class="nv">physical_address</span><span class="o">=</span>0x12345678
 </span></span><span class="line"><span class="cl"><span class="nv">pfn</span><span class="o">=</span><span class="k">$((</span><span class="nv">$physical_address</span> &gt;&gt; <span class="m">12</span><span class="k">))</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 注入 hwpoison</span>
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="nv">$pfn</span> <span class="p">|</span> sudo tee /sys/kernel/debug/hwpoison/corrupt-pfn
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h4 id="验证内存毒化功能-1">验证内存毒化功能
+</span></span></code></pre></div><h4 id="验证内存毒化功能-1">验证内存毒化功能
 </h4><p>检查内核日志以确认内存错误已被检测和处理：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span> 2481.576496<span class="o">]</span> Injecting memory failure at pfn 0x0
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="o">[</span> 2481.576496<span class="o">]</span> Injecting memory failure at pfn 0x0
 </span></span><span class="line"><span class="cl"><span class="o">[</span> 2481.576516<span class="o">]</span> Memory failure: 0x0: already hardware poisoned
 </span></span><span class="line"><span class="cl"><span class="o">[</span> 2392.437856<span class="o">]</span> Injecting memory failure at pfn 0x12345
 </span></span><span class="line"><span class="cl"><span class="o">[</span> 2392.439018<span class="o">]</span> Memory failure: 0x12345: recovery action <span class="k">for</span> clean LRU page: Recovered
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>总的来说，<code>hwpoison</code> 是一个用于提高系统稳定性和可靠性的关键机制，特别是在需要处理硬件内存错误的环境中。</p>
+</span></span></code></pre></div><p>总的来说，<code>hwpoison</code> 是一个用于提高系统稳定性和可靠性的关键机制，特别是在需要处理硬件内存错误的环境中。</p>
 <h4 id="恢复内存毒化页面">恢复内存毒化页面
 </h4><p>1、使用 echo写入 /sys/kernel/debug/hwpoison/unpoison-pfn</p>
 <ul>
 <li>在PFN的Software-unpoison页面对应到这个文件。这样，一个页面可以再次被复用。这只对Linux注入的故障起作用，对真正的内存故障不起作用。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> 0x12345 &gt; /sys/kernel/mm/page_poison/unpoison-pfn
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>2、使用madvice系统调用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> 0x12345 &gt; /sys/kernel/mm/page_poison/unpoison-pfn
+</span></span></code></pre></div><p>2、使用madvice系统调用</p>
 <ul>
 <li>madvise 系统调用可用于通知内核某些内存页面的期望使用方式，但不能直接解除 hwpoison 状态。然而，结合 madvise 和重启系统，可以间接帮助恢复内存状态。</li>
 </ul>
 <p>3、或者通过内核模块恢复毒化的内存页</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mm.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/page-flags.h&gt;</span><span class="cp">
@@ -1051,72 +750,35 @@
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_LICENSE</span><span class="p">(</span><span class="s">&#34;GPL&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&#34;Your Name&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&#34;A simple module to unpoison a memory page&#34;</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>编译和加载内核模块</p>
+</span></span></code></pre></div><p>编译和加载内核模块</p>
 <ol>
 <li>
 <p>保存代码为 <code>unpoison_page.c</code>。</p>
 </li>
 <li>
 <p>创建一个 <code>Makefile</code>：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-ma" data-lang="ma"><span class="line"><span class="cl"><span class="n">obj</span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nv">unpoison_page</span><span class="err">.</span><span class="n">o</span><span class="w">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-ma" data-lang="ma"><span class="line"><span class="cl"><span class="n">obj</span><span class="o">-</span><span class="n">m</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nv">unpoison_page</span><span class="err">.</span><span class="n">o</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">all</span><span class="err">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">make</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="err">$</span><span class="p">(</span><span class="n">shell</span><span class="w"> </span><span class="n">uname</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="n">build</span><span class="w"> </span><span class="n">M</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">PWD</span><span class="p">)</span><span class="w"> </span><span class="n">modules</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">clean</span><span class="err">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">make</span><span class="w"> </span><span class="o">-</span><span class="n">C</span><span class="w"> </span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">modules</span><span class="o">/</span><span class="err">$</span><span class="p">(</span><span class="n">shell</span><span class="w"> </span><span class="n">uname</span><span class="w"> </span><span class="o">-</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="n">build</span><span class="w"> </span><span class="n">M</span><span class="o">=</span><span class="err">$</span><span class="p">(</span><span class="n">PWD</span><span class="p">)</span><span class="w"> </span><span class="n">clean</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></span></code></pre></div></li>
 <li>
 <p>编译内核模块</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">make
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">make
+</span></span></code></pre></div></li>
 <li>
 <p>加载内核模块，并传递需要恢复的 PFN（从之前获取的 PFN）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo insmod unpoison_page.ko <span class="nv">pfn</span><span class="o">=</span>0x12345
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo insmod unpoison_page.ko <span class="nv">pfn</span><span class="o">=</span>0x12345
+</span></span></code></pre></div></li>
 </ol>
 <p><strong>验证内核日志</strong></p>
 <p>通过 <code>dmesg</code> 命令查看内核日志，确认内存页是否已恢复：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dmesg <span class="p">|</span> grep poison
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dmesg <span class="p">|</span> grep poison
 </span></span><span class="line"><span class="cl"><span class="o">[</span> 1234.567890<span class="o">]</span> Unpoisoning page at PFN: 0x12345
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="edac">EDAC
+</span></span></code></pre></div><h2 id="edac">EDAC
 </h2><p>EDAC (Error Detection and Correction) 是一种硬件和软件结合的技术，用于检测和纠正计算机内存中的错误。它特别适用于服务器和其他高可靠性计算环境。EDAC 通过检测内存中的错误并在可能的情况下自动纠正这些错误，帮助确保系统稳定性和数据完整性。</p>
 <h3 id="edac-的主要功能">EDAC 的主要功能
 </h3><ol>
@@ -1146,24 +808,7 @@
 <ul>
 <li>确保你的硬件和操作系统支持 EDAC。现代的服务器和一些高端工作站通常支持 ECC（Error-Correcting Code）内存，这是 EDAC 功能的基础，下面检测电脑是否支持ECC内存</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# dmidecode -t memory
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# dmidecode -t memory
 </span></span><span class="line"><span class="cl"><span class="c1"># dmidecode 3.4</span>
 </span></span><span class="line"><span class="cl">Getting SMBIOS data from sysfs.
 </span></span><span class="line"><span class="cl">SMBIOS 2.8 present.
@@ -1176,64 +821,30 @@
 </span></span><span class="line"><span class="cl">        Maximum Capacity: <span class="m">16</span> GB
 </span></span><span class="line"><span class="cl">        Error Information Handle: Not Provided
 </span></span><span class="line"><span class="cl">        Number Of Devices: <span class="m">1</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
+</span></span></code></pre></div><ul>
 <li>查询系统所支持的EDAC模块，选择与机器硬件所适配的EDAC模块安装。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ ls /lib/modules/<span class="o">{</span>对应的内核版本<span class="o">}</span>/kernel/drivers/edac/
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ ls /lib/modules/<span class="o">{</span>对应的内核版本<span class="o">}</span>/kernel/drivers/edac/
 </span></span><span class="line"><span class="cl">amd64_edac.ko    i3000_edac.ko  i5400_edac.ko    ie31200_edac.ko  skx_edac.ko
 </span></span><span class="line"><span class="cl">e752x_edac.ko    i3200_edac.ko  i7300_edac.ko    igen6_edac.ko    x38_edac.ko
 </span></span><span class="line"><span class="cl">edac_mce_amd.ko  i5000_edac.ko  i7core_edac.ko   pnd2_edac.ko
 </span></span><span class="line"><span class="cl">i10nm_edac.ko    i5100_edac.ko  i82975x_edac.ko  sb_edac.ko
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>2、<strong>加载EDAC模块</strong>：</p>
+</span></span></code></pre></div><p>2、<strong>加载EDAC模块</strong>：</p>
 <p>在现代的Linux内核中，EDAC模块通常已经包含在内核中。你可以通过以下命令加载相应的模块：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo modprobe i7core_edac
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>3、<strong>安装和配置 EDAC 工具：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo modprobe i7core_edac
+</span></span></code></pre></div><p>3、<strong>安装和配置 EDAC 工具：</strong></p>
 <ul>
 <li>
 <p>在 Linux 系统上，可以使用 <code>edac-utils</code> 来管理和监控 EDAC。安装方法如下</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install edac-utils
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install edac-utils
+</span></span></code></pre></div></li>
 </ul>
 <p>4、<strong>检查 EDAC 状态：</strong></p>
 <ul>
 <li>
 <p>使用以下命令检查 EDAC 状态：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo edac-util --status
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo edac-util --status
+</span></span></code></pre></div></li>
 </ul>
 <p>5、<strong>模拟内存错误：</strong></p>
 <ul>
@@ -1253,15 +864,8 @@
 <ul>
 <li>
 <p>在模拟内存错误后，可以通过 <code>dmesg</code> 命令查看内核日志，确认 EDAC 是否检测到错误并进行纠正。例如：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dmesg <span class="p">|</span> grep -i edac
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dmesg <span class="p">|</span> grep -i edac
+</span></span></code></pre></div></li>
 </ul>
 <h2 id="rasdaemon目前主流的检错纠错工具">Rasdaemon(目前主流的检错纠错工具)
 </h2><p><code>Rasdaemon</code> (Reliability, Availability, and Serviceability daemon) 是一个开源的系统服务，用于捕获和报告硬件错误事件，特别是与内存、处理器和其他关键硬件相关的错误。它支持 Linux 系统，能够监控和记录硬件错误，提供详细的错误信息，有助于系统管理员进行诊断和故障排除。Rasdaemon 利用硬件提供的错误报告机制，通过内核事件追踪 (kernel trace) 系统收集硬件错误事件。</p>
@@ -1291,109 +895,32 @@
 </ol>
 <h3 id="rasdaemon-的使用需要edac支持">Rasdaemon 的使用（需要EDAC支持）
 </h3><p><strong>1、安装rasdaemon</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install rasdaemon
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>2、配置rasdaemon</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt install rasdaemon
+</span></span></code></pre></div><p><strong>2、配置rasdaemon</strong></p>
 <ul>
 <li>启动rasdaemon</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# rasdaemon --enable
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# rasdaemon --enable
 </span></span><span class="line"><span class="cl">rasdaemon: ras:mc_event event enabled
 </span></span><span class="line"><span class="cl">rasdaemon: ras:aer_event event enabled
 </span></span><span class="line"><span class="cl">rasdaemon: mce:mce_record event enabled
 </span></span><span class="line"><span class="cl">rasdaemon: ras:extlog_mem_event event enabled
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
+</span></span></code></pre></div><ul>
 <li>需要启动两个systemd服务: <code>ras-mc-ctl.service</code> 和 <code>rasdaemon.service</code> :</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl <span class="nb">enable</span> ras-mc-ctl.service
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl <span class="nb">enable</span> ras-mc-ctl.service
 </span></span><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl <span class="nb">enable</span> rasdaemon.service
 </span></span><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl start ras-mc-ctl.service
 </span></span><span class="line"><span class="cl">root@ecs-c7f5:~# systemctl start rasdaemon.service
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Synchronizing state of rasdaemon.service with SysV service script with /lib/systemd/systemd-sysv-install.
 </span></span><span class="line"><span class="cl">Executing: /lib/systemd/systemd-sysv-install <span class="nb">enable</span> rasdaemon
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><strong>3、检查 <code>rasdaemon</code> 状态</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl status rasdaemon
+</span></span></code></pre></div><p><strong>3、检查 <code>rasdaemon</code> 状态</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">systemctl status rasdaemon
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">systemctl status ras-mc-ctl
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>输出信息:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># rasdaemon 服务状态</span>
+</span></span></code></pre></div><p>输出信息:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># rasdaemon 服务状态</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="err">●</span> <span class="n">rasdaemon</span><span class="o">.</span><span class="n">service</span> <span class="o">-</span> <span class="n">RAS</span> <span class="n">daemon</span> <span class="n">to</span> <span class="nb">log</span> <span class="n">the</span> <span class="n">RAS</span> <span class="n">events</span>
 </span></span><span class="line"><span class="cl">   <span class="n">Loaded</span><span class="p">:</span> <span class="n">loaded</span> <span class="p">(</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">rasdaemon</span><span class="o">.</span><span class="n">service</span><span class="p">;</span> <span class="n">enabled</span><span class="p">;</span> <span class="n">vendor</span> <span class="n">preset</span><span class="p">:</span> <span class="n">disabled</span><span class="p">)</span>
@@ -1426,19 +953,10 @@
 </span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">zcloud</span><span class="o">.</span><span class="n">staging</span><span class="o">.</span><span class="n">huatai</span><span class="o">.</span><span class="n">me</span> <span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Starting</span> <span class="n">Initialize</span> <span class="n">EDAC</span> <span class="n">v3</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">Drivers</span> <span class="n">For</span> <span class="n">Machine</span> <span class="n">Hardware</span><span class="o">...</span>
 </span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">zcloud</span><span class="o">.</span><span class="n">staging</span><span class="o">.</span><span class="n">huatai</span><span class="o">.</span><span class="n">me</span> <span class="n">ras</span><span class="o">-</span><span class="n">mc</span><span class="o">-</span><span class="n">ctl</span><span class="p">[</span><span class="mi">2772415</span><span class="p">]:</span> <span class="n">ras</span><span class="o">-</span><span class="n">mc</span><span class="o">-</span><span class="n">ctl</span><span class="p">:</span> <span class="n">Error</span><span class="p">:</span> <span class="n">No</span> <span class="n">dimm</span> <span class="n">labels</span> <span class="k">for</span> <span class="n">HP</span> <span class="n">model</span> <span class="n">ProLiant</span> <span class="n">DL360</span> <span class="n">Gen9</span>
 </span></span><span class="line"><span class="cl"><span class="n">Nov</span> <span class="mi">28</span> <span class="mi">11</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">22</span> <span class="n">zcloud</span><span class="o">.</span><span class="n">staging</span><span class="o">.</span><span class="n">huatai</span><span class="o">.</span><span class="n">me</span> <span class="n">systemd</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">Finished</span> <span class="n">Initialize</span> <span class="n">EDAC</span> <span class="n">v3</span><span class="o">.</span><span class="mf">0.0</span> <span class="n">Drivers</span> <span class="n">For</span> <span class="n">Machine</span> <span class="n">Hardware</span><span class="o">.</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这里有一个错误提示: <code>ras-mc-ctl: Error: No dimm labels for XXXX</code> ，实际上在各种服务器上初始时都能看到，需要进一步配置。</p>
+</span></span></code></pre></div><p>这里有一个错误提示: <code>ras-mc-ctl: Error: No dimm labels for XXXX</code> ，实际上在各种服务器上初始时都能看到，需要进一步配置。</p>
 <p><strong>4、检查EDAC信息</strong>（如果使用ECC内存）： 可以使用<code>ras-mc-ctl</code>工具（通常包含在<code>rasdaemon</code>包中）来检查详细的EDAC信息：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ras-mc-ctl --status
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330.png"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ras-mc-ctl --status
+</span></span></code></pre></div><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330.png"
 	width="516"
 	height="72"
 	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu16192268445492714901.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211435330_hu17610843283354955925.png 1024w"
@@ -1452,15 +970,8 @@
 		data-flex-basis="1720px"
 	
 ></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ras-mc-ctl --layout
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096.png"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ras-mc-ctl --layout
+</span></span></code></pre></div><p><img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096.png"
 	width="594"
 	height="67"
 	srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15194108421477439709.png 480w, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/assets/image-20240628211822096_hu15958066638407402994.png 1024w"
@@ -1478,35 +989,14 @@
 <ul>
 <li>在后台运行<code>rasdaemon</code>，直接输入rasdaemon就行。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon
-</span></span></code></pre></td></tr></table>
-</div>
-</div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon
+</span></span></code></pre></div><ul>
 <li>在前台运行<code>rasdaemon</code>，此时输出显示 rasdaemon 初始化并监听事件，此时就可以等待出现的硬件异常。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon -f
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>如果希望同时将错误记录到数据库(编译时使用了参数 <code>--enable-sqlite3</code>)，则可以增加一个 <code>-r</code> 参数:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon -f -r
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>配置 DIMM labels</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon -f
+</span></span></code></pre></div><p>如果希望同时将错误记录到数据库(编译时使用了参数 <code>--enable-sqlite3</code>)，则可以增加一个 <code>-r</code> 参数:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rasdaemon -f -r
+</span></span></code></pre></div><p>配置 DIMM labels</p>
 <p>ras-mc-ctl 是RAS内存控制器管理工具，用于执行一些针对EDAC(Error Detection and Correction)驱动的RAS管理任务。</p>
 <ul>
 <li>
@@ -1514,45 +1004,16 @@
 </li>
 <li>
 <p><code>ras-mc-ctl</code> 使用 <code>--error-count</code> 获取错误计数</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl --error-count</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl --error-count</span>
 </span></span><span class="line"><span class="cl">Label                 CE      UE
 </span></span><span class="line"><span class="cl">mc#0csrow#2channel#0  <span class="m">0</span>   <span class="m">0</span>
 </span></span><span class="line"><span class="cl">mc#0csrow#2channel#1  <span class="m">0</span>   <span class="m">0</span>
 </span></span><span class="line"><span class="cl">mc#0csrow#3channel#1  <span class="m">0</span>   <span class="m">0</span>
 </span></span><span class="line"><span class="cl">mc#0csrow#3channel#0  <span class="m">0</span>   <span class="m">0</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 <li>
 <p>使用 <code>ras-mc-ctl</code> 打印出被记录的所有错误。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl --summary</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ras-mc-ctl --summary</span>
 </span></span><span class="line"><span class="cl">Memory controller events summary:
 </span></span><span class="line"><span class="cl">  Corrected on DIMM Label<span class="o">(</span>s<span class="o">)</span>: <span class="s1">&#39;DIMM_B1&#39;</span> location: 0:2:0:-1 errors: <span class="m">5</span>
 </span></span><span class="line"><span class="cl">
@@ -1565,9 +1026,7 @@
 </span></span><span class="line"><span class="cl">Disk errors summary:
 </span></span><span class="line"><span class="cl">  0:0 has <span class="m">6646</span> errors
 </span></span><span class="line"><span class="cl">No MCE errors.
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 </ul>
 <h3 id="利用rasdaemon实现错误内存的软下线">利用Rasdaemon实现错误内存的软下线
 </h3><p><strong>由于缺乏ecc内存，导致edac模块无法正常运行，所以rasdaemon也无法正常捕获到错误，因此我们只做了对指定页面的软下线。</strong></p>
@@ -1575,83 +1034,17 @@
 <li>
 <p><strong>使用 Rasdaemon 监控和处理错误</strong></p>
 <p>Rasdaemon 会自动监控和记录内存错误，并在检测到内存错误时，尝试对相关页面进行软下线。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ras-mc-ctl --errors | grep &lt;error_address&gt;
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo ras-mc-ctl --errors | grep &lt;error_address&gt;
+</span></span></code></pre></div></li>
 <li>
 <p><strong>检查日志</strong></p>
 <p>你可以查看 Rasdaemon 生成的日志，以确认内存错误和软下线事件：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ras-mc-ctl --summary
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo ras-mc-ctl --summary
 </span></span><span class="line"><span class="cl">sudo journalctl -u rasdaemon
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 <li>
 <p><strong>编写内核模块对页面进行软下线</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/module.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/kernel.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/init.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/mm.h&gt;</span><span class="cp">
@@ -1698,108 +1091,33 @@
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_LICENSE</span><span class="p">(</span><span class="s">&#34;GPL&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_AUTHOR</span><span class="p">(</span><span class="s">&#34;Lijun&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MODULE_DESCRIPTION</span><span class="p">(</span><span class="s">&#34;Soft offline specified page frame number&#34;</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div></li>
+</span></span></code></pre></div></li>
 </ol>
 <h2 id="问题汇总">问题汇总：
 </h2><p>1、apt install 报错</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">hacker</span><span class="err">@</span><span class="n">ubuntu</span><span class="p">:</span><span class="o">~/</span><span class="n">Desktop</span><span class="o">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">edac</span><span class="o">-</span><span class="n">utils</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">hacker</span><span class="err">@</span><span class="n">ubuntu</span><span class="p">:</span><span class="o">~/</span><span class="n">Desktop</span><span class="o">$</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">edac</span><span class="o">-</span><span class="n">utils</span>
 </span></span><span class="line"><span class="cl"><span class="n">E</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">get</span> <span class="n">lock</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">lock</span><span class="o">-</span><span class="n">frontend</span><span class="o">.</span> <span class="n">It</span> <span class="n">is</span> <span class="n">held</span> <span class="n">by</span> <span class="n">process</span> <span class="mi">4700</span> <span class="p">(</span><span class="n">unattended</span><span class="o">-</span><span class="n">upgr</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">N</span><span class="p">:</span> <span class="n">Be</span> <span class="n">aware</span> <span class="n">that</span> <span class="n">removing</span> <span class="n">the</span> <span class="n">lock</span> <span class="n">file</span> <span class="n">is</span> <span class="ow">not</span> <span class="n">a</span> <span class="n">solution</span> <span class="ow">and</span> <span class="n">may</span> <span class="k">break</span> <span class="n">your</span> <span class="n">system</span><span class="o">.</span>
 </span></span><span class="line"><span class="cl"><span class="n">E</span><span class="p">:</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">acquire</span> <span class="n">the</span> <span class="n">dpkg</span> <span class="n">frontend</span> <span class="n">lock</span> <span class="p">(</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="o">/</span><span class="n">lock</span><span class="o">-</span><span class="n">frontend</span><span class="p">),</span> <span class="n">is</span> <span class="n">another</span> <span class="n">process</span> <span class="n">using</span> <span class="n">it</span><span class="err">?</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>解决方法：删除锁定文件</p>
+</span></span></code></pre></div><p>解决方法：删除锁定文件</p>
 <p>在某些情况下，根本原因可能是锁文件。锁文件阻止两个或多个进程访问相同的数据。当您运行 apt 或 apt-get 命令时，通常会创建一个锁文件。但是，如果最新的 apt 命令没有成功执行(即突然终止)，锁文件将继续存在并阻止任何后续的 apt 或 apt-get 实例。</p>
 <p>解决 “Could not get lock /var/lib/apt/lists/lock”错误</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">apt</span><span class="o">/</span><span class="nx">lists</span><span class="o">/</span><span class="nx">lock</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>解决 “Could not get lock /var/lib/dpkg/lock”错误</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>其他时候，您可能会遇到 “/var/lib/dpkg/lock-frontend error”的错误。这意味着当前正在运行使用 APT / DPKG 的图形应用程序，这可能是使用 Gdebi 或 Synaptic 包管理器造成的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">apt</span><span class="o">/</span><span class="nx">lists</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></div><p>解决 “Could not get lock /var/lib/dpkg/lock”错误</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></div><p>其他时候，您可能会遇到 “/var/lib/dpkg/lock-frontend error”的错误。这意味着当前正在运行使用 APT / DPKG 的图形应用程序，这可能是使用 Gdebi 或 Synaptic 包管理器造成的。</p>
 <p>即时的补救措施是退出或关闭程序，并再次尝试。如果没有效果，可是尝试删除 /var/lib/dpkg/lock-frontend 文件。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span><span class="o">-</span><span class="nx">frontend</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>删除 lock-frontend 文件可能会再次导致“Could not get lock /var/lib/dpkg/lock”错误，因此，您将不得不继续删除相关锁定文件。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>如果您碰巧会出现有关 apt-cache lock 的错误，例如 /var/cache/apt/archives/lock，请删除相关锁定文件。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">cache</span><span class="o">/</span><span class="nx">apt</span><span class="o">/</span><span class="nx">archives</span><span class="o">/</span><span class="nx">lock</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span><span class="o">-</span><span class="nx">frontend</span>
+</span></span></code></pre></div><p>删除 lock-frontend 文件可能会再次导致“Could not get lock /var/lib/dpkg/lock”错误，因此，您将不得不继续删除相关锁定文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
+</span></span></code></pre></div><p>如果您碰巧会出现有关 apt-cache lock 的错误，例如 /var/cache/apt/archives/lock，请删除相关锁定文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-awk" data-lang="awk"><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">cache</span><span class="o">/</span><span class="nx">apt</span><span class="o">/</span><span class="nx">archives</span><span class="o">/</span><span class="nx">lock</span>
 </span></span><span class="line"><span class="cl"><span class="o">$</span> <span class="nx">sudo</span> <span class="nx">rm</span> <span class="o">/</span><span class="nx">var</span><span class="o">/</span><span class="nx">lib</span><span class="o">/</span><span class="nx">dpkg</span><span class="o">/</span><span class="nx">lock</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>2、edac-util无法使用</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ edac-util -v
+</span></span></code></pre></div><p>2、edac-util无法使用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hacker@ubuntu:~/Desktop$ edac-util -v
 </span></span><span class="line"><span class="cl">edac-util: Error: No memory controller data found.
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>原因可能是我的电脑不支持ecc()，一般来说内存条的Datawidth比Totalwidth小才支持ecc。在Windows下运行以下命令可查看是否支持ecc，Linux下可用<code>sudo dmidecode -t memory</code>命令查看</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#Windows下</span>
+</span></span></code></pre></div><p>原因可能是我的电脑不支持ecc()，一般来说内存条的Datawidth比Totalwidth小才支持ecc。在Windows下运行以下命令可查看是否支持ecc，Linux下可用<code>sudo dmidecode -t memory</code>命令查看</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#Windows下</span>
 </span></span><span class="line"><span class="cl">C:<span class="se">\U</span>sers<span class="se">\L</span>&gt;wmic memorychip get datawidth,totalwidth
 </span></span><span class="line"><span class="cl">DataWidth  TotalWidth
 </span></span><span class="line"><span class="cl"><span class="m">64</span>         <span class="m">64</span>
@@ -1814,9 +1132,7 @@
 </span></span><span class="line"><span class="cl">	Error Detecting Method: None
 </span></span><span class="line"><span class="cl">	Error Correcting Capabilities:
 </span></span><span class="line"><span class="cl">		None
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 id="相关知识">相关知识
+</span></span></code></pre></div><h2 id="相关知识">相关知识
 </h2><h3 id="error-correction-code-ecc"><strong>Error correction code (ECC)</strong>
 </h3><p>纠错码 （ECC） 是一种用于检测和纠正由于环境干扰和物理缺陷导致的内存数据错误的机制。ECC 内存用于无法容忍因数据损坏而导致故障的高可靠性应用，例如医疗设备、飞机控制系统或银行数据库服务器。</p>
 <p>大多数内存错误是由软错误（例如宇宙射线、α 射线、电磁干扰）引起的单个（1 位）错误，但有些可能是由于硬件故障（例如行锤故障）引起的。对于在较高高度运行的系统（例如商用飞机）而言，软错误更为普遍。据说，在大约10公里的高度，诱导宇宙射线的比特误差要高出300倍。</p>

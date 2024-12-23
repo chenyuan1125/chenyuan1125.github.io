@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://chenyuan1125.github.io/en/p/bandit%E5%AE%9E%E9%AA%8C/'>
 
-<link rel="stylesheet" href="/scss/style.min.1d7a77f66a9605dfbac1c7922a91290042c454a1166056d913fcbcea340dd583.css"><meta property='og:title' content="bandit实验">
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="bandit实验">
 <meta property='og:description' content="bandit实验详细记录">
 <meta property='og:url' content='https://chenyuan1125.github.io/en/p/bandit%E5%AE%9E%E9%AA%8C/'>
 <meta property='og:site_name' content='Lee'>
@@ -14,6 +14,8 @@
 <meta name="twitter:title" content="bandit实验">
 <meta name="twitter:description" content="bandit实验详细记录"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://chenyuan1125.github.io/en/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -404,7 +406,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    2684字
+                    2569字
                 </time>
         </div>
         
@@ -449,45 +451,17 @@
 </h3><p>利用diff -a</p>
 <h3 id="level18-19"><strong>level18-19</strong>
 </h3><p>The password for the next level is stored in a file <strong>readme</strong> in the homedirectory. Unfortunately, someone has modified <strong>.bashrc</strong> to log you out when you log in with SSH.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -p <span class="m">2220</span> bandit18@bandit.labs.overthewire.org cat readme
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level19-20"><strong>level19-20</strong>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -p <span class="m">2220</span> bandit18@bandit.labs.overthewire.org cat readme
+</span></span></code></pre></div><h3 id="level19-20"><strong>level19-20</strong>
 </h3><p>setuid，利用bandit20.do文件来提权root</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bandit20-do  cat /etc/bandit_pass/bandit20
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level20-21"><strong>level20-21</strong>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bandit20-do  cat /etc/bandit_pass/bandit20
+</span></span></code></pre></div><h3 id="level20-21"><strong>level20-21</strong>
 </h3><p>利用nc -lv 监听端口，再用./suconnect 端口号连接</p>
 <h3 id="level21-22"><strong>level21-22</strong>
 </h3><p>找到对应的crond脚本</p>
 <h3 id="level22-23"><strong>level22-23</strong>
 </h3><p>找到对应脚本,再把bandit23的mytarget找出来，再读取密码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">bandit22@bandit:/etc/cron.d$ cat  /usr/bin/cronjob_bandit23.sh
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">bandit22@bandit:/etc/cron.d$ cat  /usr/bin/cronjob_bandit23.sh
 </span></span><span class="line"><span class="cl"><span class="c1">#!/bin/bash</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nv">myname</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>
@@ -497,69 +471,31 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">cat /etc/bandit_pass/<span class="nv">$myname</span> &gt; /tmp/<span class="nv">$mytarget</span>
 </span></span><span class="line"><span class="cl">bandit22@bandit:/etc/cron.d$ <span class="nb">echo</span> I am user bandit23 <span class="p">|</span> md5sum <span class="p">|</span> cut -d <span class="s1">&#39; &#39;</span> -f <span class="m">1</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level23-24"><strong>level23-24</strong>
+</span></span></code></pre></div><h3 id="level23-24"><strong>level23-24</strong>
 </h3><p>找到对应脚本，参考上一个level的脚本，创建一个新的脚本来获取密码，注意文件的权限问题</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl">cat /etc/bandit_pass/bandit24 &gt; /tmp/bandit24/bandit24
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level24-25"><strong>level24-25</strong>
+</span></span></code></pre></div><h3 id="level24-25"><strong>level24-25</strong>
 </h3><p><strong>Level Goal</strong></p>
 <p>A daemon is listening on port 30002 and will give you the password for bandit25 if given the password for bandit24 and a secret numeric 4-digit pincode. There is no way to retrieve the pincode except by going through all of the 10000 combinations, called brute-forcing.
 You do not need to create new connections each time</p>
 <p>tips： nc localhost 30002  利用shell脚本进行爆破</p>
 <p>注意程序可能会因为超时卡住，所以要分段爆破</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>0000..9999<span class="o">}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>0000..9999<span class="o">}</span>
 </span></span><span class="line"><span class="cl"><span class="k">do</span>
 </span></span><span class="line"><span class="cl">	<span class="nb">echo</span> <span class="s2">&#34;VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar </span><span class="nv">$i</span><span class="s2">&#34;</span> &gt;&gt; ./banditpin
 </span></span><span class="line"><span class="cl"><span class="k">done</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">cat ./banditpin <span class="p">|</span> nc localhost <span class="m">30002</span> &gt;&gt; ./bandit25pass
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level25-26">level25-26
+</span></span></code></pre></div><h3 id="level25-26">level25-26
 </h3><p><strong>Level Goal</strong></p>
 <p>Logging in to bandit26 from bandit25 should be fairly easy… The shell for user bandit26 is not <strong>/bin/bash</strong>, but something else. Find out what it is, how it works and how to break out of it.</p>
 <p>参考博客：<a class="link" href="https://mayadevbe.me/posts/overthewire/bandit/level26/"  target="_blank" rel="noopener"
     >OverTheWire Bandit Level 25 -&gt; 26 - Walkthrough - MayADevBe Blog</a></p>
 <p>ls发现目录下有bandit26的私钥，尝试使用ssh -i 进行连接，连接失败，由于/bin/bash被修改。</p>
 <p>利用cat  /etc/passwd查看bandit26所使用的shell，发现为/usr/bin/showtext，再查看这个文件，发现它是个脚本，并且通过more打开了text.txt文件，</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit25@bandit:~$ cat /etc/passwd <span class="p">|</span> grep bandit26
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit25@bandit:~$ cat /etc/passwd <span class="p">|</span> grep bandit26
 </span></span><span class="line"><span class="cl">bandit26:x:11026:11026:bandit level 26:/home/bandit26:/usr/bin/showtext
 </span></span><span class="line"><span class="cl">bandit25@bandit:~$ ls -la /usr/bin/showtext
 </span></span><span class="line"><span class="cl">-rwxr-xr-x <span class="m">1</span> root root <span class="m">53</span> May  <span class="m">7</span>  <span class="m">2020</span> /usr/bin/showtext
@@ -570,23 +506,8 @@ You do not need to create new connections each time</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">more ~/text.txt
 </span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">0</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>再次尝试ssh连接，失败</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ssh -i bandit26.sshkey bandit26@localhost
+</span></span></code></pre></div><p>再次尝试ssh连接，失败</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ssh -i bandit26.sshkey bandit26@localhost
 </span></span><span class="line"><span class="cl">...
 </span></span><span class="line"><span class="cl">  _                     _ _ _   ___   __  
 </span></span><span class="line"><span class="cl"> <span class="p">|</span> <span class="p">|</span>                   <span class="p">|</span> <span class="o">(</span>_<span class="o">)</span> <span class="p">|</span> <span class="p">|</span>__ <span class="se">\ </span>/ /  
@@ -595,36 +516,21 @@ You do not need to create new connections each time</p>
 </span></span><span class="line"><span class="cl"> <span class="p">|</span> <span class="p">|</span>_<span class="o">)</span> <span class="p">|</span> <span class="o">(</span>_<span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="o">(</span>_<span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>_ / /<span class="p">|</span> <span class="o">(</span>_<span class="o">)</span> <span class="p">|</span>
 </span></span><span class="line"><span class="cl"> <span class="p">|</span>_.__/ <span class="se">\_</span>_,_<span class="p">|</span>_<span class="p">|</span> <span class="p">|</span>_<span class="p">|</span><span class="se">\_</span>_,_<span class="p">|</span>_<span class="p">|</span><span class="se">\_</span>_<span class="p">|</span>____<span class="se">\_</span>__/ 
 </span></span><span class="line"><span class="cl">Connection to bandit.labs.overthewire.org closed.
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>分析原因，如果text.txt文件超过一页，那么more text.txt就会等待翻页，显然，text.txt文件太小，此时需要另辟蹊径，既然文件本身改变不了，那么反过来改变运行窗口的大小也能起到同样的作用。</p>
+</span></span></code></pre></div><p>分析原因，如果text.txt文件超过一页，那么more text.txt就会等待翻页，显然，text.txt文件太小，此时需要另辟蹊径，既然文件本身改变不了，那么反过来改变运行窗口的大小也能起到同样的作用。</p>
 <p>进入more以后，使用v进入vim编辑模式，再通过&quot;:e /etc/bandit_pass_bandit26&quot;得到password。（-e 打开文件）</p>
 <p>或者通过:set shell=/bin/bash    :shell 来进入bandit26用户</p>
 <h3 id="level26-27">level26-27
 </h3><p><strong>Level Goal</strong></p>
 <p>Good job getting a shell! Now hurry and grab the password for bandit27!</p>
 <p>bandit27.do已被setid，所以执行这个文件时会短暂使用root用户权限，借此我们可以执行其它命令。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit26@bandit:~$ ls
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit26@bandit:~$ ls
 </span></span><span class="line"><span class="cl">bandit27-do  text.txt
 </span></span><span class="line"><span class="cl">bandit26@bandit:~$ ./bandit27-do 
 </span></span><span class="line"><span class="cl">Run a <span class="nb">command</span> as another user.
 </span></span><span class="line"><span class="cl">  Example: ./bandit27-do id
 </span></span><span class="line"><span class="cl">bandit26@bandit:~$ ./bandit27-do cat /etc/bandit<span class="se">\_</span>pass/bandit27
 </span></span><span class="line"><span class="cl">3ba3118a22e93127a4ed485be72ef5ea
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level27-28">level27-28
+</span></span></code></pre></div><h3 id="level27-28">level27-28
 </h3><p><strong>Level Goal</strong></p>
 <p>There is a git repository at <code>ssh://bandit27-git@localhost/home/bandit27-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit27-git</code> is the same as for the user <code>bandit27</code>.</p>
 <p>Clone the repository and find the password for the next level.</p>
@@ -645,19 +551,7 @@ You do not need to create new connections each time</p>
 There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo via the port 2220. The password for the user bandit29-git is the same as for the user bandit29.</p>
 <p>Clone the repository and find the password for the next level.</p>
 <p>参照上个level的流程，发现</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
 </span></span><span class="line"><span class="cl"><span class="c1"># Bandit Notes</span>
 </span></span><span class="line"><span class="cl">Some notes <span class="k">for</span> bandit30 of bandit.
 </span></span><span class="line"><span class="cl">
@@ -665,55 +559,19 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">- username: bandit30
 </span></span><span class="line"><span class="cl">- password: &lt;no passwords in production!&gt;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>production提示我们有其它的环境</p>
+</span></span></code></pre></div><p>production提示我们有其它的环境</p>
 <p>于是利用git branch -a查看是否有其它分支，发现dev环境</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ git branch -a
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ git branch -a
 </span></span><span class="line"><span class="cl">* master
 </span></span><span class="line"><span class="cl">  remotes/origin/HEAD -&gt; origin/master
 </span></span><span class="line"><span class="cl">  remotes/origin/dev
 </span></span><span class="line"><span class="cl">  remotes/origin/master
 </span></span><span class="line"><span class="cl">  remotes/origin/sploits-dev
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>使用git checkout dev或git switch dev切换分支</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ git checkout remotes/origin/dev
+</span></span></code></pre></div><p>使用git checkout dev或git switch dev切换分支</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ git checkout remotes/origin/dev
 </span></span><span class="line"><span class="cl">Note: switching to <span class="s1">&#39;remotes/origin/dev&#39;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>最后查看仓库，找到密码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ ls
+</span></span></code></pre></div><p>最后查看仓库，找到密码</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ ls
 </span></span><span class="line"><span class="cl">code  README.md
 </span></span><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
 </span></span><span class="line"><span class="cl"><span class="c1"># Bandit Notes</span>
@@ -723,29 +581,17 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">- username: bandit30
 </span></span><span class="line"><span class="cl">- password: xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level30-31">level30-31
+</span></span></code></pre></div><h3 id="level30-31">level30-31
 </h3><p><strong>Level Goal</strong></p>
 <p>There is a git repository at <code>ssh://bandit30-git@localhost/home/bandit30-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit30-git</code> is the same as for the user <code>bandit30</code>.</p>
 <p>Clone the repository and find the password for the next level.</p>
 <p>与上面几个level的差异是这个level使用git tag来解决</p>
 <p><strong>Git tagging</strong> is a way to mark specific points in the history of the repository. One example would be to mark release points of the software. The command to see the tags is <code>git tag</code>. To create a tag the command is <code>git tag -a &lt;tag_name&gt; -m &lt;&quot;tag description/message&quot;&gt;</code>. To see more details, like the tag message and commit, you can use the following command: <code>git show &lt;tag_name&gt;</code>.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git tag
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git tag
 </span></span><span class="line"><span class="cl">secret
 </span></span><span class="line"><span class="cl">bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git show secret
 </span></span><span class="line"><span class="cl">OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level31-32">level31-32
+</span></span></code></pre></div><h3 id="level31-32">level31-32
 </h3><p><strong>Level Goal</strong></p>
 <p>There is a git repository at <code>ssh://bandit31-git@localhost/home/bandit31-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit31-git</code> is the same as for the user <code>bandit31</code>.</p>
 <p>Clone the repository and find the password for the next level.</p>
@@ -757,40 +603,7 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 <p><strong>Git Add</strong> updates what files will be part of the next commit. The <code>-f</code> flag forces files to be able to be committed, even when they are normally ignored.</p>
 <p>.gitignore用来过滤本地仓库的一些文件或目录，使得在上传至远程仓库时忽略这些文件和目录，具体用法STFW</p>
 <p>解法：克隆远程仓库后查看readme.md文件，发现如下提示，按照提示创建key.txt文件，并把&rsquo;May I come in?&lsquo;写入，接着push到远程仓库，发现报错，于是修改.gitignore的文件内容使得其能正常push到远程仓库。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit31@bandit:/tmp/bandit31/repo$ cat README.md 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit31@bandit:/tmp/bandit31/repo$ cat README.md 
 </span></span><span class="line"><span class="cl">This <span class="nb">time</span> your task is to push a file to the remote repository.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Details:
@@ -819,9 +632,7 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 </span></span><span class="line"><span class="cl">remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
 </span></span><span class="line"><span class="cl">remote: 
 </span></span><span class="line"><span class="cl">To ssh://localhost:2220/home/bandit31-git/repo
-</span></span></code></pre></td></tr></table>
-</div>
-</div><h3 id="level32-33">level32-33
+</span></span></code></pre></div><h3 id="level32-33">level32-33
 </h3><p>After all this <code>git</code> stuff its time for another escape. Good luck!</p>
 <p>Tips</p>
 <p>Linux has <strong>Variables</strong> called local variables (valid in current shell), shell variables (set up by shell) and environment variables (valid systemwide). These variables have their names in uppercase only. They are defined by writing <code>VAR_NAME=var_value</code> in the command line. To see the content of a variable, you can write <code>echo $VAR_NAME</code>.</p>
@@ -837,19 +648,7 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 <li><code>USER</code> - currently logged-in user</li>
 </ul>
 <p>解法：因为shell把我们输入的字符全部转换为大写了，所以无法执行正常的指令，大写的字符一般与环境变量有关，$0表示所使用shell的名字，$$表示进程id，通过使用$0来进入正常shell，接着进入bandit33查看密码</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">exit</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">exit</span>
 </span></span><span class="line"><span class="cl">&gt;&gt; <span class="nv">$0</span>
 </span></span><span class="line"><span class="cl">$ whoami    
 </span></span><span class="line"><span class="cl">bandit33
@@ -857,9 +656,7 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 </span></span><span class="line"><span class="cl">uppershell
 </span></span><span class="line"><span class="cl">$ cat /etc/bandit_pass/bandit33
 </span></span><span class="line"><span class="cl">odHo63fHiFqcWWJG9rLiLDtPm45KzUKy
-</span></span></code></pre></td></tr></table>
-</div>
-</div>
+</span></span></code></pre></div>
 </section>
 
 
