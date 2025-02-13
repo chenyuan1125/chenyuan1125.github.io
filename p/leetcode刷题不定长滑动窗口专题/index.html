@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="力扣刷题记录记录，参考灵神刷题思路，不定长滑动窗口。">
+<meta name="keywords" content="力扣、算法"><title>LeetCode刷题:不定长滑动窗口专题</title>
+
+<link rel='canonical' href='https://chenyuan1125.github.io/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/'>
+
+<link rel="stylesheet" href="/scss/style.min.d14f29148164d1d66ef6b6850d7d5a6387f2b9f70026d09d858128fcb742f32c.css"><meta property='og:title' content="LeetCode刷题:不定长滑动窗口专题">
+<meta property='og:description' content="力扣刷题记录记录，参考灵神刷题思路，不定长滑动窗口。">
+<meta property='og:url' content='https://chenyuan1125.github.io/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/'>
+<meta property='og:site_name' content='辰远同学'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='力扣' /><meta property='article:published_time' content='2025-02-13T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-02-13T21:47:38&#43;08:00'/><meta property='og:image' content='https://chenyuan1125.github.io/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/1.png' />
+<meta name="twitter:title" content="LeetCode刷题:不定长滑动窗口专题">
+<meta name="twitter:description" content="力扣刷题记录记录，参考灵神刷题思路，不定长滑动窗口。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://chenyuan1125.github.io/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/1.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+
+<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远同学</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="https://chenyuan1125.github.io/en/" >English</option>
+                                
+                                    <option value="https://chenyuan1125.github.io/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#求最长最大">求最长/最大</a>
+      <ol>
+        <li><a href="#3无重复字符的最长子串">3.无重复字符的最长子串</a></li>
+        <li><a href="#3090每个字符最多出现两次的最长子字符串">3090.每个字符最多出现两次的最长子字符串</a></li>
+        <li><a href="#2831找出最长等值子数组未做出">2831.找出最长等值子数组（未做出）</a></li>
+      </ol>
+    </li>
+    <li><a href="#求最短最小">求最短/最小</a>
+      <ol>
+        <li><a href="#209长度最小的子数组">209.长度最小的子数组</a></li>
+        <li><a href="#76最小覆盖子串">76.最小覆盖子串</a></li>
+        <li><a href="#2904最短且字典序最小的美丽子字符串">2904.最短且字典序最小的美丽子字符串</a></li>
+      </ol>
+    </li>
+    <li><a href="#求子数组个数">求子数组个数</a>
+      <ol>
+        <li><a href="#1358包含所有三种字符的子字符串数目">1358.包含所有三种字符的子字符串数目</a></li>
+        <li><a href="#2537统计好子数组的数目">2537.统计好子数组的数目</a></li>
+      </ol>
+    </li>
+    <li><a href="#越短越合法">越短越合法</a>
+      <ol>
+        <li><a href="#713乘积小于-k-的子数组">713.乘积小于 K 的子数组</a></li>
+        <li><a href="#2762不间断子数组">2762.不间断子数组</a></li>
+      </ol>
+    </li>
+    <li><a href="#恰好型滑动窗口">恰好型滑动窗口</a>
+      <ol>
+        <li><a href="#930和相同的二元子数组">930.和相同的二元子数组</a></li>
+        <li><a href="#3306元音辅音字符串计数-ii">3306.元音辅音字符串计数 II</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/">
+                <img src="/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/1_hu11123755634953503792.png"
+                        srcset="/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/1_hu11123755634953503792.png 800w, /p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/1_hu1477197595444439246.png 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post LeetCode刷题:不定长滑动窗口专题" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%88%B7%E9%A2%98/" style="background-color: #D2A288; color: #fff;">
+                刷题
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/leetcode%E5%88%B7%E9%A2%98%E4%B8%8D%E5%AE%9A%E9%95%BF%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E4%B8%93%E9%A2%98/">LeetCode刷题:不定长滑动窗口专题</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            力扣刷题记录记录，参考灵神刷题思路，不定长滑动窗口。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2025-02-13</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 10 分钟
+                </time>
+            </div>
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+                <time class="article-words">
+                    4817字
+                </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="leetcode刷题不定长滑动窗口专题">LeetCode刷题:不定长滑动窗口专题
+</h1><h2 id="求最长最大">求最长/最大
+</h2><h3 id="3无重复字符的最长子串">3.无重复字符的最长子串
+</h3><p><a class="link" href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/"  target="_blank" rel="noopener"
+    >3. 无重复字符的最长子串</a></p>
+<p>给定一个字符串s，请你找出其中不含有重复字符的最长子串的长度。</p>
+<p><strong>示例 1:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入: s = &#34;abcabcbb&#34;
+</span></span><span class="line"><span class="cl">输出: 3 
+</span></span><span class="line"><span class="cl">解释: 因为无重复字符的最长子串是 &#34;abc&#34;，所以其长度为 3。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>使用滑动窗口，需要注意的是窗口左边往右缩小时是为了满足题目条件，一旦满足条件就停止，而窗口右边是正常的滑动。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sets</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">sets</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sets</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h3 id="3090每个字符最多出现两次的最长子字符串">3090.每个字符最多出现两次的最长子字符串
+</h3><p>给你一个字符串<code>s</code>，请找出满足每个字符最多出现两次的最长子字符串，并返回该子字符串的<strong>最大</strong>长度。</p>
+<p><strong>示例 1：</strong></p>
+<p><strong>输入：</strong> s = &ldquo;bcbbbcba&rdquo;</p>
+<p><strong>输出：</strong> 4</p>
+<p><strong>解释：</strong></p>
+<p>以下子字符串长度为 4，并且每个字符最多出现两次：<code>&quot;bcbbbcba&quot;</code>。</p>
+<p><strong>思路：</strong></p>
+<p>就是上一题的升级版</p>
+<p><strong>实现:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">maximumLengthSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sets</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">sets</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sets</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sets</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h3 id="2831找出最长等值子数组未做出">2831.找出最长等值子数组（未做出）
+</h3><p><a class="link" href="https://leetcode.cn/problems/find-the-longest-equal-subarray/"  target="_blank" rel="noopener"
+    >2831. 找出最长等值子数组</a></p>
+<p>给你一个下标从 <strong>0</strong> 开始的整数数组 <code>nums</code> 和一个整数 <code>k</code> 。</p>
+<p>如果子数组中所有元素都相等，则认为子数组是一个 <strong>等值子数组</strong> 。注意，空数组是 <strong>等值子数组</strong> 。</p>
+<p>从 <code>nums</code> 中删除最多 <code>k</code> 个元素后，返回可能的最长等值子数组的长度。</p>
+<p><strong>子数组</strong> 是数组中一个连续且可能为空的元素序列。</p>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：nums = [1,3,2,3,1,3], k = 3
+</span></span><span class="line"><span class="cl">输出：3
+</span></span><span class="line"><span class="cl">解释：最优的方案是删除下标 2 和下标 4 的元素。
+</span></span><span class="line"><span class="cl">删除后，nums 等于 [1, 3, 3, 3] 。
+</span></span><span class="line"><span class="cl">最长等值子数组从 i = 1 开始到 j = 3 结束，长度等于 3 。
+</span></span><span class="line"><span class="cl">可以证明无法创建更长的等值子数组。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>分组+滑动窗口，比如nums = [1,3,2,3,1,3]，我们可以把1，2，3分为三组，然后每次按组来遍历，看是否能将其他多余的元素删除，如果不超过k则更新等值子数组的长度。(参考灵神)</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">longestEqualSubarray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pos_lists</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pos_lists</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">pos_lists</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">            <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pos</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="n">p</span> <span class="o">-</span> <span class="n">pos</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h2 id="求最短最小">求最短/最小
+</h2><h3 id="209长度最小的子数组">209.长度最小的子数组
+</h3><p><a class="link" href="https://leetcode.cn/problems/minimum-size-subarray-sum/"  target="_blank" rel="noopener"
+    >209. 长度最小的子数组</a></p>
+<p>给定一个含有<code>n</code>个正整数的数组和一个正整数<code>target</code>。</p>
+<p>找出该数组中满足其总和大于等于<code>target</code>的长度最小的<strong>子数组</strong><code>[numsl, numsl+1, ..., numsr-1, numsr]</code>，并返回其长度**。**如果不存在符合条件的子数组，返回<code>0</code>。</p>
+<p><strong>思路</strong></p>
+<p>直接使用滑动窗口，每往右扩一次，就需要检查是否可以将左端点往右移动以找到满足题目条件的最子数组。</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">minSubArrayLen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="nb">sum</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">sum</span> <span class="o">-=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">sum</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="n">count</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">ans</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="ow">and</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="nb">sum</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h3 id="76最小覆盖子串">76.最小覆盖子串
+</h3><p><a class="link" href="https://leetcode.cn/problems/minimum-window-substring/"  target="_blank" rel="noopener"
+    >76. 最小覆盖子串</a></p>
+<p>给你一个字符串<code>s</code>、一个字符串<code>t</code>。返回<code>s</code>中涵盖<code>t</code>所有字符的最小子串。如果<code>s</code>中不存在涵盖<code>t</code>所有字符的子串，则返回空字符串<code>&quot;&quot;</code>。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>对于 <code>t</code> 中重复字符，我们寻找的子字符串中该字符数量必须不少于 <code>t</code> 中该字符数量。</li>
+<li>如果 <code>s</code> 中存在这样的子串，我们保证它是唯一的答案。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：s = &#34;ADOBECODEBANC&#34;, t = &#34;ABC&#34;
+</span></span><span class="line"><span class="cl">输出：&#34;BANC&#34;
+</span></span><span class="line"><span class="cl">解释：最小覆盖子串 &#34;BANC&#34; 包含来自字符串 t 的 &#39;A&#39;、&#39;B&#39; 和 &#39;C&#39;。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>可以参考209题的做法，我们先滑动窗口右移，再从左边不断缩小窗口，找到最小的子串，这题我们需要注意的就是如何使用哈希表判断子串涵盖t的所有字符串。</p>
+<p>注意我们判断哈希表是否涵盖可以直接使用<code>cnt_s &gt;= cnt_t</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">minWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">set_contain</span><span class="p">(</span><span class="n">t_cnt</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="n">s_cnt</span><span class="p">:</span> <span class="nb">set</span><span class="p">)</span> <span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">is_contain</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">t_cnt</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">s_cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t_cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">is_contain</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span>  <span class="n">is_contain</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">t_cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">s_cnt</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans_left</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans_right</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">s_cnt</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">set_contain</span><span class="p">(</span><span class="n">t_cnt</span><span class="p">,</span><span class="n">s_cnt</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">i</span> <span class="o">-</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">ans_right</span> <span class="o">-</span> <span class="n">ans_left</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans_left</span> <span class="o">=</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans_right</span> <span class="o">=</span> <span class="n">i</span>
+</span></span><span class="line"><span class="cl">                <span class="n">s_cnt</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">ans_left</span><span class="p">:</span><span class="n">ans_right</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">ans_left</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="s2">&#34;&#34;</span>
+</span></span></code></pre></div><p><strong>优化：</strong></p>
+<p>用一个变量 <em>less</em> 维护目前子串中有 <em>less</em> 种字母的出现次数小于 <em>t</em> 中字母的出现次数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">minWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans_left</span><span class="p">,</span> <span class="n">ans_right</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>  <span class="c1"># 比 Counter 更快</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">less</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt</span><span class="p">)</span>  <span class="c1"># 有 less 种字母的出现次数 &lt; t 中的字母出现次数</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>  <span class="c1"># 移动子串右端点</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>  <span class="c1"># 右端点字母移入子串</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 原来窗口内 c 的出现次数比 t 的少，现在一样多</span>
+</span></span><span class="line"><span class="cl">                <span class="n">less</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">less</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># 涵盖：所有字母的出现次数都是 &gt;=</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">ans_right</span> <span class="o">-</span> <span class="n">ans_left</span><span class="p">:</span>  <span class="c1"># 找到更短的子串</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans_left</span><span class="p">,</span> <span class="n">ans_right</span> <span class="o">=</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span>  <span class="c1"># 记录此时的左右端点</span>
+</span></span><span class="line"><span class="cl">                <span class="n">x</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>  <span class="c1"># 左端点字母</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1"># x 移出窗口之前，检查出现次数，</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1"># 如果窗口内 x 的出现次数和 t 一样，</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1"># 那么 x 移出窗口后，窗口内 x 的出现次数比 t 的少</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">less</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># 左端点字母移出子串</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s2">&#34;&#34;</span> <span class="k">if</span> <span class="n">ans_left</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">s</span><span class="p">[</span><span class="n">ans_left</span><span class="p">:</span> <span class="n">ans_right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span></span></code></pre></div><h3 id="2904最短且字典序最小的美丽子字符串">2904.最短且字典序最小的美丽子字符串
+</h3><p><a class="link" href="https://leetcode.cn/problems/shortest-and-lexicographically-smallest-beautiful-string/"  target="_blank" rel="noopener"
+    >2904. 最短且字典序最小的美丽子字符串</a></p>
+<p>给你一个二进制字符串<code>s</code>和一个正整数<code>k</code>。</p>
+<p>如果<code>s</code>的某个子字符串中<code>1</code>的个数恰好等于<code>k</code>，则称这个子字符串是一个<strong>美丽子字符串</strong>。</p>
+<p>令<code>len</code>等于<strong>最短</strong>美丽子字符串的长度。</p>
+<p>返回长度等于<code>len</code>且字典序<strong>最小</strong> 的美丽子字符串。如果 <code>s</code> 中不含美丽子字符串，则返回一个 <strong>空</strong> 字符串。</p>
+<p>对于相同长度的两个字符串<code>a</code>和<code>b</code>，如果在<code>a</code>和<code>b</code>出现不同的第一个位置上，<code>a</code>中该位置上的字符严格大于<code>b</code>中的对应字符，则认为字符串<code>a</code>字典序<strong>大于</strong>字符串<code>b</code>。</p>
+<ul>
+<li>例如，<code>&quot;abcd&quot;</code>的字典序大于<code>&quot;abcc&quot;</code>，因为两个字符串出现不同的第一个位置对应第四个字符，而<code>d</code>大于<code>c</code>。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：s = &#34;100011001&#34;, k = 3
+</span></span><span class="line"><span class="cl">输出：&#34;11001&#34;
+</span></span><span class="line"><span class="cl">解释：示例中共有 7 个美丽子字符串：
+</span></span><span class="line"><span class="cl">1. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">2. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">3. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">4. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">5. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">6. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">7. 子字符串 &#34;100011001&#34; 。
+</span></span><span class="line"><span class="cl">最短美丽子字符串的长度是 5 。
+</span></span><span class="line"><span class="cl">长度为 5 且字典序最小的美丽子字符串是子字符串 &#34;11001&#34; 。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>维护一个滑动窗口，然后不断收缩找到最短美丽字符串，需要注意字典序最小的答案，直接用比较法就好了。</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">shortestBeautifulSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="n">s</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span> 
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_1</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ss</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt_1</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">cnt_1</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_1</span> <span class="o">-=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">cnt_1</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ss</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">:</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span> <span class="ow">or</span> <span class="n">ss</span> <span class="o">&lt;</span> <span class="n">ans</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">ss</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">ans</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ans</span> <span class="o">=</span> <span class="n">ss</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h2 id="求子数组个数">求子数组个数
+</h2><p>一般要写 ans += left。</p>
+<p>滑动窗口的内层循环结束时，右端点固定在
+right，左端点在 0,1,2,…,left−1 的所有子数组（子串）都是合法的，这一共有 left 个。</p>
+<h3 id="1358包含所有三种字符的子字符串数目">1358.包含所有三种字符的子字符串数目
+</h3><p><a class="link" href="https://leetcode.cn/problems/number-of-substrings-containing-all-three-characters/"  target="_blank" rel="noopener"
+    >1358.包含所有三种字符的子字符串数目</a></p>
+<p>给你一个字符串<code>s</code>，它只包含三种字符a,b和c。</p>
+<p>请你返回a，b和c都<strong>至少</strong>出现过一次的子字符串数目。</p>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：s = &#34;abcabc&#34;
+</span></span><span class="line"><span class="cl">输出：10
+</span></span><span class="line"><span class="cl">解释：包含 a，b 和 c 各至少一次的子字符串为 &#34;abc&#34;, &#34;abca&#34;, &#34;abcab&#34;, &#34;abcabc&#34;, &#34;bca&#34;, &#34;bcab&#34;, &#34;bcabc&#34;, &#34;cab&#34;, &#34;cabc&#34; 和 &#34;abc&#34; (相同字符串算多次)。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>利用哈希表存储a,b,c的个数，然后构建滑动窗口，如果满足条件就移动左端点，直到不满足条件，此时ans += left，left就是以right为右端点的子串数。</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">numberOfSubstrings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_s</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="s2">&#34;abc&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_t</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt_t</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">cnt_t</span> <span class="o">&gt;=</span> <span class="n">cnt_s</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_t</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">s</span> <span class="o">=</span> <span class="s2">&#34;acbbcac&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">solution</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">solution</span><span class="o">.</span><span class="n">numberOfSubstrings</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</span></span></code></pre></div><h3 id="2537统计好子数组的数目">2537.统计好子数组的数目
+</h3><p><a class="link" href="https://leetcode.cn/problems/count-the-number-of-good-subarrays/"  target="_blank" rel="noopener"
+    >2537. 统计好子数组的数目</a></p>
+<p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> ，请你返回 <code>nums</code> 中 <strong>好</strong> 子数组的数目。</p>
+<p>一个子数组 <code>arr</code> 如果有 <strong>至少</strong> <code>k</code> 对下标 <code>(i, j)</code> 满足 <code>i &lt; j</code> 且 <code>arr[i] == arr[j]</code> ，那么称它是一个 <strong>好</strong> 子数组。</p>
+<p><strong>子数组</strong> 是原数组中一段连续 <strong>非空</strong> 的元素序列。</p>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：nums = [1,1,1,1,1], k = 10
+</span></span><span class="line"><span class="cl">输出：1
+</span></span><span class="line"><span class="cl">解释：唯一的好子数组是这个数组本身。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>延续上一题的思路，重点在于如何判断数组是好数组。</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">countGood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_g</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">pairs</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pairs</span> <span class="o">+=</span> <span class="n">cnt_g</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt_g</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">pairs</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pairs</span> <span class="o">-=</span> <span class="n">cnt_g</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_g</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h2 id="越短越合法">越短越合法
+</h2><p>一般要写 ans += right - left + 1。</p>
+<p>滑动窗口的内层循环结束时，右端点固定在right，左端点在left,left+1,…,right的所有子数组（子串）都是合法的，这一共有right−left+1 个。</p>
+<h3 id="713乘积小于-k-的子数组">713.乘积小于 K 的子数组
+</h3><p><a class="link" href="https://leetcode.cn/problems/subarray-product-less-than-k/"  target="_blank" rel="noopener"
+    >713. 乘积小于 K 的子数组</a></p>
+<p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> ，请你返回子数组内所有元素的乘积严格小于 <code>k</code> 的连续子数组的数目。</p>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：nums = [10,5,2,6], k = 100
+</span></span><span class="line"><span class="cl">输出：8
+</span></span><span class="line"><span class="cl">解释：8 个乘积小于 100 的子数组分别为：[10]、[5]、[2]、[6]、[10,5]、[5,2]、[2,6]、[5,2,6]。
+</span></span><span class="line"><span class="cl">需要注意的是 [10,5,2] 并不是乘积小于 100 的子数组。
+</span></span></code></pre></div><p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">numSubarrayProductLessThanK</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">s</span> <span class="o">*=</span> <span class="n">p</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="n">s</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="ow">and</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">s</span> <span class="o">/=</span> <span class="n">nums</span><span class="p">[</span> <span class="n">left</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h3 id="2762不间断子数组">2762.不间断子数组
+</h3><p><a class="link" href="https://leetcode.cn/problems/continuous-subarrays/"  target="_blank" rel="noopener"
+    >2762.不间断子数组</a></p>
+<p>给你一个下标从<strong>0</strong>开始的整数数组<code>nums</code>。<code>nums</code>的一个子数组如果满足以下条件，那么它是<strong>不间断</strong>的：</p>
+<ul>
+<li><code>i</code>，<code>i+1</code>，&hellip;，<code>j</code>表示子数组中的下标。对于所有满足<code>i&lt;=i1,i2&lt;=j</code>的下标对，都有<code>0&lt;=|nums[i1]-nums[i2]|&lt;=2</code>。</li>
+</ul>
+<p>请你返回<strong>不间断</strong>子数组的总数目。</p>
+<p>子数组是一个数组中一段连续<strong>非空</strong>的元素序列。</p>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：nums = [5,4,2,4]
+</span></span><span class="line"><span class="cl">输出：8
+</span></span><span class="line"><span class="cl">解释：
+</span></span><span class="line"><span class="cl">大小为 1 的不间断子数组：[5], [4], [2], [4] 。
+</span></span><span class="line"><span class="cl">大小为 2 的不间断子数组：[5,4], [4,2], [2,4] 。
+</span></span><span class="line"><span class="cl">大小为 3 的不间断子数组：[4,2,4] 。
+</span></span><span class="line"><span class="cl">没有大小为 4 的不间断子数组。
+</span></span><span class="line"><span class="cl">不间断子数组的总数目为 4 + 3 + 1 = 8 。
+</span></span><span class="line"><span class="cl">除了这些以外，没有别的不间断子数组。
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>滑动窗口，需要注意的就是如何存储和获取窗口数组的最大最小值。我们可以使用哈希表来实现，因为最多只涉及到3个数，而且可以直接使用max和min函数获取最大最小值。</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">continuousSubarrays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sets</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">sets</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="nb">max</span><span class="p">(</span><span class="n">sets</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">sets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sets</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">sets</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">del</span> <span class="n">sets</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div><h2 id="恰好型滑动窗口">恰好型滑动窗口
+</h2><p>例如，要计算有多少个元素和恰好等于𝑘的子数组，可以把问题变成：</p>
+<ul>
+<li>计算有多少个元素和≥𝑘的子数组。</li>
+<li>计算有多少个元素和𝑘，也就是 ≥𝑘+1 的子数组。</li>
+</ul>
+<p>答案就是元素和≥𝑘的子数组个数，减去元素和≥𝑘+1的子数组个数。这里把&gt;转换成≥，从而可以把滑窗逻辑封装成一个函数f，然后用 f(k) - f(k + 1) 计算，无需编写两份滑窗代码。</p>
+<p>总结：「恰好」可以拆分成两个「至少」，也就是两个「越长越合法」的滑窗问题。</p>
+<p>注：也可以把问题变成≤k减去≤k−1（两个至多）。可根据题目选择合适的变形方式。</p>
+<p>注：也可以把两个滑动窗口合并起来，维护同一个右端点 right 和两个左端点 left1和 left2，我把这种写法叫做三指针滑动窗口。</p>
+<h3 id="930和相同的二元子数组">930.和相同的二元子数组
+</h3><p><a class="link" href="https://leetcode.cn/problems/binary-subarrays-with-sum/"  target="_blank" rel="noopener"
+    >930. 和相同的二元子数组</a></p>
+<p>给你一个二元数组<code>nums</code>，和一个整数<code>goal</code>，请你统计并返回有多少个和为<code>goal</code>的<strong>非空</strong>子数组。</p>
+<p><strong>子数组</strong>是数组的一段连续部分。</p>
+<p><strong>示例 1：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入：nums = [1,0,1,0,1], goal = 2
+</span></span><span class="line"><span class="cl">输出：4
+</span></span><span class="line"><span class="cl">解释：
+</span></span><span class="line"><span class="cl">有 4 个满足题目要求的子数组：[1,0,1]、[1,0,1,0]、[0,1,0,1]、[1,0,1]
+</span></span></code></pre></div><p><strong>思路：</strong></p>
+<p>将恰好拆分成两个至少，然后直接套用越长越合的公式。</p>
+<p><strong>实现：</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">numSubarraysWithSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">goal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">def</span>  <span class="nf">sliding_window</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">goal</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">=</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">sum</span> <span class="o">+=</span> <span class="n">p</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="ow">and</span> <span class="nb">sum</span> <span class="o">&gt;=</span> <span class="n">goal</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="nb">sum</span> <span class="o">-=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">+=</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">ans</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">sliding_window</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">goal</span><span class="p">)</span> <span class="o">-</span> <span class="n">sliding_window</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">goal</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="3306元音辅音字符串计数-ii">3306.元音辅音字符串计数 II
+</h3><p><a class="link" href="https://leetcode.cn/problems/count-of-substrings-containing-every-vowel-and-k-consonants-ii/"  target="_blank" rel="noopener"
+    >3306. 元音辅音字符串计数 II</a></p>
+<p>给你一个字符串<code>word</code>和一个<strong>非负</strong>整数<code>k</code>。</p>
+<p>返回 <code>word</code> 的 子字符串中，每个元音字母（<code>'a'</code>、<code>'e'</code>、<code>'i'</code>、<code>'o'</code>、<code>'u'</code><strong>至少</strong>出现一次，并且<strong>恰好</strong> 包含<code>k</code>个辅音字母的子字符串的总数。</p>
+<p><strong>示例 1：</strong></p>
+<p>**输入：**word = &ldquo;aeioqq&rdquo;, k = 1</p>
+<p>**输出：**0</p>
+<p><strong>解释：</strong></p>
+<p>不存在包含所有元音字母的子字符串。</p>
+<p><strong>思路：</strong></p>
+<p>与上题类似，但是难度要高一些，因为满足条件并不简单构造，我开始是打算使用哈希表构建一个元音字母表，如果滑动窗口的哈希表大于等于元音字母表，那么就满足第一个条件，第二个条件只好用一个count变量来计数，但是这样的实现超过了时间限制.</p>
+<p>最后做了一些优化。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">countOfSubstrings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">def</span> <span class="nf">s</span><span class="p">(</span><span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">=</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt_f</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt_y</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cnt_w</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="s2">&#34;aeiou&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cnt_w</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cnt_f</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt_w</span><span class="p">)</span><span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">cnt_f</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">word</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="ow">in</span> <span class="s2">&#34;aeiou&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">cnt_w</span><span class="p">[</span><span class="n">word</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">if</span> <span class="n">cnt_w</span><span class="p">[</span><span class="n">word</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                            <span class="k">del</span> <span class="n">cnt_w</span><span class="p">[</span><span class="n">word</span><span class="p">[</span><span class="n">left</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">cnt_f</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ans</span> <span class="o">+=</span> <span class="n">left</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">ans</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">s</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">-</span> <span class="n">s</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</span></span></code></pre></div><p><strong>优化二</strong></p>
+<p>把两个滑动窗口合并成一个。我一般把这种滑窗叫做<strong>三指针滑窗</strong>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">countOfSubstrings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">word</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_vowel1</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_vowel2</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt_consonant1</span> <span class="o">=</span> <span class="n">cnt_consonant2</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ans</span> <span class="o">=</span> <span class="n">left1</span> <span class="o">=</span> <span class="n">left2</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">word</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">b</span> <span class="ow">in</span> <span class="s2">&#34;aeiou&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_vowel1</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_vowel2</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_consonant1</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt_consonant2</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt_vowel1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">cnt_consonant1</span> <span class="o">&gt;=</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">out</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="n">left1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">out</span> <span class="ow">in</span> <span class="s2">&#34;aeiou&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cnt_vowel1</span><span class="p">[</span><span class="n">out</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">cnt_vowel1</span><span class="p">[</span><span class="n">out</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">del</span> <span class="n">cnt_vowel1</span><span class="p">[</span><span class="n">out</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cnt_consonant1</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left1</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">cnt_vowel2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">cnt_consonant2</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">out</span> <span class="o">=</span> <span class="n">word</span><span class="p">[</span><span class="n">left2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">out</span> <span class="ow">in</span> <span class="s2">&#34;aeiou&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cnt_vowel2</span><span class="p">[</span><span class="n">out</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="n">cnt_vowel2</span><span class="p">[</span><span class="n">out</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">del</span> <span class="n">cnt_vowel2</span><span class="p">[</span><span class="n">out</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">cnt_consonant2</span> <span class="o">-=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">                <span class="n">left2</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">ans</span> <span class="o">+=</span> <span class="n">left1</span> <span class="o">-</span> <span class="n">left2</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">ans</span>
+</span></span></code></pre></div>
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E5%8A%9B%E6%89%A3/">力扣</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2025-02-13
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist", "waline-container"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top","visitor":true});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2025 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
