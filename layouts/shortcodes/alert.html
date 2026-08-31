@@ -1,0 +1,6 @@
+{{- $type := default "note" (.Get 0) -}}
+{{- $valid := slice "note" "tip" "warn" "error" -}}
+{{- if not (in $valid $type) }}{{ $type = "note" }}{{ end -}}
+<blockquote class="alert alert-{{ $type }}">
+    {{ .Inner | markdownify }}
+</blockquote>

@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {"id": "input", "x": 40, "y": 110, "w": 920, "h": 120, "text": "输入: [CLS] 我 喜欢 猫 [SEP] 它 很 可爱 [SEP]", "color": "light-violet"},
+    {"id": "tok", "x": 60, "y": 340, "w": 270, "h": 170, "text": "Token\n词向量", "color": "light-blue"},
+    {"id": "seg", "x": 385, "y": 340, "w": 270, "h": 170, "text": "Segment\n句子 A / B", "color": "light-red"},
+    {"id": "pos", "x": 710, "y": 340, "w": 270, "h": 170, "text": "Position\n学习位置", "color": "light-green"},
+    {"id": "add", "x": 385, "y": 600, "w": 270, "h": 120, "text": "按位相加", "color": "yellow"},
+    {"id": "output", "x": 300, "y": 800, "w": 440, "h": 120, "text": "送入 Transformer Encoder", "color": "light-violet"}
+  ],
+  "texts": [
+    {"id": "title", "x": 40, "y": 30, "w": 920, "text": "BERT 输入表示", "color": "black", "size": "m"},
+    {"id": "note", "x": 40, "y": 260, "w": 920, "text": "每个 token = Token + Segment + Position", "color": "grey", "size": "s"}
+  ],
+  "arrows": [
+    {"id": "a1", "x1": 195, "y1": 510, "x2": 395, "y2": 600},
+    {"id": "a2", "x1": 520, "y1": 510, "x2": 520, "y2": 600},
+    {"id": "a3", "x1": 845, "y1": 510, "x2": 645, "y2": 600},
+    {"id": "a4", "x1": 520, "y1": 720, "x2": 520, "y2": 800}
+  ]
+}

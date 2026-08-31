@@ -9,211 +9,152 @@ tags: ["BERT", "Transformer", "预训练", "MLM"]
 categories: ["大模型架构学习"]
 ---
 
-## 引子：从 GPT-1 的"单向"说起
+## 引子：从 GPT-1 的"我只能往前看"说起
 
-上一篇拆了 Transformer，它的核心是注意力——理论上能看上下文所有词。但 2018 年 OpenAI 的 GPT-1，把 Transformer Decoder 单独拎出来做自回归语言模型：每一步只看自己和过去的词。
+上一篇我们拆了 Transformer，它的核心是注意力机制——理论上能看到上下文里所有词。但 2018 年 OpenAI 推出的 GPT-1，把 Transformer 的 **Decoder** 单独拎出来做预训练，套上"自回归"的语言模型：每一步只看自己和过去的词，往后预测下一个。
 
-这就像读句子时**只准往前看**，不准回头。读"小明给小红 ___ 一本书"时，GPT 只能根据"小明给小红"猜下一个词，看不到"书"这个宾语。
+这就像一个人读句子时，**只准用眼睛扫前面读过的字，不准回头看**。读"小明给小红___一本书"时，GPT 只能根据"小明给小红"猜下一个词是"送"还是"买"——但它看不到"书"这个宾语。
 
-这种"单向"约束让 GPT 擅长生成，但遇到理解任务（分类、问答、NER）就吃亏了——很多判断需要"两头看"。
+这种"单向"约束让 GPT 特别擅长**生成**（写下一个字），但遇到**理解**任务（句子分类、问答、命名实体识别）就吃亏了：很多判断需要"两头看"。
 
-2018 年底 Google 的 BERT 就是来解决这个问题的——名字里的 **Bidirectional** 就是这个意思。
+2018 年底 Google 放出的 BERT（Bidirectional Encoder Representations from Transformers）就是来解决这个问题——**名字里的 "Bidirectional" 就是这个意思**。
 
-## 双向的本质：Attention Mask 的区别
+## 双向到底"双"在哪？
 
-{{< figure src="bert-attention-mask.png" title="图 1：GPT 因果掩码 vs BERT 双向掩码——同一句话的注意力范围" >}}
+先看对比图：
 
-GPT 和 BERT 都用 Transformer，唯一的架构区别就在 **attention mask**：
+{{< figure src="bert-direction.png" title="图 1：BERT 双向 vs GPT 单向——同一句话两种预训练思路（tldraw 绘制）" >}}
 
-**GPT（Causal Mask）**：
-```
-我 喜欢 猫 睡 在 沙发 上
-1 0 0 0 0 0 0    ← 预测"我"时只能看"我"
-1 1 0 0 0 0 0    ← 预测"喜欢"时能看"我""喜欢"
-1 1 1 0 0 0 0    ← 预测"猫"时能看"我""喜欢""猫"
-1 1 1 1 0 0 0    ← 预测"睡"时能看前面所有
-...              ← 每个 token 只能看自己和左边
-```
+GPT 的单向：预测"猫"时，只能看"我喜欢"和它自己，看不到"睡在沙发上"。
 
-**BERT（Bidirectional Mask）**：
-```
-我 喜欢 [MASK] 睡 在 沙发 上
-1 1 1 1 1 1 1    ← 预测 [MASK] 时能看到所有位置
-1 1 1 1 1 1 1    ← 其他位置也一样
-```
+BERT 的双向：预测被遮住的"猫"时，**左右都能看**——"我喜欢 ___ 睡在沙发上"，左右两边都是上下文。
 
-BERT 没有 causal mask——所有 token 互相可见。但问题来了：如果模型预测"猫"时能看到"猫"本身，那它直接抄答案就行，学不到任何东西。所以 BERT 用了一个巧妙的 trick：**把 15% 的 token 遮住，让模型去猜被遮的是什么**。
+这看着简单，但实现起来要解决一个关键问题：**不能"看见自己"**。如果模型在预测"猫"时把"猫"也喂进去了，那就是抄答案。BERT 的解法就是**遮住 15% 的词**让模型猜——这就是接下来要讲的 **MLM**。
 
-这就是 MLM 的核心思想，也是 BERT 训练双向表示的关键设计。
+## 核心机制一：Masked Language Model（MLM）
 
-## MLM 的技术细节
+MLM 的全称是"遮蔽语言模型"，思路来自英语考试里的完形填空。
 
-### 15% 的遮蔽策略
+**具体做法**：
+1. 准备一段文本
+2. 随机挑 15% 的词（subword token）出来
+3. 这 15% 里：
+   - 80% 替换成 `[MASK]`（例：原句"我喜欢猫" → "我喜欢 [MASK]"）
+   - 10% 替换成随机的别的词（"我喜欢 桌子"）
+   - 10% 保持原样不动（"我喜欢 猫"）
+4. 让模型根据**左右两边的所有上下文**，猜出这些被遮的位置原来是什么
 
-BERT 论文选择了 15% 的遮蔽率，这个数字不是随便定的。实验发现：
-- 遮蔽太少（<10%）：模型没有足够的训练信号
-- 遮蔽太多（>20%）：训练数据被破坏得太厉害，模型学不到正常的语言规律
+最后那 10% "保持原样"是为了减轻预训练-微调的 mismatch：微调时没有 `[MASK]`，要让模型学会"不管输入被怎么处理，我都要能正常理解"。
 
-15% 是一个平衡点。但论文还发现了一个问题：**预训练时有 [MASK]，微调时没有**，这造成了 mismatch。为了解决这个问题，被选中的 15% token 被进一步拆分成三种处理方式：
+{{< figure src="bert-mlm.png" title="图 2：BERT 预训练——MLM + NSP 双任务（tldraw 绘制）" >}}
 
-```
-被选中的 15% token:
-├── 80% → 替换成 [MASK]    → "我喜欢猫" → "我喜欢 [MASK]"
-├── 10% → 替换成随机词    → "我喜欢猫" → "我喜欢 桌子"
-└── 10% → 保持原样        → "我喜欢猫" → "我喜欢 猫"
-```
+**为什么 MLM 能让模型学会双向理解？**
+因为预测 [MASK] 时，模型的注意力能同时看左右两侧（除了被遮的那个位置）。这逼迫它必须把左右信息都编码进同一个向量里——这就是"双向"的本质。
 
-最后 10% 保持原样的设计非常巧妙：它让模型知道"即使输入是正确的，我也要输出正确的结果"，这大大减轻了 pre-train-finetune 的 mismatch。
+## 核心机制二：Next Sentence Prediction（NSP）
 
-### 损失函数
+MLM 学的是"词和上下文的关系"，但很多下游任务（问答、自然语言推理）需要"句子之间的关系"。BERT 加了第二个预训练任务 NSP：
 
-BERT 的损失函数只在被遮住的 15% token 上计算：
+**做法**：
+- 给模型两句话 A 和 B
+- 50% 的概率 B 是 A 的真实下一句
+- 50% 的概率 B 是语料里随便抽的一句
+- 让模型判断"B 是不是 A 的下一句？"（二分类）
 
-```python
-# 伪代码：BERT 的 MLM 损失
-logits = bert_model(masked_input)          # [batch, seq_len, vocab_size]
-loss = cross_entropy(logits, target_ids)   # 所有位置都算
-loss = loss * mask_weights                 # 只保留被遮位置的梯度
-# mask_weights: 被遮为 1，其余为 0
-```
+这一招让 BERT 学到了**句间关系**，做 QA、文本匹配这些任务时直接受益。
 
-也就是说，模型在训练时**只学习预测被遮住的词**，其他位置没有梯度。这比自回归语言模型（每个位置都算损失）更高效——模型只需要关注最难的任务。
+（顺带一提：后来的 RoBERTa 发现 NSP 这个任务其实没那么必要，去掉后效果反而更好。但 BERT 原论文里它是关键设计之一。）
 
-### 为什么 MLM 比自回归更高效？
+## 输入表示：三种 embedding 相加
 
-自回归语言模型（GPT）的损失函数是：
+BERT 的输入有三个 embedding 相加，这点要特别记住：
 
-```python
-# GPT 的损失：每个位置都预测下一个词
-loss = cross_entropy(logits[:, :-1, :], input_ids[:, 1:])
-```
+下面这张简化图对齐 BERT 论文 Figure 2 的输入结构：
 
-这意味着模型要学两次"我喜欢"和"猫"之间的共现关系，也要学"猫"和"睡"之间的关系。但很多相邻关系是 trivial 的（"我"→"喜欢"这种高频搭配不需要太多训练信号）。
+{{< figure src="bert-embeddings.png" title="图 3：BERT 输入表示——Token + Segment + Position 三种 embedding 相加（tldraw 绘制，结构参考 Devlin et al., 2018, Figure 2）" >}}
 
-MLM 只让模型预测最难的那 15% 位置，**其他 85% 的位置虽然参与计算注意力，但不产生梯度**。这使得每次 forward pass 的 15% 计算量就产生了有意义的训练信号——更高效。
+- **Token Embeddings**：词的向量（用 WordPiece 切词，词表约 3 万）
+- **Segment Embeddings**：标记"A 句"还是"B 句"（用 E_A/E_B 两个向量）
+- **Position Embeddings**：标记这是第几个位置（用学习出来的，不是 Transformer 原版的正弦函数）
 
-## NSP 的深层设计
+加起来就是输入向量，进入多层 Transformer Encoder。
 
-NSP（Next Sentence Prediction）是 BERT 的第二个预训练任务。
+## 架构与规模
 
-**为什么需要 NSP？** MLM 只学词和词的关系，但很多下游任务需要句间关系（问答、推理、对话）。BERT 需要一种方式让模型学会"句子级别的理解"。
+BERT 沿用 Transformer 的 **Encoder**（不是 Decoder）：
 
-**怎么做？**
-- 输入：[CLS] 我 喜欢 猫 [SEP] 它 很 可爱 [SEP]
-- 50% 概率：B 是 A 的真实下一句（IsNext）
-- 50% 概率：B 是随机抽的句子（NotNext）
-- 用 [CLS] 的输出做二分类
+| 模型 | 层数 | 隐藏维度 | 注意力头 | 参数量 |
+|---|---|---|---|---|
+| BERT-base | 12 | 768 | 12 | ~110M |
+| BERT-large | 24 | 1024 | 16 | ~340M |
 
-**NSP 的贡献有多大？** 论文实验显示，去掉 NSP 后 BERT 在 NLI 任务上掉了约 1-2 个点。但后来的 RoBERTa 发现，如果训练数据足够大、训练时间足够长，NSP 的效果可以被其他目标替代。
+预训练数据：
+- BookCorpus（8 亿词）
+- English Wikipedia（25 亿词）
+- 总共约 33 亿词，训练 40 个 epoch（base）/ 4 个 epoch（large）
 
-**关键思想：** NSP 证明了**预训练任务可以不止一个**。MLM 学 token 级表示，NSP 学句子级表示，两者互补。这个思想后来被很多模型沿用（如 ALBERT 的 SOP、ELECTRA 的判别式任务）。
+训练硬件：BERT-base 用 4 块 Cloud TPU、BERT-large 用 16 块 Cloud TPU，各训练约 4 天。以今天看算力不大，但在当时已经足以改变 NLP 的默认工作方式。
 
-## 输入表示：Token + Segment + Position
+## 下游任务：BERT 的杀手锏
 
-BERT 的输入由三个 embedding 相加构成：
+BERT 预训练完是"通才"，微调后是"专才"。原论文展示了 11 个 NLP 任务的 SOTA（state-of-the-art）：
 
-{{< figure src="bert-embeddings.png" title="图 1：BERT 输入表示——Token + Segment + Position 三种 embedding 相加" >}}
+**1. 文本分类（如情感分析）**
+- 取 `[CLS]` 标记的输出向量
+- 接一个全连接层 → softmax 分类
 
-**Token Embeddings**：用 WordPiece 分词，词表大小 30,000。WordPiece 的核心思想是：把常见词（如"the"、"cat"）保留为完整词，把不常见词拆成子词（如"playing" → "play" + "##ing"）。这比 BPE 更注重语言的形态学特征。
+**2. 问答（如 SQuAD）**
+- 输入："问题 + 文章"
+- 输出：答案在文章中的**起止位置**（两个向量分别预测 start 和 end 的概率分布）
 
-**Segment Embeddings**：只有两个向量 E_A 和 E_B，分别标记输入属于句子 A 还是 B。这个设计很轻量——两个 embedding 就能区分句子的边界。
+**3. 命名实体识别（NER）**
+- 每个 token 的输出接分类器，预测是否是实体、属于哪类
 
-**Position Embeddings**：和 Transformer 原版不同，BERT 用的是**可学习的**位置编码，而不是正弦函数。这意味着每个位置都有一个独立的向量，模型可以自己学习位置间的关系。可学习的代价是：最大长度被限制在 512（BERT 预设的最大序列长度），超过这个长度的输入无法处理。
+**4. 自然语言推理（NLI）**
+- 输入两句话，输出"蕴含/矛盾/中立"
 
-## 架构与训练细节
+**微调成本极低**：通常 1-3 块 GPU 跑几小时就够，因为绝大部分参数已经预训练好了。这让学术界和中小公司都能用得起。
 
-| 参数 | BERT-base | BERT-large |
+{{< figure src="bert-finetune.png" title="图 4：BERT 微调——同一底座适配不同下游任务（tldraw 绘制）" >}}
+
+## BERT 家族：后浪们
+
+BERT 一出，NLP 领域炸了，半年内冒出一堆改进版：
+
+- **RoBERTa**（Facebook, 2019）：去掉 NSP，增大数据量（160GB），训练更久，效果显著超过原版 BERT
+- **ALBERT**（Google, 2019）：参数共享 + 矩阵分解，把 BERT-large 从 340M 压到 12M，性能几乎不降
+- **ERNIE**（百度, 2019）：中文版 BERT，加入知识增强掩码策略
+- **DistilBERT**（HuggingFace, 2019）：蒸馏小模型，速度提升 60%，性能保留 97%
+- **SpanBERT**（2019）：连续片段掩码，对 QA 类任务更友好
+
+## BERT vs GPT：理解 vs 生成
+
+这是理解 BERT 定位的关键对比：
+
+| 维度 | BERT | GPT |
 |---|---|---|
-| 层数 | 12 | 24 |
-| 隐藏维度 | 768 | 1024 |
-| 注意力头 | 12 | 16 |
-| 参数量 | ~110M | ~340M |
-| 训练数据 | BookCorpus (800M) + English Wikipedia (2,500M) | 同左 |
+| 架构 | Transformer Encoder | Transformer Decoder |
+| 注意力 | 双向 | 单向（遮住未来） |
+| 预训练任务 | MLM + NSP | 自回归语言模型 |
+| 擅长 | 理解（分类、QA、NER） | 生成（续写、对话） |
+| 典型应用 | 搜索、推荐、文本匹配 | 写作、对话、代码生成 |
 
-**训练细节**（这些细节往往被忽略，但对理解 BERT 很重要）：
+**一句话总结**：BERT 擅长"读懂"，GPT 擅长"接着写"。
 
-- **优化器**：Adam，学习率 1e-4，使用 warmup（前 10,000 步线性增长到 1e-4，然后线性衰减）
-- **Batch size**：256 个序列，每个序列最大 512 个 token
-- **训练步数**：1,000,000 步（约 40 epoch）
-- **硬件**：4 块 Cloud TPU（base）/ 16 块 Cloud TPU（large），训练约 4 天
-- **正则化**：Dropout 0.1，GELU 激活函数（不是 ReLU）
+但有意思的是，到了 GPT-3（2020）以后，大模型靠"规模 + 生成式预训练"也能搞定理解任务（in-context learning），BERT 这一脉的"双向编码器"路线逐渐被生成式大模型吸收融合。但 BERT 本身在工业界（搜索、推荐、文本分类）至今仍是主力，因为**小、快、准、便宜**。
 
-**GELU 的选择**：BERT 是第一个广泛使用 GELU 的模型。GELU 比 ReLU 更平滑，在负半轴有非零梯度，这对深层网络的训练更友好。这个选择后来被几乎所有 Transformer 模型沿用。
+## 护栏视角
 
-## 下游任务：微调的艺术
-
-BERT 的微调极其简单——**加一个分类头，端到端训练**。这也是它成功的关键之一。
-
-### 分类任务
-
-```
-输入: [CLS] 这部电影真好看 [SEP]
-                     ↓
-              BERT Encoder
-                     ↓
-           [CLS] 的输出向量 (768d)
-                     ↓
-           Linear(768, 2) → softmax
-                     ↓
-              正面/负面
-```
-
-[CLS] 是 BERT 的一个特殊设计：它不参与任何语义计算，只用来聚合整个序列的表示。在预训练时，[CLS] 的输出用于 NSP 分类；在微调时，[CLS] 的输出用于下游分类任务。
-
-### 问答任务（SQuAD）
-
-```
-输入: [CLS] 问题 [SEP] 文章段落 [SEP]
-                     ↓
-              BERT Encoder
-                     ↓
-       每个 token 输出两个向量:
-        - Start logits → softmax → 答案起始位置
-        - End logits  → softmax → 答案结束位置
-```
-
-注意这里没有额外参数——BERT 直接输出每个 token 对应起始和结束的概率。这意味着模型必须理解"答案的边界在哪里"，这是阅读理解的核心能力。
-
-### 微调的技术细节
-
-微调时，BERT 通常使用 2e-5 到 5e-5 的学习率（比预训练低 1-2 个数量级），用小 batch（16-32），训练 2-4 个 epoch。**为什么这么少？** 因为预训练已经学到了通用语言表示，微调只需要小幅调整到特定任务。
-
-这个"预训练 → 微调"范式的影响非常深远：它让 NLP 任务从"每个任务训练一个专用模型"变成了"一个通用模型 + 任务特定的头部"。这和后来的 GPT 系列是相反的思路——GPT 选择不做微调，靠 in-context learning 适配任务。
-
-## BERT 的十一项 SOTA 结果
-
-BERT 论文在 11 个 NLP 任务上刷新了 SOTA 记录，这是当时最全面的 benchmark 结果之一：
-
-| 任务 | 类型 | 改进幅度 |
-|---|---|---|
-| SQuAD v1.1 (问答) | 阅读理解 | +5.7 F1 |
-| SQuAD v2.0 (问答) | 阅读理解 | +7.6 F1 |
-| GLUE 基准 | 多任务综合 | +7.7% |
-| MNLI (自然语言推理) | 句间关系 | +5.1% |
-| NER (命名实体识别) | 序列标注 | +3.2 F1 |
-| SWAG (常识推理) | 推理 | +8.3% |
-
-**这些提升意味着什么？** 在 BERT 之前，每个 NLP 任务都需要精心设计的特征工程和任务特定架构。BERT 提供了一种通用解决方案——同样的架构、同样的预训练权重，只需要换一个分类头就能在几乎所有任务上超越之前的最好结果。
-
-这对 NLP 研究的影响是革命性的：**研究方向从"设计更好的任务特定架构"转向了"设计更好的预训练目标"**。
-
-## BERT 的局限与启示
-
-**局限：**
-- 最大输入长度 512（可学习位置编码的限制）
-- 预训练和微调的 mismatch 仍然存在（虽然用 10% 原样缓解了）
-- 计算量大（base 模型 110M 参数，large 340M，在当时已经很大）
-- 生成任务不擅长（这是 Encoder-only 架构的天生限制）
-
-**启示：**
-1. **遮蔽策略是双向预训练的关键**——不是简单的"去掉 causal mask"，而是设计了巧妙的 15% 遮蔽策略来解决"看见自己"的问题。
-2. **多任务预训练是可行的**——MLM + NSP 证明了一个模型可以同时学不同粒度的语言知识。
-3. **规模不是唯一因素**——BERT-base 只有 110M 参数，但合理的预训练目标设计让它超越了很多更大的模型。
-4. **微调范式的力量**——BERT 证明了"通用预训练 + 轻量微调"可以替代"任务特定架构"，这个范式至今仍是 NLP 的主流方法之一。
+BERT 的训练数据是公开网页 + 维基百科，里面难免有偏见、错误信息、敏感内容。预训练时这些都会被模型"学进去"。下游做客服、招聘、教育类应用时，必须做：
+- **数据脱敏**：过滤明显的 PII（个人身份信息）
+- **偏见检测**：用 StereoSet、WinoBias 等基准测性别/种族/地域偏见
+- **事实核查**：BERT 不知道自己"对不对"，下游要加检索/校验层
+- **对抗输入**：错别字、emoji 干扰会让 BERT 分类不稳定，需要对抗训练或数据增强
 
 ## 参考资料
 
 - Devlin, J., Chang, M.W., Lee, K., & Toutanova, K. (2018). *BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*. arXiv:1810.04805.
 - Liu, Y., et al. (2019). *RoBERTa: A Robustly Optimized BERT Pretraining Approach*. arXiv:1907.11692.
-- Clark, K., et al. (2020). *ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators*. arXiv:2003.10555.
+- Sanh, V., et al. (2019). *DistilBERT, a distilled version of BERT*. arXiv:1910.01108.
+- 论文 arXiv HTML 版（含 Figures）：https://arxiv.org/html/1810.04805
 - The Illustrated BERT（Jay Alammar 经典图解）：http://jalammar.github.io/illustrated-bert/

@@ -1,0 +1,32 @@
+# 外部资源本地化（覆盖主题的 jsdelivr CDN——国内被墙）
+# 所有文件已下载到 static/vendor/，随站点构建发布
+Vibrant:
+    - src: /vendor/vibrant/vibrant.min.js
+      type: script
+
+PhotoSwipe:
+    - src: /vendor/photoswipe/photoswipe.min.js
+      type: script
+      defer: true
+
+    - src: /vendor/photoswipe/photoswipe-ui-default.min.js
+      type: script
+      defer: true
+
+    - src: /vendor/photoswipe/default-skin/default-skin.min.css
+      type: style
+
+    - src: /vendor/photoswipe/photoswipe.min.css
+      type: style
+
+KaTeX:
+    - src: /vendor/katex/katex.min.css
+      type: style
+
+    - src: /vendor/katex/katex.min.js
+      type: script
+      defer: true
+
+    - src: /vendor/katex/auto-render.min.js
+      type: script
+      defer: true
