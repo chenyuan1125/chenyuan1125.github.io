@@ -7,20 +7,20 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 01 Sep 2026 22:08:21 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 01 Sep 2026 22:17:28 +0800</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>大模型架构学习</title>
+        <link>/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Linux内核</title>
         <link>/categories/linux%E5%86%85%E6%A0%B8/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
         <guid>/categories/linux%E5%86%85%E6%A0%B8/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>大模型架构学习</title>
-        <link>/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</link>
-        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-        
-        <guid>/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</guid>
         <description></description>
         </item>
         <item>
