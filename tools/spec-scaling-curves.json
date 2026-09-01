@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {"id":"1","x":30,"y":30,"w":180,"h":50,"text":"125M 参数","color":"blue","fill":"solid","geo":"rectangle"},
+    {"id":"2","x":30,"y":120,"w":180,"h":50,"text":"1.5B 参数","color":"green","fill":"solid","geo":"rectangle"},
+    {"id":"3","x":30,"y":210,"w":180,"h":50,"text":"13B 参数","color":"orange","fill":"solid","geo":"rectangle"},
+    {"id":"4","x":30,"y":300,"w":180,"h":50,"text":"175B 参数","color":"red","fill":"solid","geo":"rectangle"},
+    {"id":"5","x":400,"y":30,"w":200,"h":50,"text":"Zero-Shot 性能\n(稳步提升)","color":"blue","fill":"tint","geo":"rectangle"},
+    {"id":"6","x":400,"y":120,"w":200,"h":50,"text":"One-Shot 性能\n(曲线变陡)","color":"green","fill":"tint","geo":"rectangle"},
+    {"id":"7","x":400,"y":210,"w":200,"h":50,"text":"Few-Shot 性能\n(急剧提升)","color":"red","fill":"tint","geo":"rectangle"},
+    {"id":"8","x":400,"y":300,"w":200,"h":50,"text":"In-Context Learning\n能力涌现","color":"violet","fill":"solid","geo":"rectangle"}
+  ],
+  "arrows": [
+    {"id":"a1","x1":210,"y1":55,"x2":400,"y2":55,"color":"black","arrowheadEnd":"arrow"},
+    {"id":"a2","x1":210,"y1":145,"x2":400,"y2":145,"color":"black","arrowheadEnd":"arrow"},
+    {"id":"a3","x1":210,"y1":235,"x2":400,"y2":235,"color":"black","arrowheadEnd":"arrow"},
+    {"id":"a4","x1":210,"y1":325,"x2":400,"y2":325,"color":"black","arrowheadEnd":"arrow"}
+  ],
+  "texts": [
+    {"id":"t1","x":30,"y":370,"w":600,"text":"关键发现：Few-Shot 性能随模型规模超线性增长，大模型是更优秀的元学习器","color":"black","size":"m","font":"sans"}
+  ]
+}

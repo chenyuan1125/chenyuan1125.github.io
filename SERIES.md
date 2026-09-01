@@ -12,7 +12,7 @@
 | 01 | 2026-08-26 | Transformer（Attention Is All You Need, 2017）——注意力机制、多头、位置编码 | transformer-01 | ✅ 已发布 |
 | 02 | 2026-08-27 | BERT（2018）——双向编码器、Masked LM、理解型模型的开端 | [bert-02](https://ethan-lily.cn/p/bert-02/) | ✅ 已发布 |
 | 03 | 2026-08-28 | GPT-1/2（2018/2019）——生成式预训练、few-shot 萌芽 | [gpt-01](https://ethan-lily.cn/p/gpt-01/) | ✅ 已发布 |
-| 04 | | GPT-3（2020）——in-context learning、few-shot 爆发 | | ⬜ |
+| 04 | 2026-09-02 | GPT-3（2020）——in-context learning、few-shot 爆发 | [gpt-03](https://ethan-lily.cn/p/gpt-03/) | ✅ 已发布 |
 | 05 | | T5 / BART（2019/2020）——Text-to-Text、encoder-decoder 统一 | | ⬜ |
 | 06 | | GPT-3.5 / InstructGPT（2022）——RLHF、对齐技术起点 | | ⬜ |
 | 07 | | Chinchilla（2022）——Scaling Laws、参数/数据配比 | | ⬜ |
