@@ -20,7 +20,7 @@
 | 09 | | MoE 系列：Switch Transformer / Mixtral——稀疏专家 | | ⬜ |
 | 10 | | DeepSeek-V2 MLA / V3 MoE——高效注意力、大规模稀疏 | | ⬜ |
 | 11 | | 线性注意力：RWKV / Mamba（SSM） | | ⬜ |
-| 12 | | 推理模型：o1 / DeepSeek-R1——RL 与思维链 | | ⬜ |
+| 12 | 2025-09-01 | 推理模型：o1 / DeepSeek-R1——RL 与思维链 | [deepseek-r1-reasoning-rl](https://ethan-lily.cn/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/) | ✅ 已发布 |
 | 13 | | 多模态：CLIP / LLaVA / GPT-4V 架构 | | ⬜ |
 | 14 | | 安全相关技术报告：红队、越狱防御、护栏（Anthropic/OpenAI） | | ⬜ |
 
