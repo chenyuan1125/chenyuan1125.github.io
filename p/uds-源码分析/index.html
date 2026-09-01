@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。">
+<title>Unix Domain Socket 源码实现分析 (OLK 6.6)</title>
+
+<link rel='canonical' href='/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/'>
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="Unix Domain Socket 源码实现分析 (OLK 6.6)">
+<meta property='og:description' content="深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。">
+<meta property='og:url' content='/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='IPC' /><meta property='article:tag' content='UDS' /><meta property='article:tag' content='Linux内核' /><meta property='article:tag' content='源码分析' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-31T20:13:23&#43;08:00'/>
+<meta name="twitter:title" content="Unix Domain Socket 源码实现分析 (OLK 6.6)">
+<meta name="twitter:description" content="深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。">
+
+<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="/en/" >English</option>
+                                
+                                    <option value="/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引子tcp-loopback-有什么问题">引子：TCP loopback 有什么问题？</a></li>
+    <li><a href="#uds-最重要的设计决策地址用路径名">UDS 最重要的设计决策：地址用路径名</a></li>
+    <li><a href="#创建-socket比-tcp-少一层">创建 socket：比 TCP 少一层</a>
+      <ol>
+        <li><a href="#socket-系统调用">socket() 系统调用</a></li>
+        <li><a href="#创建-socket-对象__sys_socket_create--sock_create--__sock_create">创建 socket 对象：__sys_socket_create → sock_create → __sock_create</a></li>
+        <li><a href="#映射到文件描述符">映射到文件描述符</a></li>
+      </ol>
+    </li>
+    <li><a href="#bind把-socket-和路径绑定">bind：把 socket 和路径绑定</a></li>
+    <li><a href="#listenaccept连接管理">listen/accept：连接管理</a></li>
+    <li><a href="#connectuds-最关键的链路">connect：UDS 最关键的链路</a></li>
+    <li><a href="#数据收发不走网络栈">数据收发：不走网络栈</a>
+      <ol>
+        <li><a href="#send直接把数据放到接收队列">send：直接把数据放到接收队列</a></li>
+        <li><a href="#recv从接收队列取">recv：从接收队列取</a></li>
+      </ol>
+    </li>
+    <li><a href="#进阶uds-独有的能力">进阶：UDS 独有的能力</a>
+      <ol>
+        <li><a href="#1-文件描述符传递scm_rights">1. 文件描述符传递（SCM_RIGHTS）</a></li>
+        <li><a href="#2-证书传递scm_credentials">2. 证书传递（SCM_CREDENTIALS）</a></li>
+        <li><a href="#3-sock_seqpacket流式--保边界">3. SOCK_SEQPACKET：流式 + 保边界</a></li>
+      </ol>
+    </li>
+    <li><a href="#从-ai-安全视角看-uds">从 AI 安全视角看 UDS</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/linux%E5%86%85%E6%A0%B8/" >
+                Linux内核
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">Unix Domain Socket 源码实现分析 (OLK 6.6)</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-08-28</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 7 分钟
+                </time>
+            </div>
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+                <time class="article-words">
+                    3494字
+                </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="引子tcp-loopback-有什么问题">引子：TCP loopback 有什么问题？
+</h2><p>两台机器通信要经过复杂的网络栈：路由、拥塞控制、校验和、分片重组。但<strong>同一台机器上两个进程通信</strong>，走 TCP loopback 也能通，只是杀鸡用牛刀了——数据包绕了一大圈网卡环路才回来，CPU 白白做了大量不需要的协议处理。</p>
+<p>Unix Domain Socket（UDS）就是为这个场景设计的：<strong>不走网络层，直接在进程间共享内存缓冲</strong>。它比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且在同一台机器上，UDS 的安全性天然可控（文件权限就能限制访问）。</p>
+<h2 id="uds-最重要的设计决策地址用路径名">UDS 最重要的设计决策：地址用路径名
+</h2><p>TCP 用 IP:Port 标识端点，UDS 则用<strong>文件系统路径</strong>（或抽象命名空间的名字）。这是理解 UDS 一切设计的关键：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// include/uapi/linux/un.h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#define UNIX_PATH_MAX   108
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__kernel_sa_family_t</span> <span class="n">sun_family</span><span class="p">;</span> <span class="cm">/* AF_UNIX */</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">sun_path</span><span class="p">[</span><span class="n">UNIX_PATH_MAX</span><span class="p">];</span>   <span class="cm">/* 路径名 */</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>bind 到这个路径上时，内核会在文件系统创建一个<strong>特殊的 socket 文件</strong>（type=S_IFSOCK），ls 能看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ls -l /run/containerd/containerd.sock
+</span></span><span class="line"><span class="cl">srw-rw---- <span class="m">1</span> root root <span class="m">0</span> Aug <span class="m">28</span> 10:00 /run/containerd/containerd.sock
+</span></span><span class="line"><span class="cl"><span class="c1"># ↑ 开头的 s 就是 socket 文件类型</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>路径名地址带来了两个好处：</p>
+<ul>
+<li><strong>权限控制天然继承自文件系统</strong>：chmod 就能控制谁能连接</li>
+<li><strong>生命周期可见</strong>：socket 文件存在就是有人监听，删了就是停了</li>
+</ul>
+<p>但路径名还有个缺点：<strong>需要创建文件</strong>，用完还要清理（unlink）。所以 Linux 后来加了<strong>抽象命名空间</strong>（abstract namespace），把 sun_path 第一个字节设为 <code>\0</code>，socket 名字只存在于内核内存中，不落盘：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 抽象命名空间示例：地址为 &#34;@containerd&#34;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="n">addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">addr</span><span class="p">.</span><span class="n">sun_family</span> <span class="o">=</span> <span class="n">AF_UNIX</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">addr</span><span class="p">.</span><span class="n">sun_path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>  <span class="c1">// 首字节为 \0 表示抽象命名空间
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">memcpy</span><span class="p">(</span><span class="n">addr</span><span class="p">.</span><span class="n">sun_path</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#34;containerd&#34;</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="创建-socket比-tcp-少一层">创建 socket：比 TCP 少一层
+</h2><p>UDS 的 socket 创建入口和 TCP 一样，都是 <code>socket(AF_UNIX, SOCK_STREAM, 0)</code>，但内核路径完全不同。</p>
+<h3 id="socket-系统调用">socket() 系统调用
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// net/socket.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">SYSCALL_DEFINE3</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="n">protocol</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">__sys_socket</span><span class="p">(</span><span class="n">family</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">protocol</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">__sys_socket</span><span class="p">(</span><span class="kt">int</span> <span class="n">family</span><span class="p">,</span> <span class="kt">int</span> <span class="n">type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">protocol</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sock</span> <span class="o">=</span> <span class="nf">__sys_socket_create</span><span class="p">(</span><span class="n">family</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">protocol</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">IS_ERR</span><span class="p">(</span><span class="n">sock</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">PTR_ERR</span><span class="p">(</span><span class="n">sock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">sock_map_fd</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">type</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">O_CLOEXEC</span> <span class="o">|</span> <span class="n">O_NONBLOCK</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>核心是两步：<strong>创建 socket 对象</strong> → <strong>映射到文件描述符</strong>。</p>
+<h3 id="创建-socket-对象__sys_socket_create--sock_create--__sock_create">创建 socket 对象：__sys_socket_create → sock_create → __sock_create
+</h3><p><code>__sock_create</code> 会调用 <code>net_families[AF_UNIX]-&gt;create</code>，也就是 <code>unix_create</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// net/unix/af_unix.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">net_proto_family</span> <span class="n">unix_family_ops</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">family</span> <span class="o">=</span> <span class="n">AF_UNIX</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">create</span> <span class="o">=</span> <span class="n">unix_create</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">owner</span>  <span class="o">=</span> <span class="n">THIS_MODULE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>unix_create</code> 做的事情很简单：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_create</span><span class="p">(</span><span class="k">struct</span> <span class="n">net</span> <span class="o">*</span><span class="n">net</span><span class="p">,</span> <span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="kt">int</span> <span class="n">protocol</span><span class="p">,</span> <span class="kt">int</span> <span class="n">kern</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 校验协议类型：只支持 SOCK_STREAM / SOCK_DGRAM / SOCK_SEQPACKET
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">protocol</span> <span class="o">&amp;&amp;</span> <span class="n">protocol</span> <span class="o">!=</span> <span class="n">PF_UNIX</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EPROTONOSUPPORT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 分配 sock 结构（这才是真正的内核 socket 对象）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sk</span> <span class="o">=</span> <span class="nf">unix_sk_alloc</span><span class="p">(</span><span class="n">net</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">sk</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">ENOMEM</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 根据类型初始化不同的 ops 表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">switch</span> <span class="p">(</span><span class="n">sock</span><span class="o">-&gt;</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">SOCK_STREAM</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sock</span><span class="o">-&gt;</span><span class="n">ops</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">unix_stream_ops</span><span class="p">;</span>    <span class="c1">// TCP 风格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">SOCK_DGRAM</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sock</span><span class="o">-&gt;</span><span class="n">ops</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">unix_dgram_ops</span><span class="p">;</span>     <span class="c1">// UDP 风格
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">SOCK_SEQPACKET</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sock</span><span class="o">-&gt;</span><span class="n">ops</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">unix_seqpacket_ops</span><span class="p">;</span> <span class="c1">// 流式 + 保边界
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">default</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">ESOCKTNOSUPPORT</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 初始化 sock 结构（锁、等待队列等）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">unix_insert_socket</span><span class="p">(</span><span class="nf">unix_sk</span><span class="p">(</span><span class="n">sk</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>关键区别</strong>：UDS 不需要像 TCP 那样分配 port、初始化路由表、设置拥塞控制。<code>unix_sk_alloc</code> 只是分配一个 <code>struct unix_sock</code>（比 <code>struct inet_sock</code> 小得多），加上基本的锁和队列初始化。</p>
+<h3 id="映射到文件描述符">映射到文件描述符
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">sock_map_fd</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">file</span> <span class="o">*</span><span class="n">newfile</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="nf">get_unused_fd_flags</span><span class="p">(</span><span class="n">flags</span><span class="p">);</span>  <span class="c1">// 取一个空闲 fd 号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">newfile</span> <span class="o">=</span> <span class="nf">sock_alloc_file</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">fd_install</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">newfile</span><span class="p">);</span>              <span class="c1">// 关联 fd 和 file
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="n">fd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>sock_alloc_file</code> 分配一个<strong>伪文件</strong>（pseudo file），它的 <code>file_operations</code> 是 <code>socket_file_ops</code>——这是 UDS 能以 <code>read/write</code> 方式操作的关键。</p>
+<h2 id="bind把-socket-和路径绑定">bind：把 socket 和路径绑定
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// net/unix/af_unix.c
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_bind</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">uaddr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">addr_len</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">unix_sock</span> <span class="o">*</span><span class="n">u</span> <span class="o">=</span> <span class="nf">unix_sk</span><span class="p">(</span><span class="n">sk</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="o">*</span><span class="n">sunaddr</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="o">*</span><span class="p">)</span><span class="n">uaddr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">*</span><span class="n">path</span> <span class="o">=</span> <span class="n">sunaddr</span><span class="o">-&gt;</span><span class="n">sun_path</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 已经是 bound 状态 → 拒绝
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">u</span><span class="o">-&gt;</span><span class="n">addr</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EINVAL</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 校验地址格式
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">struct</span> <span class="n">unix_address</span> <span class="o">*</span><span class="n">addr</span> <span class="o">=</span> <span class="nf">kmalloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">addr</span><span class="p">)</span> <span class="o">+</span> <span class="n">addr_len</span><span class="p">,</span> <span class="n">GFP_KERNEL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">addr</span><span class="o">-&gt;</span><span class="n">len</span> <span class="o">=</span> <span class="n">addr_len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">memcpy</span><span class="p">(</span><span class="n">addr</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">sunaddr</span><span class="p">,</span> <span class="n">addr_len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ★ 抽象命名空间：名字存在内核内存，不落盘
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">addr</span><span class="o">-&gt;</span><span class="n">hash</span> <span class="o">=</span> <span class="nf">unix_abstract_hash</span><span class="p">(</span><span class="n">addr</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="n">addr_len</span><span class="p">,</span> <span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_type</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ★ 路径名命名空间：在文件系统创建一个 socket 文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">struct</span> <span class="n">path</span> <span class="n">parent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">err</span> <span class="o">=</span> <span class="nf">kern_path</span><span class="p">(</span><span class="n">sunaddr</span><span class="o">-&gt;</span><span class="n">sun_path</span><span class="p">,</span> <span class="n">LOOKUP_PARENT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">parent</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// ... 创建 S_IFSOCK 文件
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">addr</span><span class="o">-&gt;</span><span class="n">hash</span> <span class="o">=</span> <span class="nf">unix_autobind_hash</span><span class="p">(</span><span class="n">sk</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 获取 hash 锁，插入到全局 hash 表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">spin_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">unix_table_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">__unix_insert_socket</span><span class="p">(</span><span class="nf">unix_sk</span><span class="p">(</span><span class="n">sk</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">spin_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">unix_table_lock</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">u</span><span class="o">-&gt;</span><span class="n">addr</span> <span class="o">=</span> <span class="n">addr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>两种绑定路径的区别</strong>：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left"></th>
+          <th style="text-align: left">路径名</th>
+          <th style="text-align: left">抽象命名空间</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">标识方式</td>
+          <td style="text-align: left"><code>sun_path[0] != '\0'</code></td>
+          <td style="text-align: left"><code>sun_path[0] == '\0'</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">文件系统</td>
+          <td style="text-align: left">创建 socket 文件</td>
+          <td style="text-align: left">无文件</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">清理</td>
+          <td style="text-align: left">需要 unlink</td>
+          <td style="text-align: left">进程退出自动释放</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">权限</td>
+          <td style="text-align: left">文件权限控制</td>
+          <td style="text-align: left">无（只有命名空间隔离）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">典型场景</td>
+          <td style="text-align: left">生产服务（/run/*.sock）</td>
+          <td style="text-align: left">临时通信</td>
+      </tr>
+  </tbody>
+</table></div>
+<h2 id="listenaccept连接管理">listen/accept：连接管理
+</h2><p>UDS 的 listen/accept 和 TCP 在语义上完全一致，但实现简单得多：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_listen</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="kt">int</span> <span class="n">backlog</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 只是设置两个字段：listen 状态 + 最大挂起数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_max_ack_backlog</span> <span class="o">=</span> <span class="n">backlog</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_state</span> <span class="o">=</span> <span class="n">TCP_LISTEN</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>没有 TCP 的三次握手、没有 SYN 队列、没有定时器——就是<strong>设个状态</strong>。</p>
+<p>accept 的核心是 <code>unix_stream_accept</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_stream_accept</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">newsock</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                              <span class="k">struct</span> <span class="n">proto_accept_arg</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="p">,</span> <span class="o">*</span><span class="n">newsk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">unix_sock</span> <span class="o">*</span><span class="n">newu</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 从等待队列取一个已连接的客户端（如果没有就阻塞）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">newsk</span> <span class="o">=</span> <span class="nf">skb_dequeue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_receive_queue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 新 socket 继承监听 socket 的 credentials
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">newu</span> <span class="o">=</span> <span class="nf">unix_sk</span><span class="p">(</span><span class="n">newsk</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 返回新 socket 的文件描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">newsock</span><span class="o">-&gt;</span><span class="n">sk</span> <span class="o">=</span> <span class="n">newsk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong>：当客户端 connect 时，它的 socket 已经被放入服务端的 <code>sk_receive_queue</code> 了。accept 只是在排队。</p>
+<h2 id="connectuds-最关键的链路">connect：UDS 最关键的链路
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_stream_connect</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">uaddr</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                               <span class="kt">int</span> <span class="n">addr_len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="o">*</span><span class="n">sunaddr</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr_un</span> <span class="o">*</span><span class="p">)</span><span class="n">uaddr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">other</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 根据路径名找到服务端 socket
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">other</span> <span class="o">=</span> <span class="nf">unix_find_other</span><span class="p">(</span><span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_net</span><span class="p">,</span> <span class="n">sunaddr</span><span class="p">,</span> <span class="n">addr_len</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                            <span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_type</span><span class="p">,</span> <span class="n">hash</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">other</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">err</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 分配一个新 sock（用于这条连接）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">newsk</span> <span class="o">=</span> <span class="nf">unix_create1</span><span class="p">(</span><span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_net</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 新 sock 绑定一个临时地址（自动生成）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 把新 sock 放到服务端的接收队列尾部
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">skb</span> <span class="o">=</span> <span class="nf">sock_alloc_send_skb</span><span class="p">(</span><span class="n">sk</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">O_NONBLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">skb</span><span class="o">-&gt;</span><span class="n">sk</span> <span class="o">=</span> <span class="n">newsk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">skb_queue_tail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">other</span><span class="o">-&gt;</span><span class="n">sk_receive_queue</span><span class="p">,</span> <span class="n">skb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 4. 唤醒服务端（如果它在 accept 上阻塞）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">other</span><span class="o">-&gt;</span><span class="nf">sk_data_ready</span><span class="p">(</span><span class="n">other</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 5. 修改状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">other</span><span class="o">-&gt;</span><span class="n">sk_state</span> <span class="o">=</span> <span class="n">TCP_ESTABLISHED</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">newsk</span><span class="o">-&gt;</span><span class="n">sk_state</span> <span class="o">=</span> <span class="n">TCP_ESTABLISHED</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>关键</strong>：<code>unix_find_other</code> 根据路径名在全局 hash 表里找到服务端 socket。这一步不需要像 TCP 那样经过路由表查找、ARP 解析、网卡中断——<strong>纯内存操作</strong>。</p>
+<h2 id="数据收发不走网络栈">数据收发：不走网络栈
+</h2><h3 id="send直接把数据放到接收队列">send：直接把数据放到接收队列
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_stream_sendmsg</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                <span class="kt">size_t</span> <span class="n">len</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">other</span> <span class="o">=</span> <span class="nf">unix_peer</span><span class="p">(</span><span class="n">sk</span><span class="p">);</span>  <span class="c1">// 直接拿到对端
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 分配 skb
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">skb</span> <span class="o">=</span> <span class="nf">sock_alloc_send_skb</span><span class="p">(</span><span class="n">sk</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="p">...);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 从用户态拷贝数据到 skb
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">err</span> <span class="o">=</span> <span class="nf">skb_store_bits</span><span class="p">(</span><span class="n">skb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">msg</span><span class="o">-&gt;</span><span class="n">msg_iov</span><span class="o">-&gt;</span><span class="n">iov_base</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 直接把 skb 放到对端的接收队列
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">skb_queue_tail</span><span class="p">(</span><span class="o">&amp;</span><span class="n">other</span><span class="o">-&gt;</span><span class="n">sk_receive_queue</span><span class="p">,</span> <span class="n">skb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 通知对端有数据来了
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">other</span><span class="o">-&gt;</span><span class="nf">sk_data_ready</span><span class="p">(</span><span class="n">other</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>对比 TCP 的路径</strong>：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">步骤</th>
+          <th style="text-align: left">TCP</th>
+          <th style="text-align: left">UDS</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">数据拷贝</td>
+          <td style="text-align: left">用户→内核skb</td>
+          <td style="text-align: left">用户→内核skb</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">路由查找</td>
+          <td style="text-align: left">查路由表</td>
+          <td style="text-align: left">无</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">拥塞控制</td>
+          <td style="text-align: left">窗口管理、重传定时器</td>
+          <td style="text-align: left">无</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">校验和</td>
+          <td style="text-align: left">计算 IP/TCP 校验和</td>
+          <td style="text-align: left">无</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">分片</td>
+          <td style="text-align: left">可能分片、重组</td>
+          <td style="text-align: left">无</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">中断</td>
+          <td style="text-align: left">软中断、硬中断</td>
+          <td style="text-align: left">无</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">投递</td>
+          <td style="text-align: left">通过网卡发送</td>
+          <td style="text-align: left">直接放到对端队列</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>UDS 的数据路径<strong>只有 2 次拷贝</strong>（用户→内核→对端），而 TCP loopback 要经过完整的协议栈，即使没出网卡，仍要经过路由、拥塞控制、校验和、softirq 等环节。</p>
+<h3 id="recv从接收队列取">recv：从接收队列取
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">unix_stream_recvmsg</span><span class="p">(</span><span class="k">struct</span> <span class="n">socket</span> <span class="o">*</span><span class="n">sock</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                <span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">struct</span> <span class="n">sock</span> <span class="o">*</span><span class="n">sk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">-&gt;</span><span class="n">sk</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 从接收队列取 skb
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">skb</span> <span class="o">=</span> <span class="nf">skb_dequeue</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sk</span><span class="o">-&gt;</span><span class="n">sk_receive_queue</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">skb</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="n">EAGAIN</span><span class="p">;</span>  <span class="c1">// 或阻塞等待
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 把数据拷贝到用户态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">skb_copy_datagram_msg</span><span class="p">(</span><span class="n">skb</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="进阶uds-独有的能力">进阶：UDS 独有的能力
+</h2><h3 id="1-文件描述符传递scm_rights">1. 文件描述符传递（SCM_RIGHTS）
+</h3><p>这是 UDS 最有价值的能力之一——<strong>把一个进程的文件描述符传给另一个进程</strong>，对端拿到的是同一个内核文件对象：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 发送端
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="n">msghdr</span> <span class="n">msg</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="nf">CMSG_SPACE</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">))];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cmsg</span> <span class="o">=</span> <span class="nf">CMSG_FIRSTHDR</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmsg</span><span class="o">-&gt;</span><span class="n">cmsg_level</span> <span class="o">=</span> <span class="n">SOL_SOCKET</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmsg</span><span class="o">-&gt;</span><span class="n">cmsg_type</span> <span class="o">=</span> <span class="n">SCM_RIGHTS</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">cmsg</span><span class="o">-&gt;</span><span class="n">cmsg_len</span> <span class="o">=</span> <span class="nf">CMSG_LEN</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="o">*</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="nf">CMSG_DATA</span><span class="p">(</span><span class="n">cmsg</span><span class="p">)</span> <span class="o">=</span> <span class="n">fd_to_send</span><span class="p">;</span>  <span class="c1">// 要传递的 fd
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">sendmsg</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>内核实现：<code>unix_scm_to_skb</code> 把文件指针从当前进程的 fd 表里取出，插入到 skb 的辅助数据中，对端接收时从 skb 取出文件指针，在它的 fd 表中分配一个新 fd。<strong>整个过程不涉及文件内容拷贝</strong>。</p>
+<p>这在 containerd 中非常关键：containerd 通过 UDS 把容器标准输入/输出/错误的 fd 传递给 shim 进程。</p>
+<h3 id="2-证书传递scm_credentials">2. 证书传递（SCM_CREDENTIALS）
+</h3><p>UDS 可以<strong>自动携带发送进程的 PID、UID、GID</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">// 接收端可以获取对端进程的证书
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="n">ucred</span> <span class="n">peercred</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">socklen_t</span> <span class="n">len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">peercred</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">getsockopt</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_PEERCRED</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">peercred</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">len</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// peercred.pid, peercred.uid, peercred.gid
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个能力是<strong>内核自动提供的，不需要发送端配合</strong>。这意味着服务端可以<strong>基于 PID 做细粒度权限控制</strong>——比如只允许某个进程连接。</p>
+<h3 id="3-sock_seqpacket流式--保边界">3. SOCK_SEQPACKET：流式 + 保边界
+</h3><p>TCP 是流式（SOCK_STREAM），数据可能粘包；UDP 是报文（SOCK_DGRAM），有大小限制。UDS 的 SOCK_SEQPACKET 则<strong>兼具两者优点</strong>：</p>
+<ul>
+<li>面向连接（像 TCP）</li>
+<li>保消息边界（像 UDP）</li>
+<li>数据可靠、有序</li>
+</ul>
+<h2 id="从-ai-安全视角看-uds">从 AI 安全视角看 UDS
+</h2><p>UDS 虽然不经过网络，但它本身就有安全风险：</p>
+<p><strong>路径名 socket 的权限风险</strong>：socket 文件继承文件系统的权限。如果 <code>chmod 777</code> 一个 UDS 文件，任何用户都能连接。容器场景下，宿主机和容器可能共享挂载的 socket 文件——这是容器逃逸的常见攻击面。</p>
+<p><strong>抽象命名空间不可控</strong>：抽象命名空间的 socket 不落盘，不能用 <code>ls</code> 看到，也没有文件权限保护。恶意进程只要知道名字就能连上。这也是为什么 containerd 的默认 socket 是路径名（<code>/run/containerd/containerd.sock</code>）而不是抽象命名空间——路径名至少能用文件权限约束。</p>
+<p><strong>fd 传递的攻击面</strong>：SCM_RIGHTS 传递的是内核文件对象指针。如果恶意进程通过 UDS 接收 fd，可能拿到意外的系统资源。所以接收方应该用 <code>SO_PEERCRED</code> 验证发送方身份。</p>
+<h2 id="总结">总结
+</h2><p>UDS 是 Linux 本地 IPC 的最佳选择——<strong>比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且支持 fd 传递和证书传递这些独特能力</strong>。它的核心设计思想是：既然两个进程在同一台机器上，那就绕过整个网络栈，直接在内存中传递数据。</p>
+<p>回到 containerd 的通信架构，它的所有 gRPC 和 TTRPC 接口都基于 UDS 实现——这不是巧合，而是对安全性和性能的共同追求。</p>
+<h2 id="参考资料">参考资料
+</h2><ul>
+<li>Linux kernel 6.6 源码：<code>net/unix/af_unix.c</code></li>
+<li><code>man 7 unix</code> — Unix sockets 手册</li>
+<li><code>man 7 cmsg</code> — 辅助数据（fd 传递、证书传递）</li>
+<li>Stevens, <em>UNIX Network Programming</em>, Vol 1, Chapter 15 (Unix Domain Protocols)</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/ipc/">IPC</a>
+        
+            <a href="/tags/uds/">UDS</a>
+        
+            <a href="/tags/linux%E5%86%85%E6%A0%B8/">Linux内核</a>
+        
+            <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-08-31
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist", "waline-container"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">containerd 通信机制分析</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top","visitor":true});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="/vendor/photoswipe/photoswipe.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/photoswipe/photoswipe-ui-default.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+
+    </body>
+</html>

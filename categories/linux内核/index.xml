@@ -7,13 +7,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Fri, 28 Aug 2026 22:23:05 +0800</lastBuildDate><atom:link href="/categories/linux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 31 Aug 2026 20:13:23 +0800</lastBuildDate><atom:link href="/categories/linux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Unix Domain Socket 源码实现分析 (OLK 6.6)</title>
-        <link>/p/uds-linux-kernel/</link>
+        <link>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
-        <guid>/p/uds-linux-kernel/</guid>
-        <description>&lt;img src="/p/uds-linux-kernel/1.jpg" alt="Featured image of post Unix Domain Socket 源码实现分析 (OLK 6.6)" /&gt;&lt;h2 id=&#34;引子tcp-loopback-有什么问题&#34;&gt;引子：TCP loopback 有什么问题？
+        <guid>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;h2 id=&#34;引子tcp-loopback-有什么问题&#34;&gt;引子：TCP loopback 有什么问题？
 &lt;/h2&gt;&lt;p&gt;两台机器通信要经过复杂的网络栈：路由、拥塞控制、校验和、分片重组。但&lt;strong&gt;同一台机器上两个进程通信&lt;/strong&gt;，走 TCP loopback 也能通，只是杀鸡用牛刀了——数据包绕了一大圈网卡环路才回来，CPU 白白做了大量不需要的协议处理。&lt;/p&gt;
 &lt;p&gt;Unix Domain Socket（UDS）就是为这个场景设计的：&lt;strong&gt;不走网络层，直接在进程间共享内存缓冲&lt;/strong&gt;。它比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且在同一台机器上，UDS 的安全性天然可控（文件权限就能限制访问）。&lt;/p&gt;
 &lt;h2 id=&#34;uds-最重要的设计决策地址用路径名&#34;&gt;UDS 最重要的设计决策：地址用路径名
@@ -668,6 +668,11 @@
 &lt;li&gt;保消息边界（像 UDP）&lt;/li&gt;
 &lt;li&gt;数据可靠、有序&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;从-ai-安全视角看-uds&#34;&gt;从 AI 安全视角看 UDS
+&lt;/h2&gt;&lt;p&gt;UDS 虽然不经过网络，但它本身就有安全风险：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;路径名 socket 的权限风险&lt;/strong&gt;：socket 文件继承文件系统的权限。如果 &lt;code&gt;chmod 777&lt;/code&gt; 一个 UDS 文件，任何用户都能连接。容器场景下，宿主机和容器可能共享挂载的 socket 文件——这是容器逃逸的常见攻击面。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;抽象命名空间不可控&lt;/strong&gt;：抽象命名空间的 socket 不落盘，不能用 &lt;code&gt;ls&lt;/code&gt; 看到，也没有文件权限保护。恶意进程只要知道名字就能连上。这也是为什么 containerd 的默认 socket 是路径名（&lt;code&gt;/run/containerd/containerd.sock&lt;/code&gt;）而不是抽象命名空间——路径名至少能用文件权限约束。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;fd 传递的攻击面&lt;/strong&gt;：SCM_RIGHTS 传递的是内核文件对象指针。如果恶意进程通过 UDS 接收 fd，可能拿到意外的系统资源。所以接收方应该用 &lt;code&gt;SO_PEERCRED&lt;/code&gt; 验证发送方身份。&lt;/p&gt;
 &lt;h2 id=&#34;总结&#34;&gt;总结
 &lt;/h2&gt;&lt;p&gt;UDS 是 Linux 本地 IPC 的最佳选择——&lt;strong&gt;比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且支持 fd 传递和证书传递这些独特能力&lt;/strong&gt;。它的核心设计思想是：既然两个进程在同一台机器上，那就绕过整个网络栈，直接在内存中传递数据。&lt;/p&gt;
 &lt;p&gt;回到 containerd 的通信架构，它的所有 gRPC 和 TTRPC 接口都基于 UDS 实现——这不是巧合，而是对安全性和性能的共同追求。&lt;/p&gt;

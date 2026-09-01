@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="从源码出发，拆解 containerd 的 gRPC、TTRPC、UDS 三层通信架构，理解一个容器运行时如何管理进程生命周期。">
+<title>containerd 通信机制分析</title>
+
+<link rel='canonical' href='/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/'>
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="containerd 通信机制分析">
+<meta property='og:description' content="从源码出发，拆解 containerd 的 gRPC、TTRPC、UDS 三层通信架构，理解一个容器运行时如何管理进程生命周期。">
+<meta property='og:url' content='/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='containerd' /><meta property='article:tag' content='容器' /><meta property='article:tag' content='gRPC' /><meta property='article:tag' content='IPC' /><meta property='article:tag' content='源码分析' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-31T20:13:23&#43;08:00'/>
+<meta name="twitter:title" content="containerd 通信机制分析">
+<meta name="twitter:description" content="从源码出发，拆解 containerd 的 gRPC、TTRPC、UDS 三层通信架构，理解一个容器运行时如何管理进程生命周期。">
+
+<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="/en/" >English</option>
+                                
+                                    <option value="/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引子containerd-在容器生态里的位置">引子：containerd 在容器生态里的位置</a></li>
+    <li><a href="#通信架构总览">通信架构总览</a></li>
+    <li><a href="#启动流程通信通道的初始化">启动流程：通信通道的初始化</a></li>
+    <li><a href="#grpc-和-ttrpc为什么需要两套">gRPC 和 TTRPC：为什么需要两套</a>
+      <ol>
+        <li><a href="#grpc-服务注册">gRPC 服务注册</a></li>
+        <li><a href="#ttrpc-服务注册">TTRPC 服务注册</a></li>
+      </ol>
+    </li>
+    <li><a href="#服务端处理请求的完整链路">服务端处理请求的完整链路</a></li>
+    <li><a href="#containerd-shim-通信模型">Containerd-Shim 通信模型</a></li>
+    <li><a href="#插件通信机制">插件通信机制</a></li>
+    <li><a href="#从-ai-安全视角看-containerd-通信">从 AI 安全视角看 containerd 通信</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/%E5%AE%B9%E5%99%A8/" >
+                容器
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/">containerd 通信机制分析</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            从源码出发，拆解 containerd 的 gRPC、TTRPC、UDS 三层通信架构，理解一个容器运行时如何管理进程生命周期。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2026-08-28</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 6 分钟
+                </time>
+            </div>
+        
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+</svg>
+                <time class="article-words">
+                    2932字
+                </time>
+        </div>
+        
+
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="引子containerd-在容器生态里的位置">引子：containerd 在容器生态里的位置
+</h2><p>用 Docker 或 Kubernetes 时，你很少直接接触 containerd。但它是<strong>容器生态的基石</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Docker CLI → Docker Engine → containerd → runc → 容器进程
+</span></span><span class="line"><span class="cl">Kubelet    → (CRI)        → containerd → runc → 容器进程
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Containerd 是一个<strong>容器生命周期管理器</strong>，它不直接拉起容器，而是通过 OCI 标准调用 runc 去拉。Containerd 自己负责：镜像下载/存储、rootfs 生成、容器的启停守护、以及底层存储和网络的管理。</p>
+<p>它的通信架构很有意思——<strong>一个守护进程，三个 socket 文件，两种 RPC 协议，一种通信方式串起全部</strong>。</p>
+<h2 id="通信架构总览">通信架构总览
+</h2><p>Containerd 启动后会在 <code>/run/containerd/</code> 下创建多个 socket 文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ls -la /run/containerd/
+</span></span><span class="line"><span class="cl">srw-rw---- <span class="m">1</span> root root <span class="m">0</span> /run/containerd/containerd.sock     <span class="c1"># gRPC 主端点</span>
+</span></span><span class="line"><span class="cl">srw-rw---- <span class="m">1</span> root root <span class="m">0</span> /run/containerd/containerd.sock.ttrpc <span class="c1"># TTRPC 端点</span>
+</span></span><span class="line"><span class="cl">srw-rw---- <span class="m">1</span> root root <span class="m">0</span> /run/containerd/debug.sock            <span class="c1"># Debug 端点</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所有通信都基于 <strong>Unix Domain Socket (UDS)</strong>，协议有两种：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">协议</th>
+          <th style="text-align: left">用途</th>
+          <th style="text-align: left">监听地址</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left"><strong>gRPC</strong> (HTTP/2 + Protobuf)</td>
+          <td style="text-align: left">外部客户端：ctr、Docker、K8s Kubelet</td>
+          <td style="text-align: left"><code>/run/containerd/containerd.sock</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left"><strong>TTRPC</strong> (TTTRPC)</td>
+          <td style="text-align: left">内部插件通信：containerd ↔ 插件</td>
+          <td style="text-align: left"><code>/run/containerd/containerd.sock.ttrpc</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">gRPC TCP (可选)</td>
+          <td style="text-align: left">外部监听（一般不用）</td>
+          <td style="text-align: left">127.0.0.1 或空</td>
+      </tr>
+  </tbody>
+</table></div>
+<p><strong>为什么用两套 RPC 协议？</strong> 这是 containerd 架构设计的关键决策，后面会讲。</p>
+<h2 id="启动流程通信通道的初始化">启动流程：通信通道的初始化
+</h2><p>入口在 <code>cmd/containerd/main.go</code>，核心逻辑在 <code>command.App()</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">app</span> <span class="o">:=</span> <span class="nx">command</span><span class="p">.</span><span class="nf">App</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">app</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>App()</code> 中按顺序初始化了多个监听器：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 1. Debug 端点（UDS 或 TCP）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="nx">config</span><span class="p">.</span><span class="nx">Debug</span><span class="p">.</span><span class="nx">Address</span> <span class="o">!=</span> <span class="s">&#34;&#34;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">l</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">sys</span><span class="p">.</span><span class="nf">GetLocalListener</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">Debug</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">serve</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">server</span><span class="p">.</span><span class="nx">ServeDebug</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 2. gRPC 主端点（UDS）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">l</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">sys</span><span class="p">.</span><span class="nf">GetLocalListener</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">GRPC</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">serve</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">server</span><span class="p">.</span><span class="nx">ServeGRPC</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 3. TTRPC 端点（UDS）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">tl</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">sys</span><span class="p">.</span><span class="nf">GetLocalListener</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">TTRPC</span><span class="p">.</span><span class="nx">Address</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">serve</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">tl</span><span class="p">,</span> <span class="nx">server</span><span class="p">.</span><span class="nx">ServeTTRPC</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>sys.GetLocalListener</code> 是关键函数——它根据地址字符串决定创建 UDS 还是 TCP 监听器，并<strong>设置 socket 文件的权限和所有者</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">GetLocalListener</span><span class="p">(</span><span class="nx">path</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">uid</span><span class="p">,</span> <span class="nx">gid</span> <span class="kt">int</span><span class="p">)</span> <span class="p">(</span><span class="nx">net</span><span class="p">.</span><span class="nx">Listener</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 删除旧 socket 文件（避免 bind 失败）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">os</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 监听 UDS
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">l</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nf">Listen</span><span class="p">(</span><span class="s">&#34;unix&#34;</span><span class="p">,</span> <span class="nx">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置文件权限（默认 0660，只有 root 和同组可访问）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">os</span><span class="p">.</span><span class="nf">Chmod</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="mo">0660</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 设置文件所有者（让 Docker 等非 root 进程也能连接）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">os</span><span class="p">.</span><span class="nf">Chown</span><span class="p">(</span><span class="nx">path</span><span class="p">,</span> <span class="nx">uid</span><span class="p">,</span> <span class="nx">gid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">l</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong>：先 <code>Remove</code> 再 <code>Listen</code>，这是 UDS 的惯用模式——socket 文件在进程退出后不会自动删除，不清理下次 bind 会失败。</p>
+<h2 id="grpc-和-ttrpc为什么需要两套">gRPC 和 TTRPC：为什么需要两套
+</h2><p>gRPC 是标准的外部接口，但 containerd 内部插件之间用的是 <strong>TTRPC</strong>。为什么？</p>
+<ol>
+<li><strong>gRPC 太重</strong>：gRPC 基于 HTTP/2，有完整的流控、头部压缩、多路复用。对 containerd 内部插件通信来说，这些是开销，不是收益。</li>
+<li><strong>TTRPC 是 containerd 自己的轻量级 RPC</strong>：基于 Protobuf（和 gRPC 一样），但去掉了 HTTP/2 层，直接在 UDS 上传输 Protobuf 二进制数据。没有流控、没有头部压缩、没有 service 发现——就是<strong>序列化 → 发送 → 反序列化</strong>。</li>
+<li><strong>插件不暴露给外部</strong>：gRPC 端点对 Docker/K8s 开放，TTRPC 端点只对 containerd 自身和它的插件开放。两套协议隔开了外部和内部，<strong>攻击面更小</strong>。</li>
+</ol>
+<h3 id="grpc-服务注册">gRPC 服务注册
+</h3><p>Containerd 在启动时注册了多个 gRPC 服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// services/server/server.go
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="nf">New</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">config</span> <span class="o">*</span><span class="nx">srvconfig</span><span class="p">.</span><span class="nx">Config</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Server</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">s</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">Server</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 注册 gRPC 服务
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">s</span><span class="p">.</span><span class="nf">RegisterServices</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">s</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">RegisterServices</span><span class="p">(</span><span class="nx">grpcServer</span> <span class="o">*</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">Server</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 每个服务都是一个 plugin
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">p</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">s</span><span class="p">.</span><span class="nx">plugins</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">service</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">p</span><span class="p">.(</span><span class="nx">grpcService</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">service</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">)</span>  <span class="c1">// 插件注册自己的 gRPC 服务
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>每个插件（containers、images、snapshots、tasks 等）都实现了 <code>grpcService</code> 接口，在启动时注册到 gRPC server。<strong>这是一种 service 插件化架构</strong>——核心不依赖具体实现，只依赖接口。</p>
+<h3 id="ttrpc-服务注册">TTRPC 服务注册
+</h3><p>TTRPC 的注册方式类似，但更轻量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 每个插件同时注册到 gRPC 和 TTRPC
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">server</span> <span class="o">*</span><span class="nx">grpc</span><span class="p">.</span><span class="nx">Server</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">apitypes</span><span class="p">.</span><span class="nf">RegisterService</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nf">RegisterTTRPC</span><span class="p">(</span><span class="nx">server</span> <span class="o">*</span><span class="nx">ttrpc</span><span class="p">.</span><span class="nx">Server</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">apitypes</span><span class="p">.</span><span class="nf">RegisterServiceTTRPC</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>同一个业务逻辑，两个 RPC 协议入口</strong>——外部走 gRPC，内部走 TTRPC。</p>
+<h2 id="服务端处理请求的完整链路">服务端处理请求的完整链路
+</h2><p>以创建容器为例，看一个请求从接收到处理完成的完整路径：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1. Docker/ctr → gRPC 请求 → containerd.sock
+</span></span><span class="line"><span class="cl">2. gRPC Server 反序列化 Protobuf → CreateContainerRequest
+</span></span><span class="line"><span class="cl">3. Server 路由到 containersService.Create()
+</span></span><span class="line"><span class="cl">4. containersService 调用内部 API（如 tasksService）
+</span></span><span class="line"><span class="cl">5. tasksService 通过 TTRPC 调用 shim 进程
+</span></span><span class="line"><span class="cl">6. Shim 通过 runc 拉起容器
+</span></span><span class="line"><span class="cl">7. 结果原路返回
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>第 5 步值得展开</strong>：containerd 和 shim 之间的通信就是 TTRPC + UDS。</p>
+<h2 id="containerd-shim-通信模型">Containerd-Shim 通信模型
+</h2><p>每个容器都有一个独立的 <code>containerd-shim</code> 进程。Shim 的作用是<strong>隔离开 containerd 和容器进程</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">containerd 崩溃 → 不影响运行中的容器
+</span></span><span class="line"><span class="cl">容器进程退出 → 不影响 containerd（shim 报回去）
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Containerd 和 shim 通过 TTRPC over UDS 通信：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// containerd 创建 shim 后，建立 TTRPC 连接
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nf">startShim</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 启动 shim 进程（传一个 bundle 目录）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">shim</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">shimManager</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 通过 UDS 连接 shim 的 TTRPC 端点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">conn</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">ttrpc</span><span class="p">.</span><span class="nf">Dial</span><span class="p">(</span><span class="nx">shim</span><span class="p">.</span><span class="nf">Address</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 调用 shim 的 TTRPC 服务
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">shimapi</span><span class="p">.</span><span class="nf">NewTaskClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">client</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">request</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Shim 进程启动后也会监听一个 UDS，路径通常是 <code>/run/containerd/containerd-task-&lt;container_id&gt;.sock</code>。这个 socket 文件<strong>只有 containerd 和 shim 知道</strong>，外部无法连接。</p>
+<p><strong>为什么不是 gRPC？</strong> 同一个宿主机上可能有几百个容器，每个都有一个 shim 进程。如果 shim 都用 gRPC（HTTP/2），每个连接都要维护 HTTP/2 帧、流控窗口、头部表——几百个 shim 的 gRPC 开销是不可忽视的。TTRPC 的轻量级设计在这里体现了价值。</p>
+<h2 id="插件通信机制">插件通信机制
+</h2><p>Containerd 的插件系统是它的核心架构。每个插件是一个独立的 Go 接口实现，但<strong>运行在同一个进程内</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 插件注册
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">plugin</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">plugin</span><span class="p">.</span><span class="nx">Registration</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">Type</span><span class="p">:</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">ServicePlugin</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">ID</span><span class="p">:</span>   <span class="s">&#34;containers&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">InitFn</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">ic</span> <span class="o">*</span><span class="nx">plugin</span><span class="p">.</span><span class="nx">InitContext</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nf">NewService</span><span class="p">(</span><span class="nx">ic</span><span class="p">),</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>插件之间通过<strong>接口调用</strong>（不是 RPC）直接在进程内通信：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// containers 服务需要调用 snapshots 服务
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Service</span><span class="p">)</span> <span class="nf">Create</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">req</span> <span class="o">*</span><span class="nx">api</span><span class="p">.</span><span class="nx">CreateContainerRequest</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 从全局注册表拿到 snapshots 插件实例
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">snapshots</span> <span class="o">:=</span> <span class="nx">plugin</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">&#34;snapshots&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 直接调用 Go 接口方法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">snapshots</span><span class="p">.</span><span class="nf">Prepare</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>插件在同一个进程内，所以不需要 RPC 通信</strong>——这是最直接的架构选择。但对外暴露时，每个插件把自己的服务注册到 gRPC/TTRPC server，让外部进程也能调用。</p>
+<h2 id="从-ai-安全视角看-containerd-通信">从 AI 安全视角看 containerd 通信
+</h2><p><strong>UDS 权限控制</strong>：containerd 的 socket 文件默认 0660（owner root + group root）。Docker 要连接的话，要么把 Docker 加入 root 组，要么修改 socket 组的权限。这在实际部署中经常被配置错误——有人图方便改成 <code>0777</code>，这意味着任何进程都能操作容器。在容器逃逸攻击中，攻击者第一步就是扫描宿主机上可写的 socket 文件。</p>
+<p><strong>TTRPC 的攻击面更小</strong>：TTRPC 端点不暴露给外部，攻击者无法直接通过 gRPC 端口拿到所有服务。但如果有恶意进程在宿主机上运行，它也能连 TTRPC socket（如果文件权限没设好）。</p>
+<p><strong>Shim 隔离的安全价值</strong>：如果 containerd 被攻破，攻击者只能控制那一组 gRPC 服务，不能直接操作运行中的容器（shim 是独立进程）。反过来，容器进程崩溃也不会影响 containerd。这种<strong>双向隔离</strong>是安全架构的好设计。</p>
+<p><strong>fd 传递的安全风险</strong>：containerd 通过 UDS 的 SCM_RIGHTS 把容器 stdin/stdout/stderr 的 fd 传递给 shim。如果接收方没验证发送方身份，可能被恶意利用。所以 containerd 的 shim 会用 <code>SO_PEERCRED</code> 确认连接方是 containerd 进程。</p>
+<h2 id="总结">总结
+</h2><p>Containerd 的通信架构可以用三个关键词概括：</p>
+<ol>
+<li><strong>UDS 底座</strong>：所有通信都跑在 Unix Domain Socket 上，性能好、安全可控</li>
+<li><strong>双 RPC 协议</strong>：gRPC 对外、TTRPC 对内，隔离开外部和内部，各取所长</li>
+<li><strong>插件化服务注册</strong>：每个业务模块是一个插件，启动时注册到 gRPC 和 TTRPC server，内聚外松</li>
+</ol>
+<p>这种架构让 containerd 即能满足外部客户端的标准接口需求（gRPC），又能保持内部插件通信的轻量高效（TTRPC），同时通过 UDS 的权限模型提供安全保障。</p>
+<h2 id="参考资料">参考资料
+</h2><ul>
+<li>containerd 源码：https://github.com/containerd/containerd (v2.x)</li>
+<li>containerd 架构文档：https://github.com/containerd/containerd/blob/main/docs/architecture.md</li>
+<li>CRI 架构：https://github.com/containerd/containerd/blob/main/docs/cri/architecture.md</li>
+<li>TTRPC 协议：https://github.com/containerd/ttrpc</li>
+<li>gRPC 文档：https://grpc.io/docs/</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/containerd/">Containerd</a>
+        
+            <a href="/tags/%E5%AE%B9%E5%99%A8/">容器</a>
+        
+            <a href="/tags/grpc/">GRPC</a>
+        
+            <a href="/tags/ipc/">IPC</a>
+        
+            <a href="/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">源码分析</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-08-31
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist", "waline-container"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Unix Domain Socket 源码实现分析 (OLK 6.6)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top","visitor":true});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="/vendor/photoswipe/photoswipe.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/photoswipe/photoswipe-ui-default.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+
+    </body>
+</html>

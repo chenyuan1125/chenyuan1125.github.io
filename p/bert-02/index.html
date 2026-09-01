@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="BERT 的双向不是噱头——把 GPT 因果 mask 换成全连通 mask，每个 token 都能看到整个上下文，模型被迫学会真正的语义融合。">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。">
 <title>BERT：双向编码器，到底双在哪</title>
 
 <link rel='canonical' href='/p/bert-02/'>
 
 <link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="BERT：双向编码器，到底双在哪">
-<meta property='og:description' content="BERT 的双向不是噱头——把 GPT 因果 mask 换成全连通 mask，每个 token 都能看到整个上下文，模型被迫学会真正的语义融合。">
+<meta property='og:description' content="2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。">
 <meta property='og:url' content='/p/bert-02/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='BERT' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='预训练' /><meta property='article:tag' content='MLM' /><meta property='article:published_time' content='2026-08-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-30T18:01:45&#43;08:00'/><meta property='og:image' content='/p/bert-02/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='BERT' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='预训练' /><meta property='article:tag' content='MLM' /><meta property='article:published_time' content='2026-08-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-31T20:13:23&#43;08:00'/><meta property='og:image' content='/p/bert-02/cover.jpg' />
 <meta name="twitter:title" content="BERT：双向编码器，到底双在哪">
-<meta name="twitter:description" content="BERT 的双向不是噱头——把 GPT 因果 mask 换成全连通 mask，每个 token 都能看到整个上下文，模型被迫学会真正的语义融合。"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:description" content="2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/p/bert-02/cover.jpg' />
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
@@ -293,47 +293,16 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#引子同样用-transformer双在哪">引子：同样用 Transformer，&ldquo;双&quot;在哪？</a></li>
-    <li><a href="#一双在-attention-mask">一、&ldquo;双&quot;在 attention mask</a></li>
-    <li><a href="#二双向之后为什么不能继续用-lm">二、双向之后，为什么不能继续用 LM？</a></li>
-    <li><a href="#三mlm用-cloze-任务绕开标签泄漏">三、MLM：用 cloze 任务绕开标签泄漏</a>
-      <ol>
-        <li><a href="#31-选位置随机遮-15">3.1 选位置：随机遮 15%</a></li>
-        <li><a href="#32-替换策略801010">3.2 替换策略：80/10/10</a></li>
-        <li><a href="#33-损失只在被遮位置计算">3.3 损失只在被遮位置计算</a></li>
-      </ol>
-    </li>
-    <li><a href="#四nsp第二个预训练任务的真相">四、NSP：第二个预训练任务的真相</a>
-      <ol>
-        <li><a href="#41-任务定义">4.1 任务定义</a></li>
-        <li><a href="#42-消融数据说了什么">4.2 消融数据说了什么</a></li>
-        <li><a href="#43-nsp-后来被质疑roberta-的实证">4.3 NSP 后来被质疑（RoBERTa 的实证）</a></li>
-      </ol>
-    </li>
-    <li><a href="#五几个常被搞错的细节">五、几个常被搞错的细节</a>
-      <ol>
-        <li><a href="#51-bert-是第一个用-gelu-的模型">5.1 &ldquo;BERT 是第一个用 GELU 的模型&rdquo;</a></li>
-        <li><a href="#52-bert-的掩码率是消融得到的">5.2 &ldquo;BERT 的掩码率是消融得到的&rdquo;</a></li>
-        <li><a href="#53-squad-微调时没有额外参数">5.3 &ldquo;SQuAD 微调时没有额外参数&rdquo;</a></li>
-        <li><a href="#54-bert-让所有-nlp-任务不再需要任务特定架构">5.4 &ldquo;BERT 让所有 NLP 任务不再需要任务特定架构&rdquo;</a></li>
-      </ol>
-    </li>
-    <li><a href="#六架构与训练速览">六、架构与训练速览</a></li>
-    <li><a href="#七mlm-vs-自回归几个常见误读">七、MLM vs 自回归：几个常见误读</a>
-      <ol>
-        <li><a href="#71-mlm-比-lm-高效因为只算了-15">7.1 &ldquo;MLM 比 LM 高效，因为只算了 15%&rdquo;</a></li>
-        <li><a href="#72-bert-预训练是完形填空所以学到了理解能力">7.2 &ldquo;BERT 预训练是完形填空，所以学到了理解能力&rdquo;</a></li>
-        <li><a href="#73-bert-因为双向所以更强">7.3 &ldquo;BERT 因为双向所以更强&rdquo;</a></li>
-      </ol>
-    </li>
-    <li><a href="#八bert-的真实贡献">八、BERT 的真实贡献</a>
-      <ol>
-        <li><a href="#81-架构层让-token-看到全部上下文">8.1 架构层：让 token 看到全部上下文</a></li>
-        <li><a href="#82-训练层mlm-解决了看见自己问题">8.2 训练层：MLM 解决了&quot;看见自己&quot;问题</a></li>
-        <li><a href="#83-范式层通用预训练--轻量微调">8.3 范式层：通用预训练 + 轻量微调</a></li>
-      </ol>
-    </li>
-    <li><a href="#九bert-的局限">九、BERT 的局限</a></li>
+    <li><a href="#引子从-gpt-1-的我只能往前看说起">引子：从 GPT-1 的&quot;我只能往前看&quot;说起</a></li>
+    <li><a href="#双向到底双在哪">双向到底&quot;双&quot;在哪？</a></li>
+    <li><a href="#核心机制一masked-language-modelmlm">核心机制一：Masked Language Model（MLM）</a></li>
+    <li><a href="#核心机制二next-sentence-predictionnsp">核心机制二：Next Sentence Prediction（NSP）</a></li>
+    <li><a href="#输入表示三种-embedding-相加">输入表示：三种 embedding 相加</a></li>
+    <li><a href="#架构与规模">架构与规模</a></li>
+    <li><a href="#下游任务bert-的杀手锏">下游任务：BERT 的杀手锏</a></li>
+    <li><a href="#bert-家族后浪们">BERT 家族：后浪们</a></li>
+    <li><a href="#bert-vs-gpt理解-vs-生成">BERT vs GPT：理解 vs 生成</a></li>
+    <li><a href="#护栏视角">护栏视角</a></li>
     <li><a href="#参考资料">参考资料</a></li>
   </ol>
 </nav>
@@ -350,10 +319,10 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/p/bert-02/">
-                <img src="/p/bert-02/cover_hu17480695943423604474.jpg"
-                        srcset="/p/bert-02/cover_hu17480695943423604474.jpg 800w, /p/bert-02/cover_hu5929125274301107832.jpg 1600w"
+                <img src="/p/bert-02/cover_hu4406498089258357548.jpg"
+                        srcset="/p/bert-02/cover_hu4406498089258357548.jpg 800w, /p/bert-02/cover_hu5156044819246189278.jpg 1600w"
                         width="800" 
-                        height="420" 
+                        height="534" 
                         loading="lazy"
                         alt="Featured image of post BERT：双向编码器，到底双在哪" />
                 
@@ -379,7 +348,7 @@
     
         
         <h3 class="article-subtitle">
-            BERT 的双向不是噱头——把 GPT 因果 mask 换成全连通 mask，每个 token 都能看到整个上下文，模型被迫学会真正的语义融合。
+            2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。
         </h3>
         
     </div>
@@ -415,7 +384,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 13 分钟
+                    阅读时长: 7 分钟
                 </time>
             </div>
         
@@ -425,7 +394,7 @@
   <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
 </svg>
                 <time class="article-words">
-                    6270字
+                    3188字
                 </time>
         </div>
         
@@ -441,421 +410,194 @@
     <section class="article-content">
     
     
-    <h2 id="引子同样用-transformer双在哪">引子：同样用 Transformer，&ldquo;双&quot;在哪？
-</h2><p>上一篇拆了 Transformer，它的核心是 self-attention——理论上能看上下文所有 token。但 2018 年 OpenAI 的 GPT-1（Radford et al.）把 Transformer Decoder 拆出来做自回归语言模型，每一步只允许看自己<strong>和过去</strong>的 token。</p>
-<p>这就像读句子时只准往前看，不能回头。句子&quot;小明给小红 ___ 一本书&quot;里的填空位置——，读到这里，GPT 只能根据&quot;小明给小红&quot;猜下一个词，看不到后面&quot;一本书&quot;这个宾语给出的提示。语义判断需要&quot;两头看&rdquo;，单向约束就成了天花板。</p>
-<p>BERT（Bidirectional Encoder Representations from Transformers）的&quot;Bidirectional&quot;就是为这件事准备的。</p>
-<p>但&quot;BERT 比 GPT 多看了一头&quot;这件事，<strong>真正的实现代价极小</strong>——架构几乎一样，只是 attention mask 不同。难的不是&quot;让 token 互相看&quot;，难的是&quot;看完之后模型还能不能学到东西&quot;。本文就讲这三件事：</p>
+    <h2 id="引子从-gpt-1-的我只能往前看说起">引子：从 GPT-1 的&quot;我只能往前看&quot;说起
+</h2><p>上一篇我们拆了 Transformer，它的核心是注意力机制——理论上能看到上下文里所有词。但 2018 年 OpenAI 推出的 GPT-1，把 Transformer 的 <strong>Decoder</strong> 单独拎出来做预训练，套上&quot;自回归&quot;的语言模型：每一步只看自己和过去的词，往后预测下一个。</p>
+<p>这就像一个人读句子时，<strong>只准用眼睛扫前面读过的字，不准回头看</strong>。读&quot;小明给小红___一本书&quot;时，GPT 只能根据&quot;小明给小红&quot;猜下一个词是&quot;送&quot;还是&quot;买&quot;——但它看不到&quot;书&quot;这个宾语。</p>
+<p>这种&quot;单向&quot;约束让 GPT 特别擅长<strong>生成</strong>（写下一个字），但遇到<strong>理解</strong>任务（句子分类、问答、命名实体识别）就吃亏了：很多判断需要&quot;两头看&quot;。</p>
+<p>2018 年底 Google 放出的 BERT（Bidirectional Encoder Representations from Transformers）就是来解决这个问题——<strong>名字里的 &ldquo;Bidirectional&rdquo; 就是这个意思</strong>。</p>
+<h2 id="双向到底双在哪">双向到底&quot;双&quot;在哪？
+</h2><p>先看对比图：</p>
+<figure><img src="/p/bert-02/bert-direction.png"><figcaption>
+      <h4>图 1：BERT 双向 vs GPT 单向——同一句话两种预训练思路（tldraw 绘制）</h4>
+    </figcaption>
+</figure>
+
+<p>GPT 的单向：预测&quot;猫&quot;时，只能看&quot;我喜欢&quot;和它自己，看不到&quot;睡在沙发上&quot;。</p>
+<p>BERT 的双向：预测被遮住的&quot;猫&quot;时，<strong>左右都能看</strong>——&ldquo;我喜欢 ___ 睡在沙发上&rdquo;，左右两边都是上下文。</p>
+<p>这看着简单，但实现起来要解决一个关键问题：<strong>不能&quot;看见自己&quot;</strong>。如果模型在预测&quot;猫&quot;时把&quot;猫&quot;也喂进去了，那就是抄答案。BERT 的解法就是<strong>遮住 15% 的词</strong>让模型猜——这就是接下来要讲的 <strong>MLM</strong>。</p>
+<h2 id="核心机制一masked-language-modelmlm">核心机制一：Masked Language Model（MLM）
+</h2><p>MLM 的全称是&quot;遮蔽语言模型&quot;，思路来自英语考试里的完形填空。</p>
+<p><strong>具体做法</strong>：</p>
 <ol>
-<li><strong>怎么&quot;双&quot;</strong>：attention mask 的差异</li>
-<li><strong>双了之后怎么训练</strong>：为什么必须用 MLM 而不是 LM</li>
-<li><strong>到底有多大用</strong>：消融数据说了什么</li>
+<li>准备一段文本</li>
+<li>随机挑 15% 的词（subword token）出来</li>
+<li>这 15% 里：
+<ul>
+<li>80% 替换成 <code>[MASK]</code>（例：原句&quot;我喜欢猫&quot; → &ldquo;我喜欢 [MASK]&quot;）</li>
+<li>10% 替换成随机的别的词（&ldquo;我喜欢 桌子&rdquo;）</li>
+<li>10% 保持原样不动（&ldquo;我喜欢 猫&rdquo;）</li>
+</ul>
+</li>
+<li>让模型根据<strong>左右两边的所有上下文</strong>，猜出这些被遮的位置原来是什么</li>
 </ol>
-<hr>
-<h2 id="一双在-attention-mask">一、&ldquo;双&quot;在 attention mask
-</h2><p>GPT 和 BERT 都用 Transformer encoder block，<strong>唯一的架构差异就在 attention mask</strong>。这个差异用一张图就能讲清楚。</p>
-<figure><img src="/p/bert-02/bert-attention-mask.png"><figcaption>
-      <h4>图 1：GPT 因果 mask vs BERT 双向 mask——同一句话的注意力范围</h4>
+<p>最后那 10% &ldquo;保持原样&quot;是为了减轻预训练-微调的 mismatch：微调时没有 <code>[MASK]</code>，要让模型学会&quot;不管输入被怎么处理，我都要能正常理解&rdquo;。</p>
+<figure><img src="/p/bert-02/bert-mlm.png"><figcaption>
+      <h4>图 2：BERT 预训练——MLM &#43; NSP 双任务（tldraw 绘制）</h4>
     </figcaption>
 </figure>
 
-<p>设输入长度为 7（含 [CLS]/[SEP]），mask 矩阵里 <code>1</code> 表示&quot;看得见&rdquo;，<code>0</code> 表示&quot;看不见&quot;：</p>
-<p><strong>GPT（Causal Mask）</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">我 喜欢 猫 睡 在 沙发 上
-</span></span><span class="line"><span class="cl">1 0 0 0 0 0 0     ← 预测&#34;我&#34;时只能看自己
-</span></span><span class="line"><span class="cl">1 1 0 0 0 0 0     ← 预测&#34;喜欢&#34;时看&#34;我&#34;&#34;喜欢&#34;
-</span></span><span class="line"><span class="cl">1 1 1 0 0 0 0     ← 预测&#34;猫&#34;时看&#34;我&#34;&#34;喜欢&#34;&#34;猫&#34;
-</span></span><span class="line"><span class="cl">1 1 1 1 0 0 0     ← 预测&#34;睡&#34;时看前 4 个
-</span></span><span class="line"><span class="cl">1 1 1 1 1 0 0     ← 预测&#34;在&#34;时看前 5 个
-</span></span><span class="line"><span class="cl">1 1 1 1 1 1 0     ← 预测&#34;沙发&#34;时看前 6 个
-</span></span><span class="line"><span class="cl">1 1 1 1 1 1 1     ← 预测&#34;上&#34;时看全部
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这是一个<strong>下三角</strong>矩阵。每个 token 的感受野从自己扩展到整个前缀，但永远看不到右边。12 层叠加后，每层感受野都受这个 mask 约束——信息只能从左向右流动。</p>
-<p><strong>BERT（Bidirectional Mask）</strong></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">我 喜欢 [MASK] 睡 在 沙发 上
-</span></span><span class="line"><span class="cl">1 1 1 1 1 1 1     ← 预测 [MASK] 时看全部 7 个位置
-</span></span><span class="line"><span class="cl">1 1 1 1 1 1 1     ← 其他位置的注意力也一样
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这是一个<strong>全 1</strong> 矩阵。每个位置都能 attend 到所有位置——包括自己、包括后面、包括其他 [MASK]。12 层之后，每个 token 的最终表示都已经融合了<strong>整个序列的左右上下文</strong>。</p>
-<p>这就是&quot;双&quot;的全部含义。**没有新增任何参数，没有改变 layer norm / FFN / 残差结构，没有改变 token 化方式。**只是一张 mask 矩阵从下三角换成全 1，模型就从&quot;语言模型&quot;变成&quot;双向编码器&quot;。</p>
-<p>但这件事带来一个直接问题——下一节就要解决。</p>
-<hr>
-<h2 id="二双向之后为什么不能继续用-lm">二、双向之后，为什么不能继续用 LM？
-</h2><p>把 mask 改成全 1，self-attention 在数学上是合法的。但<strong>自回归语言模型的目标函数不再成立</strong>：</p>
-<blockquote>
-<p>给定前缀 $w_1, w_2, \ldots, w_{t-1}$，预测下一个 token $w_t$。</p>
-</blockquote>
-<p>如果模型在预测 $w_t$ 时能&quot;看到&quot; $w_t$ 本身（比如直接 attend 到 $w_t$ 位置），那损失函数就变成了&quot;用答案预测答案&quot;——模型的最优解是<strong>直接拷贝输入</strong>，学不到任何语义。</p>
-<p>直觉演示：句子&quot;猫坐在垫子上&quot;，用 LM 目标 + 全 1 mask 训练时：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">目标：给定&#34;猫坐在垫子上&#34;预测第 3 个 token
-</span></span><span class="line"><span class="cl">模型：看见全部输入 → 直接输出&#34;坐&#34;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这等价于把 LM 目标降级成&quot;抄写&quot;。<strong>所以 BERT 必须改训练目标</strong>——这就是 MLM（Masked Language Modeling）的来源。</p>
-<hr>
-<h2 id="三mlm用-cloze-任务绕开标签泄漏">三、MLM：用 cloze 任务绕开标签泄漏
-</h2><p>BERT 论文借鉴了 Taylor 1953 年的 Cloze 任务：把句子挖个空，让模型填回去。具体做法分两步。</p>
-<h3 id="31-选位置随机遮-15">3.1 选位置：随机遮 15%
-</h3><p>原文措辞：</p>
-<blockquote>
-<p>&ldquo;In all of our experiments, we mask <strong>15%</strong> of all WordPiece tokens in each sequence at random.&rdquo;</p>
-</blockquote>
-<p>15% 这个数字是<strong>直接选定的启发值</strong>，原论文<strong>没有给出 sweep 消融</strong>——附录 C.2 的 Table 8 是 mask 策略（80/10/10）的消融，不是 mask rate 的消融。</p>
-<p>直觉上：</p>
+<p><strong>为什么 MLM 能让模型学会双向理解？</strong>
+因为预测 [MASK] 时，模型的注意力能同时看左右两侧（除了被遮的那个位置）。这逼迫它必须把左右信息都编码进同一个向量里——这就是&quot;双向&quot;的本质。</p>
+<h2 id="核心机制二next-sentence-predictionnsp">核心机制二：Next Sentence Prediction（NSP）
+</h2><p>MLM 学的是&quot;词和上下文的关系&rdquo;，但很多下游任务（问答、自然语言推理）需要&quot;句子之间的关系&quot;。BERT 加了第二个预训练任务 NSP：</p>
+<p><strong>做法</strong>：</p>
 <ul>
-<li>太低（如 5%）→ 训练信号太弱，模型收敛慢；</li>
-<li>太高（如 50%）→ 输入被破坏得太厉害，连续语言结构难以学到。</li>
+<li>给模型两句话 A 和 B</li>
+<li>50% 的概率 B 是 A 的真实下一句</li>
+<li>50% 的概率 B 是语料里随便抽的一句</li>
+<li>让模型判断&quot;B 是不是 A 的下一句？&quot;（二分类）</li>
 </ul>
-<p>15% 是个折中——每个序列平均有 76 个 token（512×0.15），既够密又不至于把句子打散。</p>
-<h3 id="32-替换策略801010">3.2 替换策略：80/10/10
-</h3><p>被选中的 15% token 不能简单替换成 [MASK]——否则<strong>预训练时见过 [MASK]，微调时没有 [MASK]，分布严重不匹配</strong>。</p>
-<p>原文解决方案：</p>
-<blockquote>
-<p>&ldquo;If the i-th token is chosen, we replace the i-th token with
-(1) the [MASK] token <strong>80%</strong> of the time
-(2) a random token <strong>10%</strong> of the time
-(3) the unchanged i-th token <strong>10%</strong> of the time.&rdquo;</p>
-</blockquote>
-<p>举例（来自原文附录 A.1，&ldquo;my dog is hairy&rdquo;）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">原始:    my dog is hairy
-</span></span><span class="line"><span class="cl">↓ 选中第 4 个 token &#34;hairy&#34;
-</span></span><span class="line"><span class="cl">80%:     my dog is [MASK]        ← 标准 MLM
-</span></span><span class="line"><span class="cl">10%:     my dog is apple         ← 随机替换
-</span></span><span class="line"><span class="cl">10%:     my dog is hairy         ← 保持原样
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>最后那 10% 保持原样看似没意义，其实很关键：模型<strong>永远不知道当前 token 会不会被要求预测</strong>，所以必须为每个 token 都维护一个完整的语境表示（contextualized representation），而不是只对 [MASK] 位置&quot;特殊对待&quot;。</p>
-<p>10% 的随机替换则让模型被迫学一个隐式的&quot;合理性判别&quot;——不能因为 90% 的位置是 [MASK] 就把 [MASK] 当成背景噪声忽略掉。</p>
-<h3 id="33-损失只在被遮位置计算">3.3 损失只在被遮位置计算
-</h3><p>伪代码（BERT 原文逻辑）：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">logits</span> <span class="o">=</span> <span class="n">bert</span><span class="p">(</span><span class="n">masked_input</span><span class="p">)</span>              <span class="c1"># [batch, seq_len, vocab]</span>
-</span></span><span class="line"><span class="cl"><span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">target_ids</span><span class="p">)</span> <span class="c1"># 算所有位置</span>
-</span></span><span class="line"><span class="cl"><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">*</span> <span class="n">mask_weights</span>               <span class="c1"># 只在被遮位置保留梯度</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># mask_weights: 被遮位置 = 1, 其余 = 0</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>模型 100% 的前向计算照常发生（被遮位置也要参与 attention），但<strong>只有 15% 的 token 产生梯度</strong>。原论文附录 A.2 的原话：</p>
-<blockquote>
-<p>&ldquo;Compared to standard language model training, the masked LM only makes predictions on <strong>15% of tokens</strong> in each batch, which suggests that more pre-training steps may be required for the model to converge.&rdquo;</p>
-</blockquote>
-<p>这也是 BERT 训练 1M 步（≈40 epoch）的部分原因——单步有效信号只有自回归 LM 的 15%，需要更多步补偿。</p>
-<p>附录 C.1 还有一个图（Figure 5），曲线说明 MLM 收敛速度<strong>确实比 LTR 慢一点</strong>，但很快就在绝对准确率上反超 LTR。</p>
-<hr>
-<h2 id="四nsp第二个预训练任务的真相">四、NSP：第二个预训练任务的真相
-</h2><h3 id="41-任务定义">4.1 任务定义
-</h3><p>输入两段文本 [CLS] A [SEP] B [SEP]：</p>
-<ul>
-<li>50% 概率：B 是 A 的真实下一句（label = IsNext）</li>
-<li>50% 概率：B 是从语料里随机抽的（label = NotNext）</li>
-</ul>
-<p>用 [CLS] 位置的输出做二分类。原文（Section 3.1.2）：</p>
-<blockquote>
-<p>&ldquo;we demonstrate in Section 5.1 that pre-training towards this task is very beneficial to both QA and NLI.&rdquo;</p>
-</blockquote>
-<h3 id="42-消融数据说了什么">4.2 消融数据说了什么
-</h3><p>论文 Table 5（BERT_BASE 架构，Dev Set）：</p>
-<div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: left">任务</th>
-          <th style="text-align: left">MNLI-m</th>
-          <th style="text-align: left">QNLI</th>
-          <th style="text-align: left">MRPC</th>
-          <th style="text-align: left">SST-2</th>
-          <th style="text-align: left">SQuAD F1</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">BERT_BASE（完整）</td>
-          <td style="text-align: left"><strong>84.4</strong></td>
-          <td style="text-align: left"><strong>88.4</strong></td>
-          <td style="text-align: left"><strong>86.7</strong></td>
-          <td style="text-align: left"><strong>92.7</strong></td>
-          <td style="text-align: left"><strong>88.5</strong></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">No NSP</td>
-          <td style="text-align: left">83.9</td>
-          <td style="text-align: left">84.9</td>
-          <td style="text-align: left">86.5</td>
-          <td style="text-align: left">92.6</td>
-          <td style="text-align: left">87.9</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">LTR &amp; No NSP</td>
-          <td style="text-align: left">82.1</td>
-          <td style="text-align: left">84.3</td>
-          <td style="text-align: left">77.5</td>
-          <td style="text-align: left">92.1</td>
-          <td style="text-align: left">77.8</td>
-      </tr>
-  </tbody>
-</table></div>
-<p>去掉 NSP 后：</p>
-<ul>
-<li><strong>QNLI 掉了 3.5 点</strong>（88.4→84.9）—— 这是最大跌幅，QNLI 是句间关系任务，NSP 直接相关。</li>
-<li><strong>MNLI 掉了 0.5 点</strong>（84.4→83.9）—— 几乎没影响。</li>
-<li><strong>SST-2 掉了 0.1 点</strong>—— 几乎无影响（SST-2 是单句情感分类）。</li>
-<li><strong>SQuAD 掉了 0.6 点</strong>—— 小幅下降。</li>
-</ul>
-<p>**所以&quot;去掉 NSP 掉 1-2 个点&quot;是一个粗略说法，真实情况是任务相关、且主要体现在 QNLI 上。**论文原文（Section 5.1）的措辞也比较克制：&ldquo;removing NSP hurts performance <strong>significantly on QNLI, MNLI, and SQuAD 1.1</strong>&quot;——而 Table 5 里 MNLI 其实只掉 0.5 点，&ldquo;significantly&rdquo; 更准确地说应该是 QNLI。</p>
-<h3 id="43-nsp-后来被质疑roberta-的实证">4.3 NSP 后来被质疑（RoBERTa 的实证）
-</h3><p>RoBERTa（Liu et al. 2019）专门做了 NSP 的对照实验，论文 Section 4.2 的 Table 4 直接列出了数字：</p>
-<div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: left">输入格式</th>
-          <th style="text-align: left">SQuAD 1.1/2.0</th>
-          <th style="text-align: left">MNLI</th>
-          <th style="text-align: left">NLI Avg</th>
-          <th style="text-align: left">RACE</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">SEGMENT-PAIR + NSP（BERT 原版）</td>
-          <td style="text-align: left">90.4 / 78.7</td>
-          <td style="text-align: left">84.0</td>
-          <td style="text-align: left">92.9</td>
-          <td style="text-align: left">64.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">SENTENCE-PAIR + NSP</td>
-          <td style="text-align: left">88.7 / 76.2</td>
-          <td style="text-align: left">82.9</td>
-          <td style="text-align: left">92.1</td>
-          <td style="text-align: left">63.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">FULL-SENTENCES, <strong>无 NSP</strong></td>
-          <td style="text-align: left">90.4 / 79.1</td>
-          <td style="text-align: left"><strong>84.7</strong></td>
-          <td style="text-align: left">92.5</td>
-          <td style="text-align: left">64.8</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">DOC-SENTENCES, 无 NSP</td>
-          <td style="text-align: left">90.6 / 79.7</td>
-          <td style="text-align: left">84.7</td>
-          <td style="text-align: left">92.7</td>
-          <td style="text-align: left">65.6</td>
-      </tr>
-  </tbody>
-</table></div>
-<p><strong>去掉 NSP 后</strong>：</p>
-<ul>
-<li>SQuAD F1：90.4→90.4（<strong>持平</strong>）</li>
-<li>MNLI：84.0→84.7（<strong>+0.7</strong>）</li>
-<li>RACE：64.2→64.8（<strong>+0.6</strong>）</li>
-</ul>
-<p>也就是说，<strong>RoBERTa 的复现直接推翻了 BERT 论文&quot;去掉 NSP 会掉点&quot;的判断</strong>——在更大数据（160GB vs 16GB）、更长训练下，去掉 NSP 不仅不损失，反而整体略好。RoBERTa 摘要里把&rdquo;<strong>removing the next sentence prediction objective</strong>&ldquo;列为四大改进之一。</p>
-<p>后续 ALBERT（Lan et al. 2020）则提出 <strong>SOP（Sentence Order Prediction）</strong>——把&quot;判断是否相邻&quot;换成&quot;判断句序是否正确&rdquo;，更难、更能学到句间连贯性，进一步说明 NSP 任务本身设计粗糙。</p>
-<p>所以 NSP 的真正价值不是&quot;句子级表示有多必要&quot;，而是<strong>证明了&quot;预训练任务可以不止一个&quot;</strong>——MLM 学 token 级，NSP 学句间关系，两者互补。这个多任务预训练的思路被后续 ELECTRA、SpanBERT、ALBERT 等沿用，只是具体任务换了。</p>
-<hr>
-<h2 id="五几个常被搞错的细节">五、几个常被搞错的细节
-</h2><blockquote>
-<p>原文核完，几个<strong>流传很广但实际上是错</strong>或<strong>夸张</strong>的说法，在这里一并澄清。</p>
-</blockquote>
-<h3 id="51-bert-是第一个用-gelu-的模型">5.1 &ldquo;BERT 是第一个用 GELU 的模型&rdquo;
-</h3><p>错。GELU 由 Hendrycks &amp; Gimpel 在 2016 年提出（arXiv:1606.08415），但<strong>第一个把它用在 Transformer LM 预训练的是 GPT-1（2018 年 6 月）</strong>。</p>
-<p>GPT-1 原文（Section 3.2）的原话：</p>
-<blockquote>
-<p>&ldquo;For the activation function, we used the <strong>Gaussian Error Linear Unit (GELU) [18]</strong>.&rdquo;</p>
-</blockquote>
-<p>BERT 附录 A.2 的原话：</p>
-<blockquote>
-<p>&ldquo;We use a <strong>gelu activation (Hendrycks and Gimpel, 2016)</strong> rather than the standard relu, <strong>following OpenAI GPT</strong>.&rdquo;</p>
-</blockquote>
-<p>BERT 论文自己都写&quot;following OpenAI GPT&quot;——<strong>BERT 不是 GELU 的发明者，是接力者</strong>。</p>
-<h3 id="52-bert-的掩码率是消融得到的">5.2 &ldquo;BERT 的掩码率是消融得到的&rdquo;
-</h3><p>错。15% 没有 sweep 实验支持，是直接选定的启发值。原文 Table 8 的消融只对比 80/10/10 这种 mask 策略的分布，不对比 mask rate 本身。</p>
-<p>后续工作（&ldquo;Should You Mask 15% in Masked Language Modeling?&quot;，arXiv:2202.08005）专门重新研究过这个数字，发现在 RoBERTa 训练规模下，<strong>20% 反而略好于 15%</strong>，但作者也认为差异不显著。所以 15% 不是&quot;最优解&rdquo;，是&quot;够用&quot;。</p>
-<h3 id="53-squad-微调时没有额外参数">5.3 &ldquo;SQuAD 微调时没有额外参数&rdquo;
-</h3><p>错。SQuAD 的 start / end 预测是<strong>基于 BERT 输出加一层线性层</strong>：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">start_logits</span> <span class="o">=</span> <span class="n">W_s</span> <span class="err">·</span> <span class="n">h_i</span> <span class="o">+</span> <span class="n">b_s</span>   <span class="c1"># W_s: H × 1</span>
-</span></span><span class="line"><span class="cl"><span class="n">end_logits</span>   <span class="o">=</span> <span class="n">W_e</span> <span class="err">·</span> <span class="n">h_i</span> <span class="o">+</span> <span class="n">b_e</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这里的 $W_s, W_e$ 就是新增参数（BERT-base 是 768 维，所以每个向量 768 个权重）。原文章把它们省略掉会让读者误以为没有参数。</p>
-<h3 id="54-bert-让所有-nlp-任务不再需要任务特定架构">5.4 &ldquo;BERT 让所有 NLP 任务不再需要任务特定架构&rdquo;
-</h3><p>夸张。原文强调&quot;minimal task-specific parameters&quot;——只是参数变少了，不是没了。SQuAD 需要 start/end 头，序列标注需要 token-level 分类头，多任务需要任务路由。<strong>BERT 的贡献是降低下游任务对</strong>架构工程<strong>的依赖，不是消灭它</strong>。</p>
-<hr>
-<h2 id="六架构与训练速览">六、架构与训练速览
-</h2><figure><img src="/p/bert-02/bert-embeddings.png"><figcaption>
-      <h4>图 2：BERT 输入表示——Token &#43; Segment &#43; Position 三种 embedding 相加</h4>
+<p>这一招让 BERT 学到了<strong>句间关系</strong>，做 QA、文本匹配这些任务时直接受益。</p>
+<p>（顺带一提：后来的 RoBERTa 发现 NSP 这个任务其实没那么必要，去掉后效果反而更好。但 BERT 原论文里它是关键设计之一。）</p>
+<h2 id="输入表示三种-embedding-相加">输入表示：三种 embedding 相加
+</h2><p>BERT 的输入有三个 embedding 相加，这点要特别记住：</p>
+<p>下面这张简化图对齐 BERT 论文 Figure 2 的输入结构：</p>
+<figure><img src="/p/bert-02/bert-embeddings.png"><figcaption>
+      <h4>图 3：BERT 输入表示——Token &#43; Segment &#43; Position 三种 embedding 相加（tldraw 绘制，结构参考 Devlin et al., 2018, Figure 2）</h4>
     </figcaption>
 </figure>
 
-<p>BERT 的输入由三种 embedding 逐元素相加得到：</p>
 <ul>
-<li><strong>Token Embedding</strong>：WordPiece 分词，词表 30,000</li>
-<li><strong>Segment Embedding</strong>：标记 token 属于句子 A 还是 B（NSP 需要）</li>
-<li><strong>Position Embedding</strong>：可学习的位置向量，最大 512</li>
+<li><strong>Token Embeddings</strong>：词的向量（用 WordPiece 切词，词表约 3 万）</li>
+<li><strong>Segment Embeddings</strong>：标记&quot;A 句&quot;还是&quot;B 句&quot;（用 E_A/E_B 两个向量）</li>
+<li><strong>Position Embeddings</strong>：标记这是第几个位置（用学习出来的，不是 Transformer 原版的正弦函数）</li>
 </ul>
-<p>为了后文参考，把核心数字整理成一张表。所有数字都来自 BERT 原论文 Section 3 / Appendix A。</p>
+<p>加起来就是输入向量，进入多层 Transformer Encoder。</p>
+<h2 id="架构与规模">架构与规模
+</h2><p>BERT 沿用 Transformer 的 <strong>Encoder</strong>（不是 Decoder）：</p>
 <div class="table-wrapper"><table>
   <thead>
       <tr>
-          <th style="text-align: left">参数</th>
-          <th style="text-align: left">BERT-base</th>
-          <th style="text-align: left">BERT-large</th>
+          <th style="text-align: left">模型</th>
+          <th style="text-align: left">层数</th>
+          <th style="text-align: left">隐藏维度</th>
+          <th style="text-align: left">注意力头</th>
+          <th style="text-align: left">参数量</th>
       </tr>
   </thead>
   <tbody>
       <tr>
-          <td style="text-align: left">层数 L</td>
+          <td style="text-align: left">BERT-base</td>
           <td style="text-align: left">12</td>
-          <td style="text-align: left">24</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">隐藏维度 H</td>
           <td style="text-align: left">768</td>
-          <td style="text-align: left">1024</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">注意力头 A</td>
           <td style="text-align: left">12</td>
+          <td style="text-align: left">~110M</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">BERT-large</td>
+          <td style="text-align: left">24</td>
+          <td style="text-align: left">1024</td>
           <td style="text-align: left">16</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">FFN 中间维度</td>
-          <td style="text-align: left">3072</td>
-          <td style="text-align: left">4096</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">总参数</td>
-          <td style="text-align: left">110M</td>
-          <td style="text-align: left">340M</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">词表（WordPiece）</td>
-          <td style="text-align: left">30,000</td>
-          <td style="text-align: left">30,000</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">最大位置</td>
-          <td style="text-align: left">512（可学习）</td>
-          <td style="text-align: left">512</td>
+          <td style="text-align: left">~340M</td>
       </tr>
   </tbody>
 </table></div>
-<p><strong>预训练</strong>（Appendix A.2）：</p>
+<p>预训练数据：</p>
 <ul>
-<li><strong>优化器</strong>：Adam，lr=1e-4，β₁=0.9，β₂=0.999，L2 weight decay=0.01</li>
-<li><strong>学习率调度</strong>：前 10,000 步 warmup 线性增长到 1e-4，之后线性衰减</li>
-<li><strong>Batch size</strong>：256 序列 × 512 tokens = 128,000 tokens/batch</li>
-<li><strong>训练步数</strong>：1,000,000 步（≈40 epochs over 3.3B word corpus）</li>
-<li><strong>序列长度调度</strong>：<strong>90% 步用 128 tokens，10% 步用 512 tokens</strong>——这是为了在注意力是 O(n²) 的代价下，加速训练同时让位置编码学到 512 的范围</li>
-<li><strong>Dropout</strong>：0.1（所有层）</li>
-<li><strong>激活函数</strong>：GELU（from GPT-1）</li>
-<li><strong>数据</strong>：BookCorpus (800M words) + English Wikipedia (2,500M words)</li>
-<li><strong>硬件</strong>：BERT-base 用 4 块 Cloud TPU（Pod 配置，共 16 chip）；BERT-large 用 16 块 Cloud TPU（64 chip），训练约 4 天</li>
+<li>BookCorpus（8 亿词）</li>
+<li>English Wikipedia（25 亿词）</li>
+<li>总共约 33 亿词，训练 40 个 epoch（base）/ 4 个 epoch（large）</li>
 </ul>
-<p><strong>微调</strong>（Appendix A.3 的推荐范围）：</p>
+<p>训练硬件：BERT-base 用 4 块 Cloud TPU、BERT-large 用 16 块 Cloud TPU，各训练约 4 天。以今天看算力不大，但在当时已经足以改变 NLP 的默认工作方式。</p>
+<h2 id="下游任务bert-的杀手锏">下游任务：BERT 的杀手锏
+</h2><p>BERT 预训练完是&quot;通才&quot;，微调后是&quot;专才&quot;。原论文展示了 11 个 NLP 任务的 SOTA（state-of-the-art）：</p>
+<p><strong>1. 文本分类（如情感分析）</strong></p>
 <ul>
-<li>Batch size：16 或 32</li>
-<li>学习率：2e-5、3e-5 或 5e-5</li>
-<li>Epochs：2、3 或 4</li>
+<li>取 <code>[CLS]</code> 标记的输出向量</li>
+<li>接一个全连接层 → softmax 分类</li>
 </ul>
-<hr>
-<h2 id="七mlm-vs-自回归几个常见误读">七、MLM vs 自回归：几个常见误读
-</h2><p>读 BERT 资料时常见的几个说法，正好借这里澄清。</p>
-<h3 id="71-mlm-比-lm-高效因为只算了-15">7.1 &ldquo;MLM 比 LM 高效，因为只算了 15%&rdquo;
-</h3><p>半对半错。<strong>前向计算是 100% 进行的</strong>——所有 token 都要参与 attention。变少的只是<strong>反向梯度的来源</strong>。换句话说：</p>
+<p><strong>2. 问答（如 SQuAD）</strong></p>
 <ul>
-<li>自回归 LM：每步 100% 前向 + 100% 位置有梯度 = $O(n^2)$ attention × 全序列梯度</li>
-<li>BERT MLM：每步 100% 前向 + 15% 位置有梯度 = $O(n^2)$ attention × 15% 梯度</li>
+<li>输入：&ldquo;问题 + 文章&rdquo;</li>
+<li>输出：答案在文章中的<strong>起止位置</strong>（两个向量分别预测 start 和 end 的概率分布）</li>
 </ul>
-<p>梯度来源减少意味着每次更新更&quot;轻&quot;，但代价是<strong>有效信息密度低、需要更多步</strong>——这正是 BERT 训练 40 epoch 的部分原因。</p>
-<h3 id="72-bert-预训练是完形填空所以学到了理解能力">7.2 &ldquo;BERT 预训练是完形填空，所以学到了理解能力&rdquo;
-</h3><p>不严谨。&ldquo;完形填空&quot;只是训练信号的形状，<strong>模型学到的不是&quot;填空技巧&rdquo;，而是 contextualized representation</strong>——每个 token 的表示已经融合了左右上下文。这种表示迁移到分类、问答、NER 时，<strong>不需要从零学语义</strong>，所以微调代价小。</p>
-<h3 id="73-bert-因为双向所以更强">7.3 &ldquo;BERT 因为双向所以更强&rdquo;
-</h3><p>部分对。消融（Table 5）告诉我们：</p>
+<p><strong>3. 命名实体识别（NER）</strong></p>
 <ul>
-<li>BERT_BASE（双向 + NSP）：MNLI-m = 84.4</li>
-<li>LTR &amp; No NSP（单向 + 无 NSP）：MNLI-m = 82.1</li>
-<li>差距 <strong>2.3 个点</strong></li>
+<li>每个 token 的输出接分类器，预测是否是实体、属于哪类</li>
 </ul>
-<p>这个差距<strong>主要来自 SQuAD 和 MRPC 这类需要 token 级双向上下文的任务</strong>——SQuAD 掉 10.7 点，MRPC 掉 9.2 点。但 SST-2（单句情感）只掉 0.6 点，<strong>说明&quot;双向&quot;的优势是任务相关的</strong>。</p>
-<hr>
-<h2 id="八bert-的真实贡献">八、BERT 的真实贡献
-</h2><p>到这里可以回答标题的问题了。&ldquo;双&quot;在 attention mask，&ldquo;双&quot;的价值在哪？三层：</p>
-<h3 id="81-架构层让-token-看到全部上下文">8.1 架构层：让 token 看到全部上下文
-</h3><p>代价是 mask 矩阵从下三角换成全 1，<strong>架构主体不变</strong>。这一改让 Transformer Encoder 的&quot;双向上下文融合&quot;能力第一次在大规模预训练中被完整释放。</p>
-<h3 id="82-训练层mlm-解决了看见自己问题">8.2 训练层：MLM 解决了&quot;看见自己&quot;问题
-</h3><p>如果只在架构上&quot;双&rdquo;，模型会退化成抄写机器。MLM 通过遮蔽 + 80/10/10 替换，把&quot;双向&quot;从架构属性变成了<strong>预训练目标的一部分</strong>，让损失函数本身不泄漏标签。</p>
-<h3 id="83-范式层通用预训练--轻量微调">8.3 范式层：通用预训练 + 轻量微调
-</h3><p>BERT 把 NLP 的范式从&quot;每个任务设计专属架构&quot;转向&quot;通用 backbone + 任务特定头部&rdquo;。这种范式在 BERT 之前 ELMo 已有（特征拼接），但 BERT 用 fine-tuning 把这种范式推到了 SOTA——<strong>为后续 RoBERTa、ALBERT、SpanBERT、ELECTRA 提供了同一条路线</strong>。</p>
-<hr>
-<h2 id="九bert-的局限">九、BERT 的局限
-</h2><p>讲完优点也要讲局限：</p>
-<ol>
-<li><strong>最大长度 512</strong>——可学习位置编码的限制，长文本任务（文档级 QA、长文档分类）需要截断或用 Longformer 这类变体。</li>
-<li><strong>预训练-微调 mismatch</strong>——虽然 80/10/10 缓解了，但 [MASK] 在微调时永远不出现，仍然是个 bias。</li>
-<li><strong>不适合生成</strong>——Encoder-only 架构看不到&quot;未来&quot;，解码要靠 autoregressive head。T5、BART 这类 Encoder-Decoder 才是生成的主流选择。</li>
-<li><strong>NSP 训练效率低</strong>——50% 的训练样本是随机句对，对表征学习的贡献被后续工作质疑。</li>
-</ol>
-<hr>
+<p><strong>4. 自然语言推理（NLI）</strong></p>
+<ul>
+<li>输入两句话，输出&quot;蕴含/矛盾/中立&quot;</li>
+</ul>
+<p><strong>微调成本极低</strong>：通常 1-3 块 GPU 跑几小时就够，因为绝大部分参数已经预训练好了。这让学术界和中小公司都能用得起。</p>
+<figure><img src="/p/bert-02/bert-finetune.png"><figcaption>
+      <h4>图 4：BERT 微调——同一底座适配不同下游任务（tldraw 绘制）</h4>
+    </figcaption>
+</figure>
+
+<h2 id="bert-家族后浪们">BERT 家族：后浪们
+</h2><p>BERT 一出，NLP 领域炸了，半年内冒出一堆改进版：</p>
+<ul>
+<li><strong>RoBERTa</strong>（Facebook, 2019）：去掉 NSP，增大数据量（160GB），训练更久，效果显著超过原版 BERT</li>
+<li><strong>ALBERT</strong>（Google, 2019）：参数共享 + 矩阵分解，把 BERT-large 从 340M 压到 12M，性能几乎不降</li>
+<li><strong>ERNIE</strong>（百度, 2019）：中文版 BERT，加入知识增强掩码策略</li>
+<li><strong>DistilBERT</strong>（HuggingFace, 2019）：蒸馏小模型，速度提升 60%，性能保留 97%</li>
+<li><strong>SpanBERT</strong>（2019）：连续片段掩码，对 QA 类任务更友好</li>
+</ul>
+<h2 id="bert-vs-gpt理解-vs-生成">BERT vs GPT：理解 vs 生成
+</h2><p>这是理解 BERT 定位的关键对比：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th style="text-align: left">维度</th>
+          <th style="text-align: left">BERT</th>
+          <th style="text-align: left">GPT</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">架构</td>
+          <td style="text-align: left">Transformer Encoder</td>
+          <td style="text-align: left">Transformer Decoder</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">注意力</td>
+          <td style="text-align: left">双向</td>
+          <td style="text-align: left">单向（遮住未来）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">预训练任务</td>
+          <td style="text-align: left">MLM + NSP</td>
+          <td style="text-align: left">自回归语言模型</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">擅长</td>
+          <td style="text-align: left">理解（分类、QA、NER）</td>
+          <td style="text-align: left">生成（续写、对话）</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">典型应用</td>
+          <td style="text-align: left">搜索、推荐、文本匹配</td>
+          <td style="text-align: left">写作、对话、代码生成</td>
+      </tr>
+  </tbody>
+</table></div>
+<p><strong>一句话总结</strong>：BERT 擅长&quot;读懂&quot;，GPT 擅长&quot;接着写&quot;。</p>
+<p>但有意思的是，到了 GPT-3（2020）以后，大模型靠&quot;规模 + 生成式预训练&quot;也能搞定理解任务（in-context learning），BERT 这一脉的&quot;双向编码器&quot;路线逐渐被生成式大模型吸收融合。但 BERT 本身在工业界（搜索、推荐、文本分类）至今仍是主力，因为<strong>小、快、准、便宜</strong>。</p>
+<h2 id="护栏视角">护栏视角
+</h2><p>BERT 的训练数据是公开网页 + 维基百科，里面难免有偏见、错误信息、敏感内容。预训练时这些都会被模型&quot;学进去&quot;。下游做客服、招聘、教育类应用时，必须做：</p>
+<ul>
+<li><strong>数据脱敏</strong>：过滤明显的 PII（个人身份信息）</li>
+<li><strong>偏见检测</strong>：用 StereoSet、WinoBias 等基准测性别/种族/地域偏见</li>
+<li><strong>事实核查</strong>：BERT 不知道自己&quot;对不对&quot;，下游要加检索/校验层</li>
+<li><strong>对抗输入</strong>：错别字、emoji 干扰会让 BERT 分类不稳定，需要对抗训练或数据增强</li>
+</ul>
 <h2 id="参考资料">参考资料
 </h2><ul>
 <li>Devlin, J., Chang, M.W., Lee, K., &amp; Toutanova, K. (2018). <em>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</em>. arXiv:1810.04805.</li>
-<li>Radford, A., Narasimhan, K., Salimans, T., &amp; Sutskever, I. (2018). <em>Improving Language Understanding by Generative Pre-Training</em>. OpenAI Technical Report.</li>
-<li>Hendrycks, D., &amp; Gimpel, K. (2016). <em>Gaussian Error Linear Units (GELUs)</em>. arXiv:1606.08415.</li>
 <li>Liu, Y., et al. (2019). <em>RoBERTa: A Robustly Optimized BERT Pretraining Approach</em>. arXiv:1907.11692.</li>
-<li>Clark, K., et al. (2020). <em>ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators</em>. arXiv:2003.10555.</li>
-<li>Lan, Z., et al. (2020). <em>ALBERT: A Lite BERT for Self-supervised Learning of Language Representations</em>. arXiv:1909.11942.</li>
-<li><em>Should You Mask 15% in Masked Language Modeling?</em> arXiv:2202.08005.</li>
+<li>Sanh, V., et al. (2019). <em>DistilBERT, a distilled version of BERT</em>. arXiv:1910.01108.</li>
+<li>论文 arXiv HTML 版（含 Figures）：https://arxiv.org/html/1810.04805</li>
 <li>The Illustrated BERT（Jay Alammar 经典图解）：http://jalammar.github.io/illustrated-bert/</li>
 </ul>
 
@@ -899,7 +641,7 @@
 
 
         <span>
-            最后更新于 2026-08-30
+            最后更新于 2026-08-31
         </span>
     </section></footer>
 
@@ -946,13 +688,8 @@
         
         
             <div class="article-image">
-                <img src="/p/gpt-01/cover.624cb4b79710d9e6dcbd9f305278adde_hu11691919844391666909.jpg" 
-                        width="250" 
-                        height="150" 
-                        loading="lazy"
-                        alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽"
-                        data-key="gpt-01" 
-                        data-hash="md5-Yky0t5cQ2ebcvZ8wUnit3g==">
+                
+                    <img src="/cover.jpg" loading="lazy" data-key="gpt-01" data-hash="/cover.jpg"/>
                 
             </div>
         
@@ -983,6 +720,30 @@
 
         <div class="article-details">
             <h2 class="article-title">01 | 一切的起点：Transformer 到底解决了什么问题？</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/">
+        
+        
+            <div class="article-image">
+                <img src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover.0c92215db13e2df1672670d145e4a37a_hu14280598210258948660.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post DeepSeek-R1：用强化学习激发大模型推理能力"
+                        
+                        data-hash="md5-DJIhXbE&#43;LfFnJnDRReSjeg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepSeek-R1：用强化学习激发大模型推理能力</h2>
         </div>
     </a>
 </article>

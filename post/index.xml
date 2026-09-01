@@ -7,13 +7,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 30 Aug 2026 18:01:45 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 01 Sep 2026 22:08:21 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>containerd 通信机制分析</title>
-        <link>/p/containerd-communication/</link>
+        <link>/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
-        <guid>/p/containerd-communication/</guid>
-        <description>&lt;img src="/p/containerd-communication/1.jpg" alt="Featured image of post containerd 通信机制分析" /&gt;&lt;h2 id=&#34;引子containerd-在容器生态里的位置&#34;&gt;引子：containerd 在容器生态里的位置
+        <guid>/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</guid>
+        <description>&lt;h2 id=&#34;引子containerd-在容器生态里的位置&#34;&gt;引子：containerd 在容器生态里的位置
 &lt;/h2&gt;&lt;p&gt;用 Docker 或 Kubernetes 时，你很少直接接触 containerd。但它是&lt;strong&gt;容器生态的基石&lt;/strong&gt;：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -353,6 +353,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;插件在同一个进程内，所以不需要 RPC 通信&lt;/strong&gt;——这是最直接的架构选择。但对外暴露时，每个插件把自己的服务注册到 gRPC/TTRPC server，让外部进程也能调用。&lt;/p&gt;
+&lt;h2 id=&#34;从-ai-安全视角看-containerd-通信&#34;&gt;从 AI 安全视角看 containerd 通信
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;UDS 权限控制&lt;/strong&gt;：containerd 的 socket 文件默认 0660（owner root + group root）。Docker 要连接的话，要么把 Docker 加入 root 组，要么修改 socket 组的权限。这在实际部署中经常被配置错误——有人图方便改成 &lt;code&gt;0777&lt;/code&gt;，这意味着任何进程都能操作容器。在容器逃逸攻击中，攻击者第一步就是扫描宿主机上可写的 socket 文件。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TTRPC 的攻击面更小&lt;/strong&gt;：TTRPC 端点不暴露给外部，攻击者无法直接通过 gRPC 端口拿到所有服务。但如果有恶意进程在宿主机上运行，它也能连 TTRPC socket（如果文件权限没设好）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Shim 隔离的安全价值&lt;/strong&gt;：如果 containerd 被攻破，攻击者只能控制那一组 gRPC 服务，不能直接操作运行中的容器（shim 是独立进程）。反过来，容器进程崩溃也不会影响 containerd。这种&lt;strong&gt;双向隔离&lt;/strong&gt;是安全架构的好设计。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;fd 传递的安全风险&lt;/strong&gt;：containerd 通过 UDS 的 SCM_RIGHTS 把容器 stdin/stdout/stderr 的 fd 传递给 shim。如果接收方没验证发送方身份，可能被恶意利用。所以 containerd 的 shim 会用 &lt;code&gt;SO_PEERCRED&lt;/code&gt; 确认连接方是 containerd 进程。&lt;/p&gt;
 &lt;h2 id=&#34;总结&#34;&gt;总结
 &lt;/h2&gt;&lt;p&gt;Containerd 的通信架构可以用三个关键词概括：&lt;/p&gt;
 &lt;ol&gt;
@@ -377,12 +382,12 @@
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
         <guid>/p/gpt-01/</guid>
-        <description>&lt;img src="/p/gpt-01/cover.jpg" alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" /&gt;&lt;h2 id=&#34;从-bert-到-gpt一个对称的思路&#34;&gt;从 BERT 到 GPT：一个对称的思路
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" /&gt;&lt;h2 id=&#34;从-bert-到-gpt一个对称的思路&#34;&gt;从 BERT 到 GPT：一个对称的思路
 &lt;/h2&gt;&lt;p&gt;2018 年是 NLP 的转折年。Google 的 BERT 用双向编码器横扫了理解类任务，OpenAI 的 GPT-1 则在同一年走了另一条路——只用 Decoder，只做生成。&lt;/p&gt;
 &lt;p&gt;BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。&lt;/p&gt;
 &lt;h2 id=&#34;核心设计decoder-only-与自回归&#34;&gt;核心设计：Decoder-only 与自回归
 &lt;/h2&gt;&lt;p&gt;GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/p/gpt-01/gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src=&#34;gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
       &lt;h4&gt;图 1：GPT-1 Decoder-only 架构（tldraw 绘制）&lt;/h4&gt;
     &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -528,7 +533,7 @@
 &lt;li&gt;&lt;strong&gt;Scaling Law 的提出&lt;/strong&gt;——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;单向注意力掩码的可视化&#34;&gt;单向注意力掩码的可视化
-&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;/p/gpt-01/gpt-mask.png&#34;&gt;&lt;figcaption&gt;
+&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;gpt-mask.png&#34;&gt;&lt;figcaption&gt;
       &lt;h4&gt;图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）&lt;/h4&gt;
     &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -563,11 +568,11 @@
         </item>
         <item>
         <title>Unix Domain Socket 源码实现分析 (OLK 6.6)</title>
-        <link>/p/uds-linux-kernel/</link>
+        <link>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
-        <guid>/p/uds-linux-kernel/</guid>
-        <description>&lt;img src="/p/uds-linux-kernel/1.jpg" alt="Featured image of post Unix Domain Socket 源码实现分析 (OLK 6.6)" /&gt;&lt;h2 id=&#34;引子tcp-loopback-有什么问题&#34;&gt;引子：TCP loopback 有什么问题？
+        <guid>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;h2 id=&#34;引子tcp-loopback-有什么问题&#34;&gt;引子：TCP loopback 有什么问题？
 &lt;/h2&gt;&lt;p&gt;两台机器通信要经过复杂的网络栈：路由、拥塞控制、校验和、分片重组。但&lt;strong&gt;同一台机器上两个进程通信&lt;/strong&gt;，走 TCP loopback 也能通，只是杀鸡用牛刀了——数据包绕了一大圈网卡环路才回来，CPU 白白做了大量不需要的协议处理。&lt;/p&gt;
 &lt;p&gt;Unix Domain Socket（UDS）就是为这个场景设计的：&lt;strong&gt;不走网络层，直接在进程间共享内存缓冲&lt;/strong&gt;。它比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且在同一台机器上，UDS 的安全性天然可控（文件权限就能限制访问）。&lt;/p&gt;
 &lt;h2 id=&#34;uds-最重要的设计决策地址用路径名&#34;&gt;UDS 最重要的设计决策：地址用路径名
@@ -1222,6 +1227,11 @@
 &lt;li&gt;保消息边界（像 UDP）&lt;/li&gt;
 &lt;li&gt;数据可靠、有序&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;从-ai-安全视角看-uds&#34;&gt;从 AI 安全视角看 UDS
+&lt;/h2&gt;&lt;p&gt;UDS 虽然不经过网络，但它本身就有安全风险：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;路径名 socket 的权限风险&lt;/strong&gt;：socket 文件继承文件系统的权限。如果 &lt;code&gt;chmod 777&lt;/code&gt; 一个 UDS 文件，任何用户都能连接。容器场景下，宿主机和容器可能共享挂载的 socket 文件——这是容器逃逸的常见攻击面。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;抽象命名空间不可控&lt;/strong&gt;：抽象命名空间的 socket 不落盘，不能用 &lt;code&gt;ls&lt;/code&gt; 看到，也没有文件权限保护。恶意进程只要知道名字就能连上。这也是为什么 containerd 的默认 socket 是路径名（&lt;code&gt;/run/containerd/containerd.sock&lt;/code&gt;）而不是抽象命名空间——路径名至少能用文件权限约束。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;fd 传递的攻击面&lt;/strong&gt;：SCM_RIGHTS 传递的是内核文件对象指针。如果恶意进程通过 UDS 接收 fd，可能拿到意外的系统资源。所以接收方应该用 &lt;code&gt;SO_PEERCRED&lt;/code&gt; 验证发送方身份。&lt;/p&gt;
 &lt;h2 id=&#34;总结&#34;&gt;总结
 &lt;/h2&gt;&lt;p&gt;UDS 是 Linux 本地 IPC 的最佳选择——&lt;strong&gt;比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且支持 fd 传递和证书传递这些独特能力&lt;/strong&gt;。它的核心设计思想是：既然两个进程在同一台机器上，那就绕过整个网络栈，直接在内存中传递数据。&lt;/p&gt;
 &lt;p&gt;回到 containerd 的通信架构，它的所有 gRPC 和 TTRPC 接口都基于 UDS 实现——这不是巧合，而是对安全性和性能的共同追求。&lt;/p&gt;
@@ -1240,421 +1250,194 @@
         <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
         
         <guid>/p/bert-02/</guid>
-        <description>&lt;img src="/p/bert-02/cover.jpg" alt="Featured image of post BERT：双向编码器，到底双在哪" /&gt;&lt;h2 id=&#34;引子同样用-transformer双在哪&#34;&gt;引子：同样用 Transformer，&amp;ldquo;双&amp;quot;在哪？
-&lt;/h2&gt;&lt;p&gt;上一篇拆了 Transformer，它的核心是 self-attention——理论上能看上下文所有 token。但 2018 年 OpenAI 的 GPT-1（Radford et al.）把 Transformer Decoder 拆出来做自回归语言模型，每一步只允许看自己&lt;strong&gt;和过去&lt;/strong&gt;的 token。&lt;/p&gt;
-&lt;p&gt;这就像读句子时只准往前看，不能回头。句子&amp;quot;小明给小红 ___ 一本书&amp;quot;里的填空位置——，读到这里，GPT 只能根据&amp;quot;小明给小红&amp;quot;猜下一个词，看不到后面&amp;quot;一本书&amp;quot;这个宾语给出的提示。语义判断需要&amp;quot;两头看&amp;rdquo;，单向约束就成了天花板。&lt;/p&gt;
-&lt;p&gt;BERT（Bidirectional Encoder Representations from Transformers）的&amp;quot;Bidirectional&amp;quot;就是为这件事准备的。&lt;/p&gt;
-&lt;p&gt;但&amp;quot;BERT 比 GPT 多看了一头&amp;quot;这件事，&lt;strong&gt;真正的实现代价极小&lt;/strong&gt;——架构几乎一样，只是 attention mask 不同。难的不是&amp;quot;让 token 互相看&amp;quot;，难的是&amp;quot;看完之后模型还能不能学到东西&amp;quot;。本文就讲这三件事：&lt;/p&gt;
+        <description>&lt;img src="/p/bert-02/cover.jpg" alt="Featured image of post BERT：双向编码器，到底双在哪" /&gt;&lt;h2 id=&#34;引子从-gpt-1-的我只能往前看说起&#34;&gt;引子：从 GPT-1 的&amp;quot;我只能往前看&amp;quot;说起
+&lt;/h2&gt;&lt;p&gt;上一篇我们拆了 Transformer，它的核心是注意力机制——理论上能看到上下文里所有词。但 2018 年 OpenAI 推出的 GPT-1，把 Transformer 的 &lt;strong&gt;Decoder&lt;/strong&gt; 单独拎出来做预训练，套上&amp;quot;自回归&amp;quot;的语言模型：每一步只看自己和过去的词，往后预测下一个。&lt;/p&gt;
+&lt;p&gt;这就像一个人读句子时，&lt;strong&gt;只准用眼睛扫前面读过的字，不准回头看&lt;/strong&gt;。读&amp;quot;小明给小红___一本书&amp;quot;时，GPT 只能根据&amp;quot;小明给小红&amp;quot;猜下一个词是&amp;quot;送&amp;quot;还是&amp;quot;买&amp;quot;——但它看不到&amp;quot;书&amp;quot;这个宾语。&lt;/p&gt;
+&lt;p&gt;这种&amp;quot;单向&amp;quot;约束让 GPT 特别擅长&lt;strong&gt;生成&lt;/strong&gt;（写下一个字），但遇到&lt;strong&gt;理解&lt;/strong&gt;任务（句子分类、问答、命名实体识别）就吃亏了：很多判断需要&amp;quot;两头看&amp;quot;。&lt;/p&gt;
+&lt;p&gt;2018 年底 Google 放出的 BERT（Bidirectional Encoder Representations from Transformers）就是来解决这个问题——&lt;strong&gt;名字里的 &amp;ldquo;Bidirectional&amp;rdquo; 就是这个意思&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;双向到底双在哪&#34;&gt;双向到底&amp;quot;双&amp;quot;在哪？
+&lt;/h2&gt;&lt;p&gt;先看对比图：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/bert-02/bert-direction.png&#34;&gt;&lt;figcaption&gt;
+      &lt;h4&gt;图 1：BERT 双向 vs GPT 单向——同一句话两种预训练思路（tldraw 绘制）&lt;/h4&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;GPT 的单向：预测&amp;quot;猫&amp;quot;时，只能看&amp;quot;我喜欢&amp;quot;和它自己，看不到&amp;quot;睡在沙发上&amp;quot;。&lt;/p&gt;
+&lt;p&gt;BERT 的双向：预测被遮住的&amp;quot;猫&amp;quot;时，&lt;strong&gt;左右都能看&lt;/strong&gt;——&amp;ldquo;我喜欢 ___ 睡在沙发上&amp;rdquo;，左右两边都是上下文。&lt;/p&gt;
+&lt;p&gt;这看着简单，但实现起来要解决一个关键问题：&lt;strong&gt;不能&amp;quot;看见自己&amp;quot;&lt;/strong&gt;。如果模型在预测&amp;quot;猫&amp;quot;时把&amp;quot;猫&amp;quot;也喂进去了，那就是抄答案。BERT 的解法就是&lt;strong&gt;遮住 15% 的词&lt;/strong&gt;让模型猜——这就是接下来要讲的 &lt;strong&gt;MLM&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;核心机制一masked-language-modelmlm&#34;&gt;核心机制一：Masked Language Model（MLM）
+&lt;/h2&gt;&lt;p&gt;MLM 的全称是&amp;quot;遮蔽语言模型&amp;quot;，思路来自英语考试里的完形填空。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;具体做法&lt;/strong&gt;：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;怎么&amp;quot;双&amp;quot;&lt;/strong&gt;：attention mask 的差异&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;双了之后怎么训练&lt;/strong&gt;：为什么必须用 MLM 而不是 LM&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;到底有多大用&lt;/strong&gt;：消融数据说了什么&lt;/li&gt;
+&lt;li&gt;准备一段文本&lt;/li&gt;
+&lt;li&gt;随机挑 15% 的词（subword token）出来&lt;/li&gt;
+&lt;li&gt;这 15% 里：
+&lt;ul&gt;
+&lt;li&gt;80% 替换成 &lt;code&gt;[MASK]&lt;/code&gt;（例：原句&amp;quot;我喜欢猫&amp;quot; → &amp;ldquo;我喜欢 [MASK]&amp;quot;）&lt;/li&gt;
+&lt;li&gt;10% 替换成随机的别的词（&amp;ldquo;我喜欢 桌子&amp;rdquo;）&lt;/li&gt;
+&lt;li&gt;10% 保持原样不动（&amp;ldquo;我喜欢 猫&amp;rdquo;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;让模型根据&lt;strong&gt;左右两边的所有上下文&lt;/strong&gt;，猜出这些被遮的位置原来是什么&lt;/li&gt;
 &lt;/ol&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;一双在-attention-mask&#34;&gt;一、&amp;ldquo;双&amp;quot;在 attention mask
-&lt;/h2&gt;&lt;p&gt;GPT 和 BERT 都用 Transformer encoder block，&lt;strong&gt;唯一的架构差异就在 attention mask&lt;/strong&gt;。这个差异用一张图就能讲清楚。&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/p/bert-02/bert-attention-mask.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 1：GPT 因果 mask vs BERT 双向 mask——同一句话的注意力范围&lt;/h4&gt;
+&lt;p&gt;最后那 10% &amp;ldquo;保持原样&amp;quot;是为了减轻预训练-微调的 mismatch：微调时没有 &lt;code&gt;[MASK]&lt;/code&gt;，要让模型学会&amp;quot;不管输入被怎么处理，我都要能正常理解&amp;rdquo;。&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/bert-02/bert-mlm.png&#34;&gt;&lt;figcaption&gt;
+      &lt;h4&gt;图 2：BERT 预训练——MLM &amp;#43; NSP 双任务（tldraw 绘制）&lt;/h4&gt;
     &lt;/figcaption&gt;
 &lt;/figure&gt;
 
-&lt;p&gt;设输入长度为 7（含 [CLS]/[SEP]），mask 矩阵里 &lt;code&gt;1&lt;/code&gt; 表示&amp;quot;看得见&amp;rdquo;，&lt;code&gt;0&lt;/code&gt; 表示&amp;quot;看不见&amp;quot;：&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;GPT（Causal Mask）&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;我 喜欢 猫 睡 在 沙发 上
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 0 0 0 0 0 0     ← 预测&amp;#34;我&amp;#34;时只能看自己
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 0 0 0 0 0     ← 预测&amp;#34;喜欢&amp;#34;时看&amp;#34;我&amp;#34;&amp;#34;喜欢&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 0 0 0 0     ← 预测&amp;#34;猫&amp;#34;时看&amp;#34;我&amp;#34;&amp;#34;喜欢&amp;#34;&amp;#34;猫&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 1 0 0 0     ← 预测&amp;#34;睡&amp;#34;时看前 4 个
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 1 1 0 0     ← 预测&amp;#34;在&amp;#34;时看前 5 个
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 1 1 1 0     ← 预测&amp;#34;沙发&amp;#34;时看前 6 个
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 1 1 1 1     ← 预测&amp;#34;上&amp;#34;时看全部
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;这是一个&lt;strong&gt;下三角&lt;/strong&gt;矩阵。每个 token 的感受野从自己扩展到整个前缀，但永远看不到右边。12 层叠加后，每层感受野都受这个 mask 约束——信息只能从左向右流动。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;BERT（Bidirectional Mask）&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;我 喜欢 [MASK] 睡 在 沙发 上
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 1 1 1 1     ← 预测 [MASK] 时看全部 7 个位置
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1 1 1 1 1 1 1     ← 其他位置的注意力也一样
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;这是一个&lt;strong&gt;全 1&lt;/strong&gt; 矩阵。每个位置都能 attend 到所有位置——包括自己、包括后面、包括其他 [MASK]。12 层之后，每个 token 的最终表示都已经融合了&lt;strong&gt;整个序列的左右上下文&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;这就是&amp;quot;双&amp;quot;的全部含义。**没有新增任何参数，没有改变 layer norm / FFN / 残差结构，没有改变 token 化方式。**只是一张 mask 矩阵从下三角换成全 1，模型就从&amp;quot;语言模型&amp;quot;变成&amp;quot;双向编码器&amp;quot;。&lt;/p&gt;
-&lt;p&gt;但这件事带来一个直接问题——下一节就要解决。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;二双向之后为什么不能继续用-lm&#34;&gt;二、双向之后，为什么不能继续用 LM？
-&lt;/h2&gt;&lt;p&gt;把 mask 改成全 1，self-attention 在数学上是合法的。但&lt;strong&gt;自回归语言模型的目标函数不再成立&lt;/strong&gt;：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;给定前缀 $w_1, w_2, \ldots, w_{t-1}$，预测下一个 token $w_t$。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;如果模型在预测 $w_t$ 时能&amp;quot;看到&amp;quot; $w_t$ 本身（比如直接 attend 到 $w_t$ 位置），那损失函数就变成了&amp;quot;用答案预测答案&amp;quot;——模型的最优解是&lt;strong&gt;直接拷贝输入&lt;/strong&gt;，学不到任何语义。&lt;/p&gt;
-&lt;p&gt;直觉演示：句子&amp;quot;猫坐在垫子上&amp;quot;，用 LM 目标 + 全 1 mask 训练时：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;目标：给定&amp;#34;猫坐在垫子上&amp;#34;预测第 3 个 token
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;模型：看见全部输入 → 直接输出&amp;#34;坐&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;这等价于把 LM 目标降级成&amp;quot;抄写&amp;quot;。&lt;strong&gt;所以 BERT 必须改训练目标&lt;/strong&gt;——这就是 MLM（Masked Language Modeling）的来源。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;三mlm用-cloze-任务绕开标签泄漏&#34;&gt;三、MLM：用 cloze 任务绕开标签泄漏
-&lt;/h2&gt;&lt;p&gt;BERT 论文借鉴了 Taylor 1953 年的 Cloze 任务：把句子挖个空，让模型填回去。具体做法分两步。&lt;/p&gt;
-&lt;h3 id=&#34;31-选位置随机遮-15&#34;&gt;3.1 选位置：随机遮 15%
-&lt;/h3&gt;&lt;p&gt;原文措辞：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;In all of our experiments, we mask &lt;strong&gt;15%&lt;/strong&gt; of all WordPiece tokens in each sequence at random.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;15% 这个数字是&lt;strong&gt;直接选定的启发值&lt;/strong&gt;，原论文&lt;strong&gt;没有给出 sweep 消融&lt;/strong&gt;——附录 C.2 的 Table 8 是 mask 策略（80/10/10）的消融，不是 mask rate 的消融。&lt;/p&gt;
-&lt;p&gt;直觉上：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;为什么 MLM 能让模型学会双向理解？&lt;/strong&gt;
+因为预测 [MASK] 时，模型的注意力能同时看左右两侧（除了被遮的那个位置）。这逼迫它必须把左右信息都编码进同一个向量里——这就是&amp;quot;双向&amp;quot;的本质。&lt;/p&gt;
+&lt;h2 id=&#34;核心机制二next-sentence-predictionnsp&#34;&gt;核心机制二：Next Sentence Prediction（NSP）
+&lt;/h2&gt;&lt;p&gt;MLM 学的是&amp;quot;词和上下文的关系&amp;rdquo;，但很多下游任务（问答、自然语言推理）需要&amp;quot;句子之间的关系&amp;quot;。BERT 加了第二个预训练任务 NSP：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;做法&lt;/strong&gt;：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;太低（如 5%）→ 训练信号太弱，模型收敛慢；&lt;/li&gt;
-&lt;li&gt;太高（如 50%）→ 输入被破坏得太厉害，连续语言结构难以学到。&lt;/li&gt;
+&lt;li&gt;给模型两句话 A 和 B&lt;/li&gt;
+&lt;li&gt;50% 的概率 B 是 A 的真实下一句&lt;/li&gt;
+&lt;li&gt;50% 的概率 B 是语料里随便抽的一句&lt;/li&gt;
+&lt;li&gt;让模型判断&amp;quot;B 是不是 A 的下一句？&amp;quot;（二分类）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;15% 是个折中——每个序列平均有 76 个 token（512×0.15），既够密又不至于把句子打散。&lt;/p&gt;
-&lt;h3 id=&#34;32-替换策略801010&#34;&gt;3.2 替换策略：80/10/10
-&lt;/h3&gt;&lt;p&gt;被选中的 15% token 不能简单替换成 [MASK]——否则&lt;strong&gt;预训练时见过 [MASK]，微调时没有 [MASK]，分布严重不匹配&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;原文解决方案：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;If the i-th token is chosen, we replace the i-th token with
-(1) the [MASK] token &lt;strong&gt;80%&lt;/strong&gt; of the time
-(2) a random token &lt;strong&gt;10%&lt;/strong&gt; of the time
-(3) the unchanged i-th token &lt;strong&gt;10%&lt;/strong&gt; of the time.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;举例（来自原文附录 A.1，&amp;ldquo;my dog is hairy&amp;rdquo;）：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;原始:    my dog is hairy
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;↓ 选中第 4 个 token &amp;#34;hairy&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;80%:     my dog is [MASK]        ← 标准 MLM
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;10%:     my dog is apple         ← 随机替换
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;10%:     my dog is hairy         ← 保持原样
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;最后那 10% 保持原样看似没意义，其实很关键：模型&lt;strong&gt;永远不知道当前 token 会不会被要求预测&lt;/strong&gt;，所以必须为每个 token 都维护一个完整的语境表示（contextualized representation），而不是只对 [MASK] 位置&amp;quot;特殊对待&amp;quot;。&lt;/p&gt;
-&lt;p&gt;10% 的随机替换则让模型被迫学一个隐式的&amp;quot;合理性判别&amp;quot;——不能因为 90% 的位置是 [MASK] 就把 [MASK] 当成背景噪声忽略掉。&lt;/p&gt;
-&lt;h3 id=&#34;33-损失只在被遮位置计算&#34;&gt;3.3 损失只在被遮位置计算
-&lt;/h3&gt;&lt;p&gt;伪代码（BERT 原文逻辑）：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;logits&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bert&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;masked_input&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;              &lt;span class=&#34;c1&#34;&gt;# [batch, seq_len, vocab]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;loss&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cross_entropy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;logits&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;target_ids&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# 算所有位置&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;loss&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;loss&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mask_weights&lt;/span&gt;               &lt;span class=&#34;c1&#34;&gt;# 只在被遮位置保留梯度&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# mask_weights: 被遮位置 = 1, 其余 = 0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;模型 100% 的前向计算照常发生（被遮位置也要参与 attention），但&lt;strong&gt;只有 15% 的 token 产生梯度&lt;/strong&gt;。原论文附录 A.2 的原话：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;Compared to standard language model training, the masked LM only makes predictions on &lt;strong&gt;15% of tokens&lt;/strong&gt; in each batch, which suggests that more pre-training steps may be required for the model to converge.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;这也是 BERT 训练 1M 步（≈40 epoch）的部分原因——单步有效信号只有自回归 LM 的 15%，需要更多步补偿。&lt;/p&gt;
-&lt;p&gt;附录 C.1 还有一个图（Figure 5），曲线说明 MLM 收敛速度&lt;strong&gt;确实比 LTR 慢一点&lt;/strong&gt;，但很快就在绝对准确率上反超 LTR。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;四nsp第二个预训练任务的真相&#34;&gt;四、NSP：第二个预训练任务的真相
-&lt;/h2&gt;&lt;h3 id=&#34;41-任务定义&#34;&gt;4.1 任务定义
-&lt;/h3&gt;&lt;p&gt;输入两段文本 [CLS] A [SEP] B [SEP]：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;50% 概率：B 是 A 的真实下一句（label = IsNext）&lt;/li&gt;
-&lt;li&gt;50% 概率：B 是从语料里随机抽的（label = NotNext）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;用 [CLS] 位置的输出做二分类。原文（Section 3.1.2）：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;we demonstrate in Section 5.1 that pre-training towards this task is very beneficial to both QA and NLI.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;42-消融数据说了什么&#34;&gt;4.2 消融数据说了什么
-&lt;/h3&gt;&lt;p&gt;论文 Table 5（BERT_BASE 架构，Dev Set）：&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;任务&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;MNLI-m&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;QNLI&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;MRPC&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;SST-2&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;SQuAD F1&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;BERT_BASE（完整）&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;84.4&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;88.4&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;86.7&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;92.7&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;88.5&lt;/strong&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;No NSP&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;83.9&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;84.9&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;86.5&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;92.6&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;87.9&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;LTR &amp;amp; No NSP&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;82.1&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;84.3&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;77.5&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;92.1&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;77.8&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;去掉 NSP 后：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;QNLI 掉了 3.5 点&lt;/strong&gt;（88.4→84.9）—— 这是最大跌幅，QNLI 是句间关系任务，NSP 直接相关。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;MNLI 掉了 0.5 点&lt;/strong&gt;（84.4→83.9）—— 几乎没影响。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;SST-2 掉了 0.1 点&lt;/strong&gt;—— 几乎无影响（SST-2 是单句情感分类）。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;SQuAD 掉了 0.6 点&lt;/strong&gt;—— 小幅下降。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;**所以&amp;quot;去掉 NSP 掉 1-2 个点&amp;quot;是一个粗略说法，真实情况是任务相关、且主要体现在 QNLI 上。**论文原文（Section 5.1）的措辞也比较克制：&amp;ldquo;removing NSP hurts performance &lt;strong&gt;significantly on QNLI, MNLI, and SQuAD 1.1&lt;/strong&gt;&amp;quot;——而 Table 5 里 MNLI 其实只掉 0.5 点，&amp;ldquo;significantly&amp;rdquo; 更准确地说应该是 QNLI。&lt;/p&gt;
-&lt;h3 id=&#34;43-nsp-后来被质疑roberta-的实证&#34;&gt;4.3 NSP 后来被质疑（RoBERTa 的实证）
-&lt;/h3&gt;&lt;p&gt;RoBERTa（Liu et al. 2019）专门做了 NSP 的对照实验，论文 Section 4.2 的 Table 4 直接列出了数字：&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;输入格式&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;SQuAD 1.1/2.0&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;MNLI&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;NLI Avg&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;RACE&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;SEGMENT-PAIR + NSP（BERT 原版）&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;90.4 / 78.7&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;84.0&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;92.9&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;64.2&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;SENTENCE-PAIR + NSP&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;88.7 / 76.2&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;82.9&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;92.1&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;63.0&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;FULL-SENTENCES, &lt;strong&gt;无 NSP&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;90.4 / 79.1&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;84.7&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;92.5&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;64.8&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;DOC-SENTENCES, 无 NSP&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;90.6 / 79.7&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;84.7&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;92.7&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;65.6&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;去掉 NSP 后&lt;/strong&gt;：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;SQuAD F1：90.4→90.4（&lt;strong&gt;持平&lt;/strong&gt;）&lt;/li&gt;
-&lt;li&gt;MNLI：84.0→84.7（&lt;strong&gt;+0.7&lt;/strong&gt;）&lt;/li&gt;
-&lt;li&gt;RACE：64.2→64.8（&lt;strong&gt;+0.6&lt;/strong&gt;）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;也就是说，&lt;strong&gt;RoBERTa 的复现直接推翻了 BERT 论文&amp;quot;去掉 NSP 会掉点&amp;quot;的判断&lt;/strong&gt;——在更大数据（160GB vs 16GB）、更长训练下，去掉 NSP 不仅不损失，反而整体略好。RoBERTa 摘要里把&amp;rdquo;&lt;strong&gt;removing the next sentence prediction objective&lt;/strong&gt;&amp;ldquo;列为四大改进之一。&lt;/p&gt;
-&lt;p&gt;后续 ALBERT（Lan et al. 2020）则提出 &lt;strong&gt;SOP（Sentence Order Prediction）&lt;/strong&gt;——把&amp;quot;判断是否相邻&amp;quot;换成&amp;quot;判断句序是否正确&amp;rdquo;，更难、更能学到句间连贯性，进一步说明 NSP 任务本身设计粗糙。&lt;/p&gt;
-&lt;p&gt;所以 NSP 的真正价值不是&amp;quot;句子级表示有多必要&amp;quot;，而是&lt;strong&gt;证明了&amp;quot;预训练任务可以不止一个&amp;quot;&lt;/strong&gt;——MLM 学 token 级，NSP 学句间关系，两者互补。这个多任务预训练的思路被后续 ELECTRA、SpanBERT、ALBERT 等沿用，只是具体任务换了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;五几个常被搞错的细节&#34;&gt;五、几个常被搞错的细节
-&lt;/h2&gt;&lt;blockquote&gt;
-&lt;p&gt;原文核完，几个&lt;strong&gt;流传很广但实际上是错&lt;/strong&gt;或&lt;strong&gt;夸张&lt;/strong&gt;的说法，在这里一并澄清。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;51-bert-是第一个用-gelu-的模型&#34;&gt;5.1 &amp;ldquo;BERT 是第一个用 GELU 的模型&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;错。GELU 由 Hendrycks &amp;amp; Gimpel 在 2016 年提出（arXiv:1606.08415），但&lt;strong&gt;第一个把它用在 Transformer LM 预训练的是 GPT-1（2018 年 6 月）&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;GPT-1 原文（Section 3.2）的原话：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;For the activation function, we used the &lt;strong&gt;Gaussian Error Linear Unit (GELU) [18]&lt;/strong&gt;.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;BERT 附录 A.2 的原话：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;We use a &lt;strong&gt;gelu activation (Hendrycks and Gimpel, 2016)&lt;/strong&gt; rather than the standard relu, &lt;strong&gt;following OpenAI GPT&lt;/strong&gt;.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;BERT 论文自己都写&amp;quot;following OpenAI GPT&amp;quot;——&lt;strong&gt;BERT 不是 GELU 的发明者，是接力者&lt;/strong&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;52-bert-的掩码率是消融得到的&#34;&gt;5.2 &amp;ldquo;BERT 的掩码率是消融得到的&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;错。15% 没有 sweep 实验支持，是直接选定的启发值。原文 Table 8 的消融只对比 80/10/10 这种 mask 策略的分布，不对比 mask rate 本身。&lt;/p&gt;
-&lt;p&gt;后续工作（&amp;ldquo;Should You Mask 15% in Masked Language Modeling?&amp;quot;，arXiv:2202.08005）专门重新研究过这个数字，发现在 RoBERTa 训练规模下，&lt;strong&gt;20% 反而略好于 15%&lt;/strong&gt;，但作者也认为差异不显著。所以 15% 不是&amp;quot;最优解&amp;rdquo;，是&amp;quot;够用&amp;quot;。&lt;/p&gt;
-&lt;h3 id=&#34;53-squad-微调时没有额外参数&#34;&gt;5.3 &amp;ldquo;SQuAD 微调时没有额外参数&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;错。SQuAD 的 start / end 预测是&lt;strong&gt;基于 BERT 输出加一层线性层&lt;/strong&gt;：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;start_logits&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;W_s&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;·&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;h_i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b_s&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;# W_s: H × 1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;end_logits&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;W_e&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;·&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;h_i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b_e&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;这里的 $W_s, W_e$ 就是新增参数（BERT-base 是 768 维，所以每个向量 768 个权重）。原文章把它们省略掉会让读者误以为没有参数。&lt;/p&gt;
-&lt;h3 id=&#34;54-bert-让所有-nlp-任务不再需要任务特定架构&#34;&gt;5.4 &amp;ldquo;BERT 让所有 NLP 任务不再需要任务特定架构&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;夸张。原文强调&amp;quot;minimal task-specific parameters&amp;quot;——只是参数变少了，不是没了。SQuAD 需要 start/end 头，序列标注需要 token-level 分类头，多任务需要任务路由。&lt;strong&gt;BERT 的贡献是降低下游任务对&lt;/strong&gt;架构工程&lt;strong&gt;的依赖，不是消灭它&lt;/strong&gt;。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;六架构与训练速览&#34;&gt;六、架构与训练速览
-&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;/p/bert-02/bert-embeddings.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 2：BERT 输入表示——Token &amp;#43; Segment &amp;#43; Position 三种 embedding 相加&lt;/h4&gt;
+&lt;p&gt;这一招让 BERT 学到了&lt;strong&gt;句间关系&lt;/strong&gt;，做 QA、文本匹配这些任务时直接受益。&lt;/p&gt;
+&lt;p&gt;（顺带一提：后来的 RoBERTa 发现 NSP 这个任务其实没那么必要，去掉后效果反而更好。但 BERT 原论文里它是关键设计之一。）&lt;/p&gt;
+&lt;h2 id=&#34;输入表示三种-embedding-相加&#34;&gt;输入表示：三种 embedding 相加
+&lt;/h2&gt;&lt;p&gt;BERT 的输入有三个 embedding 相加，这点要特别记住：&lt;/p&gt;
+&lt;p&gt;下面这张简化图对齐 BERT 论文 Figure 2 的输入结构：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/bert-02/bert-embeddings.png&#34;&gt;&lt;figcaption&gt;
+      &lt;h4&gt;图 3：BERT 输入表示——Token &amp;#43; Segment &amp;#43; Position 三种 embedding 相加（tldraw 绘制，结构参考 Devlin et al., 2018, Figure 2）&lt;/h4&gt;
     &lt;/figcaption&gt;
 &lt;/figure&gt;
 
-&lt;p&gt;BERT 的输入由三种 embedding 逐元素相加得到：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Token Embedding&lt;/strong&gt;：WordPiece 分词，词表 30,000&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Segment Embedding&lt;/strong&gt;：标记 token 属于句子 A 还是 B（NSP 需要）&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Position Embedding&lt;/strong&gt;：可学习的位置向量，最大 512&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Token Embeddings&lt;/strong&gt;：词的向量（用 WordPiece 切词，词表约 3 万）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Segment Embeddings&lt;/strong&gt;：标记&amp;quot;A 句&amp;quot;还是&amp;quot;B 句&amp;quot;（用 E_A/E_B 两个向量）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Position Embeddings&lt;/strong&gt;：标记这是第几个位置（用学习出来的，不是 Transformer 原版的正弦函数）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;为了后文参考，把核心数字整理成一张表。所有数字都来自 BERT 原论文 Section 3 / Appendix A。&lt;/p&gt;
+&lt;p&gt;加起来就是输入向量，进入多层 Transformer Encoder。&lt;/p&gt;
+&lt;h2 id=&#34;架构与规模&#34;&gt;架构与规模
+&lt;/h2&gt;&lt;p&gt;BERT 沿用 Transformer 的 &lt;strong&gt;Encoder&lt;/strong&gt;（不是 Decoder）：&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;参数&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;BERT-base&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;BERT-large&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;模型&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;层数&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;隐藏维度&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;注意力头&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;参数量&lt;/th&gt;
       &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
       &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;层数 L&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;BERT-base&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;12&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;24&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;隐藏维度 H&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;768&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;1024&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;注意力头 A&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;12&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;~110M&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;BERT-large&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;24&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;1024&lt;/td&gt;
           &lt;td style=&#34;text-align: left&#34;&gt;16&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;FFN 中间维度&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;3072&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;4096&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;总参数&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;110M&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;340M&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;词表（WordPiece）&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;30,000&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;30,000&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;最大位置&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;512（可学习）&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;512&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;~340M&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;预训练&lt;/strong&gt;（Appendix A.2）：&lt;/p&gt;
+&lt;p&gt;预训练数据：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;优化器&lt;/strong&gt;：Adam，lr=1e-4，β₁=0.9，β₂=0.999，L2 weight decay=0.01&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;学习率调度&lt;/strong&gt;：前 10,000 步 warmup 线性增长到 1e-4，之后线性衰减&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Batch size&lt;/strong&gt;：256 序列 × 512 tokens = 128,000 tokens/batch&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;训练步数&lt;/strong&gt;：1,000,000 步（≈40 epochs over 3.3B word corpus）&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;序列长度调度&lt;/strong&gt;：&lt;strong&gt;90% 步用 128 tokens，10% 步用 512 tokens&lt;/strong&gt;——这是为了在注意力是 O(n²) 的代价下，加速训练同时让位置编码学到 512 的范围&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dropout&lt;/strong&gt;：0.1（所有层）&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;激活函数&lt;/strong&gt;：GELU（from GPT-1）&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;数据&lt;/strong&gt;：BookCorpus (800M words) + English Wikipedia (2,500M words)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;硬件&lt;/strong&gt;：BERT-base 用 4 块 Cloud TPU（Pod 配置，共 16 chip）；BERT-large 用 16 块 Cloud TPU（64 chip），训练约 4 天&lt;/li&gt;
+&lt;li&gt;BookCorpus（8 亿词）&lt;/li&gt;
+&lt;li&gt;English Wikipedia（25 亿词）&lt;/li&gt;
+&lt;li&gt;总共约 33 亿词，训练 40 个 epoch（base）/ 4 个 epoch（large）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;微调&lt;/strong&gt;（Appendix A.3 的推荐范围）：&lt;/p&gt;
+&lt;p&gt;训练硬件：BERT-base 用 4 块 Cloud TPU、BERT-large 用 16 块 Cloud TPU，各训练约 4 天。以今天看算力不大，但在当时已经足以改变 NLP 的默认工作方式。&lt;/p&gt;
+&lt;h2 id=&#34;下游任务bert-的杀手锏&#34;&gt;下游任务：BERT 的杀手锏
+&lt;/h2&gt;&lt;p&gt;BERT 预训练完是&amp;quot;通才&amp;quot;，微调后是&amp;quot;专才&amp;quot;。原论文展示了 11 个 NLP 任务的 SOTA（state-of-the-art）：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. 文本分类（如情感分析）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Batch size：16 或 32&lt;/li&gt;
-&lt;li&gt;学习率：2e-5、3e-5 或 5e-5&lt;/li&gt;
-&lt;li&gt;Epochs：2、3 或 4&lt;/li&gt;
+&lt;li&gt;取 &lt;code&gt;[CLS]&lt;/code&gt; 标记的输出向量&lt;/li&gt;
+&lt;li&gt;接一个全连接层 → softmax 分类&lt;/li&gt;
 &lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;七mlm-vs-自回归几个常见误读&#34;&gt;七、MLM vs 自回归：几个常见误读
-&lt;/h2&gt;&lt;p&gt;读 BERT 资料时常见的几个说法，正好借这里澄清。&lt;/p&gt;
-&lt;h3 id=&#34;71-mlm-比-lm-高效因为只算了-15&#34;&gt;7.1 &amp;ldquo;MLM 比 LM 高效，因为只算了 15%&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;半对半错。&lt;strong&gt;前向计算是 100% 进行的&lt;/strong&gt;——所有 token 都要参与 attention。变少的只是&lt;strong&gt;反向梯度的来源&lt;/strong&gt;。换句话说：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2. 问答（如 SQuAD）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;自回归 LM：每步 100% 前向 + 100% 位置有梯度 = $O(n^2)$ attention × 全序列梯度&lt;/li&gt;
-&lt;li&gt;BERT MLM：每步 100% 前向 + 15% 位置有梯度 = $O(n^2)$ attention × 15% 梯度&lt;/li&gt;
+&lt;li&gt;输入：&amp;ldquo;问题 + 文章&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;输出：答案在文章中的&lt;strong&gt;起止位置&lt;/strong&gt;（两个向量分别预测 start 和 end 的概率分布）&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;梯度来源减少意味着每次更新更&amp;quot;轻&amp;quot;，但代价是&lt;strong&gt;有效信息密度低、需要更多步&lt;/strong&gt;——这正是 BERT 训练 40 epoch 的部分原因。&lt;/p&gt;
-&lt;h3 id=&#34;72-bert-预训练是完形填空所以学到了理解能力&#34;&gt;7.2 &amp;ldquo;BERT 预训练是完形填空，所以学到了理解能力&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;不严谨。&amp;ldquo;完形填空&amp;quot;只是训练信号的形状，&lt;strong&gt;模型学到的不是&amp;quot;填空技巧&amp;rdquo;，而是 contextualized representation&lt;/strong&gt;——每个 token 的表示已经融合了左右上下文。这种表示迁移到分类、问答、NER 时，&lt;strong&gt;不需要从零学语义&lt;/strong&gt;，所以微调代价小。&lt;/p&gt;
-&lt;h3 id=&#34;73-bert-因为双向所以更强&#34;&gt;7.3 &amp;ldquo;BERT 因为双向所以更强&amp;rdquo;
-&lt;/h3&gt;&lt;p&gt;部分对。消融（Table 5）告诉我们：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3. 命名实体识别（NER）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;BERT_BASE（双向 + NSP）：MNLI-m = 84.4&lt;/li&gt;
-&lt;li&gt;LTR &amp;amp; No NSP（单向 + 无 NSP）：MNLI-m = 82.1&lt;/li&gt;
-&lt;li&gt;差距 &lt;strong&gt;2.3 个点&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;每个 token 的输出接分类器，预测是否是实体、属于哪类&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;这个差距&lt;strong&gt;主要来自 SQuAD 和 MRPC 这类需要 token 级双向上下文的任务&lt;/strong&gt;——SQuAD 掉 10.7 点，MRPC 掉 9.2 点。但 SST-2（单句情感）只掉 0.6 点，&lt;strong&gt;说明&amp;quot;双向&amp;quot;的优势是任务相关的&lt;/strong&gt;。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;八bert-的真实贡献&#34;&gt;八、BERT 的真实贡献
-&lt;/h2&gt;&lt;p&gt;到这里可以回答标题的问题了。&amp;ldquo;双&amp;quot;在 attention mask，&amp;ldquo;双&amp;quot;的价值在哪？三层：&lt;/p&gt;
-&lt;h3 id=&#34;81-架构层让-token-看到全部上下文&#34;&gt;8.1 架构层：让 token 看到全部上下文
-&lt;/h3&gt;&lt;p&gt;代价是 mask 矩阵从下三角换成全 1，&lt;strong&gt;架构主体不变&lt;/strong&gt;。这一改让 Transformer Encoder 的&amp;quot;双向上下文融合&amp;quot;能力第一次在大规模预训练中被完整释放。&lt;/p&gt;
-&lt;h3 id=&#34;82-训练层mlm-解决了看见自己问题&#34;&gt;8.2 训练层：MLM 解决了&amp;quot;看见自己&amp;quot;问题
-&lt;/h3&gt;&lt;p&gt;如果只在架构上&amp;quot;双&amp;rdquo;，模型会退化成抄写机器。MLM 通过遮蔽 + 80/10/10 替换，把&amp;quot;双向&amp;quot;从架构属性变成了&lt;strong&gt;预训练目标的一部分&lt;/strong&gt;，让损失函数本身不泄漏标签。&lt;/p&gt;
-&lt;h3 id=&#34;83-范式层通用预训练--轻量微调&#34;&gt;8.3 范式层：通用预训练 + 轻量微调
-&lt;/h3&gt;&lt;p&gt;BERT 把 NLP 的范式从&amp;quot;每个任务设计专属架构&amp;quot;转向&amp;quot;通用 backbone + 任务特定头部&amp;rdquo;。这种范式在 BERT 之前 ELMo 已有（特征拼接），但 BERT 用 fine-tuning 把这种范式推到了 SOTA——&lt;strong&gt;为后续 RoBERTa、ALBERT、SpanBERT、ELECTRA 提供了同一条路线&lt;/strong&gt;。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;九bert-的局限&#34;&gt;九、BERT 的局限
-&lt;/h2&gt;&lt;p&gt;讲完优点也要讲局限：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;最大长度 512&lt;/strong&gt;——可学习位置编码的限制，长文本任务（文档级 QA、长文档分类）需要截断或用 Longformer 这类变体。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;预训练-微调 mismatch&lt;/strong&gt;——虽然 80/10/10 缓解了，但 [MASK] 在微调时永远不出现，仍然是个 bias。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;不适合生成&lt;/strong&gt;——Encoder-only 架构看不到&amp;quot;未来&amp;quot;，解码要靠 autoregressive head。T5、BART 这类 Encoder-Decoder 才是生成的主流选择。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;NSP 训练效率低&lt;/strong&gt;——50% 的训练样本是随机句对，对表征学习的贡献被后续工作质疑。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;4. 自然语言推理（NLI）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;输入两句话，输出&amp;quot;蕴含/矛盾/中立&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;微调成本极低&lt;/strong&gt;：通常 1-3 块 GPU 跑几小时就够，因为绝大部分参数已经预训练好了。这让学术界和中小公司都能用得起。&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/bert-02/bert-finetune.png&#34;&gt;&lt;figcaption&gt;
+      &lt;h4&gt;图 4：BERT 微调——同一底座适配不同下游任务（tldraw 绘制）&lt;/h4&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;bert-家族后浪们&#34;&gt;BERT 家族：后浪们
+&lt;/h2&gt;&lt;p&gt;BERT 一出，NLP 领域炸了，半年内冒出一堆改进版：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RoBERTa&lt;/strong&gt;（Facebook, 2019）：去掉 NSP，增大数据量（160GB），训练更久，效果显著超过原版 BERT&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ALBERT&lt;/strong&gt;（Google, 2019）：参数共享 + 矩阵分解，把 BERT-large 从 340M 压到 12M，性能几乎不降&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ERNIE&lt;/strong&gt;（百度, 2019）：中文版 BERT，加入知识增强掩码策略&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DistilBERT&lt;/strong&gt;（HuggingFace, 2019）：蒸馏小模型，速度提升 60%，性能保留 97%&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SpanBERT&lt;/strong&gt;（2019）：连续片段掩码，对 QA 类任务更友好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;bert-vs-gpt理解-vs-生成&#34;&gt;BERT vs GPT：理解 vs 生成
+&lt;/h2&gt;&lt;p&gt;这是理解 BERT 定位的关键对比：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;维度&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;BERT&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;GPT&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;架构&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Transformer Encoder&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Transformer Decoder&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;注意力&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;双向&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;单向（遮住未来）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;预训练任务&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;MLM + NSP&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;自回归语言模型&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;擅长&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;理解（分类、QA、NER）&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;生成（续写、对话）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;典型应用&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;搜索、推荐、文本匹配&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;写作、对话、代码生成&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;一句话总结&lt;/strong&gt;：BERT 擅长&amp;quot;读懂&amp;quot;，GPT 擅长&amp;quot;接着写&amp;quot;。&lt;/p&gt;
+&lt;p&gt;但有意思的是，到了 GPT-3（2020）以后，大模型靠&amp;quot;规模 + 生成式预训练&amp;quot;也能搞定理解任务（in-context learning），BERT 这一脉的&amp;quot;双向编码器&amp;quot;路线逐渐被生成式大模型吸收融合。但 BERT 本身在工业界（搜索、推荐、文本分类）至今仍是主力，因为&lt;strong&gt;小、快、准、便宜&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;护栏视角&#34;&gt;护栏视角
+&lt;/h2&gt;&lt;p&gt;BERT 的训练数据是公开网页 + 维基百科，里面难免有偏见、错误信息、敏感内容。预训练时这些都会被模型&amp;quot;学进去&amp;quot;。下游做客服、招聘、教育类应用时，必须做：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;数据脱敏&lt;/strong&gt;：过滤明显的 PII（个人身份信息）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;偏见检测&lt;/strong&gt;：用 StereoSet、WinoBias 等基准测性别/种族/地域偏见&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;事实核查&lt;/strong&gt;：BERT 不知道自己&amp;quot;对不对&amp;quot;，下游要加检索/校验层&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;对抗输入&lt;/strong&gt;：错别字、emoji 干扰会让 BERT 分类不稳定，需要对抗训练或数据增强&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;参考资料&#34;&gt;参考资料
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;Devlin, J., Chang, M.W., Lee, K., &amp;amp; Toutanova, K. (2018). &lt;em&gt;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&lt;/em&gt;. arXiv:1810.04805.&lt;/li&gt;
-&lt;li&gt;Radford, A., Narasimhan, K., Salimans, T., &amp;amp; Sutskever, I. (2018). &lt;em&gt;Improving Language Understanding by Generative Pre-Training&lt;/em&gt;. OpenAI Technical Report.&lt;/li&gt;
-&lt;li&gt;Hendrycks, D., &amp;amp; Gimpel, K. (2016). &lt;em&gt;Gaussian Error Linear Units (GELUs)&lt;/em&gt;. arXiv:1606.08415.&lt;/li&gt;
 &lt;li&gt;Liu, Y., et al. (2019). &lt;em&gt;RoBERTa: A Robustly Optimized BERT Pretraining Approach&lt;/em&gt;. arXiv:1907.11692.&lt;/li&gt;
-&lt;li&gt;Clark, K., et al. (2020). &lt;em&gt;ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators&lt;/em&gt;. arXiv:2003.10555.&lt;/li&gt;
-&lt;li&gt;Lan, Z., et al. (2020). &lt;em&gt;ALBERT: A Lite BERT for Self-supervised Learning of Language Representations&lt;/em&gt;. arXiv:1909.11942.&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Should You Mask 15% in Masked Language Modeling?&lt;/em&gt; arXiv:2202.08005.&lt;/li&gt;
+&lt;li&gt;Sanh, V., et al. (2019). &lt;em&gt;DistilBERT, a distilled version of BERT&lt;/em&gt;. arXiv:1910.01108.&lt;/li&gt;
+&lt;li&gt;论文 arXiv HTML 版（含 Figures）：https://arxiv.org/html/1810.04805&lt;/li&gt;
 &lt;li&gt;The Illustrated BERT（Jay Alammar 经典图解）：http://jalammar.github.io/illustrated-bert/&lt;/li&gt;
 &lt;/ul&gt;
 </description>
@@ -1873,6 +1656,491 @@
 &lt;li&gt;Anthropic, &lt;em&gt;Towards Monosemanticity&lt;/em&gt; 等可解释性系列 — 理解注意力头如何工作&lt;/li&gt;
 &lt;li&gt;3Blue1Brown 的《注意力与 Transformer》视频 — 直觉讲得极好&lt;/li&gt;
 &lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>DeepSeek-R1：用强化学习激发大模型推理能力</title>
+        <link>/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/</link>
+        <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
+        
+        <guid>/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/</guid>
+        <description>&lt;img src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover.jpg" alt="Featured image of post DeepSeek-R1：用强化学习激发大模型推理能力" /&gt;&lt;blockquote class=&#34;alert alert-note&#34;&gt;
+    2025 年 1 月，DeepSeek 发布了 R1 系列推理模型，论文旋即登上 Nature。R1 的核心贡献在于：首次从实验上验证了「仅靠强化学习，无需监督微调」，就能让大模型自主学会长思维链推理、自我验证和错误回溯。本文从算法原理、训练管线到效果数据，完整拆解这一里程碑工作。
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;引言推理能力的涌现之谜&#34;&gt;引言：推理能力的「涌现」之谜
+&lt;/h2&gt;&lt;p&gt;2024 年 9 月，OpenAI 发布 o1 模型，首次将「推理时计算」（test-time compute）的概念带入主流视野。o1 能在回答问题之前生成一段内部思维链（Chain-of-Thought, CoT），自我验证、反复推敲，在数学、代码、科学推理上大幅超越 GPT-4o。&lt;/p&gt;
+&lt;p&gt;但 o1 是闭源的，其训练方法对外界是一个黑盒。社区的普遍猜测是：OpenAI 使用大量人工标注的 CoT 数据做监督微调（SFT），再辅以强化学习（RL）对齐。&lt;/p&gt;
+&lt;p&gt;DeepSeek 在 2025 年 1 月发布的 R1 论文彻底打破了这一认知。他们证明：&lt;strong&gt;只需要 RL，不需要 SFT，模型就能自动学会推理&lt;/strong&gt;。这个结论的意义不下于 AlphaGo 在围棋领域的突破——它意味着「推理能力」不是人类手把手教出来的，而是奖励信号驱动下自组织涌现的。&lt;/p&gt;
+&lt;h2 id=&#34;基础架构deepseek-v3-base&#34;&gt;基础架构：DeepSeek-V3-Base
+&lt;/h2&gt;&lt;p&gt;DeepSeek-R1 系列并非从零训练，而是基于 DeepSeek-V3-Base 做后训练（post-training）。V3 本身是一个 MoE（Mixture of Experts）架构，671B 总参数，每次推理只激活 37B 参数，支持 128K 上下文窗口。&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;模型&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;总参数量&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;激活参数量&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;上下文长度&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;基座模型&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;DeepSeek-R1-Zero&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;671B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;37B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;128K&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;DeepSeek-V3-Base&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;DeepSeek-R1&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;671B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;37B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;128K&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;DeepSeek-V3-Base&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;R1 的训练不修改 V3 的架构，而是通过强化学习重新调整模型的行为——让模型学会在回答前「思考」。&lt;/p&gt;
+&lt;h2 id=&#34;核心算法grpo去价值网络的强化学习&#34;&gt;核心算法：GRPO——去价值网络的强化学习
+&lt;/h2&gt;&lt;p&gt;传统 RLHF 中，PPO（Proximal Policy Optimization）是最常用的算法。PPO 需要四个模型：Actor（策略网络）、Critic（价值网络）、Reference（参考模型）、Reward（奖励模型）。其中 Critic 和 Actor 参数量相当，训练时显存消耗翻倍。&lt;/p&gt;
+&lt;p&gt;DeepSeek 使用的 GRPO（Group Relative Policy Optimization）彻底砍掉了 Critic 网络。其核心思想是：&lt;strong&gt;用组内相对优势代替价值函数的绝对优势估计&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;grpo-的数学原理&#34;&gt;GRPO 的数学原理
+&lt;/h3&gt;&lt;p&gt;给定一个 prompt $q$，Actor 采样 $G$ 个候选回答 ${o_1, o_2, &amp;hellip;, o_G}$，每个回答由奖励模型打分得到 ${r_1, r_2, &amp;hellip;, r_G}$。第 $i$ 个回答的优势函数定义为：&lt;/p&gt;
+$$A_i = \frac{r_i - \text{mean}(\{r_1,...,r_G\})}{\text{std}(\{r_1,...,r_G\})}$$&lt;p&gt;这个公式的含义很直观：&lt;strong&gt;如果你的回答在组内表现最好，优势为正，策略朝这个方向更新；表现最差，优势为负，策略远离这个方向&lt;/strong&gt;。组内标准化消除了奖励绝对值尺度的影响，使训练更加稳定。&lt;/p&gt;
+&lt;p&gt;GRPO 的优化目标为：&lt;/p&gt;
+$$\mathcal{J}_{GRPO}(\theta) = \mathbb{E}_{q \sim P(Q), \{o_i\}_{i=1}^G \sim \pi_{\theta_{old}}(O|q)} \left[ \frac{1}{G} \sum_{i=1}^G \left( \min\left( \frac{\pi_\theta(o_i|q)}{\pi_{\theta_{old}}(o_i|q)} A_i, \text{clip}\left( \frac{\pi_\theta(o_i|q)}{\pi_{\theta_{old}}(o_i|q)}, 1-\epsilon, 1+\epsilon \right) A_i \right) - \beta \cdot \mathbb{KL}(\pi_\theta || \pi_{ref}) \right) \right]$$&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\frac{\pi_\theta}{\pi_{\theta_{old}}}$ 是重要性采样权重，衡量新策略相对于旧策略的概率变化&lt;/li&gt;
+&lt;li&gt;$\epsilon$ 是裁剪范围（R1 中设为 10），防止单步更新过大&lt;/li&gt;
+&lt;li&gt;$\beta \cdot \mathbb{KL}$ 是 KL 散度惩罚，约束策略不要偏离参考模型太远（R1 中 $\beta=0.001$）&lt;/li&gt;
+&lt;li&gt;去掉 Critic 后，单步训练显存占用降低约 50%，batch size 可以翻倍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;grpo-vs-ppo-的直观对比&#34;&gt;GRPO vs PPO 的直观对比
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# PPO：需要价值网络估计状态价值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# value = critic(state)  # 额外的前向传播&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# advantage = reward + gamma * value_next - value  # 依赖价值估计&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# GRPO：组内相对优势，无需价值网络&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# rewards = [reward_model(o1), reward_model(o2), ..., reward_model(oG)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# advantages = (rewards - mean(rewards)) / std(rewards)  # 纯统计量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;奖励设计规则即信号&#34;&gt;奖励设计：规则即信号
+&lt;/h2&gt;&lt;p&gt;DeepSeek-R1 的奖励系统完全基于规则（rule-based），不依赖训练奖励模型。这有两个关键优势：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;零主观偏差&lt;/strong&gt;：规则客观可验证，不会出现奖励黑客（reward hacking）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;无限扩展&lt;/strong&gt;：不需要人工标注偏好数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;奖励分两类：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;准确性奖励（Accuracy Reward）&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数学题：要求答案放在 &lt;code&gt;\boxed{}&lt;/code&gt; 中，正则匹配后与标准答案比较&lt;/li&gt;
+&lt;li&gt;代码题：使用编译器运行测试用例，检查通过率&lt;/li&gt;
+&lt;li&gt;科学题：使用符号验证器或代码解释器判断&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;格式奖励（Format Reward）&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;要求推理过程放在 &lt;code&gt;\think&lt;/code&gt; 和 &lt;code&gt;\think&lt;/code&gt; 标签之间&lt;/li&gt;
+&lt;li&gt;最终答案放在 &lt;code&gt;\response&lt;/code&gt; 标签中&lt;/li&gt;
+&lt;li&gt;格式合规给正向奖励，不合规给零分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;语言一致性奖励（Language Consistency Reward）&lt;/strong&gt;（R1 专用）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;计算 CoT 中目标语言词的比例&lt;/li&gt;
+&lt;li&gt;解决多语言混杂问题&lt;/li&gt;
+&lt;li&gt;虽会轻微降低推理性能，但大幅提升可读性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最终的奖励函数为：&lt;/p&gt;
+$$R = R_{accuracy} + R_{format} + \lambda \cdot R_{language}$$&lt;h2 id=&#34;r1-zero纯-rl-的极限实验&#34;&gt;R1-Zero：纯 RL 的极限实验
+&lt;/h2&gt;&lt;p&gt;DeepSeek-R1-Zero 是论文中最激进的实验：&lt;strong&gt;直接在 V3-Base 上跑 GRPO，不用任何 SFT 数据&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;训练配置&#34;&gt;训练配置
+&lt;/h3&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;超参数&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;值&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;学习率&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;$3 \times 10^{-6}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;KL 系数 $\beta$&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;0.001&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;采样温度&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;1.0&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;每组采样数 $G$&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;16&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;最大生成长度&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;32,768 tokens（8.2k 步前）/ 65,536 tokens（之后）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;每步问题数&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;32&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;每步 batch size&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;512（32 × 16）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;总训练步数&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;10,400&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;训练 epoch&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;1.6&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;参考模型更新间隔&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;每 400 步替换为最新策略&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;涌现的行为&#34;&gt;涌现的行为
+&lt;/h3&gt;&lt;p&gt;训练过程中，R1-Zero 自发出现了多种高级推理行为：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;自我验证（Self-Verification）&lt;/strong&gt;：模型会在解题过程中主动检查中间结果。例如解方程时，求出一个解后代入原方程验证。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;反思（Reflection）&lt;/strong&gt;：当发现推理路径走不通时，模型会回溯到上一步并尝试替代方案，而非继续错误路径。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;探索替代方案（Alternative Approach Exploration）&lt;/strong&gt;：对于复杂问题，模型会生成多个解题思路，比较后选择最优路径。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;思维链长度随时间增长&lt;/strong&gt;：这是关键量化指标。随着 RL 训练进行，模型输出的平均 token 数从 500 增长到 5,000+，说明模型学会了「想得更久」。&lt;/p&gt;
+&lt;h3 id=&#34;定量效果&#34;&gt;定量效果
+&lt;/h3&gt;&lt;p&gt;AIME 2024（美国数学邀请赛）的成绩：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;训练阶段&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;pass@1&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;多数投票（64 样本）&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;初始（V3-Base）&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;15.6%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;—&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;RL 训练后（R1-Zero）&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;71.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;86.7%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;提升幅度&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;+55.4%&lt;/strong&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;—&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;关键发现&lt;/strong&gt;：在 8,200 步（对应上下文长度从 32K 切换到 64K 的点）时，性能和输出长度都出现跳跃式增长。这暗示长上下文窗口对推理能力有直接的促进作用——模型需要足够的「思考空间」来展开完整推理链。&lt;/p&gt;
+&lt;h3 id=&#34;局限性&#34;&gt;局限性
+&lt;/h3&gt;&lt;p&gt;R1-Zero 虽然推理能力强，但存在三个突出问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;可读性差&lt;/strong&gt;：输出结构混乱，缺乏 Markdown 格式&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;语言混杂&lt;/strong&gt;：同一个回答中中英文混用，尤其当 prompt 包含多种语言时&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;通用能力缺失&lt;/strong&gt;：在写作、开放问答等非推理任务上表现不佳&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;r1-正式版四阶段训练管线&#34;&gt;R1 正式版：四阶段训练管线
+&lt;/h2&gt;&lt;p&gt;为解决 R1-Zero 的问题并进一步提升性能，DeepSeek 设计了四阶段训练管线：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/pipeline.svg&#34;&gt;&lt;figcaption&gt;
+      &lt;h4&gt;图 1：DeepSeek-R1 四阶段训练管线。从冷启动 SFT → 推理 RL → 拒绝采样&amp;#43;SFT → 全场景 RL，逐步提升推理能力并保持通用能力。&lt;/h4&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h3 id=&#34;阶段一冷启动cold-start&#34;&gt;阶段一：冷启动（Cold Start）
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;目标&lt;/strong&gt;：给 RL 一个稳定的起点，避免从 Base 模型直接 RL 的初期不稳定。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;数据收集&lt;/strong&gt;：几千条长 CoT 数据，通过以下方式生成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Few-shot prompting：以长 CoT 为示例&lt;/li&gt;
+&lt;li&gt;直接提示模型生成带反思和验证的详细答案&lt;/li&gt;
+&lt;li&gt;收集 R1-Zero 的输出并人工后处理&lt;/li&gt;
+&lt;li&gt;人工标注者精修格式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;输出格式&lt;/strong&gt;：&lt;code&gt;|special_token|&amp;lt;reasoning_process&amp;gt;|special_token|&lt;/code&gt;，其中推理过程是 CoT，末尾有摘要总结结果。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优势&lt;/strong&gt;：相比 R1-Zero，冷启动模型的输出可读性大幅提升，且用人类先验引导了推理模式，模型收敛更快。&lt;/p&gt;
+&lt;h3 id=&#34;阶段二推理导向的-rl&#34;&gt;阶段二：推理导向的 RL
+&lt;/h3&gt;&lt;p&gt;在冷启动模型上运行与 R1-Zero 相同的 GRPO 训练，重点强化数学、代码、科学、逻辑推理能力。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;关键改进&lt;/strong&gt;：引入语言一致性奖励，在推理性能和可读性之间取得平衡。&lt;/p&gt;
+&lt;h3 id=&#34;阶段三拒绝采样--监督微调&#34;&gt;阶段三：拒绝采样 + 监督微调
+&lt;/h3&gt;&lt;p&gt;当推理 RL 收敛后，使用当前 checkpoint 生成 SFT 数据，分两类：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;推理数据（~600K 条）&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从 RL checkpoint 做拒绝采样，每个 prompt 采样多个回答，只保留正确的&lt;/li&gt;
+&lt;li&gt;引入生成式奖励模型（Generative Reward Model），将参考答案和模型输出送入 DeepSeek-V3 做判断&lt;/li&gt;
+&lt;li&gt;过滤掉语言混杂、段落过长、代码块混乱的输出&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;非推理数据（~200K 条）&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;写作、事实问答、自我认知、翻译等通用能力&lt;/li&gt;
+&lt;li&gt;复用 DeepSeek-V3 的 SFT 数据集&lt;/li&gt;
+&lt;li&gt;对简单查询（如&amp;quot;你好&amp;quot;）不生成 CoT&lt;/li&gt;
+&lt;li&gt;对复杂非推理任务，先让 V3 生成 CoT 再回答&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;训练&lt;/strong&gt;：在 V3-Base 上使用上述 800K 数据微调 2 个 epoch。&lt;/p&gt;
+&lt;h3 id=&#34;阶段四全场景-rl&#34;&gt;阶段四：全场景 RL
+&lt;/h3&gt;&lt;p&gt;这是最后的对齐阶段，综合提升有用性（helpfulness）和无害性（harmlessness）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;推理数据&lt;/strong&gt;：沿用规则奖励（数学、代码、逻辑）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;通用数据&lt;/strong&gt;：使用奖励模型（Reward Model）捕获人类偏好
+&lt;ul&gt;
+&lt;li&gt;有用性奖励：只评估最终摘要，不影响推理过程&lt;/li&gt;
+&lt;li&gt;无害性奖励：评估整个回答（包括推理过程），检测风险内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;训练细节&lt;/strong&gt;：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;超参数&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;值&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;学习率&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;$3 \times 10^{-6}$&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;采样温度&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;0.7（比第一阶段低）&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;总步数&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;1,700&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;通用数据+偏好奖励引入时机&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;最后 400 步&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;训练成本&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;见论文附录 B.4.4&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;重要发现&lt;/strong&gt;：超过 400 步的偏好奖励训练会导致奖励黑客（reward hacking），因此只在最后 400 步引入。&lt;/p&gt;
+&lt;h2 id=&#34;蒸馏把推理能力压缩进小模型&#34;&gt;蒸馏：把推理能力压缩进小模型
+&lt;/h2&gt;&lt;p&gt;DeepSeek-R1 最实用的贡献之一是蒸馏（distillation）。他们用 R1 生成的 800K 推理数据，在 Qwen2.5 和 Llama-3 系列上微调出 6 个小模型：&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;蒸馏模型&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;基座&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;参数量&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;AIME 2024 pass@1&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;R1-Distill-Qwen-1.5B&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Qwen2.5-1.5B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;1.5B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;28.9%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;R1-Distill-Qwen-7B&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Qwen2.5-7B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;7B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;55.9%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;R1-Distill-Qwen-14B&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Qwen2.5-14B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;14B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;69.7%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;R1-Distill-Qwen-32B&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Qwen2.5-32B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;32B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;72.6%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;R1-Distill-Llama-8B&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Llama-3.1-8B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;8B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;50.4%&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;R1-Distill-Llama-70B&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Llama-3.3-70B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;70B&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;70.2%&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;关键结论&lt;/strong&gt;：&lt;strong&gt;R1-Distill-Qwen-32B 在 AIME 上达到 72.6%，超越了 o1-mini&lt;/strong&gt;。这意味着一个 32B 参数的稠密模型，仅靠 R1 生成的推理数据微调，就达到了闭源旗舰推理模型的水平。&lt;/p&gt;
+&lt;h2 id=&#34;综合效果对比&#34;&gt;综合效果对比
+&lt;/h2&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;基准&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;指标&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;GPT-4o&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;Claude 3.5 Sonnet&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;DeepSeek V3&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;OpenAI o1-mini&lt;/th&gt;
+          &lt;th style=&#34;text-align: center&#34;&gt;DeepSeek R1&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;AIME 2024&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;pass@1&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;9.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;16.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;39.2%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;71.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;79.8%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;MATH-500&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;pass@1&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;74.6%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;71.1%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;90.2%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;90.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;97.3%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;GPQA Diamond&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;pass@1&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;49.9%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;65.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;59.1%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;60.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;71.5%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;HumanEval&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;pass@1&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;90.2%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;91.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;82.6%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;92.4%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;96.4%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;LiveCodeBench&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;pass@1&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;35.1%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;33.8%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;39.6%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;63.4%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;65.9%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Codeforces&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;rating&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;724&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;717&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;1,134&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;1,258&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;2,029&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;MMLU&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;acc&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;87.2%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;88.3%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;88.5%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;85.8%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;90.8%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;SimpleQA&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;acc&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;38.2%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;28.9%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;24.9%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;7.0%&lt;/td&gt;
+          &lt;td style=&#34;text-align: center&#34;&gt;&lt;strong&gt;30.1%&lt;/strong&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;解读&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;R1 在数学（AIME、MATH-500）和代码（HumanEval、Codeforces）上全面领先&lt;/li&gt;
+&lt;li&gt;在科学推理（GPQA Diamond）上比 o1-mini 高出 11.5 个百分点&lt;/li&gt;
+&lt;li&gt;在通用知识（MMLU）上达到 90.8%，超越了所有对比模型&lt;/li&gt;
+&lt;li&gt;在事实问答（SimpleQA）上不如 GPT-4o，说明推理增强不一定提升事实准确性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;基础设施rl-训练工程架构&#34;&gt;基础设施：RL 训练工程架构
+&lt;/h2&gt;&lt;p&gt;DeepSeek-R1 的 RL 框架分为四个解耦模块，各模块间通过异步调度提高效率：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/rl-infra.svg&#34;&gt;&lt;figcaption&gt;
+      &lt;h4&gt;图 2：DeepSeek-R1 的 RL 训练基础设施架构。四模块解耦设计，各模块完成后自动卸载模型释放显存。&lt;/h4&gt;
+    &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Rollout 模块&lt;/strong&gt;：使用 vLLM 加载 Actor 模型，从训练数据集中取 prompt 分发到多个 worker。对 MoE 架构实现专家并行策略，部署冗余热点专家副本平衡计算负载，利用 Multi-Token Prediction 做自推测解码加速推理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;推理模块&lt;/strong&gt;：加载 Reward Model 和 Reference Model，对 Rollout 生成的样本做前向传播，计算模型基奖励。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;规则奖励模块&lt;/strong&gt;：使用代码执行器、答案匹配器、格式检查器等计算规则奖励。通过异步调度与 Rollout 和 Inference 模块重叠执行，隐藏延迟。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;训练模块&lt;/strong&gt;：加载 Actor 和 Critic（如果需要），计算损失并更新参数。使用 Best-Fit 数据打包策略减少 padding 浪费，集成 DualPipe 算法实现高效流水线并行。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;关键工程优化&lt;/strong&gt;：每个模块完成后自动将模型从 VRAM 卸载到系统内存或磁盘，为下一阶段释放显存。&lt;/p&gt;
+&lt;h2 id=&#34;护栏视角从-ai-安全看-r1&#34;&gt;护栏视角：从 AI 安全看 R1
+&lt;/h2&gt;&lt;p&gt;作为一名 AI 安全工程师，我认为 DeepSeek-R1 带来的安全启示同样深刻：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;正面&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CoT 的可读性使推理过程可审计。安全团队可以检查模型的思考过程，而非仅看最终输出&lt;/li&gt;
+&lt;li&gt;规则奖励天然对抗 reward hacking，比基于人类偏好的奖励模型更鲁棒&lt;/li&gt;
+&lt;li&gt;蒸馏让小模型也具备推理能力，降低了安全审计的计算成本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;挑战&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;长 CoT 输出可能隐藏恶意逻辑。如果模型在推理过程中学会了隐藏恶意意图，传统安全检测更难发现&lt;/li&gt;
+&lt;li&gt;语言一致性奖励可能被利用。攻击者可通过控制 CoT 语言比例来绕过奖励约束&lt;/li&gt;
+&lt;li&gt;推理增强不等于安全增强。R1 在 SimpleQA 上表现不如 GPT-4o，说明推理能力的提升可能带来新的幻觉风险&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;我的判断&lt;/strong&gt;：R1 的训练范式实际上为 AI 安全提供了一个新方向——&lt;strong&gt;用可验证的规则奖励代替人类偏好，可以构建更可控、更可审计的安全对齐方案&lt;/strong&gt;。如果未来安全对齐也能采用类似 R1 的规则奖励思路，我们可能获得比 RLHF 更可靠的安全护栏。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结
+&lt;/h2&gt;&lt;p&gt;DeepSeek-R1 的核心贡献可以概括为三点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;纯 RL 驱动推理涌现&lt;/strong&gt;：首次验证了 LLM 的推理能力可以通过 RL 自组织涌现，无需 SFT 数据&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GRPO 算法工程化&lt;/strong&gt;：去价值网络的 RL 算法使训练成本降低 50%，为大规模 RL 训练铺平了道路&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;推理蒸馏实用化&lt;/strong&gt;：用 R1 生成的推理数据微调小模型，32B 模型即可超越 o1-mini，大幅降低了推理模型的使用门槛&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;R1 标志着大模型训练从「数据驱动」向「奖励驱动」的范式转移。如果说 GPT-3 证明了 scaling law 是模型能力的上限，那么 R1 证明了：&lt;strong&gt;在同样的模型规模下，训练方法才是决定能力上限的关键&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;原论文&lt;/strong&gt;：DeepSeek-AI. &lt;em&gt;DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning&lt;/em&gt;. arXiv:2501.12948, 2025. &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2501.12948&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://arxiv.org/abs/2501.12948&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nature 发表版&lt;/strong&gt;：&lt;em&gt;DeepSeek-R1 incentivizes reasoning in LLMs through reinforcement learning&lt;/em&gt;. Nature, 645, 635–645, 2025. &lt;a class=&#34;link&#34; href=&#34;https://doi.org/10.1038/s41586-025-09422-z&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://doi.org/10.1038/s41586-025-09422-z&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;官方代码仓库&lt;/strong&gt;：https://github.com/deepseek-ai/DeepSeek-R1&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GRPO 原论文&lt;/strong&gt;：Shao et al. &lt;em&gt;DeepSeekMath: Pushing the Limits of Mathematical Reasoning with Open Language Models&lt;/em&gt;. arXiv:2402.03300, 2024.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DeepSeek-V3 技术报告&lt;/strong&gt;：DeepSeek-AI. &lt;em&gt;DeepSeek-V3: A 671B MoE Model with Multi-Head Latent Attention&lt;/em&gt;. arXiv:2412.19437, 2024.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RLHF 与 PPO 综述&lt;/strong&gt;：Lambert et al. &lt;em&gt;Illustrating Reinforcement Learning from Human Feedback&lt;/em&gt;. &lt;a class=&#34;link&#34; href=&#34;https://huggingface.co/blog/rlhf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://huggingface.co/blog/rlhf&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>

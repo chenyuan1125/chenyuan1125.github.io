@@ -7,18 +7,18 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Fri, 28 Aug 2026 22:58:11 +0800</lastBuildDate><atom:link href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 31 Aug 2026 19:55:33 +0800</lastBuildDate><atom:link href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>GPT-1/2：生成式预训练与 few-shot 萌芽</title>
         <link>/p/gpt-01/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
         <guid>/p/gpt-01/</guid>
-        <description>&lt;img src="/p/gpt-01/cover.jpg" alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" /&gt;&lt;h2 id=&#34;从-bert-到-gpt一个对称的思路&#34;&gt;从 BERT 到 GPT：一个对称的思路
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" /&gt;&lt;h2 id=&#34;从-bert-到-gpt一个对称的思路&#34;&gt;从 BERT 到 GPT：一个对称的思路
 &lt;/h2&gt;&lt;p&gt;2018 年是 NLP 的转折年。Google 的 BERT 用双向编码器横扫了理解类任务，OpenAI 的 GPT-1 则在同一年走了另一条路——只用 Decoder，只做生成。&lt;/p&gt;
 &lt;p&gt;BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。&lt;/p&gt;
 &lt;h2 id=&#34;核心设计decoder-only-与自回归&#34;&gt;核心设计：Decoder-only 与自回归
 &lt;/h2&gt;&lt;p&gt;GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/p/gpt-01/gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
+&lt;figure&gt;&lt;img src=&#34;gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
       &lt;h4&gt;图 1：GPT-1 Decoder-only 架构（tldraw 绘制）&lt;/h4&gt;
     &lt;/figcaption&gt;
 &lt;/figure&gt;
@@ -164,7 +164,7 @@
 &lt;li&gt;&lt;strong&gt;Scaling Law 的提出&lt;/strong&gt;——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;单向注意力掩码的可视化&#34;&gt;单向注意力掩码的可视化
-&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;/p/gpt-01/gpt-mask.png&#34;&gt;&lt;figcaption&gt;
+&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;gpt-mask.png&#34;&gt;&lt;figcaption&gt;
       &lt;h4&gt;图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）&lt;/h4&gt;
     &lt;/figcaption&gt;
 &lt;/figure&gt;

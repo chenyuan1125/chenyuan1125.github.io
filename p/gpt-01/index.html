@@ -10,10 +10,10 @@
 <meta property='og:description' content="OpenAI 的 GPT-1/2 证明了一个直觉：只要模型够大、数据够多，生成式预训练自己就能学会语法、常识和推理，无需人工标注。">
 <meta property='og:url' content='/p/gpt-01/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPT' /><meta property='article:tag' content='生成式预训练' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='few-shot' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-28T22:58:11&#43;08:00'/><meta property='og:image' content='/p/gpt-01/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPT' /><meta property='article:tag' content='生成式预训练' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='few-shot' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-31T19:55:33&#43;08:00'/><meta property='og:image' content='/cover.jpg' />
 <meta name="twitter:title" content="GPT-1/2：生成式预训练与 few-shot 萌芽">
 <meta name="twitter:description" content="OpenAI 的 GPT-1/2 证明了一个直觉：只要模型够大、数据够多，生成式预训练自己就能学会语法、常识和推理，无需人工标注。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='/p/gpt-01/cover.jpg' />
+    <meta name="twitter:image" content='/cover.jpg' />
 
 <link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
@@ -330,12 +330,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/p/gpt-01/">
-                <img src="/p/gpt-01/cover_hu10778794143217438409.jpg"
-                        srcset="/p/gpt-01/cover_hu10778794143217438409.jpg 800w, /p/gpt-01/cover_hu17896037203979316770.jpg 1600w"
-                        width="800" 
-                        height="420" 
-                        loading="lazy"
-                        alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" />
+                
+                    <img src="/cover.jpg" loading="lazy" alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" />
                 
             </a>
         </div>
@@ -426,7 +422,7 @@
 <p>BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。</p>
 <h2 id="核心设计decoder-only-与自回归">核心设计：Decoder-only 与自回归
 </h2><p>GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。</p>
-<figure><img src="/p/gpt-01/gpt-architecture.png"><figcaption>
+<figure><img src="gpt-architecture.png"><figcaption>
       <h4>图 1：GPT-1 Decoder-only 架构（tldraw 绘制）</h4>
     </figcaption>
 </figure>
@@ -572,7 +568,7 @@
 <li><strong>Scaling Law 的提出</strong>——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据</li>
 </ol>
 <h2 id="单向注意力掩码的可视化">单向注意力掩码的可视化
-</h2><figure><img src="/p/gpt-01/gpt-mask.png"><figcaption>
+</h2><figure><img src="gpt-mask.png"><figcaption>
       <h4>图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）</h4>
     </figcaption>
 </figure>
@@ -644,7 +640,7 @@
 
 
         <span>
-            最后更新于 2026-08-28
+            最后更新于 2026-08-31
         </span>
     </section></footer>
 
@@ -691,13 +687,13 @@
         
         
             <div class="article-image">
-                <img src="/p/bert-02/cover.98b2d602c17a13a71d925fe284c12de4_hu13884211622526357901.jpg" 
+                <img src="/p/bert-02/cover.c7bdac7c6c58707d20a235a6ea6ed3bf_hu5192581336322374875.jpg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post BERT：双向编码器，到底双在哪"
                         data-key="bert-02" 
-                        data-hash="md5-mLLWAsF6E6cdkl/ihMEt5A==">
+                        data-hash="md5-x72sfGxYcH0gojWm6m7Tvw==">
                 
             </div>
         
@@ -728,6 +724,30 @@
 
         <div class="article-details">
             <h2 class="article-title">01 | 一切的起点：Transformer 到底解决了什么问题？</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/">
+        
+        
+            <div class="article-image">
+                <img src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover.0c92215db13e2df1672670d145e4a37a_hu14280598210258948660.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post DeepSeek-R1：用强化学习激发大模型推理能力"
+                        
+                        data-hash="md5-DJIhXbE&#43;LfFnJnDRReSjeg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepSeek-R1：用强化学习激发大模型推理能力</h2>
         </div>
     </a>
 </article>
