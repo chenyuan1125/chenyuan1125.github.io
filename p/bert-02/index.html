@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。">
+<title>BERT：双向编码器，到底双在哪</title>
+
+
+<link rel="canonical" href="/p/bert-02/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="BERT：双向编码器，到底双在哪">
+<meta property='og:description' content="2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。">
+<meta property='og:url' content='/p/bert-02/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='BERT' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='预训练' /><meta property='article:tag' content='MLM' /><meta property='article:published_time' content='2026-08-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-02T21:36:10&#43;08:00'/><meta property='og:image' content='/p/bert-02/cover.jpg' />
+<meta name="twitter:title" content="BERT：双向编码器，到底双在哪">
+<meta name="twitter:description" content="2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/bert-02/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                
+                                <option value="/en/" >English</option>
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/bert-02/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span></span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title"></h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#引子从-gpt-1-的单向说起">引子：从 GPT-1 的&quot;单向&quot;说起</a></li>
+    <li><a href="#双向的本质attention-mask-的区别">双向的本质：Attention Mask 的区别</a></li>
+    <li><a href="#mlm-的技术细节">MLM 的技术细节</a>
+      <ol>
+        <li><a href="#15-的遮蔽策略">15% 的遮蔽策略</a></li>
+        <li><a href="#损失函数">损失函数</a></li>
+        <li><a href="#为什么-mlm-比自回归更高效">为什么 MLM 比自回归更高效？</a></li>
+      </ol>
+    </li>
+    <li><a href="#nsp-的深层设计">NSP 的深层设计</a></li>
+    <li><a href="#输入表示token--segment--position">输入表示：Token + Segment + Position</a></li>
+    <li><a href="#架构与训练细节">架构与训练细节</a></li>
+    <li><a href="#下游任务微调的艺术">下游任务：微调的艺术</a>
+      <ol>
+        <li><a href="#分类任务">分类任务</a></li>
+        <li><a href="#问答任务squad">问答任务（SQuAD）</a></li>
+        <li><a href="#微调的技术细节">微调的技术细节</a></li>
+      </ol>
+    </li>
+    <li><a href="#bert-的十一项-sota-结果">BERT 的十一项 SOTA 结果</a></li>
+    <li><a href="#bert-的局限与启示">BERT 的局限与启示</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/bert-02/">
+            <img alt="Featured image of post BERT：双向编码器，到底双在哪" height="627" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/bert-02/cover.jpg" srcset="/p/bert-02/cover_hu_57ae82af072ae763.jpg 800w, /p/bert-02/cover.jpg 940w" width="940">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/bert-02/">BERT：双向编码器，到底双在哪</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            2018 年 Google 提出的 BERT，用完形填空思路让 Transformer 真正学会双向理解上下文，成为理解型任务的标配底座。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-08-27T00:00:00Z'>2026-08-27</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        
+                    </time>
+                
+            </div>
+        
+
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span></span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#引子从-gpt-1-的单向说起">引子：从 GPT-1 的&quot;单向&quot;说起</a></li>
+    <li><a href="#双向的本质attention-mask-的区别">双向的本质：Attention Mask 的区别</a></li>
+    <li><a href="#mlm-的技术细节">MLM 的技术细节</a>
+      <ol>
+        <li><a href="#15-的遮蔽策略">15% 的遮蔽策略</a></li>
+        <li><a href="#损失函数">损失函数</a></li>
+        <li><a href="#为什么-mlm-比自回归更高效">为什么 MLM 比自回归更高效？</a></li>
+      </ol>
+    </li>
+    <li><a href="#nsp-的深层设计">NSP 的深层设计</a></li>
+    <li><a href="#输入表示token--segment--position">输入表示：Token + Segment + Position</a></li>
+    <li><a href="#架构与训练细节">架构与训练细节</a></li>
+    <li><a href="#下游任务微调的艺术">下游任务：微调的艺术</a>
+      <ol>
+        <li><a href="#分类任务">分类任务</a></li>
+        <li><a href="#问答任务squad">问答任务（SQuAD）</a></li>
+        <li><a href="#微调的技术细节">微调的技术细节</a></li>
+      </ol>
+    </li>
+    <li><a href="#bert-的十一项-sota-结果">BERT 的十一项 SOTA 结果</a></li>
+    <li><a href="#bert-的局限与启示">BERT 的局限与启示</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <h2 id="引子从-gpt-1-的单向说起">引子：从 GPT-1 的&quot;单向&quot;说起
+</h2><p>上一篇拆了 Transformer，它的核心是注意力——理论上能看上下文所有词。但 2018 年 OpenAI 的 GPT-1，把 Transformer Decoder 单独拎出来做自回归语言模型：每一步只看自己和过去的词。</p>
+<p>这就像读句子时<strong>只准往前看</strong>，不准回头。读&quot;小明给小红 ___ 一本书&quot;时，GPT 只能根据&quot;小明给小红&quot;猜下一个词，看不到&quot;书&quot;这个宾语。</p>
+<p>这种&quot;单向&quot;约束让 GPT 擅长生成，但遇到理解任务（分类、问答、NER）就吃亏了——很多判断需要&quot;两头看&quot;。</p>
+<p>2018 年底 Google 的 BERT 就是来解决这个问题的——名字里的 <strong>Bidirectional</strong> 就是这个意思。</p>
+<h2 id="双向的本质attention-mask-的区别">双向的本质：Attention Mask 的区别
+</h2><figure><img src="bert-attention-mask.png"><figcaption>
+			<h4>图 1：GPT 因果掩码 vs BERT 双向掩码——同一句话的注意力范围</h4>
+		</figcaption>
+</figure>
+
+<p>GPT 和 BERT 都用 Transformer，唯一的架构区别就在 <strong>attention mask</strong>：</p>
+<p><strong>GPT（Causal Mask）</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">我 喜欢 猫 睡 在 沙发 上
+</span></span><span class="line"><span class="cl">1 0 0 0 0 0 0    ← 预测&#34;我&#34;时只能看&#34;我&#34;
+</span></span><span class="line"><span class="cl">1 1 0 0 0 0 0    ← 预测&#34;喜欢&#34;时能看&#34;我&#34;&#34;喜欢&#34;
+</span></span><span class="line"><span class="cl">1 1 1 0 0 0 0    ← 预测&#34;猫&#34;时能看&#34;我&#34;&#34;喜欢&#34;&#34;猫&#34;
+</span></span><span class="line"><span class="cl">1 1 1 1 0 0 0    ← 预测&#34;睡&#34;时能看前面所有
+</span></span><span class="line"><span class="cl">...              ← 每个 token 只能看自己和左边
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>BERT（Bidirectional Mask）</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">我 喜欢 [MASK] 睡 在 沙发 上
+</span></span><span class="line"><span class="cl">1 1 1 1 1 1 1    ← 预测 [MASK] 时能看到所有位置
+</span></span><span class="line"><span class="cl">1 1 1 1 1 1 1    ← 其他位置也一样
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>BERT 没有 causal mask——所有 token 互相可见。但问题来了：如果模型预测&quot;猫&quot;时能看到&quot;猫&quot;本身，那它直接抄答案就行，学不到任何东西。所以 BERT 用了一个巧妙的 trick：<strong>把 15% 的 token 遮住，让模型去猜被遮的是什么</strong>。</p>
+<p>这就是 MLM 的核心思想，也是 BERT 训练双向表示的关键设计。</p>
+<h2 id="mlm-的技术细节">MLM 的技术细节
+</h2><h3 id="15-的遮蔽策略">15% 的遮蔽策略
+</h3><p>BERT 论文选择了 15% 的遮蔽率，这个数字不是随便定的。实验发现：</p>
+<ul>
+<li>遮蔽太少（&lt;10%）：模型没有足够的训练信号</li>
+<li>遮蔽太多（&gt;20%）：训练数据被破坏得太厉害，模型学不到正常的语言规律</li>
+</ul>
+<p>15% 是一个平衡点。但论文还发现了一个问题：<strong>预训练时有 [MASK]，微调时没有</strong>，这造成了 mismatch。为了解决这个问题，被选中的 15% token 被进一步拆分成三种处理方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">被选中的 15% token:
+</span></span><span class="line"><span class="cl">├── 80% → 替换成 [MASK]    → &#34;我喜欢猫&#34; → &#34;我喜欢 [MASK]&#34;
+</span></span><span class="line"><span class="cl">├── 10% → 替换成随机词    → &#34;我喜欢猫&#34; → &#34;我喜欢 桌子&#34;
+</span></span><span class="line"><span class="cl">└── 10% → 保持原样        → &#34;我喜欢猫&#34; → &#34;我喜欢 猫&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后 10% 保持原样的设计非常巧妙：它让模型知道&quot;即使输入是正确的，我也要输出正确的结果&quot;，这大大减轻了 pre-train-finetune 的 mismatch。</p>
+<h3 id="损失函数">损失函数
+</h3><p>BERT 的损失函数只在被遮住的 15% token 上计算：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># 伪代码：BERT 的 MLM 损失</span>
+</span></span><span class="line"><span class="cl"><span class="n">logits</span> <span class="o">=</span> <span class="n">bert_model</span><span class="p">(</span><span class="n">masked_input</span><span class="p">)</span>          <span class="c1"># [batch, seq_len, vocab_size]</span>
+</span></span><span class="line"><span class="cl"><span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">target_ids</span><span class="p">)</span>   <span class="c1"># 所有位置都算</span>
+</span></span><span class="line"><span class="cl"><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">*</span> <span class="n">mask_weights</span>                 <span class="c1"># 只保留被遮位置的梯度</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># mask_weights: 被遮为 1，其余为 0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也就是说，模型在训练时<strong>只学习预测被遮住的词</strong>，其他位置没有梯度。这比自回归语言模型（每个位置都算损失）更高效——模型只需要关注最难的任务。</p>
+<h3 id="为什么-mlm-比自回归更高效">为什么 MLM 比自回归更高效？
+</h3><p>自回归语言模型（GPT）的损失函数是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># GPT 的损失：每个位置都预测下一个词</span>
+</span></span><span class="line"><span class="cl"><span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:])</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这意味着模型要学两次&quot;我喜欢&quot;和&quot;猫&quot;之间的共现关系，也要学&quot;猫&quot;和&quot;睡&quot;之间的关系。但很多相邻关系是 trivial 的（&ldquo;我&rdquo;→&ldquo;喜欢&quot;这种高频搭配不需要太多训练信号）。</p>
+<p>MLM 只让模型预测最难的那 15% 位置，<strong>其他 85% 的位置虽然参与计算注意力，但不产生梯度</strong>。这使得每次 forward pass 的 15% 计算量就产生了有意义的训练信号——更高效。</p>
+<h2 id="nsp-的深层设计">NSP 的深层设计
+</h2><p>NSP（Next Sentence Prediction）是 BERT 的第二个预训练任务。</p>
+<p><strong>为什么需要 NSP？</strong> MLM 只学词和词的关系，但很多下游任务需要句间关系（问答、推理、对话）。BERT 需要一种方式让模型学会&quot;句子级别的理解&rdquo;。</p>
+<p><strong>怎么做？</strong></p>
+<ul>
+<li>输入：[CLS] 我 喜欢 猫 [SEP] 它 很 可爱 [SEP]</li>
+<li>50% 概率：B 是 A 的真实下一句（IsNext）</li>
+<li>50% 概率：B 是随机抽的句子（NotNext）</li>
+<li>用 [CLS] 的输出做二分类</li>
+</ul>
+<p><strong>NSP 的贡献有多大？</strong> 论文实验显示，去掉 NSP 后 BERT 在 NLI 任务上掉了约 1-2 个点。但后来的 RoBERTa 发现，如果训练数据足够大、训练时间足够长，NSP 的效果可以被其他目标替代。</p>
+<p><strong>关键思想：</strong> NSP 证明了<strong>预训练任务可以不止一个</strong>。MLM 学 token 级表示，NSP 学句子级表示，两者互补。这个思想后来被很多模型沿用（如 ALBERT 的 SOP、ELECTRA 的判别式任务）。</p>
+<h2 id="输入表示token--segment--position">输入表示：Token + Segment + Position
+</h2><p>BERT 的输入由三个 embedding 相加构成：</p>
+<figure><img src="/p/bert-02/bert-embeddings.png"><figcaption>
+			<h4>图 1：BERT 输入表示——Token &#43; Segment &#43; Position 三种 embedding 相加</h4>
+		</figcaption>
+</figure>
+
+<p><strong>Token Embeddings</strong>：用 WordPiece 分词，词表大小 30,000。WordPiece 的核心思想是：把常见词（如&quot;the&quot;、&ldquo;cat&rdquo;）保留为完整词，把不常见词拆成子词（如&quot;playing&quot; → &ldquo;play&rdquo; + &ldquo;##ing&rdquo;）。这比 BPE 更注重语言的形态学特征。</p>
+<p><strong>Segment Embeddings</strong>：只有两个向量 E_A 和 E_B，分别标记输入属于句子 A 还是 B。这个设计很轻量——两个 embedding 就能区分句子的边界。</p>
+<p><strong>Position Embeddings</strong>：和 Transformer 原版不同，BERT 用的是<strong>可学习的</strong>位置编码，而不是正弦函数。这意味着每个位置都有一个独立的向量，模型可以自己学习位置间的关系。可学习的代价是：最大长度被限制在 512（BERT 预设的最大序列长度），超过这个长度的输入无法处理。</p>
+<h2 id="架构与训练细节">架构与训练细节
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>参数</th>
+					<th>BERT-base</th>
+					<th>BERT-large</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>层数</td>
+					<td>12</td>
+					<td>24</td>
+			</tr>
+			<tr>
+					<td>隐藏维度</td>
+					<td>768</td>
+					<td>1024</td>
+			</tr>
+			<tr>
+					<td>注意力头</td>
+					<td>12</td>
+					<td>16</td>
+			</tr>
+			<tr>
+					<td>参数量</td>
+					<td>~110M</td>
+					<td>~340M</td>
+			</tr>
+			<tr>
+					<td>训练数据</td>
+					<td>BookCorpus (800M) + English Wikipedia (2,500M)</td>
+					<td>同左</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>训练细节</strong>（这些细节往往被忽略，但对理解 BERT 很重要）：</p>
+<ul>
+<li><strong>优化器</strong>：Adam，学习率 1e-4，使用 warmup（前 10,000 步线性增长到 1e-4，然后线性衰减）</li>
+<li><strong>Batch size</strong>：256 个序列，每个序列最大 512 个 token</li>
+<li><strong>训练步数</strong>：1,000,000 步（约 40 epoch）</li>
+<li><strong>硬件</strong>：4 块 Cloud TPU（base）/ 16 块 Cloud TPU（large），训练约 4 天</li>
+<li><strong>正则化</strong>：Dropout 0.1，GELU 激活函数（不是 ReLU）</li>
+</ul>
+<p><strong>GELU 的选择</strong>：BERT 是第一个广泛使用 GELU 的模型。GELU 比 ReLU 更平滑，在负半轴有非零梯度，这对深层网络的训练更友好。这个选择后来被几乎所有 Transformer 模型沿用。</p>
+<h2 id="下游任务微调的艺术">下游任务：微调的艺术
+</h2><p>BERT 的微调极其简单——<strong>加一个分类头，端到端训练</strong>。这也是它成功的关键之一。</p>
+<h3 id="分类任务">分类任务
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入: [CLS] 这部电影真好看 [SEP]
+</span></span><span class="line"><span class="cl">                     ↓
+</span></span><span class="line"><span class="cl">              BERT Encoder
+</span></span><span class="line"><span class="cl">                     ↓
+</span></span><span class="line"><span class="cl">           [CLS] 的输出向量 (768d)
+</span></span><span class="line"><span class="cl">                     ↓
+</span></span><span class="line"><span class="cl">           Linear(768, 2) → softmax
+</span></span><span class="line"><span class="cl">                     ↓
+</span></span><span class="line"><span class="cl">              正面/负面
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>[CLS] 是 BERT 的一个特殊设计：它不参与任何语义计算，只用来聚合整个序列的表示。在预训练时，[CLS] 的输出用于 NSP 分类；在微调时，[CLS] 的输出用于下游分类任务。</p>
+<h3 id="问答任务squad">问答任务（SQuAD）
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">输入: [CLS] 问题 [SEP] 文章段落 [SEP]
+</span></span><span class="line"><span class="cl">                     ↓
+</span></span><span class="line"><span class="cl">              BERT Encoder
+</span></span><span class="line"><span class="cl">                     ↓
+</span></span><span class="line"><span class="cl">       每个 token 输出两个向量:
+</span></span><span class="line"><span class="cl">        - Start logits → softmax → 答案起始位置
+</span></span><span class="line"><span class="cl">        - End logits  → softmax → 答案结束位置
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意这里没有额外参数——BERT 直接输出每个 token 对应起始和结束的概率。这意味着模型必须理解&quot;答案的边界在哪里&quot;，这是阅读理解的核心能力。</p>
+<h3 id="微调的技术细节">微调的技术细节
+</h3><p>微调时，BERT 通常使用 2e-5 到 5e-5 的学习率（比预训练低 1-2 个数量级），用小 batch（16-32），训练 2-4 个 epoch。<strong>为什么这么少？</strong> 因为预训练已经学到了通用语言表示，微调只需要小幅调整到特定任务。</p>
+<p>这个&quot;预训练 → 微调&quot;范式的影响非常深远：它让 NLP 任务从&quot;每个任务训练一个专用模型&quot;变成了&quot;一个通用模型 + 任务特定的头部&quot;。这和后来的 GPT 系列是相反的思路——GPT 选择不做微调，靠 in-context learning 适配任务。</p>
+<h2 id="bert-的十一项-sota-结果">BERT 的十一项 SOTA 结果
+</h2><p>BERT 论文在 11 个 NLP 任务上刷新了 SOTA 记录，这是当时最全面的 benchmark 结果之一：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>任务</th>
+					<th>类型</th>
+					<th>改进幅度</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SQuAD v1.1 (问答)</td>
+					<td>阅读理解</td>
+					<td>+5.7 F1</td>
+			</tr>
+			<tr>
+					<td>SQuAD v2.0 (问答)</td>
+					<td>阅读理解</td>
+					<td>+7.6 F1</td>
+			</tr>
+			<tr>
+					<td>GLUE 基准</td>
+					<td>多任务综合</td>
+					<td>+7.7%</td>
+			</tr>
+			<tr>
+					<td>MNLI (自然语言推理)</td>
+					<td>句间关系</td>
+					<td>+5.1%</td>
+			</tr>
+			<tr>
+					<td>NER (命名实体识别)</td>
+					<td>序列标注</td>
+					<td>+3.2 F1</td>
+			</tr>
+			<tr>
+					<td>SWAG (常识推理)</td>
+					<td>推理</td>
+					<td>+8.3%</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>这些提升意味着什么？</strong> 在 BERT 之前，每个 NLP 任务都需要精心设计的特征工程和任务特定架构。BERT 提供了一种通用解决方案——同样的架构、同样的预训练权重，只需要换一个分类头就能在几乎所有任务上超越之前的最好结果。</p>
+<p>这对 NLP 研究的影响是革命性的：<strong>研究方向从&quot;设计更好的任务特定架构&quot;转向了&quot;设计更好的预训练目标&quot;</strong>。</p>
+<h2 id="bert-的局限与启示">BERT 的局限与启示
+</h2><p><strong>局限：</strong></p>
+<ul>
+<li>最大输入长度 512（可学习位置编码的限制）</li>
+<li>预训练和微调的 mismatch 仍然存在（虽然用 10% 原样缓解了）</li>
+<li>计算量大（base 模型 110M 参数，large 340M，在当时已经很大）</li>
+<li>生成任务不擅长（这是 Encoder-only 架构的天生限制）</li>
+</ul>
+<p><strong>启示：</strong></p>
+<ol>
+<li><strong>遮蔽策略是双向预训练的关键</strong>——不是简单的&quot;去掉 causal mask&quot;，而是设计了巧妙的 15% 遮蔽策略来解决&quot;看见自己&quot;的问题。</li>
+<li><strong>多任务预训练是可行的</strong>——MLM + NSP 证明了一个模型可以同时学不同粒度的语言知识。</li>
+<li><strong>规模不是唯一因素</strong>——BERT-base 只有 110M 参数，但合理的预训练目标设计让它超越了很多更大的模型。</li>
+<li><strong>微调范式的力量</strong>——BERT 证明了&quot;通用预训练 + 轻量微调&quot;可以替代&quot;任务特定架构&quot;，这个范式至今仍是 NLP 的主流方法之一。</li>
+</ol>
+<h2 id="参考资料">参考资料
+</h2><ul>
+<li>Devlin, J., Chang, M.W., Lee, K., &amp; Toutanova, K. (2018). <em>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</em>. arXiv:1810.04805.</li>
+<li>Liu, Y., et al. (2019). <em>RoBERTa: A Robustly Optimized BERT Pretraining Approach</em>. arXiv:1907.11692.</li>
+<li>Clark, K., et al. (2020). <em>ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators</em>. arXiv:2003.10555.</li>
+<li>The Illustrated BERT（Jay Alammar 经典图解）：http://jalammar.github.io/illustrated-bert/</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/bert/">BERT</a>
+        
+            <a href="/tags/transformer/">Transformer</a>
+        
+            <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/">预训练</a>
+        
+            <a href="/tags/mlm/">MLM</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+             2026-09-02
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title"></h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-01/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" height="150" loading="lazy" src="/p/gpt-01/cover_hu_4837811e0a817e15.jpg" srcset="/p/gpt-01/cover_hu_4837811e0a817e15.jpg 1x, /p/gpt-01/cover_hu_3b7fc40c1b5c9ea8.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #574f4780 0%, #b0a7a4C0 100%);">
+            <h2 class="article-title">GPT-1/2：生成式预训练与 few-shot 萌芽</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post 01 | 一切的起点：Transformer 到底解决了什么问题？" height="150" loading="lazy" src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_81f7b587c5dc4c25.jpg" srcset="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_81f7b587c5dc4c25.jpg 1x, /p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_fe0f8b5434d015dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #08070780 0%, #f4f3ebC0 100%);">
+            <h2 class="article-title">01 | 一切的起点：Transformer 到底解决了什么问题？</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-03/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发" height="150" loading="lazy" src="/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg" srcset="/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg 1x, /p/gpt-03/cover_hu_8b791036cb6c2ce1.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #332e3880 0%, #d1c9c7C0 100%);">
+            <h2 class="article-title">GPT-3：In-Context Learning 与 Few-Shot 爆发</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-R1：用强化学习激发大模型推理能力" height="150" loading="lazy" src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_7e19977a34734f54.jpg" srcset="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_7e19977a34734f54.jpg 1x, /p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_3f572a106f5c78c6.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #54463d80 0%, #f0ebe7C0 100%);">
+            <h2 class="article-title">DeepSeek-R1：用强化学习激发大模型推理能力</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/default-skin\/default-skin.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="bomb实验详细记录">
+<meta name="keywords" content="实验、bomb、CSAPP"><title>CSAPP:bomb实验</title>
+
+
+<link rel="canonical" href="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="CSAPP:bomb实验">
+<meta property='og:description' content="bomb实验详细记录">
+<meta property='og:url' content='/en/p/csappbomb%E5%AE%9E%E9%AA%8C/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSAPP' /><meta property='article:published_time' content='2024-09-29T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-02T21:36:09&#43;08:00'/><meta property='og:image' content='/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg' />
+<meta name="twitter:title" content="CSAPP:bomb实验">
+<meta name="twitter:description" content="bomb实验详细记录"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/%E5%85%B3%E4%BA%8E/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/%E9%93%BE%E6%8E%A5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/csappbomb%E5%AE%9E%E9%AA%8C/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#题目解析">题目解析</a>
+      <ol>
+        <li><a href="#phase_1">Phase_1</a></li>
+        <li><a href="#phase_2">Phase_2</a></li>
+        <li><a href="#phase_3">Phase_3</a></li>
+        <li><a href="#phase_4">Phase_4</a></li>
+        <li><a href="#phase_5">Phase_5</a></li>
+        <li><a href="#phase_6">Phase_6</a></li>
+        <li><a href="#bonus">Bonus</a></li>
+      </ol>
+    </li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/">
+            <img alt="Featured image of post CSAPP:bomb实验" height="2160" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg" srcset="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_d547eaa9227e5879.jpg 800w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_2d02335f88ea62e4.jpg 1600w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_cc26cc33955b1ac5.jpg 2400w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/1.jpg 3840w" width="3840">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/%E5%AE%9E%E9%AA%8C/" style="background-color: #2a9d8f; color: #fff;">
+                实验
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/">CSAPP:bomb实验</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            bomb实验详细记录
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2024-09-29T00:00:00Z'>2024-09-29</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        18 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/csappbomb%E5%AE%9E%E9%AA%8C/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#题目解析">题目解析</a>
+      <ol>
+        <li><a href="#phase_1">Phase_1</a></li>
+        <li><a href="#phase_2">Phase_2</a></li>
+        <li><a href="#phase_3">Phase_3</a></li>
+        <li><a href="#phase_4">Phase_4</a></li>
+        <li><a href="#phase_5">Phase_5</a></li>
+        <li><a href="#phase_6">Phase_6</a></li>
+        <li><a href="#bonus">Bonus</a></li>
+      </ol>
+    </li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <h1 id="bomb实验">Bomb实验
+</h1><h2 id="题目解析">题目解析
+</h2><p>注意：本人所写的注释可能有些错误，有问题还请大家批评指正，注释中*的用法和C语言类似，有些寄存器名称没有带%</p>
+<p>题目只给了一个main函数，我们可以大致看出来，它的模式是从某个地方读取字符串，然后作为参数输入每个关卡<code>phase_</code>，进行验证。具体的情况没有显示，说明我们需要通过某种手段去进行探查：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">objdump -d bomb &gt; bomb.s
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同时看到<code>bomb.c</code>中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* When run with no arguments, the bomb reads its input lines 
+</span></span></span><span class="line"><span class="cl"><span class="cm">     * from standard input. */</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">infile</span> <span class="o">=</span> <span class="n">stdin</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明可以通过文件读取的方式进行读取。</p>
+<p>寄存器说明：</p>
+<p><img alt="图1:寄存器说明" class="gallery-image" data-flex-basis="514px" data-flex-grow="214" height="804" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png" srcset="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu_2d34f30afd269dfb.png 800w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168_hu_7e16a5aded7bb4cb.png 1600w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240106202523168.png 1724w" width="1724"></p>
+<p><img alt="图2:寄存器说明" class="gallery-image" data-flex-basis="528px" data-flex-grow="220" height="789" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png" srcset="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu_9e20af2eec5903b8.png 800w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272_hu_6e24c812f3981e8a.png 1600w, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/assets/image-20240107114435272.png 1736w" width="1736"></p>
+<h3 id="phase_1">Phase_1
+</h3><p>关键代码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400ee0 &lt;phase_1&gt;:
+</span></span><span class="line"><span class="cl">  400ee0:	48 83 ec 08          	sub    $0x8,%rsp   //将栈指针减少8，也就是入栈
+</span></span><span class="line"><span class="cl">  400ee4:	be 00 24 40 00       	mov    $0x402400,%esi
+</span></span><span class="line"><span class="cl">  400ee9:	e8 4a 04 00 00       	call   401338 &lt;strings_not_equal&gt; /*test指令同逻辑与and运算，但只设置条件码寄存器，不改变目的寄存器的值，test %eax,%eax用于测试寄存器%eax是否为空，由于寄存器%rax一般存放函数的返回值，此处应该存放的是函数 strings_not_equal的值，而%eax是%rax的低32位表示，所以不难分析出，当%eax值为0时，test的两个操作数相同且都为0，条件码ZF置位为1，即可满足下一行代码的跳转指令*/
+</span></span><span class="line"><span class="cl">  400eee:	85 c0                	test   %eax,%eax
+</span></span><span class="line"><span class="cl">  400ef0:	74 05                	je     400ef7 &lt;phase_1+0x17&gt;  //当ZF位为0时，跳转到400ef7处
+</span></span><span class="line"><span class="cl">  400ef2:	e8 43 05 00 00       	call   40143a &lt;explode_bomb&gt;  //调用explode-bomb函数，爆炸
+</span></span><span class="line"><span class="cl">  400ef7:	48 83 c4 08          	add    $0x8,%rsp     //出栈
+</span></span><span class="line"><span class="cl">  400efb:	c3                   	ret     
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>仅从函数调用的角度来看，<code>phase_1</code>的参数存在1st argument寄存器中：<code>%rdi</code>，然后这个参数作为第一个参数，与<code>0x402400</code>作为第二个参数一起被传入到<code>strings_not_equal</code>中，进行一些判定操作。</p>
+<p><code>0x402400</code>像一个地址，使用gdb对程序进行debug，设置断点查看``0x402400<code>的值，发现是</code>Border relations with Canada have never been better.`，答案已找到</p>
+<h3 id="phase_2">Phase_2
+</h3><p>关键代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400efc &lt;phase_2&gt;:
+</span></span><span class="line"><span class="cl">  400efc:	55                   	push   %rbp
+</span></span><span class="line"><span class="cl">  400efd:	53                   	push   %rbx
+</span></span><span class="line"><span class="cl">  400efe:	48 83 ec 28          	sub    $0x28,%rsp    //入栈，栈指针减少40
+</span></span><span class="line"><span class="cl">  400f02:	48 89 e6             	mov    %rsp,%rsi     //将%rsp赋给%rsi(第二个参数寄存器)
+</span></span><span class="line"><span class="cl">  400f05:	e8 52 05 00 00       	call   40145c &lt;read_six_numbers&gt;
+</span></span><span class="line"><span class="cl">  400f0a:	83 3c 24 01          	cmpl   $0x1,(%rsp)   //将(%rsp)与1比较
+</span></span><span class="line"><span class="cl">  400f0e:	74 20                	je     400f30 &lt;phase_2+0x34&gt;    //若相等，则跳转到0x400f30
+</span></span><span class="line"><span class="cl">  400f10:	e8 25 05 00 00       	call   40143a &lt;explode_bomb&gt;    //若不相等，则爆炸
+</span></span><span class="line"><span class="cl">  400f15:	eb 19                	jmp    400f30 &lt;phase_2+0x34&gt;
+</span></span><span class="line"><span class="cl">  400f17:	8b 43 fc             	mov    -0x4(%rbx),%eax   //(%rbx-4)取值后赋给eax寄存器
+</span></span><span class="line"><span class="cl">  400f1a:	01 c0                	add    %eax,%eax         //eax=eax+eax
+</span></span><span class="line"><span class="cl">  400f1c:	39 03                	cmp    %eax,(%rbx)       //比较%eax和(%rbx)的值
+</span></span><span class="line"><span class="cl">  400f1e:	74 05                	je     400f25 &lt;phase_2+0x29&gt;   //如果相等，跳转到0x400f25
+</span></span><span class="line"><span class="cl">  400f20:	e8 15 05 00 00       	call   40143a &lt;explode_bomb&gt;   //如果不相等，就爆炸
+</span></span><span class="line"><span class="cl">  400f25:	48 83 c3 04          	add    $0x4,%rbx         //rbx寄存器+4
+</span></span><span class="line"><span class="cl">  400f29:	48 39 eb             	cmp    %rbp,%rbx         //%rbx与%rbp比较
+</span></span><span class="line"><span class="cl">  400f2c:	75 e9                	jne    400f17 &lt;phase_2+0x1b&gt;   //如果不相等，跳转到0x400f17
+</span></span><span class="line"><span class="cl">  400f2e:	eb 0c                	jmp    400f3c &lt;phase_2+0x40&gt;   //跳转到400f3c
+</span></span><span class="line"><span class="cl">  400f30:	48 8d 5c 24 04       	lea    0x4(%rsp),%rbx     //(%rsp+4)后赋值给%rbx
+</span></span><span class="line"><span class="cl">  400f35:	48 8d 6c 24 18       	lea    0x18(%rsp),%rbp    //(%rsp+18)后再赋值给%rbp
+</span></span><span class="line"><span class="cl">  400f3a:	eb db                	jmp    400f17 &lt;phase_2+0x1b&gt;    //跳转到0x40f17
+</span></span><span class="line"><span class="cl">  400f3c:	48 83 c4 28          	add    $0x28,%rsp         //出栈，栈指针增加40
+</span></span><span class="line"><span class="cl">  400f40:	5b                   	pop    %rbx
+</span></span><span class="line"><span class="cl">  400f41:	5d                   	pop    %rbp
+</span></span><span class="line"><span class="cl">  400f42:	c3                   	ret    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看出这个阶段读取六个数字，并通过一个循环将其与对应的值对比，这些对应值的规律就是<code>1 2 4 8 16 32</code>，答案已出。</p>
+<p>（<code>lea 0x18(%rsp),%rbp</code>指令是将%rsp+40传给%rbp，lea指令用于计算有效地址，以及加法和有限的乘法运算，而其余如mov    -0x4(%rbx),%eax则是取(%rbx-4)的值再传给%eax）</p>
+<h3 id="phase_3">Phase_3
+</h3><p>关键代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000400f43 &lt;phase_3&gt;:
+</span></span><span class="line"><span class="cl">  400f43:	48 83 ec 18          	sub    $0x18,%rsp //入栈，栈指针减少24
+</span></span><span class="line"><span class="cl">  400f47:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx //%rsp+12赋给%rcx 
+</span></span><span class="line"><span class="cl">  400f4c:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx //%rsp+8赋给%rdx 
+</span></span><span class="line"><span class="cl">  400f51:	be cf 25 40 00       	mov    $0x4025cf,%esi //将0x4025cf赋给%esi 第二个参数寄存器
+</span></span><span class="line"><span class="cl">  400f56:	b8 00 00 00 00       	mov    $0x0,%eax //将0x0赋给%eax
+</span></span><span class="line"><span class="cl">  400f5b:	e8 90 fc ff ff       	call   400bf0 &lt;__isoc99_sscanf@plt&gt; //调用scanf输入函数
+</span></span><span class="line"><span class="cl">  400f60:	83 f8 01             	cmp    $0x1,%eax //比较返回值和0x1的大小,sscanf的返回值是成功解析和存储的参数数目。
+</span></span><span class="line"><span class="cl">  400f63:	7f 05                	jg     400f6a &lt;phase_3+0x27&gt; //如果大于则跳转到0x400f6a
+</span></span><span class="line"><span class="cl">  400f65:	e8 d0 04 00 00       	call   40143a &lt;explode_bomb&gt; //否则，爆炸
+</span></span><span class="line"><span class="cl">  400f6a:	83 7c 24 08 07       	cmpl   $0x7,0x8(%rsp) //比较0x7和(%rsp+8)值的大小
+</span></span><span class="line"><span class="cl">  400f6f:	77 3c                	ja     400fad &lt;phase_3+0x6a&gt; //如果 (%rsp+8)&gt;7 跳转到0x400fad即爆炸
+</span></span><span class="line"><span class="cl">  400f71:	8b 44 24 08          	mov    0x8(%rsp),%eax //当(%rsp+8)&lt;=7时，将(%rsp+8)的值放入%eax中
+</span></span><span class="line"><span class="cl">  400f75:	ff 24 c5 70 24 40 00 	jmp    *0x402470(,%rax,8) //跳转到存放在%rax*8+0x402470内存位置上的指令，即%eax*8+0x402470
+</span></span><span class="line"><span class="cl">  400f7c:	b8 cf 00 00 00       	mov    $0xcf,%eax //将0xcf赋给%eax
+</span></span><span class="line"><span class="cl">  400f81:	eb 3b                	jmp    400fbe &lt;phase_3+0x7b&gt; //跳转到0x400fbe
+</span></span><span class="line"><span class="cl">  400f83:	b8 c3 02 00 00       	mov    $0x2c3,%eax
+</span></span><span class="line"><span class="cl">  400f88:	eb 34                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400f8a:	b8 00 01 00 00       	mov    $0x100,%eax
+</span></span><span class="line"><span class="cl">  400f8f:	eb 2d                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400f91:	b8 85 01 00 00       	mov    $0x185,%eax
+</span></span><span class="line"><span class="cl">  400f96:	eb 26                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400f98:	b8 ce 00 00 00       	mov    $0xce,%eax
+</span></span><span class="line"><span class="cl">  400f9d:	eb 1f                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400f9f:	b8 aa 02 00 00       	mov    $0x2aa,%eax
+</span></span><span class="line"><span class="cl">  400fa4:	eb 18                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400fa6:	b8 47 01 00 00       	mov    $0x147,%eax
+</span></span><span class="line"><span class="cl">  400fab:	eb 11                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400fad:	e8 88 04 00 00       	call   40143a &lt;explode_bomb&gt;
+</span></span><span class="line"><span class="cl">  400fb2:	b8 00 00 00 00       	mov    $0x0,%eax
+</span></span><span class="line"><span class="cl">  400fb7:	eb 05                	jmp    400fbe &lt;phase_3+0x7b&gt;
+</span></span><span class="line"><span class="cl">  400fb9:	b8 37 01 00 00       	mov    $0x137,%eax
+</span></span><span class="line"><span class="cl">  400fbe:	3b 44 24 0c          	cmp    0xc(%rsp),%eax //比较(%rsp+12)和%eax的值
+</span></span><span class="line"><span class="cl">  400fc2:	74 05                	je     400fc9 &lt;phase_3+0x86&gt; //如果相等，则跳转到0x400fc9
+</span></span><span class="line"><span class="cl">  400fc4:	e8 71 04 00 00       	call   40143a &lt;explode_bomb&gt; //如果不相等，就爆炸
+</span></span><span class="line"><span class="cl">  400fc9:	48 83 c4 18          	add    $0x18,%rsp //出栈，栈指针增加24
+</span></span><span class="line"><span class="cl">  400fcd:	c3                   	ret    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>注意：jg指令是后面的操作数大于前面的操作数，不要弄反了</code></p>
+<p>首先根据sscanf函数确定有两个参数，刚好%rsp+8和%rsp+12没有赋值，于是推测这两个值对应这两个变量，接着由于sscanf函数返回参数的数目，所以必须输入两个数，并且第一个参数要小于等于7，最后根据下面这条关键指令判断第二个参数取决于第一个参数的值，使用gdb遍历打印相应的跳转地址的值，得到以下列表。</p>
+<p>最关键的指令是：</p>
+<p><code>400f75:	ff 24 c5 70 24 40 00 	jmp    *0x402470(,%rax,8)</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402470  第一个参数为0，第二个参数为0xcf 
+</span></span><span class="line"><span class="cl">0x400f7c &lt;phase_3+57&gt;:  <span class="s2">&#34;\270&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/s *0x402478  第一个参数为1，第二个参数为0x137 <span class="m">311</span>
+</span></span><span class="line"><span class="cl">0x400fb9 &lt;phase_3+118&gt;: <span class="s2">&#34;\270\067\001&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402480  第一个参数为2，第二个参数为0x2c3
+</span></span><span class="line"><span class="cl">0x400f83 &lt;phase_3+64&gt;:  <span class="s2">&#34;\270\303\002&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402488   第一个参数为3，第二个参数为0x100
+</span></span><span class="line"><span class="cl">0x400f8a &lt;phase_3+71&gt;:  <span class="s2">&#34;\270&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402490  第一个参数为4，第二个参数为0x185
+</span></span><span class="line"><span class="cl">0x400f91 &lt;phase_3+78&gt;:  <span class="s2">&#34;\270\205\001&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x402498  第一个参数为5，第二个参数为0xce
+</span></span><span class="line"><span class="cl">0x400f98 &lt;phase_3+85&gt;:  <span class="s2">&#34;\270&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x4024a0  第一个参数为6，第二个参数为0x2aa
+</span></span><span class="line"><span class="cl">0x400f9f &lt;phase_3+92&gt;:  <span class="s2">&#34;\270\252\002&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/ *0x4024a8  第一个参数为7，第二个参数为0x147
+</span></span><span class="line"><span class="cl">0x400fa6 &lt;phase_3+99&gt;:  <span class="s2">&#34;\270G\001&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="phase_4">Phase_4
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">000000000040100c &lt;phase_4&gt;:
+</span></span><span class="line"><span class="cl">  40100c:	48 83 ec 18          	sub    $0x18,%rsp  //入栈，栈指针减少18
+</span></span><span class="line"><span class="cl">  401010:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx  //rcx=rsp+12
+</span></span><span class="line"><span class="cl">  401015:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx  //rdx=rsp+8
+</span></span><span class="line"><span class="cl">  40101a:	be cf 25 40 00       	mov    $0x4025cf,%esi  //esi=0x4025cf
+</span></span><span class="line"><span class="cl">  40101f:	b8 00 00 00 00       	mov    $0x0,%eax       //eax=0
+</span></span><span class="line"><span class="cl">  401024:	e8 c7 fb ff ff       	call   400bf0 &lt;__isoc99_sscanf@plt&gt; 
+</span></span><span class="line"><span class="cl">  401029:	83 f8 02             	cmp    $0x2,%eax  //比较eax和2
+</span></span><span class="line"><span class="cl">  40102c:	75 07                	jne    401035 &lt;phase_4+0x29&gt; //如果不相等，跳转到0x401035即爆炸
+</span></span><span class="line"><span class="cl">  40102e:	83 7c 24 08 0e       	cmpl   $0xe,0x8(%rsp)  //相等则比较(%rsp+8)的内存值和14
+</span></span><span class="line"><span class="cl">  401033:	76 05                	jbe    40103a &lt;phase_4+0x2e&gt;  //如果(%rsp+8)&lt;=14,跳转到0x40103a
+</span></span><span class="line"><span class="cl">  401035:	e8 00 04 00 00       	call   40143a &lt;explode_bomb&gt;  //否则，爆炸
+</span></span><span class="line"><span class="cl">  40103a:	ba 0e 00 00 00       	mov    $0xe,%edx  //edx=14 参数3
+</span></span><span class="line"><span class="cl">  40103f:	be 00 00 00 00       	mov    $0x0,%esi  //esi=0  参数2
+</span></span><span class="line"><span class="cl">  401044:	8b 7c 24 08          	mov    0x8(%rsp),%edi  //edi=*(rsp+8) 参数1
+</span></span><span class="line"><span class="cl">  401048:	e8 81 ff ff ff       	call   400fce &lt;func4&gt;  //调用func4函数
+</span></span><span class="line"><span class="cl">  40104d:	85 c0                	test   %eax,%eax  //判断返回值是否为0
+</span></span><span class="line"><span class="cl">  40104f:	75 07                	jne    401058 &lt;phase_4+0x4c&gt;  //如果不等于0，跳转到401058即爆炸
+</span></span><span class="line"><span class="cl">  401051:	83 7c 24 0c 00       	cmpl   $0x0,0xc(%rsp)    //比较*(rsp+12)和0
+</span></span><span class="line"><span class="cl">  401056:	74 05                	je     40105d &lt;phase_4+0x51&gt; //如果相等，跳转到40105d
+</span></span><span class="line"><span class="cl">  401058:	e8 dd 03 00 00       	call   40143a &lt;explode_bomb&gt;
+</span></span><span class="line"><span class="cl">  40105d:	48 83 c4 18          	add    $0x18,%rsp  //出栈
+</span></span><span class="line"><span class="cl">  401061:	c3                   	ret    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>很明显要通过此关必须在调用func4后返回0，而且第二个参数要等于0，所以只需通过调整第一个参数的值来使得func4函数返回0</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0000000000400fce &lt;func4&gt;:
+</span></span><span class="line"><span class="cl">  400fce:	48 83 ec 08          	sub    $0x8,%rsp  //入栈
+</span></span><span class="line"><span class="cl">  400fd2:	89 d0                	mov    %edx,%eax  //eax=edx=14 rsi=0 edi=第一个参数
+</span></span><span class="line"><span class="cl">  400fd4:	29 f0                	sub    %esi,%eax  //eax=eax-esi=14
+</span></span><span class="line"><span class="cl">  400fd6:	89 c1                	mov    %eax,%ecx  //ecx=eax=14
+</span></span><span class="line"><span class="cl">  400fd8:	c1 e9 1f             	shr    $0x1f,%ecx  //ecx逻辑右移31位 ecx=0
+</span></span><span class="line"><span class="cl">  400fdb:	01 c8                	add    %ecx,%eax  //eax=eax+ecx=14
+</span></span><span class="line"><span class="cl">  400fdd:	d1 f8                	sar    %eax       //eax算数右移一位 eax=7
+</span></span><span class="line"><span class="cl">  400fdf:	8d 0c 30             	lea    (%rax,%rsi,1),%ecx //ecx=rsi+rax=7
+</span></span><span class="line"><span class="cl">  400fe2:	39 f9                	cmp    %edi,%ecx  //比较edi和ecx=7
+</span></span><span class="line"><span class="cl">  400fe4:	7e 0c                	jle    400ff2 &lt;func4+0x24&gt; //若edi&gt;=ecx 跳转到0x400ff2
+</span></span><span class="line"><span class="cl">  400fe6:	8d 51 ff             	lea    -0x1(%rcx),%edx  //否则，edx=rcx-1=6
+</span></span><span class="line"><span class="cl">  400fe9:	e8 e0 ff ff ff       	call   400fce &lt;func4&gt;  //调用func4函数 edi esi=0 edx=13
+</span></span><span class="line"><span class="cl">  400fee:	01 c0                	add    %eax,%eax  //eax=eax*2
+</span></span><span class="line"><span class="cl">  400ff0:	eb 15                	jmp    401007 &lt;func4+0x39&gt; 跳转到0x401007
+</span></span><span class="line"><span class="cl">  400ff2:	b8 00 00 00 00       	mov    $0x0,%eax  //eax=0
+</span></span><span class="line"><span class="cl">  400ff7:	39 f9                	cmp    %edi,%ecx  //比较edi和ecx=7
+</span></span><span class="line"><span class="cl">  400ff9:	7d 0c                	jge    401007 &lt;func4+0x39&gt; //若ecx&gt;=edi 跳转到0x401007
+</span></span><span class="line"><span class="cl">  400ffb:	8d 71 01             	lea    0x1(%rcx),%esi //若ecx&lt;edi，esi=rcx+1=8 
+</span></span><span class="line"><span class="cl">  400ffe:	e8 cb ff ff ff       	call   400fce &lt;func4&gt;  //调用func4函数 edi esi=8 edx=14
+</span></span><span class="line"><span class="cl">  401003:	8d 44 00 01          	lea    0x1(%rax,%rax,1),%eax  //eax=rax+rax+1 不能经过这条指令，edi必须小于等于7
+</span></span><span class="line"><span class="cl">  401007:	48 83 c4 08          	add    $0x8,%rsp  //出栈
+</span></span><span class="line"><span class="cl">  40100b:	c3                   	ret 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先edi寄存器也就是我们输入的第一个参数必须小于等于7，</p>
+<p><code>lea 0x1(%rax,%rax,1),%eax</code>这条指令不能执行，一旦执行这条执行，那么eax寄存器就不可能等于0，同时我们观察到两个判断语句都有等于条件，于是我们把第一个参数设置为7，很顺利地使eax寄存器等于0，当然还有其它的可能性，可以一一去试。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">7 0 |
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="phase_5">Phase_5
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">0000000000401062 &lt;phase_5&gt;:
+</span></span><span class="line"><span class="cl">  401062:	53                   	push   %rbx  //保存调用者寄存器
+</span></span><span class="line"><span class="cl">  401063:	48 83 ec 20          	sub    $0x20,%rsp  //入栈，栈指针减少32
+</span></span><span class="line"><span class="cl">  401067:	48 89 fb             	mov    %rdi,%rbx  //rbx=rdi 第一个参数
+</span></span><span class="line"><span class="cl">  40106a:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax  //将 %fs 段寄存器中偏移地址为 0x28 的内容加载到 %rax 寄存器中。
+</span></span><span class="line"><span class="cl">  401071:	00 00                                       //%fs 是一个段寄存器，通常用于访问线程本地存储（Thread Local Storage, TLS）
+</span></span><span class="line"><span class="cl">  401073:	48 89 44 24 18       	mov    %rax,0x18(%rsp)  //将其放在栈上 *(rsp+24)=rax
+</span></span><span class="line"><span class="cl">  401078:	31 c0                	xor    %eax,%eax   // eax=0
+</span></span><span class="line"><span class="cl">  40107a:	e8 9c 02 00 00       	call   40131b &lt;string_length&gt; 
+</span></span><span class="line"><span class="cl">  40107f:	83 f8 06             	cmp    $0x6,%eax  //字符串的长度与6比较
+</span></span><span class="line"><span class="cl">  401082:	74 4e                	je     4010d2 &lt;phase_5+0x70&gt;  //若字符串的长度等于6，跳转到0x4010d2
+</span></span><span class="line"><span class="cl">  401084:	e8 b1 03 00 00       	call   40143a &lt;explode_bomb&gt;  //否则，爆炸
+</span></span><span class="line"><span class="cl">  401089:	eb 47                	jmp    4010d2 &lt;phase_5+0x70&gt;  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx  //从(rax+rbx)处读取的1字节数据零扩展到ecx中  ecx=0x69   eax=0
+</span></span><span class="line"><span class="cl">  40108f:	88 0c 24             	mov    %cl,(%rsp)       //将cl的值存入rsp所指的地址中(rcx的低8位) *(%rsp)=0x69
+</span></span><span class="line"><span class="cl">  401092:	48 8b 14 24          	mov    (%rsp),%rdx      //rdx=*(rsp)=0x69
+</span></span><span class="line"><span class="cl">  401096:	83 e2 0f             	and    $0xf,%edx        //edx=edx&amp;0xf=9
+</span></span><span class="line"><span class="cl">  401099:	0f b6 92 b0 24 40 00 	movzbl 0x4024b0(%rdx),%edx  //从(rdx+0x4024b0)处读取的1字节数据零扩展到edx,edx=0xb9
+</span></span><span class="line"><span class="cl">  4010a0:	88 54 04 10          	mov    %dl,0x10(%rsp,%rax,1)  //将dl(edx的低8位)存入((rax+rsp)+16)地址中 *(rsp+16+rax)=0xb9
+</span></span><span class="line"><span class="cl">  4010a4:	48 83 c0 01          	add    $0x1,%rax         //rax=rax+1=1
+</span></span><span class="line"><span class="cl">  4010a8:	48 83 f8 06          	cmp    $0x6,%rax         //比较rax和6
+</span></span><span class="line"><span class="cl">  4010ac:	75 dd                	jne    40108b &lt;phase_5+0x29&gt;  //若rax!=6，则跳转到0x40108b
+</span></span><span class="line"><span class="cl">  这部分的循环相当于以下C程序：
+</span></span><span class="line"><span class="cl">        for(int rax=0;rax!=6;rax++){
+</span></span><span class="line"><span class="cl">            target[rax]=array[input[rax]&amp;0xf];
+</span></span><span class="line"><span class="cl">        }   *(rsp+16)=0xb9 *(rsp+17)=0xbf *(rsp+18)=0xbe *(rsp+19)=0xb5 *(rsp+20)=0xb6 *(rsp+21)=0xb7
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  4010ae:	c6 44 24 16 00       	movb   $0x0,0x16(%rsp)       //否则，将字节0x0存入(rsp+22)地址中
+</span></span><span class="line"><span class="cl">  4010b3:	be 5e 24 40 00       	mov    $0x40245e,%esi       //esi=0x40245e
+</span></span><span class="line"><span class="cl">  4010b8:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi      //rdi=rsp+16  *(rsp+16)=0xbb
+</span></span><span class="line"><span class="cl">  4010bd:	e8 76 02 00 00       	call   401338 &lt;strings_not_equal&gt;  
+</span></span><span class="line"><span class="cl">  4010c2:	85 c0                	test   %eax,%eax  //判断返回值是否为0
+</span></span><span class="line"><span class="cl">  4010c4:	74 13                	je     4010d9 &lt;phase_5+0x77&gt;  //返回值为0，则跳转到0x4010d9
+</span></span><span class="line"><span class="cl">  4010c6:	e8 6f 03 00 00       	call   40143a &lt;explode_bomb&gt;  //否则，爆炸
+</span></span><span class="line"><span class="cl">  4010cb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)   
+</span></span><span class="line"><span class="cl">  4010d0:	eb 07                	jmp    4010d9 &lt;phase_5+0x77&gt;
+</span></span><span class="line"><span class="cl">  4010d2:	b8 00 00 00 00       	mov    $0x0,%eax         //eax=0
+</span></span><span class="line"><span class="cl">  4010d7:	eb b2                	jmp    40108b &lt;phase_5+0x29&gt;   //跳转到0x40108b
+</span></span><span class="line"><span class="cl">  4010d9:	48 8b 44 24 18       	mov    0x18(%rsp),%rax   //rax=*(rsp+24)
+</span></span><span class="line"><span class="cl">  4010de:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax   //rax与%fs段寄存器中偏移地址为0x28的内容异或来检查内容是否被修改
+</span></span><span class="line"><span class="cl">  4010e5:	00 00 
+</span></span><span class="line"><span class="cl">  4010e7:	74 05                	je     4010ee &lt;phase_5+0x8c&gt;  //如果相等，则跳转到0x4010ee
+</span></span><span class="line"><span class="cl">  4010e9:	e8 42 fa ff ff       	call   400b30 &lt;__stack_chk_fail@plt&gt;  //否则调用错误处理历程
+</span></span><span class="line"><span class="cl">  4010ee:	48 83 c4 20          	add    $0x20,%rsp  //出栈，栈指针增加32
+</span></span><span class="line"><span class="cl">  4010f2:	5b                   	pop    %rbx
+</span></span><span class="line"><span class="cl">  4010f3:	c3                   	ret    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>关键代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">40108b:	0f b6 0c 03          	movzbl (%rbx,%rax,1),%ecx  //从(rax+rbx)处读取的1字节数据零扩展到ecx中  ecx=0x69   eax=0
+</span></span><span class="line"><span class="cl">  40108f:	88 0c 24             	mov    %cl,(%rsp)       //将cl的值存入rsp所指的地址中(rcx的低8位) *(%rsp)=0x69
+</span></span><span class="line"><span class="cl">  401092:	48 8b 14 24          	mov    (%rsp),%rdx      //rdx=*(rsp)=0x69
+</span></span><span class="line"><span class="cl">  401096:	83 e2 0f             	and    $0xf,%edx        //edx=edx&amp;0xf=9
+</span></span><span class="line"><span class="cl">  401099:	0f b6 92 b0 24 40 00 	movzbl 0x4024b0(%rdx),%edx  //从(rdx+0x4024b0)处读取的1字节数据零扩展到edx,edx=0xb9
+</span></span><span class="line"><span class="cl">  4010a0:	88 54 04 10          	mov    %dl,0x10(%rsp,%rax,1)  //将dl(edx的低8位)存入((rax+rsp)+16)地址中 *(rsp+16+rax)=0xb9
+</span></span><span class="line"><span class="cl">  4010a4:	48 83 c0 01          	add    $0x1,%rax         //rax=rax+1=1
+</span></span><span class="line"><span class="cl">  4010a8:	48 83 f8 06          	cmp    $0x6,%rax         //比较rax和6
+</span></span><span class="line"><span class="cl">  4010ac:	75 dd                	jne    40108b &lt;phase_5+0x29&gt;  //若rax!=6，则跳转到0x40108b
+</span></span><span class="line"><span class="cl">  这部分的循环相当于以下C程序：
+</span></span><span class="line"><span class="cl">        for(int rax=0;rax!=6;rax++){
+</span></span><span class="line"><span class="cl">            target[rax]=array[input[rax]&amp;0xf];
+</span></span><span class="line"><span class="cl">        }  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>就是要使得所输入的字符串的十六进制取后四位，并作为array数组的下标，让array数组与目标字符串相等。</p>
+<p>目标字符串在0x40245e内存地址中，即0x666c79657273 &ldquo;flyers&rdquo;</p>
+<p>array数组在0x4024b0内存地址中,如下所示。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/16c 0x4024b0
+</span></span><span class="line"><span class="cl">0x4024b0 &lt;array.3449&gt;:  <span class="m">109</span> <span class="s1">&#39;m&#39;</span> <span class="m">97</span> <span class="s1">&#39;a&#39;</span>  <span class="m">100</span> <span class="s1">&#39;d&#39;</span> <span class="m">117</span> <span class="s1">&#39;u&#39;</span> <span class="m">105</span> <span class="s1">&#39;i&#39;</span> <span class="m">101</span> <span class="s1">&#39;e&#39;</span> <span class="m">114</span> <span class="s1">&#39;r&#39;</span> <span class="m">115</span> <span class="s1">&#39;s&#39;</span>
+</span></span><span class="line"><span class="cl">0x4024b8 &lt;array.3449+8&gt;:        <span class="m">110</span> <span class="s1">&#39;n&#39;</span> <span class="m">102</span> <span class="s1">&#39;f&#39;</span> <span class="m">111</span> <span class="s1">&#39;o&#39;</span> <span class="m">116</span> <span class="s1">&#39;t&#39;</span> <span class="m">118</span> <span class="s1">&#39;v&#39;</span> <span class="m">98</span> <span class="s1">&#39;b&#39;</span>  <span class="m">121</span> <span class="s1">&#39;y&#39;</span> <span class="m">108</span> <span class="s1">&#39;l&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>gdb<span class="o">)</span> x/s 0x40245e
+</span></span><span class="line"><span class="cl">0x40245e:       <span class="s2">&#34;flyers&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">0x4024b9 f
+</span></span><span class="line"><span class="cl">0x4024bf l
+</span></span><span class="line"><span class="cl">0x4024be y
+</span></span><span class="line"><span class="cl">0x4024b5 e
+</span></span><span class="line"><span class="cl">0x4024b6 r
+</span></span><span class="line"><span class="cl">0x4024b7 s
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>array数组的表格如下</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: center">array[i]的i</th>
+					<th style="text-align: center">对应的char</th>
+					<th style="text-align: center">input[rax]</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: center">0</td>
+					<td style="text-align: center">m</td>
+					<td style="text-align: center">0x*0</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">1</td>
+					<td style="text-align: center">a</td>
+					<td style="text-align: center">0x*1</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">2</td>
+					<td style="text-align: center">d</td>
+					<td style="text-align: center">0x*2</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">3</td>
+					<td style="text-align: center">u</td>
+					<td style="text-align: center">0x*3</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">4</td>
+					<td style="text-align: center">i</td>
+					<td style="text-align: center">0x*4</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">5</td>
+					<td style="text-align: center">e</td>
+					<td style="text-align: center">0x*5</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">6</td>
+					<td style="text-align: center">r</td>
+					<td style="text-align: center">0x*6</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">7</td>
+					<td style="text-align: center">s</td>
+					<td style="text-align: center">0x*7</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">8</td>
+					<td style="text-align: center">n</td>
+					<td style="text-align: center">0x*8</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">9</td>
+					<td style="text-align: center">f</td>
+					<td style="text-align: center">0x*9</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">a</td>
+					<td style="text-align: center">o</td>
+					<td style="text-align: center">0x*a</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">b</td>
+					<td style="text-align: center">t</td>
+					<td style="text-align: center">0x*b</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">c</td>
+					<td style="text-align: center">v</td>
+					<td style="text-align: center">0x*c</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">d</td>
+					<td style="text-align: center">b</td>
+					<td style="text-align: center">0x*d</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">e</td>
+					<td style="text-align: center">y</td>
+					<td style="text-align: center">0x*e</td>
+			</tr>
+			<tr>
+					<td style="text-align: center">f</td>
+					<td style="text-align: center">l</td>
+					<td style="text-align: center">0x*f</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>所以输入的字符串只需找到表格中对应flyers字符串的input[rax]任意组合即可，比如ionefg(0x69 0x6f 0x6e 0x65 0x66 0x67)</p>
+<h3 id="phase_6">Phase_6
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00000000004010f4 &lt;phase_6&gt;:
+</span></span><span class="line"><span class="cl">  4010f4:	41 56                	push   %r14
+</span></span><span class="line"><span class="cl">  4010f6:	41 55                	push   %r13
+</span></span><span class="line"><span class="cl">  4010f8:	41 54                	push   %r12
+</span></span><span class="line"><span class="cl">  4010fa:	55                   	push   %rbp
+</span></span><span class="line"><span class="cl">  4010fb:	53                   	push   %rbx
+</span></span><span class="line"><span class="cl">  4010fc:	48 83 ec 50          	sub    $0x50,%rsp //入栈，栈指针减少80
+</span></span><span class="line"><span class="cl">  401100:	49 89 e5             	mov    %rsp,%r13  //r13=rsp 
+</span></span><span class="line"><span class="cl">  401103:	48 89 e6             	mov    %rsp,%rsi  //rsi=rsp
+</span></span><span class="line"><span class="cl">  401106:	e8 51 03 00 00       	call   40145c &lt;read_six_numbers&gt; //读取6个数字
+</span></span><span class="line"><span class="cl">  40110b:	49 89 e6             	mov    %rsp,%r14    //r14=rsp
+</span></span><span class="line"><span class="cl">  40110e:	41 bc 00 00 00 00    	mov    $0x0,%r12d   //r12d=0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  401114:	4c 89 ed             	mov    %r13,%rbp    //rbp=r13  rsp  rsp+4
+</span></span><span class="line"><span class="cl">  401117:	41 8b 45 00          	mov    0x0(%r13),%eax  //eax=*(r13)
+</span></span><span class="line"><span class="cl">  40111b:	83 e8 01             	sub    $0x1,%eax     //eax=eax-1
+</span></span><span class="line"><span class="cl">  40111e:	83 f8 05             	cmp    $0x5,%eax      //eax与5比较
+</span></span><span class="line"><span class="cl">  401121:	76 05                	jbe    401128 &lt;phase_6+0x34&gt;  //若eax&lt;=5，跳转到0x401128 
+</span></span><span class="line"><span class="cl">  401123:	e8 12 03 00 00       	call   40143a &lt;explode_bomb&gt;   //否则，爆炸
+</span></span><span class="line"><span class="cl">  401128:	41 83 c4 01          	add    $0x1,%r12d      //r12d=r12d+1=1 2
+</span></span><span class="line"><span class="cl">  40112c:	41 83 fc 06          	cmp    $0x6,%r12d      //r12d与6比较
+</span></span><span class="line"><span class="cl">  401130:	74 21                	je     401153 &lt;phase_6+0x5f&gt;  //若r12d=6，则跳转到0x401153
+</span></span><span class="line"><span class="cl">  401132:	44 89 e3             	mov    %r12d,%ebx      //ebx=r12d=1 2
+</span></span><span class="line"><span class="cl">  401135:	48 63 c3             	movslq %ebx,%rax       //rax=ebx 1 2
+</span></span><span class="line"><span class="cl">  401138:	8b 04 84             	mov    (%rsp,%rax,4),%eax   //eax=*(rsp+rax*4)
+</span></span><span class="line"><span class="cl">  40113b:	39 45 00             	cmp    %eax,0x0(%rbp)    
+</span></span><span class="line"><span class="cl">  40113e:	75 05                	jne    401145 &lt;phase_6+0x51&gt;  //若*(rbp)!=*(rsp+rax*4),跳转到0x401145 
+</span></span><span class="line"><span class="cl">  401140:	e8 f5 02 00 00       	call   40143a &lt;explode_bomb&gt;  //否则，爆炸
+</span></span><span class="line"><span class="cl">  401145:	83 c3 01             	add    $0x1,%ebx              //ebx++ 2 
+</span></span><span class="line"><span class="cl">  401148:	83 fb 05             	cmp    $0x5,%ebx              
+</span></span><span class="line"><span class="cl">  40114b:	7e e8                	jle    401135 &lt;phase_6+0x41&gt;  //若ebx&lt;=5,跳转到0x401135
+</span></span><span class="line"><span class="cl">  40114d:	49 83 c5 04          	add    $0x4,%r13       //r13+=4
+</span></span><span class="line"><span class="cl">  401151:	eb c1                	jmp    401114 &lt;phase_6+0x20&gt;   //跳转到0x401114
+</span></span><span class="line"><span class="cl">  #这段代码的目的就是让所有参数要小于等于6，并且不得重复
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  401153:	48 8d 74 24 18       	lea    0x18(%rsp),%rsi    //rsi=rsp+24
+</span></span><span class="line"><span class="cl">  401158:	4c 89 f0             	mov    %r14,%rax      //rax=r14 rsp
+</span></span><span class="line"><span class="cl">  40115b:	b9 07 00 00 00       	mov    $0x7,%ecx      //ecx=7
+</span></span><span class="line"><span class="cl">  401160:	89 ca                	mov    %ecx,%edx      //edx=ecx=7
+</span></span><span class="line"><span class="cl">  401162:	2b 10                	sub    (%rax),%edx    //edx=edx-*(rax)  7-*(rsp)
+</span></span><span class="line"><span class="cl">  401164:	89 10                	mov    %edx,(%rax)    //*(rax)=edx  *(rsp)=7-*(rsp)
+</span></span><span class="line"><span class="cl">  401166:	48 83 c0 04          	add    $0x4,%rax      //rax=rax+4  rsp+4
+</span></span><span class="line"><span class="cl">  40116a:	48 39 f0             	cmp    %rsi,%rax      //rax与rsi比较 
+</span></span><span class="line"><span class="cl">  40116d:	75 f1                	jne    401160 &lt;phase_6+0x6c&gt;   //若rax!=rsi，则跳转到0x401160 六次循环
+</span></span><span class="line"><span class="cl">  #这段代码就是处理参数
+</span></span><span class="line"><span class="cl">  #相当于for(int i=0;i&lt;6;i++){
+</span></span><span class="line"><span class="cl">    #input[i]=7-input[i];
+</span></span><span class="line"><span class="cl">  #}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  40116f:	be 00 00 00 00       	mov    $0x0,%esi        //esi=0
+</span></span><span class="line"><span class="cl">  401174:	eb 21                	jmp    401197 &lt;phase_6+0xa3&gt;   //跳转到0x401197
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  401176:	48 8b 52 08          	mov    0x8(%rdx),%rdx    //rdx=*(rdx+8) *(0x6032d0+8)
+</span></span><span class="line"><span class="cl">  40117a:	83 c0 01             	add    $0x1,%eax     //eax++ 2
+</span></span><span class="line"><span class="cl">  40117d:	39 c8                	cmp    %ecx,%eax     //比较ecx和eax的大小 *(rsp)与2大小
+</span></span><span class="line"><span class="cl">  40117f:	75 f5                	jne    401176 &lt;phase_6+0x82&gt;  //若ecx!=eax，则跳转到0x401176 
+</span></span><span class="line"><span class="cl">  401181:	eb 05                	jmp    401188 &lt;phase_6+0x94&gt;  //跳转到0x401188
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  401183:	ba d0 32 60 00       	mov    $0x6032d0,%edx         //edx=0x6032d0  
+</span></span><span class="line"><span class="cl">  401188:	48 89 54 74 20       	mov    %rdx,0x20(%rsp,%rsi,2)  //*(rsp+rsi*2+32)=rdx
+</span></span><span class="line"><span class="cl">  40118d:	48 83 c6 04          	add    $0x4,%rsi     //rsi=rsi+4  4
+</span></span><span class="line"><span class="cl">  401191:	48 83 fe 18          	cmp    $0x18,%rsi    //rsi与24比较
+</span></span><span class="line"><span class="cl">  401195:	74 14                	je     4011ab &lt;phase_6+0xb7&gt;   //若rsi=24，跳转到0x4011ab
+</span></span><span class="line"><span class="cl">  401197:	8b 0c 34             	mov    (%rsp,%rsi,1),%ecx   //ecx=*(rsp+rsi) 指针偏移，依次获取6个数 *(rsp) *(rsp+4)
+</span></span><span class="line"><span class="cl">  40119a:	83 f9 01             	cmp    $0x1,%ecx        //比较ecx与1的大小
+</span></span><span class="line"><span class="cl">  40119d:	7e e4                	jle    401183 &lt;phase_6+0x8f&gt;  //若ecx&lt;=1，跳转到0x401183 即当处理后的*(rsp)=1时
+</span></span><span class="line"><span class="cl">  40119f:	b8 01 00 00 00       	mov    $0x1,%eax      //eax=1
+</span></span><span class="line"><span class="cl">  4011a4:	ba d0 32 60 00       	mov    $0x6032d0,%edx  //edx=0x6032d0
+</span></span><span class="line"><span class="cl">  4011a9:	eb cb                	jmp    401176 &lt;phase_6+0x82&gt;  //跳转到0x401176
+</span></span><span class="line"><span class="cl">  #这段代码不太好着手，根据我们输入的1 2 3 4 5 6带入运行，经过之前的处理后编程了6 5 4 3 2 1，
+</span></span><span class="line"><span class="cl">  #这段代码的关键在于0x6032d0这个地址代表的含义，
+</span></span><span class="line"><span class="cl">  #在处理第一个参数6时，发现在不断嵌套使用地址，优点像链表，利用gdb查看，这个地址的值发现：
+</span></span><span class="line"><span class="cl">  #(gdb) x/24w 0x6032d0
+</span></span><span class="line"><span class="cl">    #0x6032d0 &lt;node1&gt;:       0x0000014c      0x00000001      0x006032e0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x6032e0 &lt;node2&gt;:       0x000000a8      0x00000002      0x006032f0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x6032f0 &lt;node3&gt;:       0x0000039c      0x00000003      0x00603300      0x00000000
+</span></span><span class="line"><span class="cl">    #0x603300 &lt;node4&gt;:       0x000002b3      0x00000004      0x00603310      0x00000000
+</span></span><span class="line"><span class="cl">    #0x603310 &lt;node5&gt;:       0x000001dd      0x00000005      0x00603320      0x00000000
+</span></span><span class="line"><span class="cl">    #0x603320 &lt;node6&gt;:       0x000001bb      0x00000006      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">  #在这里，我的输入是1 2 3 4 5 6
+</span></span><span class="line"><span class="cl">  #我们看到打印出来的结果，每个node里第2个四字节的部分和我们的输入吻合；
+</span></span><span class="line"><span class="cl">  #而第三个四字节的部分则是下一个node的起始地址，最后一个四字节的部分则为0，
+</span></span><span class="line"><span class="cl">  #考虑到内存对齐，我们大概能推测出，这应该是一个链表，而我们的输入的数字与在第二个四字节的地方的数据有关，
+</span></span><span class="line"><span class="cl">  #第一个四字节的内容表示的是什么待确定
+</span></span><span class="line"><span class="cl">  # 这个结构体有点类似链表：
+</span></span><span class="line"><span class="cl">    # struct {
+</span></span><span class="line"><span class="cl">  #  int sth; // 某四字节内容
+</span></span><span class="line"><span class="cl">  #  int input; // 与我们的输入有关
+</span></span><span class="line"><span class="cl">  #  node* next; // 下一个node地址
+</span></span><span class="line"><span class="cl">    # } node;
+</span></span><span class="line"><span class="cl">  #这么看下来这段代码就是将处理后参数所对应node的起始地址存储到首地址为rsp+0x20，尾地址为rsp+0x50的地方
+</span></span><span class="line"><span class="cl">  #(gdb) x/12w $rsp+0x20
+</span></span><span class="line"><span class="cl">    #0x7fffffffd8c0: 0x00603320      0x00000000      0x00603310      0x00000000
+</span></span><span class="line"><span class="cl">    #0x7fffffffd8d0: 0x00603300      0x00000000      0x006032f0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x7fffffffd8e0: 0x006032e0      0x00000000      0x006032d0      0x00000000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  4011ab:	48 8b 5c 24 20       	mov    0x20(%rsp),%rbx   //rbx=*(rsp+0x20) 0x00603320
+</span></span><span class="line"><span class="cl">  4011b0:	48 8d 44 24 28       	lea    0x28(%rsp),%rax   //rax=(rsp+0x28)  
+</span></span><span class="line"><span class="cl">  4011b5:	48 8d 74 24 50       	lea    0x50(%rsp),%rsi   //rsi=(rsp+0x50)  
+</span></span><span class="line"><span class="cl">  4011ba:	48 89 d9             	mov    %rbx,%rcx    //rcx=rbx=*(rsp+0x20)  0x00603320
+</span></span><span class="line"><span class="cl">  4011bd:	48 8b 10             	mov    (%rax),%rdx  //rdx=*(rax)=*(rsp+0x28) 0x00603310
+</span></span><span class="line"><span class="cl">  4011c0:	48 89 51 08          	mov    %rdx,0x8(%rcx) //*(rcx+8)=rdx *(*(rsp+0x20)+8)=*(rsp+0x28) 															//*0x00603328=0x00603310 *0x00603318=0x603300
+</span></span><span class="line"><span class="cl">  4011c4:	48 83 c0 08          	add    $0x8,%rax    //rax+=8 (rsp+0x30)
+</span></span><span class="line"><span class="cl">  4011c8:	48 39 f0             	cmp    %rsi,%rax    
+</span></span><span class="line"><span class="cl">  4011cb:	74 05                	je     4011d2 &lt;phase_6+0xde&gt; //若rax=rsi,跳转到0x4011d2
+</span></span><span class="line"><span class="cl">  4011cd:	48 89 d1             	mov    %rdx,%rcx    //rcx=rdx *(rsp+0x28)
+</span></span><span class="line"><span class="cl">  4011d0:	eb eb                	jmp    4011bd &lt;phase_6+0xc9&gt;  //跳转到0x4011bd
+</span></span><span class="line"><span class="cl">  #这段代码可以简化为一个for循环，这个循环用来将链表的结点重新调整至第一个参数的结点为头节点，
+</span></span><span class="line"><span class="cl">  #后面的参数依次链接在这个头结点后的链表：
+</span></span><span class="line"><span class="cl">    #for(int i=0;i&lt;6;i++){
+</span></span><span class="line"><span class="cl">      #node[i]-&gt;next=node[i+1];
+</span></span><span class="line"><span class="cl">    #}
+</span></span><span class="line"><span class="cl">  #结果如下  
+</span></span><span class="line"><span class="cl">  #(gdb) x/24w 0x6032d0
+</span></span><span class="line"><span class="cl">    #0x6032d0 &lt;node1&gt;:       0x0000014c      0x00000001      0x006032e0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x6032e0 &lt;node2&gt;:       0x000000a8      0x00000002      0x006032d0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x6032f0 &lt;node3&gt;:       0x0000039c      0x00000003      0x006032e0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x603300 &lt;node4&gt;:       0x000002b3      0x00000004      0x006032f0      0x00000000
+</span></span><span class="line"><span class="cl">    #0x603310 &lt;node5&gt;:       0x000001dd      0x00000005      0x00603300      0x00000000
+</span></span><span class="line"><span class="cl">    #0x603320 &lt;node6&gt;:       0x000001bb      0x00000006      0x00603310      0x00000000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  4011d2:	48 c7 42 08 00 00 00 	movq   $0x0,0x8(%rdx)   ///*(rdx+8)=0 
+</span></span><span class="line"><span class="cl">  4011d9:	00 
+</span></span><span class="line"><span class="cl">  4011da:	bd 05 00 00 00       	mov    $0x5,%ebp    //ebp=5
+</span></span><span class="line"><span class="cl">  4011df:	48 8b 43 08          	mov    0x8(%rbx),%rax //rax=*(rbx+8)=头结点的下一个结点rbx=*(rsp+0x20)
+</span></span><span class="line"><span class="cl">  4011e3:	8b 00                	mov    (%rax),%eax   //eax=*(rax) 下一结点的sth内容
+</span></span><span class="line"><span class="cl">  4011e5:	39 03                	cmp    %eax,(%rbx)    //当前结点的sth与下一结点的sth内容比较
+</span></span><span class="line"><span class="cl">  4011e7:	7d 05                	jge    4011ee &lt;phase_6+0xfa&gt;   //若*(rbx)&gt;=eax，则跳转到0x4011ee
+</span></span><span class="line"><span class="cl">  4011e9:	e8 4c 02 00 00       	call   40143a &lt;explode_bomb&gt;   //否则，爆炸
+</span></span><span class="line"><span class="cl">  4011ee:	48 8b 5b 08          	mov    0x8(%rbx),%rbx    //rbx=*(rbx+8) 指向下一个结点
+</span></span><span class="line"><span class="cl">  4011f2:	83 ed 01             	sub    $0x1,%ebp    //ebp--
+</span></span><span class="line"><span class="cl">  4011f5:	75 e8                	jne    4011df &lt;phase_6+0xeb&gt;  //若不等于0，则跳转到0x4011df
+</span></span><span class="line"><span class="cl">  4011f7:	48 83 c4 50          	add    $0x50,%rsp    //出栈，栈指针增加80
+</span></span><span class="line"><span class="cl">  #这段代码主要是比较每个结点和下一个结点的sth值(结点的首四字节内容)，当前结点的sth要大于等于下一结点的sth，
+</span></span><span class="line"><span class="cl">  #所以我们需要将sth的值排序从大到小排序,排序后所结点对应序号的序列就是我们要输入的参数值和对应顺序，
+</span></span><span class="line"><span class="cl">  #即4 3 2 1 6 5 注意参数被处理过，不要写成3 4 5 6 1 2
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  4011fb:	5b                   	pop    %rbx 
+</span></span><span class="line"><span class="cl">  4011fc:	5d                   	pop    %rbp
+</span></span><span class="line"><span class="cl">  4011fd:	41 5c                	pop    %r12
+</span></span><span class="line"><span class="cl">  4011ff:	41 5d                	pop    %r13
+</span></span><span class="line"><span class="cl">  401201:	41 5e                	pop    %r14
+</span></span><span class="line"><span class="cl">  401203:	c3                   	ret    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注释中一般都只写了第一次循环各寄存器所对应的值，若有多个值则是循环了多次，一般循环两三次就能看出整个函数的用意。整个phase_6调试所输入的参数为1 2 3 4 5 6</strong></p>
+<h3 id="bonus">Bonus
+</h3><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">00000000004015c4 &lt;phase_defused&gt;:
+</span></span><span class="line"><span class="cl">  4015c4:	48 83 ec 78          	sub    $0x78,%rsp
+</span></span><span class="line"><span class="cl">  4015c8:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+</span></span><span class="line"><span class="cl">  4015cf:	00 00 
+</span></span><span class="line"><span class="cl">  4015d1:	48 89 44 24 68       	mov    %rax,0x68(%rsp)
+</span></span><span class="line"><span class="cl">  4015d6:	31 c0                	xor    %eax,%eax
+</span></span><span class="line"><span class="cl">  4015d8:	83 3d 81 21 20 00 06 	cmpl   $0x6,0x202181(%rip)        # 603760 &lt;num_input_strings&gt;
+</span></span><span class="line"><span class="cl">  4015df:	75 5e                	jne    40163f &lt;phase_defused+0x7b&gt;
+</span></span><span class="line"><span class="cl">  4015e1:	4c 8d 44 24 10       	lea    0x10(%rsp),%r8
+</span></span><span class="line"><span class="cl">  4015e6:	48 8d 4c 24 0c       	lea    0xc(%rsp),%rcx
+</span></span><span class="line"><span class="cl">  4015eb:	48 8d 54 24 08       	lea    0x8(%rsp),%rdx
+</span></span><span class="line"><span class="cl">  4015f0:	be 19 26 40 00       	mov    $0x402619,%esi #地址的值是&#34;%d %d %s&#34;
+</span></span><span class="line"><span class="cl">  4015f5:	bf 70 38 60 00       	mov    $0x603870,%edi #地址的值是&#34;7 0&#34;这正是第4关的key，推测从这关进入彩蛋
+</span></span><span class="line"><span class="cl">  4015fa:	e8 f1 f5 ff ff       	call   400bf0 &lt;__isoc99_sscanf@plt&gt;
+</span></span><span class="line"><span class="cl">  4015ff:	83 f8 03             	cmp    $0x3,%eax
+</span></span><span class="line"><span class="cl">  401602:	75 31                	jne    401635 &lt;phase_defused+0x71&gt;  #eax!=3，就跳转到末尾
+</span></span><span class="line"><span class="cl">  401604:	be 22 26 40 00       	mov    $0x402622,%esi     #esi=0x402622 该地址对应&#34;DrEvil&#34;
+</span></span><span class="line"><span class="cl">  401609:	48 8d 7c 24 10       	lea    0x10(%rsp),%rdi    #rdi=*(rsp+16)
+</span></span><span class="line"><span class="cl">  40160e:	e8 25 fd ff ff       	call   401338 &lt;strings_not_equal&gt;   #判断字符串是否相等
+</span></span><span class="line"><span class="cl">  401613:	85 c0                	test   %eax,%eax
+</span></span><span class="line"><span class="cl">  401615:	75 1e                	jne    401635 &lt;phase_defused+0x71&gt;   #如果不等，就跳转到末尾
+</span></span><span class="line"><span class="cl">  401617:	bf f8 24 40 00       	mov    $0x4024f8,%edi
+</span></span><span class="line"><span class="cl">  40161c:	e8 ef f4 ff ff       	call   400b10 &lt;puts@plt&gt;
+</span></span><span class="line"><span class="cl">  401621:	bf 20 25 40 00       	mov    $0x402520,%edi
+</span></span><span class="line"><span class="cl">  401626:	e8 e5 f4 ff ff       	call   400b10 &lt;puts@plt&gt;
+</span></span><span class="line"><span class="cl">  40162b:	b8 00 00 00 00       	mov    $0x0,%eax
+</span></span><span class="line"><span class="cl">  401630:	e8 0d fc ff ff       	call   401242 &lt;secret_phase&gt;   #因此进入彩蛋需要在第4关的答案后面添上&#34;DrEvil&#34;字符串
+</span></span><span class="line"><span class="cl">  401635:	bf 58 25 40 00       	mov    $0x402558,%edi
+</span></span><span class="line"><span class="cl">  40163a:	e8 d1 f4 ff ff       	call   400b10 &lt;puts@plt&gt;
+</span></span><span class="line"><span class="cl">  40163f:	48 8b 44 24 68       	mov    0x68(%rsp),%rax
+</span></span><span class="line"><span class="cl">  401644:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
+</span></span><span class="line"><span class="cl">  40164b:	00 00 
+</span></span><span class="line"><span class="cl">  40164d:	74 05                	je     401654 &lt;phase_defused+0x90&gt;
+</span></span><span class="line"><span class="cl">  40164f:	e8 dc f4 ff ff       	call   400b30 &lt;__stack_chk_fail@plt&gt;
+</span></span><span class="line"><span class="cl">  401654:	48 83 c4 78          	add    $0x78,%rsp
+</span></span><span class="line"><span class="cl">  401658:	c3                   	ret    
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">0000000000401204 &lt;fun7&gt;:
+</span></span><span class="line"><span class="cl">  401204:	48 83 ec 08          	sub    $0x8,%rsp
+</span></span><span class="line"><span class="cl">  401208:	48 85 ff             	test   %rdi,%rdi  
+</span></span><span class="line"><span class="cl">  40120b:	74 2b                	je     401238 &lt;fun7+0x34&gt;  #若rdi=0，则跳转
+</span></span><span class="line"><span class="cl">  40120d:	8b 17                	mov    (%rdi),%edx  #edx=*(rdi)=0x24
+</span></span><span class="line"><span class="cl">  40120f:	39 f2                	cmp    %esi,%edx    
+</span></span><span class="line"><span class="cl">  401211:	7e 0d                	jle    401220 &lt;fun7+0x1c&gt;  #若edx&lt;=esi，则跳转 
+</span></span><span class="line"><span class="cl">  401213:	48 8b 7f 08          	mov    0x8(%rdi),%rdi   #rdi=*(rdi+8)
+</span></span><span class="line"><span class="cl">  401217:	e8 e8 ff ff ff       	call   401204 &lt;fun7&gt;  func7(0x00603110,input)
+</span></span><span class="line"><span class="cl">  40121c:	01 c0                	add    %eax,%eax
+</span></span><span class="line"><span class="cl">  40121e:	eb 1d                	jmp    40123d &lt;fun7+0x39&gt;
+</span></span><span class="line"><span class="cl">  401220:	b8 00 00 00 00       	mov    $0x0,%eax   #eax=0
+</span></span><span class="line"><span class="cl">  401225:	39 f2                	cmp    %esi,%edx   
+</span></span><span class="line"><span class="cl">  401227:	74 14                	je     40123d &lt;fun7+0x39&gt;  #若edx=esi，则跳转  input不能等于0x24
+</span></span><span class="line"><span class="cl">  401229:	48 8b 7f 10          	mov    0x10(%rdi),%rdi  #rdi=*(rdi+16) 
+</span></span><span class="line"><span class="cl">  40122d:	e8 d2 ff ff ff       	call   401204 &lt;fun7&gt;   
+</span></span><span class="line"><span class="cl">  401232:	8d 44 00 01          	lea    0x1(%rax,%rax,1),%eax  #eax=rax+rax+1
+</span></span><span class="line"><span class="cl">  401236:	eb 05                	jmp    40123d &lt;fun7+0x39&gt;  #跳转
+</span></span><span class="line"><span class="cl">  401238:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
+</span></span><span class="line"><span class="cl">  40123d:	48 83 c4 08          	add    $0x8,%rsp
+</span></span><span class="line"><span class="cl">  401241:	c3                   	ret    
+</span></span><span class="line"><span class="cl">  #等价c语言：
+</span></span><span class="line"><span class="cl">  int fun7(int input, Node* addr){
+</span></span><span class="line"><span class="cl">  if(addr == 0){
+</span></span><span class="line"><span class="cl">    return -1;
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">  int v = addr-&gt;value;
+</span></span><span class="line"><span class="cl">  if (v == input){
+</span></span><span class="line"><span class="cl">    return 0;
+</span></span><span class="line"><span class="cl">  }else if( v &lt; input){
+</span></span><span class="line"><span class="cl">        return 1 + 2*fun7(input, addr-&gt;right);
+</span></span><span class="line"><span class="cl">  }else{
+</span></span><span class="line"><span class="cl">    return 2*func7(input, addr-&gt;left);
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">  #纵观eax值的设置，一共有三处，esi&lt;edx时，eax=2*eax； esi=edx时，eax=0；esi&gt;edx时，eax=rax+rax+1，在它们的前面还会嵌套调用func7
+</span></span><span class="line"><span class="cl">  #若想让eax=2，那么只有让最深层的func7调用eax=0，然后调用eax=rax+rax+1，最后最外面这层func7函数调用eax=2*eax，这样刚好等于2
+</span></span><span class="line"><span class="cl">  #所以input&lt;0x24  input&gt;0x8  input=0x16
+</span></span><span class="line"><span class="cl">  #这里的设置与phase_6的设置有些类似，涉及到了地址嵌套调用，使用gdb查看相应的内存地址范围的值，一目了然。
+</span></span><span class="line"><span class="cl">  #(gdb) x/120w 0x6030f0
+</span></span><span class="line"><span class="cl">	#0x6030f0 &lt;n1&gt;:  0x00000024      0x00000000      0x00603110      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603100 &lt;n1+16&gt;:       0x00603130      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603110 &lt;n21&gt;: 0x00000008      0x00000000      0x00603190      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603120 &lt;n21+16&gt;:      0x00603150      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603130 &lt;n22&gt;: 0x00000032      0x00000000      0x00603170      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603140 &lt;n22+16&gt;:      0x006031b0      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603150 &lt;n32&gt;: 0x00000016      0x00000000      0x00603270      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603160 &lt;n32+16&gt;:      0x00603230      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603170 &lt;n33&gt;: 0x0000002d      0x00000000      0x006031d0      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603180 &lt;n33+16&gt;:      0x00603290      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603190 &lt;n31&gt;: 0x00000006      0x00000000      0x006031f0      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6031a0 &lt;n31+16&gt;:      0x00603250      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6031b0 &lt;n34&gt;: 0x0000006b      0x00000000      0x00603210      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6031c0 &lt;n34+16&gt;:      0x006032b0      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6031d0 &lt;n45&gt;: 0x00000028      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6031e0 &lt;n45+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6031f0 &lt;n41&gt;: 0x00000001      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603200 &lt;n41+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603210 &lt;n47&gt;: 0x00000063      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603220 &lt;n47+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603230 &lt;n44&gt;: 0x00000023      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603240 &lt;n44+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603250 &lt;n42&gt;: 0x00000007      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603260 &lt;n42+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603270 &lt;n43&gt;: 0x00000014      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603280 &lt;n43+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x603290 &lt;n46&gt;: 0x0000002f      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6032a0 &lt;n46+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6032b0 &lt;n48&gt;: 0x000003e9      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">	#0x6032c0 &lt;n48+16&gt;:      0x00000000      0x00000000      0x00000000      0x00000000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">0000000000401242 &lt;secret_phase&gt;:
+</span></span><span class="line"><span class="cl">  401242:	53                   	push   %rbx
+</span></span><span class="line"><span class="cl">  401243:	e8 56 02 00 00       	call   40149e &lt;read_line&gt;
+</span></span><span class="line"><span class="cl">  401248:	ba 0a 00 00 00       	mov    $0xa,%edx  #edx=10 第三个参数
+</span></span><span class="line"><span class="cl">  40124d:	be 00 00 00 00       	mov    $0x0,%esi  #esi=0  第二个参数  
+</span></span><span class="line"><span class="cl">  401252:	48 89 c7             	mov    %rax,%rdi  #rdi=rax 第一个参数
+</span></span><span class="line"><span class="cl">  401255:	e8 76 f9 ff ff       	call   400bd0 &lt;strtol@plt&gt;  #将字符串转为长整型
+</span></span><span class="line"><span class="cl">  40125a:	48 89 c3             	mov    %rax,%rbx  #rbx=rax
+</span></span><span class="line"><span class="cl">  40125d:	8d 40 ff             	lea    -0x1(%rax),%eax  #eax=rax-1
+</span></span><span class="line"><span class="cl">  401260:	3d e8 03 00 00       	cmp    $0x3e8,%eax  #eax与1000比较
+</span></span><span class="line"><span class="cl">  401265:	76 05                	jbe    40126c &lt;secret_phase+0x2a&gt;  #若eax&lt;=1000,则跳转到0x40126c
+</span></span><span class="line"><span class="cl">  401267:	e8 ce 01 00 00       	call   40143a &lt;explode_bomb&gt;  #否则，爆炸
+</span></span><span class="line"><span class="cl">  40126c:	89 de                	mov    %ebx,%esi      #esi=ebx   第二个参数为转化后的长整型数字
+</span></span><span class="line"><span class="cl">  40126e:	bf f0 30 60 00       	mov    $0x6030f0,%edi  #edi=0x6930f0 第一个参数
+</span></span><span class="line"><span class="cl">  401273:	e8 8c ff ff ff       	call   401204 &lt;fun7&gt;  
+</span></span><span class="line"><span class="cl">  401278:	83 f8 02             	cmp    $0x2,%eax  #比较eax和2
+</span></span><span class="line"><span class="cl">  40127b:	74 05                	je     401282 &lt;secret_phase+0x40&gt;  #若eax=2，跳转到0x401282,所以func7函数返回值必须要等于2
+</span></span><span class="line"><span class="cl">  40127d:	e8 b8 01 00 00       	call   40143a &lt;explode_bomb&gt;  #否则，爆炸
+</span></span><span class="line"><span class="cl">  401282:	bf 38 24 40 00       	mov    $0x402438,%edi     #edi=0x402438
+</span></span><span class="line"><span class="cl">  401287:	e8 84 f8 ff ff       	call   400b10 &lt;puts@plt&gt;  
+</span></span><span class="line"><span class="cl">  40128c:	e8 33 03 00 00       	call   4015c4 &lt;phase_defused&gt;
+</span></span><span class="line"><span class="cl">  401291:	5b                   	pop    %rbx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意：彩蛋要在输入6个关卡的答案后才会出现。</p>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/csapp/">CSAPP</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-02
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post CSAPP:buffer实验" height="150" loading="lazy" src="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_a03ec4c088b9c427.jpg" srcset="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_a03ec4c088b9c427.jpg 1x, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_7fcba1294a69762e.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #adb0a080 0%, #396694C0 100%);">
+            <h2 class="article-title">CSAPP:buffer实验</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/csappattack%E5%AE%9E%E9%AA%8C/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post CSAPP:attack实验" height="150" loading="lazy" src="/en/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_fc5559e11ab951c5.jpg" srcset="/en/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_fc5559e11ab951c5.jpg 1x, /en/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_ee19e4f115884d8.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #44639280 0%, #2f334bC0 100%);">
+            <h2 class="article-title">CSAPP:attack实验</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/default-skin\/default-skin.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

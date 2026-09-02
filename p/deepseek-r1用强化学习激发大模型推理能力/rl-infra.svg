@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <linearGradient id="b1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1565c0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976d2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="b2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e65100;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ef6c00;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="b3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2e7d32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#388e3c;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="b4" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6a1b9a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7b1fa2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1565c0"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e65100"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2e7d32"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">DeepSeek-R1 RL 训练基础设施架构</text>
+
+  <!-- Module 1: Rollout -->
+  <rect x="40" y="60" width="200" height="160" rx="12" fill="url(#b1)" filter="url(#shadow)"/>
+  <text x="140" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">① Rollout 模块</text>
+  <line x1="60" y1="100" x2="220" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+  <text x="140" y="120" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.9)">vLLM Worker × N</text>
+  <text x="140" y="140" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">专家并行 · 热点专家冗余</text>
+  <text x="140" y="158" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">MTP 自推测解码</text>
+  <text x="140" y="176" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">每个 prompt 采样 G=16</text>
+  <text x="140" y="194" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">→ 生成 {o₁, o₂, ..., o₁₆}</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="240" y1="100" x2="298" y2="100" stroke="#1565c0" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <text x="269" y="93" text-anchor="middle" font-size="9" fill="#1565c0">样本</text>
+
+  <!-- Module 2: Inference -->
+  <rect x="305" y="60" width="200" height="160" rx="12" fill="url(#b2)" filter="url(#shadow)"/>
+  <text x="405" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">② 推理模块</text>
+  <line x1="325" y1="100" x2="485" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+  <text x="405" y="120" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.9)">Reward Model 前向传播</text>
+  <text x="405" y="140" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">模型基奖励计算</text>
+  <text x="405" y="158" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Reference Model 前向</text>
+  <text x="405" y="176" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">KL 散度计算</text>
+  <text x="405" y="194" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">→ 奖励 + KL 信号</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="505" y1="140" x2="563" y2="140" stroke="#e65100" stroke-width="2" marker-end="url(#arrow-orange)"/>
+  <text x="534" y="133" text-anchor="middle" font-size="9" fill="#e65100">奖励</text>
+
+  <!-- Module 3: Rule-based Reward -->
+  <rect x="570" y="60" width="200" height="160" rx="12" fill="url(#b3)" filter="url(#shadow)"/>
+  <text x="670" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">③ 规则奖励模块</text>
+  <line x1="590" y1="100" x2="750" y2="100" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+  <text x="670" y="120" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.9)">代码执行器</text>
+  <text x="670" y="140" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">答案匹配器</text>
+  <text x="670" y="158" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">格式检查器</text>
+  <text x="670" y="176" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">异步调度（与①/②重叠）</text>
+  <text x="670" y="194" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">→ 规则奖励信号</text>
+
+  <!-- Module 4: Training -->
+  <rect x="305" y="260" width="200" height="160" rx="12" fill="url(#b4)" filter="url(#shadow)"/>
+  <text x="405" y="290" text-anchor="middle" font-size="14" font-weight="bold" fill="white">④ 训练模块</text>
+  <line x1="325" y1="300" x2="485" y2="300" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+  <text x="405" y="320" text-anchor="middle" font-size="11" fill="rgba(255,255,255,0.9)">Actor 模型参数更新</text>
+  <text x="405" y="340" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">GRPO 损失计算</text>
+  <text x="405" y="358" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">Best-Fit 数据打包</text>
+  <text x="405" y="376" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.8)">DualPipe 流水线并行</text>
+  <text x="405" y="394" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.7)">→ 更新策略 π_θ</text>
+
+  <!-- Feedback loop: ④ → ① -->
+  <path d="M 505 340 L 530 340 L 530 140 L 244 140" stroke="#6a1b9a" stroke-width="2" stroke-dasharray="6,3" fill="none" marker-end="url(#arrow)"/>
+  <text x="520" y="240" font-size="9" fill="#6a1b9a" transform="rotate(90, 520, 240)">更新后策略参数</text>
+
+  <!-- Arrow ③→④ -->
+  <line x1="670" y1="220" x2="670" y2="256" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <text x="685" y="242" font-size="9" fill="#2e7d32">奖励信号</text>
+
+  <!-- Arrow ②→④ -->
+  <line x1="405" y1="220" x2="405" y2="256" stroke="#e65100" stroke-width="2" marker-end="url(#arrow-orange)"/>
+  <text x="420" y="242" font-size="9" fill="#e65100">奖励+KL</text>
+
+  <!-- Bottom annotation -->
+  <rect x="40" y="440" width="820" height="30" rx="6" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  <text x="450" y="460" text-anchor="middle" font-size="10" fill="#666">每模块完成后自动将模型从 VRAM 卸载到系统内存/磁盘 → 释放显存供下一模块使用</text>
+</svg>
