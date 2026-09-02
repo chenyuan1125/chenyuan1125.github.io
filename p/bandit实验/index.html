@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="bandit实验详细记录">
+<meta name="keywords" content="实验、CTF"><title>bandit实验</title>
+
+
+<link rel="canonical" href="/p/bandit%E5%AE%9E%E9%AA%8C/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="bandit实验">
+<meta property='og:description' content="bandit实验详细记录">
+<meta property='og:url' content='/p/bandit%E5%AE%9E%E9%AA%8C/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CTF' /><meta property='article:published_time' content='2024-10-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-02T21:36:09&#43;08:00'/><meta property='og:image' content='/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg' />
+<meta name="twitter:title" content="bandit实验">
+<meta name="twitter:description" content="bandit实验详细记录"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E9%93%BE%E6%8E%A5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/bandit%E5%AE%9E%E9%AA%8C/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/bandit%E5%AE%9E%E9%AA%8C/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span></span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title"></h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#level12-13"><strong>level12-13</strong></a></li>
+        <li><a href="#level17-18"><strong>level17-18</strong></a></li>
+        <li><a href="#level18-19"><strong>level18-19</strong></a></li>
+        <li><a href="#level19-20"><strong>level19-20</strong></a></li>
+        <li><a href="#level20-21"><strong>level20-21</strong></a></li>
+        <li><a href="#level21-22"><strong>level21-22</strong></a></li>
+        <li><a href="#level22-23"><strong>level22-23</strong></a></li>
+        <li><a href="#level23-24"><strong>level23-24</strong></a></li>
+        <li><a href="#level24-25"><strong>level24-25</strong></a></li>
+        <li><a href="#level25-26">level25-26</a></li>
+        <li><a href="#level26-27">level26-27</a></li>
+        <li><a href="#level27-28">level27-28</a></li>
+        <li><a href="#level28-29">level28-29</a></li>
+        <li><a href="#level29-30">level29-30</a></li>
+        <li><a href="#level30-31">level30-31</a></li>
+        <li><a href="#level31-32">level31-32</a></li>
+        <li><a href="#level32-33">level32-33</a></li>
+      </ol>
+    </li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/bandit%E5%AE%9E%E9%AA%8C/">
+            <img alt="Featured image of post bandit实验" height="2160" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/bandit%E5%AE%9E%E9%AA%8C/1.jpg" srcset="/p/bandit%E5%AE%9E%E9%AA%8C/1_hu_c27824effcdebc51.jpg 800w, /p/bandit%E5%AE%9E%E9%AA%8C/1_hu_7fdaa63930a9f0d0.jpg 1600w, /p/bandit%E5%AE%9E%E9%AA%8C/1_hu_8fb7ef1c9c7ee638.jpg 2400w, /p/bandit%E5%AE%9E%E9%AA%8C/1.jpg 3840w" width="3840">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/ctf/" style="background-color: #364250; color: #fff;">
+                CTF
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/bandit%E5%AE%9E%E9%AA%8C/">bandit实验</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            bandit实验详细记录
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2024-10-06T00:00:00Z'>2024-10-06</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/bandit%E5%AE%9E%E9%AA%8C/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span></span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li>
+      <ol>
+        <li><a href="#level12-13"><strong>level12-13</strong></a></li>
+        <li><a href="#level17-18"><strong>level17-18</strong></a></li>
+        <li><a href="#level18-19"><strong>level18-19</strong></a></li>
+        <li><a href="#level19-20"><strong>level19-20</strong></a></li>
+        <li><a href="#level20-21"><strong>level20-21</strong></a></li>
+        <li><a href="#level21-22"><strong>level21-22</strong></a></li>
+        <li><a href="#level22-23"><strong>level22-23</strong></a></li>
+        <li><a href="#level23-24"><strong>level23-24</strong></a></li>
+        <li><a href="#level24-25"><strong>level24-25</strong></a></li>
+        <li><a href="#level25-26">level25-26</a></li>
+        <li><a href="#level26-27">level26-27</a></li>
+        <li><a href="#level27-28">level27-28</a></li>
+        <li><a href="#level28-29">level28-29</a></li>
+        <li><a href="#level29-30">level29-30</a></li>
+        <li><a href="#level30-31">level30-31</a></li>
+        <li><a href="#level31-32">level31-32</a></li>
+        <li><a href="#level32-33">level32-33</a></li>
+      </ol>
+    </li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p><strong>参考博客</strong>：<a class="link" href="https://overthewire.org/wargames/bandit/bandit13.html"  target="_blank" rel="noopener"
+    >OverTheWire: Level Goal: Bandit Level 12 → Level 13</a></p>
+<h3 id="level12-13"><strong>level12-13</strong>
+</h3><p>主要思路： 先将文件转化为二进制文件，再利用file命令查看文件类型，根据文件类型来解压缩</p>
+<h3 id="level17-18"><strong>level17-18</strong>
+</h3><p>利用diff -a</p>
+<h3 id="level18-19"><strong>level18-19</strong>
+</h3><p>The password for the next level is stored in a file <strong>readme</strong> in the homedirectory. Unfortunately, someone has modified <strong>.bashrc</strong> to log you out when you log in with SSH.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -p <span class="m">2220</span> bandit18@bandit.labs.overthewire.org cat readme
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level19-20"><strong>level19-20</strong>
+</h3><p>setuid，利用bandit20.do文件来提权root</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./bandit20-do  cat /etc/bandit_pass/bandit20
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level20-21"><strong>level20-21</strong>
+</h3><p>利用nc -lv 监听端口，再用./suconnect 端口号连接</p>
+<h3 id="level21-22"><strong>level21-22</strong>
+</h3><p>找到对应的crond脚本</p>
+<h3 id="level22-23"><strong>level22-23</strong>
+</h3><p>找到对应脚本,再把bandit23的mytarget找出来，再读取密码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">bandit22@bandit:/etc/cron.d$ cat  /usr/bin/cronjob_bandit23.sh
+</span></span><span class="line"><span class="cl"><span class="c1">#!/bin/bash</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">myname</span><span class="o">=</span><span class="k">$(</span>whoami<span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">mytarget</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> I am user <span class="nv">$myname</span> <span class="p">|</span> md5sum <span class="p">|</span> cut -d <span class="s1">&#39; &#39;</span> -f 1<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Copying passwordfile /etc/bandit_pass/</span><span class="nv">$myname</span><span class="s2"> to /tmp/</span><span class="nv">$mytarget</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat /etc/bandit_pass/<span class="nv">$myname</span> &gt; /tmp/<span class="nv">$mytarget</span>
+</span></span><span class="line"><span class="cl">bandit22@bandit:/etc/cron.d$ <span class="nb">echo</span> I am user bandit23 <span class="p">|</span> md5sum <span class="p">|</span> cut -d <span class="s1">&#39; &#39;</span> -f <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level23-24"><strong>level23-24</strong>
+</h3><p>找到对应脚本，参考上一个level的脚本，创建一个新的脚本来获取密码，注意文件的权限问题</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat /etc/bandit_pass/bandit24 &gt; /tmp/bandit24/bandit24
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level24-25"><strong>level24-25</strong>
+</h3><p><strong>Level Goal</strong></p>
+<p>A daemon is listening on port 30002 and will give you the password for bandit25 if given the password for bandit24 and a secret numeric 4-digit pincode. There is no way to retrieve the pincode except by going through all of the 10000 combinations, called brute-forcing.
+You do not need to create new connections each time</p>
+<p>tips： nc localhost 30002  利用shell脚本进行爆破</p>
+<p>注意程序可能会因为超时卡住，所以要分段爆破</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>0000..9999<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">do</span>
+</span></span><span class="line"><span class="cl">	<span class="nb">echo</span> <span class="s2">&#34;VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar </span><span class="nv">$i</span><span class="s2">&#34;</span> &gt;&gt; ./banditpin
+</span></span><span class="line"><span class="cl"><span class="k">done</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">cat ./banditpin <span class="p">|</span> nc localhost <span class="m">30002</span> &gt;&gt; ./bandit25pass
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level25-26">level25-26
+</h3><p><strong>Level Goal</strong></p>
+<p>Logging in to bandit26 from bandit25 should be fairly easy… The shell for user bandit26 is not <strong>/bin/bash</strong>, but something else. Find out what it is, how it works and how to break out of it.</p>
+<p>参考博客：<a class="link" href="https://mayadevbe.me/posts/overthewire/bandit/level26/"  target="_blank" rel="noopener"
+    >OverTheWire Bandit Level 25 -&gt; 26 - Walkthrough - MayADevBe Blog</a></p>
+<p>ls发现目录下有bandit26的私钥，尝试使用ssh -i 进行连接，连接失败，由于/bin/bash被修改。</p>
+<p>利用cat  /etc/passwd查看bandit26所使用的shell，发现为/usr/bin/showtext，再查看这个文件，发现它是个脚本，并且通过more打开了text.txt文件，</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit25@bandit:~$ cat /etc/passwd <span class="p">|</span> grep bandit26
+</span></span><span class="line"><span class="cl">bandit26:x:11026:11026:bandit level 26:/home/bandit26:/usr/bin/showtext
+</span></span><span class="line"><span class="cl">bandit25@bandit:~$ ls -la /usr/bin/showtext
+</span></span><span class="line"><span class="cl">-rwxr-xr-x <span class="m">1</span> root root <span class="m">53</span> May  <span class="m">7</span>  <span class="m">2020</span> /usr/bin/showtext
+</span></span><span class="line"><span class="cl">bandit25@bandit:~$ cat /usr/bin/showtext
+</span></span><span class="line"><span class="cl"><span class="c1">#!/bin/sh</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">TERM</span><span class="o">=</span>linux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">more ~/text.txt
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">0</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>再次尝试ssh连接，失败</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ ssh -i bandit26.sshkey bandit26@localhost
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">  _                     _ _ _   ___   __  
+</span></span><span class="line"><span class="cl"> <span class="p">|</span> <span class="p">|</span>                   <span class="p">|</span> <span class="o">(</span>_<span class="o">)</span> <span class="p">|</span> <span class="p">|</span>__ <span class="se">\ </span>/ /  
+</span></span><span class="line"><span class="cl"> <span class="p">|</span> <span class="p">|</span>__   __ _ _ __   __<span class="p">|</span> <span class="p">|</span>_<span class="p">|</span> <span class="p">|</span>_   <span class="o">)</span> / /_  
+</span></span><span class="line"><span class="cl"> <span class="p">|</span> <span class="s1">&#39;_ \ / _` | &#39;</span>_ <span class="se">\ </span>/ _<span class="sb">`</span> <span class="p">|</span> <span class="p">|</span> __<span class="p">|</span> / / <span class="err">&#39;</span>_ <span class="se">\ </span>
+</span></span><span class="line"><span class="cl"> <span class="p">|</span> <span class="p">|</span>_<span class="o">)</span> <span class="p">|</span> <span class="o">(</span>_<span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="o">(</span>_<span class="p">|</span> <span class="p">|</span> <span class="p">|</span> <span class="p">|</span>_ / /<span class="p">|</span> <span class="o">(</span>_<span class="o">)</span> <span class="p">|</span>
+</span></span><span class="line"><span class="cl"> <span class="p">|</span>_.__/ <span class="se">\_</span>_,_<span class="p">|</span>_<span class="p">|</span> <span class="p">|</span>_<span class="p">|</span><span class="se">\_</span>_,_<span class="p">|</span>_<span class="p">|</span><span class="se">\_</span>_<span class="p">|</span>____<span class="se">\_</span>__/ 
+</span></span><span class="line"><span class="cl">Connection to bandit.labs.overthewire.org closed.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>分析原因，如果text.txt文件超过一页，那么more text.txt就会等待翻页，显然，text.txt文件太小，此时需要另辟蹊径，既然文件本身改变不了，那么反过来改变运行窗口的大小也能起到同样的作用。</p>
+<p>进入more以后，使用v进入vim编辑模式，再通过&quot;:e /etc/bandit_pass_bandit26&quot;得到password。（-e 打开文件）</p>
+<p>或者通过:set shell=/bin/bash    :shell 来进入bandit26用户</p>
+<h3 id="level26-27">level26-27
+</h3><p><strong>Level Goal</strong></p>
+<p>Good job getting a shell! Now hurry and grab the password for bandit27!</p>
+<p>bandit27.do已被setid，所以执行这个文件时会短暂使用root用户权限，借此我们可以执行其它命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit26@bandit:~$ ls
+</span></span><span class="line"><span class="cl">bandit27-do  text.txt
+</span></span><span class="line"><span class="cl">bandit26@bandit:~$ ./bandit27-do 
+</span></span><span class="line"><span class="cl">Run a <span class="nb">command</span> as another user.
+</span></span><span class="line"><span class="cl">  Example: ./bandit27-do id
+</span></span><span class="line"><span class="cl">bandit26@bandit:~$ ./bandit27-do cat /etc/bandit<span class="se">\_</span>pass/bandit27
+</span></span><span class="line"><span class="cl">3ba3118a22e93127a4ed485be72ef5ea
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level27-28">level27-28
+</h3><p><strong>Level Goal</strong></p>
+<p>There is a git repository at <code>ssh://bandit27-git@localhost/home/bandit27-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit27-git</code> is the same as for the user <code>bandit27</code>.</p>
+<p>Clone the repository and find the password for the next level.</p>
+<p>在/tmp创建一个目录，接着在目录下git init，再git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo，注意端口号。最后读取README文件即成功</p>
+<p>password：AVanL161y9rsbcJIsFHuw35rjaOM19nR</p>
+<h3 id="level28-29">level28-29
+</h3><p><strong>Level Goal</strong></p>
+<p>There is a git repository at <code>ssh://bandit28-git@localhost/home/bandit28-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit28-git</code> is the same as for the user <code>bandit28</code>.</p>
+<p>Clone the repository and find the password for the next level.</p>
+<p>tips：</p>
+<ul>
+<li>git log，show us the commit log</li>
+<li>git show <commit> show us the content of a commit (when creating a public repository it is important to be aware of  the information you push to it since changes and previous version are saved. So sensitive data, like passwords, could still be retrieved).</li>
+</ul>
+<p>克隆远程仓库后发现readme.md文件里没有显示password，无从下手，参考别人的博客发现这两个命令，于是迎刃而解。还是得积累更多的知识。</p>
+<h3 id="level29-30">level29-30
+</h3><p><strong>Level Goal</strong>
+There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo via the port 2220. The password for the user bandit29-git is the same as for the user bandit29.</p>
+<p>Clone the repository and find the password for the next level.</p>
+<p>参照上个level的流程，发现</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
+</span></span><span class="line"><span class="cl"><span class="c1"># Bandit Notes</span>
+</span></span><span class="line"><span class="cl">Some notes <span class="k">for</span> bandit30 of bandit.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## credentials</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">- username: bandit30
+</span></span><span class="line"><span class="cl">- password: &lt;no passwords in production!&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>production提示我们有其它的环境</p>
+<p>于是利用git branch -a查看是否有其它分支，发现dev环境</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ git branch -a
+</span></span><span class="line"><span class="cl">* master
+</span></span><span class="line"><span class="cl">  remotes/origin/HEAD -&gt; origin/master
+</span></span><span class="line"><span class="cl">  remotes/origin/dev
+</span></span><span class="line"><span class="cl">  remotes/origin/master
+</span></span><span class="line"><span class="cl">  remotes/origin/sploits-dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用git checkout dev或git switch dev切换分支</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ git checkout remotes/origin/dev
+</span></span><span class="line"><span class="cl">Note: switching to <span class="s1">&#39;remotes/origin/dev&#39;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后查看仓库，找到密码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ ls
+</span></span><span class="line"><span class="cl">code  README.md
+</span></span><span class="line"><span class="cl">bandit29@bandit:/tmp/bandit29/repo$ cat README.md 
+</span></span><span class="line"><span class="cl"><span class="c1"># Bandit Notes</span>
+</span></span><span class="line"><span class="cl">Some notes <span class="k">for</span> bandit30 of bandit.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">## credentials</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">- username: bandit30
+</span></span><span class="line"><span class="cl">- password: xbhV3HpNGlTIdnjUrdAlPzc2L6y9EOnS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level30-31">level30-31
+</h3><p><strong>Level Goal</strong></p>
+<p>There is a git repository at <code>ssh://bandit30-git@localhost/home/bandit30-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit30-git</code> is the same as for the user <code>bandit30</code>.</p>
+<p>Clone the repository and find the password for the next level.</p>
+<p>与上面几个level的差异是这个level使用git tag来解决</p>
+<p><strong>Git tagging</strong> is a way to mark specific points in the history of the repository. One example would be to mark release points of the software. The command to see the tags is <code>git tag</code>. To create a tag the command is <code>git tag -a &lt;tag_name&gt; -m &lt;&quot;tag description/message&quot;&gt;</code>. To see more details, like the tag message and commit, you can use the following command: <code>git show &lt;tag_name&gt;</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git tag
+</span></span><span class="line"><span class="cl">secret
+</span></span><span class="line"><span class="cl">bandit30@bandit:/tmp/tmp.GLR635iQNn/repo$ git show secret
+</span></span><span class="line"><span class="cl">OoffzGDlzhAlerFJ2cAiz1D41JW1Mhmt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level31-32">level31-32
+</h3><p><strong>Level Goal</strong></p>
+<p>There is a git repository at <code>ssh://bandit31-git@localhost/home/bandit31-git/repo</code> via the port <code>2220</code>. The password for the user <code>bandit31-git</code> is the same as for the user <code>bandit31</code>.</p>
+<p>Clone the repository and find the password for the next level.</p>
+<p>Tips</p>
+<p><strong>Git Commit</strong> saves the currently made changes with a message describing these changes. The flag <code>-a</code> makes sure all modified/deleted files are staged.</p>
+<p><strong>Git Push</strong> updates local changes in remote repositories. When pushing for the first time, you should also define the branch with <code>-u</code>.</p>
+<p><strong>Git Ignore</strong> is a file with the filename ‘.gitignore’. In this file, all file names/extensions that should be ignored by the commit are written. This means if a file which is in the ignore file is created/changed, it will not be part of the commit/repository. Git ignore also allows for wildcards. (<em>For example, :</em> ‘*.pyc’ means all files with the ending ‘.pyc’ will be ignored.) There are pre-written files for specific situations and languages, like <a class="link" href="https://github.com/github/gitignore/blob/main/Python.gitignore"  target="_blank" rel="noopener"
+    >this one</a> for Python.</p>
+<p><strong>Git Add</strong> updates what files will be part of the next commit. The <code>-f</code> flag forces files to be able to be committed, even when they are normally ignored.</p>
+<p>.gitignore用来过滤本地仓库的一些文件或目录，使得在上传至远程仓库时忽略这些文件和目录，具体用法STFW</p>
+<p>解法：克隆远程仓库后查看readme.md文件，发现如下提示，按照提示创建key.txt文件，并把&rsquo;May I come in?&lsquo;写入，接着push到远程仓库，发现报错，于是修改.gitignore的文件内容使得其能正常push到远程仓库。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bandit31@bandit:/tmp/bandit31/repo$ cat README.md 
+</span></span><span class="line"><span class="cl">This <span class="nb">time</span> your task is to push a file to the remote repository.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Details:
+</span></span><span class="line"><span class="cl">    File name: key.txt
+</span></span><span class="line"><span class="cl">    Content: <span class="s1">&#39;May I come in?&#39;</span>
+</span></span><span class="line"><span class="cl">    Branch: master
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">bandit31@bandit:/tmp/bandit31/repo$ git add .
+</span></span><span class="line"><span class="cl">bandit31@bandit:/tmp/bandit31/repo$ git commit -a -m<span class="s2">&#34;first&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>master 50ed76a<span class="o">]</span> first
+</span></span><span class="line"><span class="cl"> <span class="m">2</span> files changed, <span class="m">2</span> insertions<span class="o">(</span>+<span class="o">)</span>, <span class="m">1</span> deletion<span class="o">(</span>-<span class="o">)</span>
+</span></span><span class="line"><span class="cl"> create mode <span class="m">100644</span> key.txt
+</span></span><span class="line"><span class="cl">Enumerating objects: 6, <span class="k">done</span>.
+</span></span><span class="line"><span class="cl">Counting objects: 100% <span class="o">(</span>6/6<span class="o">)</span>, <span class="k">done</span>.
+</span></span><span class="line"><span class="cl">Delta compression using up to <span class="m">2</span> threads
+</span></span><span class="line"><span class="cl">Compressing objects: 100% <span class="o">(</span>2/2<span class="o">)</span>, <span class="k">done</span>.
+</span></span><span class="line"><span class="cl">Writing objects: 100% <span class="o">(</span>4/4<span class="o">)</span>, <span class="m">331</span> bytes <span class="p">|</span> 331.00 KiB/s, <span class="k">done</span>.
+</span></span><span class="line"><span class="cl">Total <span class="m">4</span> <span class="o">(</span>delta 0<span class="o">)</span>, reused <span class="m">0</span> <span class="o">(</span>delta 0<span class="o">)</span>, pack-reused <span class="m">0</span>
+</span></span><span class="line"><span class="cl">remote: <span class="c1">### Attempting to validate files... ####</span>
+</span></span><span class="line"><span class="cl">remote: 
+</span></span><span class="line"><span class="cl">remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+</span></span><span class="line"><span class="cl">remote: 
+</span></span><span class="line"><span class="cl">remote: Well <span class="k">done</span>! Here is the password <span class="k">for</span> the next level:
+</span></span><span class="line"><span class="cl">remote: rmCBvG56y58BXzv98yZGdO7ATVL5dW8y 
+</span></span><span class="line"><span class="cl">remote: 
+</span></span><span class="line"><span class="cl">remote: .oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.oOo.
+</span></span><span class="line"><span class="cl">remote: 
+</span></span><span class="line"><span class="cl">To ssh://localhost:2220/home/bandit31-git/repo
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="level32-33">level32-33
+</h3><p>After all this <code>git</code> stuff its time for another escape. Good luck!</p>
+<p>Tips</p>
+<p>Linux has <strong>Variables</strong> called local variables (valid in current shell), shell variables (set up by shell) and environment variables (valid systemwide). These variables have their names in uppercase only. They are defined by writing <code>VAR_NAME=var_value</code> in the command line. To see the content of a variable, you can write <code>echo $VAR_NAME</code>.</p>
+<p>To print all environment variables, you can use <code>printenv</code>.</p>
+<p>Some common that are good to know are:</p>
+<ul>
+<li><code>TERM</code> -  current terminal emulation</li>
+<li><code>HOME</code> - the path to home directory of currently logged in user</li>
+<li><code>LANG</code> - current locales settings</li>
+<li><code>PATH</code> - directory list to be searched when executing commands</li>
+<li><code>PWD</code> - pathname of the current working directory</li>
+<li><code>SHELL</code>/<code>0</code> - the path of the current user’s shell</li>
+<li><code>USER</code> - currently logged-in user</li>
+</ul>
+<p>解法：因为shell把我们输入的字符全部转换为大写了，所以无法执行正常的指令，大写的字符一般与环境变量有关，$0表示所使用shell的名字，$$表示进程id，通过使用$0来进入正常shell，接着进入bandit33查看密码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl">&gt;&gt; <span class="nv">$0</span>
+</span></span><span class="line"><span class="cl">$ whoami    
+</span></span><span class="line"><span class="cl">bandit33
+</span></span><span class="line"><span class="cl">$ ls
+</span></span><span class="line"><span class="cl">uppershell
+</span></span><span class="line"><span class="cl">$ cat /etc/bandit_pass/bandit33
+</span></span><span class="line"><span class="cl">odHo63fHiFqcWWJG9rLiLDtPm45KzUKy
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/ctf/">CTF</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+             2026-09-02
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+         <br />
+        
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>
