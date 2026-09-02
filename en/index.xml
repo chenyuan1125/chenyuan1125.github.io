@@ -7,6 +7,622 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright><atom:link href="/en/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GPT-3: In-Context Learning and the Few-Shot Explosion</title>
+        <link>/en/p/gpt-03/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/gpt-03/</guid>
+        <description>&lt;img src="/en/p/gpt-03/cover.jpg" alt="Featured image of post GPT-3: In-Context Learning and the Few-Shot Explosion" /&gt;&lt;h2 id=&#34;gpt-2s-unfinished-question&#34;&gt;GPT-2&amp;rsquo;s Unfinished Question
+&lt;/h2&gt;&lt;p&gt;GPT-2 showed two things: zero-shot capability exists, and scaling shows no saturation. But at 1.5B, zero-shot CoQA scored 55 F1 while fine-tuned SOTA was 90.7 — a huge gap.&lt;/p&gt;
+&lt;p&gt;GPT-3&amp;rsquo;s question: &lt;strong&gt;what happens at 100× the scale?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-175b-configuration&#34;&gt;The 175B Configuration
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;&lt;/th&gt;
+					&lt;th&gt;GPT-2 XL&lt;/th&gt;
+					&lt;th&gt;GPT-3&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Layers&lt;/td&gt;
+					&lt;td&gt;48&lt;/td&gt;
+					&lt;td&gt;96&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;d_model&lt;/td&gt;
+					&lt;td&gt;1600&lt;/td&gt;
+					&lt;td&gt;12288&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heads&lt;/td&gt;
+					&lt;td&gt;25&lt;/td&gt;
+					&lt;td&gt;96&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Context&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+					&lt;td&gt;2048&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Params&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;175B&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Trained on ~300B tokens (Common Crawl + WebText + books + Wikipedia), roughly 570× the text of GPT-2.&lt;/p&gt;
+&lt;h2 id=&#34;in-context-learning-the-core-discovery&#34;&gt;In-Context Learning: The Core Discovery
+&lt;/h2&gt;&lt;p&gt;GPT-3&amp;rsquo;s headline result: &lt;strong&gt;few-shot learning via prompts, no gradient updates at all.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Translate English to French:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sea otter =&amp;gt; loutre de mer
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cheese =&amp;gt; fromage
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hello =&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The model completes &amp;ldquo;bonjour&amp;rdquo; — not because it was fine-tuned on translation, but because attention over the prompt&amp;rsquo;s examples conditions the output distribution.&lt;/p&gt;
+&lt;h3 id=&#34;the-scaling-pattern&#34;&gt;The Scaling Pattern
+&lt;/h3&gt;&lt;p&gt;Across tasks, performance follows a consistent pattern: &lt;strong&gt;zero-shot &amp;lt; one-shot &amp;lt; few-shot&lt;/strong&gt;, and the gap widens with model size. Small models barely benefit from examples; 175B models benefit dramatically.&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Task&lt;/th&gt;
+					&lt;th&gt;Fine-tuned SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 zero-shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 few-shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;SuperGLUE&lt;/td&gt;
+					&lt;td&gt;89.8&lt;/td&gt;
+					&lt;td&gt;52.9&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;85.6&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;TriviaQA&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;54.2&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;71.2&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;LAMBADA&lt;/td&gt;
+					&lt;td&gt;63.2&lt;/td&gt;
+					&lt;td&gt;63.8&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;76.2&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Arithmetic (2-digit +)&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;26.5&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;80.4&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Few-shot GPT-3 matches or exceeds fine-tuned models on many tasks — with zero parameter updates.&lt;/p&gt;
+&lt;h2 id=&#34;why-icl-works-mechanistically&#34;&gt;Why ICL Works (Mechanistically)
+&lt;/h2&gt;&lt;p&gt;In-context learning is not fully understood, but the leading hypotheses:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Implicit gradient descent&lt;/strong&gt; — the forward pass over examples approximates a meta-learned update (von Oswald et al., 2022)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Induction heads&lt;/strong&gt; — specific attention heads implement &amp;ldquo;find previous occurrence of current token, copy what followed&amp;rdquo; (Olsson et al., 2022)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bayesian inference&lt;/strong&gt; — the model treats the prompt as evidence and conditions on a latent task distribution (Xie et al., 2021)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;None is the full story; all capture parts of it.&lt;/p&gt;
+&lt;h2 id=&#34;the-scaling-laws-connection&#34;&gt;The Scaling Laws Connection
+&lt;/h2&gt;&lt;p&gt;Kaplan et al. (2020) showed loss follows power laws in parameters, data, and compute:&lt;/p&gt;
+$$L(N) \propto N^{-0.076}$$&lt;p&gt;GPT-3 sits on the predicted curve. Chinchilla (2022) later showed the optimal token/parameter ratio is ~20 tokens per parameter — GPT-3 was undertrained by that measure, which is why LLaMA-65B (1.4T tokens) matches it at ~⅓ the size.&lt;/p&gt;
+&lt;h2 id=&#34;what-gpt-3-changed&#34;&gt;What GPT-3 Changed
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Prompting as interface&lt;/strong&gt; — natural language became the programming interface for models&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The API economy&lt;/strong&gt; — no fine-tuning means one model serves all users&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scaling as business strategy&lt;/strong&gt; — GPT-3 justified compute investment at a scale no paper had before&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hallucination&lt;/strong&gt; — fluent but factually wrong outputs (the term entered common usage with GPT-3)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No memory&lt;/strong&gt; — 2048-token context is tiny; later models extended this by orders of magnitude&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Compute cost&lt;/strong&gt; — few-shot inference on 175B was extremely expensive&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Undertrained by modern standards&lt;/strong&gt; — Chinchilla-optimal training would use ~3.5T tokens&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Brown, T., et al. (2020). &lt;em&gt;Language Models are Few-Shot Learners&lt;/em&gt;. arXiv:2005.14165.&lt;/li&gt;
+&lt;li&gt;Kaplan, J., et al. (2020). &lt;em&gt;Scaling Laws for Neural Language Models&lt;/em&gt;. arXiv:2001.08361.&lt;/li&gt;
+&lt;li&gt;Hoffmann, J., et al. (2022). &lt;em&gt;Training Compute-Optimal Large Language Models&lt;/em&gt;. arXiv:2203.15556.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning</title>
+        <link>/en/p/deepseek-r1-reasoning-rl/</link>
+        <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/deepseek-r1-reasoning-rl/</guid>
+        <description>&lt;img src="/en/p/deepseek-r1-reasoning-rl/cover.jpg" alt="Featured image of post DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning" /&gt;&lt;h2 id=&#34;r1-zero-pure-rl-no-sft&#34;&gt;R1-Zero: Pure RL, No SFT
+&lt;/h2&gt;&lt;p&gt;The DeepSeek-R1 paper has two models:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;R1-Zero&lt;/strong&gt;: base model + RL directly, no supervised fine-tuning&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;R1&lt;/strong&gt;: SFT cold start → RL → rejection sampling → more SFT → more RL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;R1-Zero is the scientifically interesting one: applied directly to DeepSeek-V3-Base with GRPO, it develops reasoning behaviors — self-verification, reflection, long chains of thought — without any demonstration data.&lt;/p&gt;
+&lt;h2 id=&#34;grpo-group-relative-policy-optimization&#34;&gt;GRPO: Group Relative Policy Optimization
+&lt;/h2&gt;&lt;p&gt;PPO needs a separate value model (about one extra model&amp;rsquo;s memory). GRPO drops it: sample G outputs per prompt from the old policy, use the group&amp;rsquo;s mean as baseline:&lt;/p&gt;
+$$A_i = \frac{r_i - \text{mean}(r_1, \ldots, r_G)}{\text{std}(r_1, \ldots, r_G)}$$&lt;p&gt;This turns the advantage estimate into a group-relative comparison, removing the critic network entirely.&lt;/p&gt;
+&lt;h3 id=&#34;rule-based-rewards&#34;&gt;Rule-Based Rewards
+&lt;/h3&gt;&lt;p&gt;For math/code, rewards are verifiable:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Correctness&lt;/strong&gt;: exact-match or unit tests pass&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Format&lt;/strong&gt;: response contains ``` reasoning tags and answer tags&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;No learned reward model → no reward hacking against a proxy. The model cannot fool a unit test.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/deepseek-r1-reasoning-rl/pipeline.svg&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 1: R1 training pipeline — cold start, RL, rejection sampling, second RL round&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;emergent-behaviors-in-r1-zero&#34;&gt;Emergent Behaviors in R1-Zero
+&lt;/h2&gt;&lt;p&gt;Training curves show the &amp;ldquo;aha moment&amp;rdquo;: around a certain RL step, response length jumps and accuracy climbs discontinuously. Behaviors that appear without being rewarded:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Self-verification&lt;/strong&gt;: &amp;ldquo;Wait, let me check this again&amp;hellip;&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backtracking&lt;/strong&gt;: abandoning a failed approach mid-solution&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reflection&lt;/strong&gt;: explicitly stating assumptions and testing them&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The paper&amp;rsquo;s interpretation: given only correctness rewards and enough exploration, chain-of-thought is the most natural path to correct answers.&lt;/p&gt;
+&lt;h2 id=&#34;why-r1-the-two-stage-version-is-still-needed&#34;&gt;Why R1 (the Two-Stage Version) Is Still Needed
+&lt;/h2&gt;&lt;p&gt;R1-Zero has problems: non-English mixing, endless repetition, weak instruction following. The full R1 pipeline fixes these:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;SFT cold start&lt;/strong&gt; (thousands of long-CoT examples) — gives the model a usable format&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reasoning RL&lt;/strong&gt; — GRPO on verifiable tasks&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rejection sampling + SFT&lt;/strong&gt; — generate diverse reasoning data, filter by correctness, retrain&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Second RL round&lt;/strong&gt; — now including human-preference rewards for helpfulness and harmlessness&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Benchmark&lt;/th&gt;
+					&lt;th&gt;DeepSeek-V3&lt;/th&gt;
+					&lt;th&gt;R1-Zero&lt;/th&gt;
+					&lt;th&gt;R1&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;AIME 2024&lt;/td&gt;
+					&lt;td&gt;39.2&lt;/td&gt;
+					&lt;td&gt;71.0&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;79.8&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MATH-500&lt;/td&gt;
+					&lt;td&gt;90.2&lt;/td&gt;
+					&lt;td&gt;95.9&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;97.3&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Codeforces (percentile)&lt;/td&gt;
+					&lt;td&gt;58.7&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;96.3&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPQA Diamond&lt;/td&gt;
+					&lt;td&gt;59.1&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;71.5&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;R1 matches OpenAI o1-1217 on AIME and MATH.&lt;/p&gt;
+&lt;h2 id=&#34;why-this-matters&#34;&gt;Why This Matters
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Reasoning is learnable by RL&lt;/strong&gt; — no process-supervision data (as o1 likely used) required, outcome rewards suffice&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Open replication&lt;/strong&gt; — the recipe, code, and weights are all open, unlike o1&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The efficiency question&lt;/strong&gt; — R1 achieves o1-level results with a much smaller infrastructure budget, challenging the &amp;ldquo;scale is everything&amp;rdquo; narrative&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Language mixing persists in long reasoning chains&lt;/li&gt;
+&lt;li&gt;Sensitive to prompt format (the paper itself notes format brittleness)&lt;/li&gt;
+&lt;li&gt;RL for general domains (writing, open-ended QA) still needs preference models, where reward hacking returns&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;DeepSeek-AI (2025). &lt;em&gt;DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning&lt;/em&gt;. arXiv:2501.12948.&lt;/li&gt;
+&lt;li&gt;Shao, Z., et al. (2024). &lt;em&gt;DeepSeekMath: Pushing the Limits of Mathematical Reasoning&lt;/em&gt; (GRPO origin). arXiv:2402.03300.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>containerd Communication Architecture</title>
+        <link>/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</guid>
+        <description>&lt;img src="/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/cover.jpg" alt="Featured image of post containerd Communication Architecture" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>GPT-1/2: Generative Pretraining and the Seeds of Few-Shot</title>
+        <link>/en/p/gpt-01/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/gpt-01/</guid>
+        <description>&lt;img src="/en/p/gpt-01/cover.jpg" alt="Featured image of post GPT-1/2: Generative Pretraining and the Seeds of Few-Shot" /&gt;&lt;h2 id=&#34;from-bert-to-gpt-two-symmetric-bets&#34;&gt;From BERT to GPT: Two Symmetric Bets
+&lt;/h2&gt;&lt;p&gt;2018 split NLP into two lines. BERT went bidirectional-encoder for understanding. GPT-1 went decoder-only for generation. Same Transformer substrate, opposite architecture configurations — a fork that defined the next five years.&lt;/p&gt;
+&lt;h2 id=&#34;core-design-decoder-only-and-autoregression&#34;&gt;Core Design: Decoder-Only and Autoregression
+&lt;/h2&gt;&lt;p&gt;GPT-1 extracts the Transformer decoder, drops cross-attention, stacks 12 layers of masked self-attention + FFN.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Masked self-attention&lt;/strong&gt; — each token sees only itself and the left context. Future scores are set to -∞ before softmax, so their weights become 0:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;K&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d_k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;triu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;diagonal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;softmax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Pre-norm&lt;/strong&gt; — GPT-1 places LayerNorm before each sublayer (post-norm in the original Transformer). This small change makes deep stacks trainable.&lt;/p&gt;
+&lt;h3 id=&#34;training-details&#34;&gt;Training Details
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;&lt;/th&gt;
+					&lt;th&gt;GPT-1&lt;/th&gt;
+					&lt;th&gt;GPT-2 Small&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Layers&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Hidden dim&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heads&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Params&lt;/td&gt;
+					&lt;td&gt;117M&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Data&lt;/td&gt;
+					&lt;td&gt;BookCorpus (~1B words)&lt;/td&gt;
+					&lt;td&gt;WebText (~40GB)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Batch&lt;/td&gt;
+					&lt;td&gt;64&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Sequence length&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;why-decoder-only-can-understand&#34;&gt;Why Decoder-Only Can Understand
+&lt;/h2&gt;&lt;p&gt;The counterintuitive claim: predicting the next token requires understanding everything before it — syntax, coreference, commonsense. If the model predicts &amp;ldquo;groceries&amp;rdquo; after &amp;ldquo;Xiaoming went to the supermarket and bought some ___&amp;rdquo;, it must resolve what supermarkets sell.&lt;/p&gt;
+&lt;p&gt;GPT-1 hit SOTA on 9 of 12 NLP tasks — behind BERT on absolute scores, but proof that generation subsumes understanding.&lt;/p&gt;
+&lt;h2 id=&#34;gpt-2-implicit-multitask-learning&#34;&gt;GPT-2: Implicit Multitask Learning
+&lt;/h2&gt;&lt;p&gt;GPT-2 scaled up (1.5B max) and found something more important: &lt;strong&gt;zero-shot task transfer&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Machine translation (WMT-14 En→Fr): zero-shot BLEU 11.5 — no parallel data ever seen&lt;/li&gt;
+&lt;li&gt;Reading comprehension (CoQA): 55 F1 zero-shot&lt;/li&gt;
+&lt;li&gt;Summarization (CNN/DM): competitive ROUGE-L without fine-tuning&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The model learned multiple tasks implicitly from language modeling alone.&lt;/p&gt;
+&lt;h3 id=&#34;scaling-without-saturation&#34;&gt;Scaling Without Saturation
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Model&lt;/th&gt;
+					&lt;th&gt;Params&lt;/th&gt;
+					&lt;th&gt;LAMBADA (zero-shot)&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Small&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+					&lt;td&gt;45.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Medium&lt;/td&gt;
+					&lt;td&gt;355M&lt;/td&gt;
+					&lt;td&gt;55.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Large&lt;/td&gt;
+					&lt;td&gt;774M&lt;/td&gt;
+					&lt;td&gt;58.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 XL&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;63.0%&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;No plateau. This curve directly motivated GPT-3&amp;rsquo;s 175B and the scaling-laws program.&lt;/p&gt;
+&lt;h2 id=&#34;why-gpt-12-matters&#34;&gt;Why GPT-1/2 Matters
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Decoder-only won&lt;/strong&gt; — GPT-3, LLaMA, Mistral, DeepSeek all follow this line&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zero-shot changed everything&lt;/strong&gt; — GPT-2&amp;rsquo;s discovery that models transfer without fine-tuning led directly to in-context learning, instruction tuning, and RLHF&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scaling as strategy&lt;/strong&gt; — 117M → 1.5B → 175B was not accidental; GPT-2&amp;rsquo;s data justified it&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Radford, A., et al. (2018). &lt;em&gt;Improving Language Understanding by Generative Pre-Training&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;Radford, A., et al. (2019). &lt;em&gt;Language Models are Unsupervised Multitask Learners&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;The Illustrated GPT-2: &lt;a class=&#34;link&#34; href=&#34;http://jalammar.github.io/illustrated-gpt2/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://jalammar.github.io/illustrated-gpt2/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Unix Domain Socket Source Code Analysis (OLK 6.6)</title>
+        <link>/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;img src="/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/cover.jpg" alt="Featured image of post Unix Domain Socket Source Code Analysis (OLK 6.6)" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>BERT: What Exactly Is &#39;Bidirectional&#39;?</title>
+        <link>/en/p/bert-02/</link>
+        <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/bert-02/</guid>
+        <description>&lt;img src="/en/p/bert-02/cover.jpg" alt="Featured image of post BERT: What Exactly Is &#39;Bidirectional&#39;?" /&gt;&lt;h2 id=&#34;prologue-gpt-1s-unidirectional-constraint&#34;&gt;Prologue: GPT-1&amp;rsquo;s Unidirectional Constraint
+&lt;/h2&gt;&lt;p&gt;GPT-1 uses a Transformer decoder as an autoregressive LM: each token attends only to itself and previous tokens. Reading a sentence becomes &amp;ldquo;forward-only&amp;rdquo;. For &amp;ldquo;Xiaoming gave Xiaohong ___ a book&amp;rdquo;, GPT cannot see the object &amp;ldquo;book&amp;rdquo; that follows the blank.&lt;/p&gt;
+&lt;p&gt;BERT&amp;rsquo;s name — Bidirectional Encoder Representations from Transformers — is about fixing exactly this.&lt;/p&gt;
+&lt;p&gt;But &amp;ldquo;bidirectional&amp;rdquo; costs almost nothing architecturally: &lt;strong&gt;the only change is the attention mask&lt;/strong&gt;. The hard part is training it without label leakage.&lt;/p&gt;
+&lt;h2 id=&#34;1-bidirectionality-lives-in-the-attention-mask&#34;&gt;1. Bidirectionality Lives in the Attention Mask
+&lt;/h2&gt;&lt;p&gt;GPT uses a lower-triangular causal mask. BERT uses a full matrix — every token attends to every token, including itself and future positions. No new parameters, no layer changes. Just a mask of ones instead of a triangle.&lt;/p&gt;
+&lt;h2 id=&#34;2-why-you-cant-use-a-standard-lm-objective&#34;&gt;2. Why You Can&amp;rsquo;t Use a Standard LM Objective
+&lt;/h2&gt;&lt;p&gt;If the model can see token t when predicting token t, the optimal solution is to copy the input. The LM objective degenerates into transcription. BERT&amp;rsquo;s solution: Masked Language Modeling.&lt;/p&gt;
+&lt;h3 id=&#34;the-15-masking-rate&#34;&gt;The 15% Masking Rate
+&lt;/h3&gt;&lt;p&gt;The paper states: &amp;ldquo;we mask 15% of all WordPiece tokens in each sequence at random.&amp;rdquo; No ablation over mask rates exists in the paper — 15% is a heuristic, not an optimized value.&lt;/p&gt;
+&lt;h3 id=&#34;the-801010-split&#34;&gt;The 80/10/10 Split
+&lt;/h3&gt;&lt;p&gt;Selected positions are replaced:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;80% → [MASK] token&lt;/li&gt;
+&lt;li&gt;10% → random token&lt;/li&gt;
+&lt;li&gt;10% → unchanged&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The 10% unchanged keeps the model honest: it must maintain a distributional representation for every input token, because it never knows which positions will be queried.&lt;/p&gt;
+&lt;h2 id=&#34;3-nsp-the-task-that-later-fell&#34;&gt;3. NSP: The Task That Later Fell
+&lt;/h2&gt;&lt;p&gt;Next Sentence Prediction: 50% of pairs are real adjacent sentences, 50% random. [CLS] output is used for binary classification.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The actual ablation numbers (Table 5 of the paper):&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Task&lt;/th&gt;
+					&lt;th&gt;MNLI-m&lt;/th&gt;
+					&lt;th&gt;QNLI&lt;/th&gt;
+					&lt;th&gt;MRPC&lt;/th&gt;
+					&lt;th&gt;SST-2&lt;/th&gt;
+					&lt;th&gt;SQuAD&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;BERT_BASE&lt;/td&gt;
+					&lt;td&gt;84.4&lt;/td&gt;
+					&lt;td&gt;88.4&lt;/td&gt;
+					&lt;td&gt;86.7&lt;/td&gt;
+					&lt;td&gt;92.7&lt;/td&gt;
+					&lt;td&gt;88.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;No NSP&lt;/td&gt;
+					&lt;td&gt;83.9&lt;/td&gt;
+					&lt;td&gt;84.9&lt;/td&gt;
+					&lt;td&gt;86.5&lt;/td&gt;
+					&lt;td&gt;92.6&lt;/td&gt;
+					&lt;td&gt;87.9&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Removing NSP costs &lt;strong&gt;3.5 points on QNLI&lt;/strong&gt; (a sentence-pair task) but only 0.5 on MNLI and 0.1 on SST-2. The effect is task-dependent.&lt;/p&gt;
+&lt;p&gt;RoBERTa (2019) later showed that with more data and longer training, removing NSP is neutral or slightly better:&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Setup&lt;/th&gt;
+					&lt;th&gt;SQuAD 1.1/2.0&lt;/th&gt;
+					&lt;th&gt;MNLI&lt;/th&gt;
+					&lt;th&gt;RACE&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;SEGMENT-PAIR + NSP&lt;/td&gt;
+					&lt;td&gt;90.4 / 78.7&lt;/td&gt;
+					&lt;td&gt;84.0&lt;/td&gt;
+					&lt;td&gt;64.2&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;FULL-SENTENCES, no NSP&lt;/td&gt;
+					&lt;td&gt;90.4 / 79.1&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;84.7&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;64.8&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;ALBERT replaced NSP with SOP (Sentence Order Prediction) — harder and more useful for discourse coherence.&lt;/p&gt;
+&lt;h2 id=&#34;4-details-often-gotten-wrong&#34;&gt;4. Details Often Gotten Wrong
+&lt;/h2&gt;&lt;h3 id=&#34;gelu-attribution&#34;&gt;GELU Attribution
+&lt;/h3&gt;&lt;p&gt;BERT uses GELU &amp;ldquo;following OpenAI GPT&amp;rdquo; — GPT-1 (June 2018) adopted GELU first. BERT is the inheritor, not the inventor.&lt;/p&gt;
+&lt;h3 id=&#34;squad-fine-tuning-has-parameters&#34;&gt;SQuAD Fine-tuning Has Parameters
+&lt;/h3&gt;&lt;p&gt;The start/end predictors are linear layers on top of BERT output: start_logits = W_s·h_i + b_s. Claiming &amp;ldquo;no additional parameters&amp;rdquo; is wrong.&lt;/p&gt;
+&lt;h3 id=&#34;pre-training-compute&#34;&gt;Pre-training Compute
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Batch: 256 sequences × 512 tokens = 128,000 tokens/batch&lt;/li&gt;
+&lt;li&gt;1M steps ≈ 40 epochs over 3.3B words&lt;/li&gt;
+&lt;li&gt;90% of steps use seq_len 128 (attention is quadratic); 10% use 512&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5-berts-real-contribution&#34;&gt;5. BERT&amp;rsquo;s Real Contribution
+&lt;/h2&gt;&lt;p&gt;Three layers:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Architecture&lt;/strong&gt;: full attention instead of causal — near-zero cost, huge representational gain&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Training&lt;/strong&gt;: MLM solves the &amp;ldquo;seeing yourself&amp;rdquo; problem — the objective itself prevents leakage&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Paradigm&lt;/strong&gt;: universal pretraining + lightweight fine-tuning replaced task-specific architectures&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;512 max sequence length (learned positional embeddings)&lt;/li&gt;
+&lt;li&gt;Pretrain/fine-tune mismatch persists ([MASK] never appears downstream)&lt;/li&gt;
+&lt;li&gt;Cannot generate — encoder-only has no causal factorization&lt;/li&gt;
+&lt;li&gt;NSP is inefficient: half the training signal is about sentence adjacency, later shown to be replaceable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Devlin, J., et al. (2018). &lt;em&gt;BERT: Pre-training of Deep Bidirectional Transformers&lt;/em&gt;. arXiv:1810.04805.&lt;/li&gt;
+&lt;li&gt;Liu, Y., et al. (2019). &lt;em&gt;RoBERTa&lt;/em&gt;. arXiv:1907.11692.&lt;/li&gt;
+&lt;li&gt;Lan, Z., et al. (2020). &lt;em&gt;ALBERT&lt;/em&gt;. arXiv:1909.11942.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?</title>
+        <link>/en/p/transformer-01/</link>
+        <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/transformer-01/</guid>
+        <description>&lt;img src="/en/p/transformer-01/cover.jpg" alt="Featured image of post Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?" /&gt;&lt;h2 id=&#34;prologue-the-bottleneck-of-sequential-processing&#34;&gt;Prologue: The Bottleneck of Sequential Processing
+&lt;/h2&gt;&lt;p&gt;Before 2017, sequence models meant RNNs and LSTMs. They process tokens one at a time: hidden state at step t depends on step t-1. This creates two fatal problems:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;No parallelism&lt;/strong&gt; — training cannot be parallelized across time steps, so you can&amp;rsquo;t leverage GPUs effectively&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Long-range information decay&lt;/strong&gt; — even with gating mechanisms, information from 100 steps ago gets diluted through repeated transformations&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/transformer-01/rnn-flow.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 1: RNN sequential processing — hidden state must pass through every step&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;The Transformer paper&amp;rsquo;s answer was radical: &lt;strong&gt;throw away recurrence entirely. Use attention for everything.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;self-attention-the-core-mechanism&#34;&gt;Self-Attention: The Core Mechanism
+&lt;/h2&gt;&lt;p&gt;The formula every LLM engineer knows:&lt;/p&gt;
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$&lt;p&gt;Every token computes a query, key, and value vector. The attention score between token i and token j is the dot product of query_i and key_j, scaled by √d_k, then softmaxed into weights. The output for token i is a weighted sum of all value vectors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why the √d_k scaling?&lt;/strong&gt; For large d_k, dot products grow large in magnitude, pushing softmax into regions with tiny gradients. Dividing by √d_k keeps the variance stable.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Scaled dot-product attention&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;K&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d_k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;     &lt;span class=&#34;c1&#34;&gt;# [seq, seq]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;softmax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;# weights sum to 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;output&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;                      &lt;span class=&#34;c1&#34;&gt;# [seq, d_v]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The key property: &lt;strong&gt;every token can attend to every other token in O(1) sequential steps&lt;/strong&gt;. Long-range dependencies are now direct paths, not chains of transformations.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/transformer-01/scaled-dot-product.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 2: Scaled dot-product attention&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;multi-head-attention-looking-from-different-angles&#34;&gt;Multi-Head Attention: Looking from Different Angles
+&lt;/h2&gt;&lt;p&gt;One attention head learns one type of relationship. Multi-head attention runs h heads in parallel (each with smaller d_k), concatenates their outputs:&lt;/p&gt;
+$$\text{MultiHead}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$&lt;p&gt;where each head_i = Attention(QW_i^Q, KW_i^K, VW_i^V).&lt;/p&gt;
+&lt;p&gt;With 8 heads of dimension 64 (total 512), one head might track syntax, another coreference, another positional patterns. Empirically, heads specialize without explicit instruction.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/transformer-01/multihead.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 3: Multi-head attention — h parallel attention operations&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;positional-encoding-where-am-i&#34;&gt;Positional Encoding: Where Am I?
+&lt;/h2&gt;&lt;p&gt;Attention is permutation-invariant — it has no notion of word order. &amp;ldquo;Dog bites man&amp;rdquo; and &amp;ldquo;man bites dog&amp;rdquo; produce identical attention patterns. The fix: add positional encodings to input embeddings.&lt;/p&gt;
+&lt;p&gt;The original paper used sinusoidal functions:&lt;/p&gt;
+$$PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d}}\right), \quad PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d}}\right)$$&lt;p&gt;Each dimension corresponds to a sinusoid of different wavelength. The intuition: relative positions can be computed as linear transformations, and the model can extrapolate to longer sequences.&lt;/p&gt;
+&lt;h2 id=&#34;training-details&#34;&gt;Training Details
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Parameter&lt;/th&gt;
+					&lt;th&gt;Value&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Layers (Encoder/Decoder)&lt;/td&gt;
+					&lt;td&gt;6 / 6&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Model dimension&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heads&lt;/td&gt;
+					&lt;td&gt;8&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;FFN inner dimension&lt;/td&gt;
+					&lt;td&gt;2048&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Optimizer&lt;/td&gt;
+					&lt;td&gt;Adam (β1=0.9, β2=0.98)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Learning rate schedule&lt;/td&gt;
+					&lt;td&gt;warmup 4000 steps, then ∝ d_model^-0.5 · step^-0.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Dropout&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Label smoothing&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;why-transformer-won&#34;&gt;Why Transformer Won
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Full parallelism&lt;/strong&gt; — all tokens processed simultaneously during training&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Direct long-range paths&lt;/strong&gt; — max path length between any two tokens is O(1)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalable&lt;/strong&gt; — architecture has no recurrence bottleneck, so it scales with compute&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This third property turned out to matter most. Transformer became the substrate for BERT, GPT, and every modern LLM — not because attention is theoretically optimal, but because it exploits GPUs perfectly and keeps getting better as you scale.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Vaswani, A., et al. (2017). &lt;em&gt;Attention Is All You Need&lt;/em&gt;. arXiv:1706.03762.&lt;/li&gt;
+&lt;li&gt;The Annotated Transformer: &lt;a class=&#34;link&#34; href=&#34;http://nlp.seas.harvard.edu/2018/04/03/attention.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://nlp.seas.harvard.edu/2018/04/03/attention.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>bandit实验</title>
         <link>/en/p/bandit%E5%AE%9E%E9%AA%8C/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
@@ -3188,6 +3804,42 @@ There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;注意：彩蛋要在输入6个关卡的答案后才会出现。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>IPC Source Code Analysis and Summary</title>
+        <link>/en/p/ipc-introduction/</link>
+        <pubDate>Thu, 08 Aug 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/ipc-introduction/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post IPC Source Code Analysis and Summary" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Encryption Algorithm Survey</title>
+        <link>/en/p/encryption-algorithm/</link>
+        <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/encryption-algorithm/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post Encryption Algorithm Survey" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>OS Course Project: Memory Fault Detection and Handling</title>
+        <link>/en/p/os/</link>
+        <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/os/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post OS Course Project: Memory Fault Detection and Handling" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Computer Architecture Course Notes</title>
+        <link>/en/p/architecture/</link>
+        <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/architecture/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post Computer Architecture Course Notes" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
 </description>
         </item>
         <item>

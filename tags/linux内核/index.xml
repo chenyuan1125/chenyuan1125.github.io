@@ -7,13 +7,13 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 02 Sep 2026 21:36:09 +0800</lastBuildDate><atom:link href="/tags/linux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Sep 2026 23:16:15 +0800</lastBuildDate><atom:link href="/tags/linux%E5%86%85%E6%A0%B8/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Unix Domain Socket 源码实现分析 (OLK 6.6)</title>
         <link>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
         
         <guid>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
-        <description>&lt;h2 id=&#34;引子tcp-loopback-有什么问题&#34;&gt;引子：TCP loopback 有什么问题？
+        <description>&lt;img src="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/cover.jpg" alt="Featured image of post Unix Domain Socket 源码实现分析 (OLK 6.6)" /&gt;&lt;h2 id=&#34;引子tcp-loopback-有什么问题&#34;&gt;引子：TCP loopback 有什么问题？
 &lt;/h2&gt;&lt;p&gt;两台机器通信要经过复杂的网络栈：路由、拥塞控制、校验和、分片重组。但&lt;strong&gt;同一台机器上两个进程通信&lt;/strong&gt;，走 TCP loopback 也能通，只是杀鸡用牛刀了——数据包绕了一大圈网卡环路才回来，CPU 白白做了大量不需要的协议处理。&lt;/p&gt;
 &lt;p&gt;Unix Domain Socket（UDS）就是为这个场景设计的：&lt;strong&gt;不走网络层，直接在进程间共享内存缓冲&lt;/strong&gt;。它比 TCP loopback 快 2-3 倍，CPU 消耗低一个数量级，而且在同一台机器上，UDS 的安全性天然可控（文件权限就能限制访问）。&lt;/p&gt;
 &lt;h2 id=&#34;uds-最重要的设计决策地址用路径名&#34;&gt;UDS 最重要的设计决策：地址用路径名

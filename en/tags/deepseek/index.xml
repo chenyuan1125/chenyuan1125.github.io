@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>DeepSeek on Lee</title>
+        <link>/en/tags/deepseek/</link>
+        <description>Recent content in DeepSeek on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:22:23 +0800</lastBuildDate><atom:link href="/en/tags/deepseek/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning</title>
+        <link>/en/p/deepseek-r1-reasoning-rl/</link>
+        <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/deepseek-r1-reasoning-rl/</guid>
+        <description>&lt;img src="/en/p/deepseek-r1-reasoning-rl/cover.jpg" alt="Featured image of post DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning" /&gt;&lt;h2 id=&#34;r1-zero-pure-rl-no-sft&#34;&gt;R1-Zero: Pure RL, No SFT
+&lt;/h2&gt;&lt;p&gt;The DeepSeek-R1 paper has two models:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;R1-Zero&lt;/strong&gt;: base model + RL directly, no supervised fine-tuning&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;R1&lt;/strong&gt;: SFT cold start → RL → rejection sampling → more SFT → more RL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;R1-Zero is the scientifically interesting one: applied directly to DeepSeek-V3-Base with GRPO, it develops reasoning behaviors — self-verification, reflection, long chains of thought — without any demonstration data.&lt;/p&gt;
+&lt;h2 id=&#34;grpo-group-relative-policy-optimization&#34;&gt;GRPO: Group Relative Policy Optimization
+&lt;/h2&gt;&lt;p&gt;PPO needs a separate value model (about one extra model&amp;rsquo;s memory). GRPO drops it: sample G outputs per prompt from the old policy, use the group&amp;rsquo;s mean as baseline:&lt;/p&gt;
+$$A_i = \frac{r_i - \text{mean}(r_1, \ldots, r_G)}{\text{std}(r_1, \ldots, r_G)}$$&lt;p&gt;This turns the advantage estimate into a group-relative comparison, removing the critic network entirely.&lt;/p&gt;
+&lt;h3 id=&#34;rule-based-rewards&#34;&gt;Rule-Based Rewards
+&lt;/h3&gt;&lt;p&gt;For math/code, rewards are verifiable:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Correctness&lt;/strong&gt;: exact-match or unit tests pass&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Format&lt;/strong&gt;: response contains ``` reasoning tags and answer tags&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;No learned reward model → no reward hacking against a proxy. The model cannot fool a unit test.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/deepseek-r1-reasoning-rl/pipeline.svg&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 1: R1 training pipeline — cold start, RL, rejection sampling, second RL round&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;emergent-behaviors-in-r1-zero&#34;&gt;Emergent Behaviors in R1-Zero
+&lt;/h2&gt;&lt;p&gt;Training curves show the &amp;ldquo;aha moment&amp;rdquo;: around a certain RL step, response length jumps and accuracy climbs discontinuously. Behaviors that appear without being rewarded:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Self-verification&lt;/strong&gt;: &amp;ldquo;Wait, let me check this again&amp;hellip;&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backtracking&lt;/strong&gt;: abandoning a failed approach mid-solution&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reflection&lt;/strong&gt;: explicitly stating assumptions and testing them&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The paper&amp;rsquo;s interpretation: given only correctness rewards and enough exploration, chain-of-thought is the most natural path to correct answers.&lt;/p&gt;
+&lt;h2 id=&#34;why-r1-the-two-stage-version-is-still-needed&#34;&gt;Why R1 (the Two-Stage Version) Is Still Needed
+&lt;/h2&gt;&lt;p&gt;R1-Zero has problems: non-English mixing, endless repetition, weak instruction following. The full R1 pipeline fixes these:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;SFT cold start&lt;/strong&gt; (thousands of long-CoT examples) — gives the model a usable format&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reasoning RL&lt;/strong&gt; — GRPO on verifiable tasks&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rejection sampling + SFT&lt;/strong&gt; — generate diverse reasoning data, filter by correctness, retrain&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Second RL round&lt;/strong&gt; — now including human-preference rewards for helpfulness and harmlessness&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Benchmark&lt;/th&gt;
+					&lt;th&gt;DeepSeek-V3&lt;/th&gt;
+					&lt;th&gt;R1-Zero&lt;/th&gt;
+					&lt;th&gt;R1&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;AIME 2024&lt;/td&gt;
+					&lt;td&gt;39.2&lt;/td&gt;
+					&lt;td&gt;71.0&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;79.8&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MATH-500&lt;/td&gt;
+					&lt;td&gt;90.2&lt;/td&gt;
+					&lt;td&gt;95.9&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;97.3&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Codeforces (percentile)&lt;/td&gt;
+					&lt;td&gt;58.7&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;96.3&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPQA Diamond&lt;/td&gt;
+					&lt;td&gt;59.1&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;71.5&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;R1 matches OpenAI o1-1217 on AIME and MATH.&lt;/p&gt;
+&lt;h2 id=&#34;why-this-matters&#34;&gt;Why This Matters
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Reasoning is learnable by RL&lt;/strong&gt; — no process-supervision data (as o1 likely used) required, outcome rewards suffice&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Open replication&lt;/strong&gt; — the recipe, code, and weights are all open, unlike o1&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The efficiency question&lt;/strong&gt; — R1 achieves o1-level results with a much smaller infrastructure budget, challenging the &amp;ldquo;scale is everything&amp;rdquo; narrative&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Language mixing persists in long reasoning chains&lt;/li&gt;
+&lt;li&gt;Sensitive to prompt format (the paper itself notes format brittleness)&lt;/li&gt;
+&lt;li&gt;RL for general domains (writing, open-ended QA) still needs preference models, where reward hacking returns&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;DeepSeek-AI (2025). &lt;em&gt;DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning&lt;/em&gt;. arXiv:2501.12948.&lt;/li&gt;
+&lt;li&gt;Shao, Z., et al. (2024). &lt;em&gt;DeepSeekMath: Pushing the Limits of Mathematical Reasoning&lt;/em&gt; (GRPO origin). arXiv:2402.03300.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

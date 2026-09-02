@@ -7,7 +7,199 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 02 Sep 2026 21:36:09 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Sep 2026 23:23:22 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Few-Shot</title>
+        <link>/en/tags/few-shot/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/few-shot/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>GPT-3</title>
+        <link>/en/tags/gpt-3/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/gpt-3/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>In-Context Learning</title>
+        <link>/en/tags/in-context-learning/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/in-context-learning/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>LLM</title>
+        <link>/en/tags/llm/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/llm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Scaling Law</title>
+        <link>/en/tags/scaling-law/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/scaling-law/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>DeepSeek</title>
+        <link>/en/tags/deepseek/</link>
+        <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/deepseek/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>GRPO</title>
+        <link>/en/tags/grpo/</link>
+        <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/grpo/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Reasoning</title>
+        <link>/en/tags/reasoning/</link>
+        <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/reasoning/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Reinforcement Learning</title>
+        <link>/en/tags/reinforcement-learning/</link>
+        <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/reinforcement-learning/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Containerd</title>
+        <link>/en/tags/containerd/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/containerd/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Containers</title>
+        <link>/en/tags/containers/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/containers/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Generative Pretraining</title>
+        <link>/en/tags/generative-pretraining/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/generative-pretraining/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>GPT</title>
+        <link>/en/tags/gpt/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/gpt/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>GRPC</title>
+        <link>/en/tags/grpc/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/grpc/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>IPC</title>
+        <link>/en/tags/ipc/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/ipc/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Linux Kernel</title>
+        <link>/en/tags/linux-kernel/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/linux-kernel/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Source Analysis</title>
+        <link>/en/tags/source-analysis/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/source-analysis/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Transformer</title>
+        <link>/en/tags/transformer/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/transformer/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>UDS</title>
+        <link>/en/tags/uds/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/uds/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>BERT</title>
+        <link>/en/tags/bert/</link>
+        <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/bert/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>MLM</title>
+        <link>/en/tags/mlm/</link>
+        <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/mlm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Pretraining</title>
+        <link>/en/tags/pretraining/</link>
+        <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/pretraining/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Architecture</title>
+        <link>/en/tags/architecture/</link>
+        <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/architecture/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Attention</title>
+        <link>/en/tags/attention/</link>
+        <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/attention/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>CSAPP</title>
         <link>/en/tags/csapp/</link>
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
@@ -21,6 +213,22 @@
         <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
         
         <guid>/en/tags/ctf/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Cryptography</title>
+        <link>/en/tags/cryptography/</link>
+        <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/cryptography/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>OS</title>
+        <link>/en/tags/os/</link>
+        <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/os/</guid>
         <description></description>
         </item>
         <item>

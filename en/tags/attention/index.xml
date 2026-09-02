@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Attention on Lee</title>
+        <link>/en/tags/attention/</link>
+        <description>Recent content in Attention on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:19:09 +0800</lastBuildDate><atom:link href="/en/tags/attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?</title>
+        <link>/en/p/transformer-01/</link>
+        <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/transformer-01/</guid>
+        <description>&lt;img src="/en/p/transformer-01/cover.jpg" alt="Featured image of post Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?" /&gt;&lt;h2 id=&#34;prologue-the-bottleneck-of-sequential-processing&#34;&gt;Prologue: The Bottleneck of Sequential Processing
+&lt;/h2&gt;&lt;p&gt;Before 2017, sequence models meant RNNs and LSTMs. They process tokens one at a time: hidden state at step t depends on step t-1. This creates two fatal problems:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;No parallelism&lt;/strong&gt; — training cannot be parallelized across time steps, so you can&amp;rsquo;t leverage GPUs effectively&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Long-range information decay&lt;/strong&gt; — even with gating mechanisms, information from 100 steps ago gets diluted through repeated transformations&lt;/li&gt;
+&lt;/ol&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/transformer-01/rnn-flow.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 1: RNN sequential processing — hidden state must pass through every step&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;The Transformer paper&amp;rsquo;s answer was radical: &lt;strong&gt;throw away recurrence entirely. Use attention for everything.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;self-attention-the-core-mechanism&#34;&gt;Self-Attention: The Core Mechanism
+&lt;/h2&gt;&lt;p&gt;The formula every LLM engineer knows:&lt;/p&gt;
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$&lt;p&gt;Every token computes a query, key, and value vector. The attention score between token i and token j is the dot product of query_i and key_j, scaled by √d_k, then softmaxed into weights. The output for token i is a weighted sum of all value vectors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why the √d_k scaling?&lt;/strong&gt; For large d_k, dot products grow large in magnitude, pushing softmax into regions with tiny gradients. Dividing by √d_k keeps the variance stable.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Scaled dot-product attention&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;K&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d_k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;     &lt;span class=&#34;c1&#34;&gt;# [seq, seq]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;softmax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;# weights sum to 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;output&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;V&lt;/span&gt;                      &lt;span class=&#34;c1&#34;&gt;# [seq, d_v]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The key property: &lt;strong&gt;every token can attend to every other token in O(1) sequential steps&lt;/strong&gt;. Long-range dependencies are now direct paths, not chains of transformations.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/transformer-01/scaled-dot-product.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 2: Scaled dot-product attention&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;multi-head-attention-looking-from-different-angles&#34;&gt;Multi-Head Attention: Looking from Different Angles
+&lt;/h2&gt;&lt;p&gt;One attention head learns one type of relationship. Multi-head attention runs h heads in parallel (each with smaller d_k), concatenates their outputs:&lt;/p&gt;
+$$\text{MultiHead}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$&lt;p&gt;where each head_i = Attention(QW_i^Q, KW_i^K, VW_i^V).&lt;/p&gt;
+&lt;p&gt;With 8 heads of dimension 64 (total 512), one head might track syntax, another coreference, another positional patterns. Empirically, heads specialize without explicit instruction.&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/transformer-01/multihead.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 3: Multi-head attention — h parallel attention operations&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;positional-encoding-where-am-i&#34;&gt;Positional Encoding: Where Am I?
+&lt;/h2&gt;&lt;p&gt;Attention is permutation-invariant — it has no notion of word order. &amp;ldquo;Dog bites man&amp;rdquo; and &amp;ldquo;man bites dog&amp;rdquo; produce identical attention patterns. The fix: add positional encodings to input embeddings.&lt;/p&gt;
+&lt;p&gt;The original paper used sinusoidal functions:&lt;/p&gt;
+$$PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d}}\right), \quad PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d}}\right)$$&lt;p&gt;Each dimension corresponds to a sinusoid of different wavelength. The intuition: relative positions can be computed as linear transformations, and the model can extrapolate to longer sequences.&lt;/p&gt;
+&lt;h2 id=&#34;training-details&#34;&gt;Training Details
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Parameter&lt;/th&gt;
+					&lt;th&gt;Value&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Layers (Encoder/Decoder)&lt;/td&gt;
+					&lt;td&gt;6 / 6&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Model dimension&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heads&lt;/td&gt;
+					&lt;td&gt;8&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;FFN inner dimension&lt;/td&gt;
+					&lt;td&gt;2048&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Optimizer&lt;/td&gt;
+					&lt;td&gt;Adam (β1=0.9, β2=0.98)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Learning rate schedule&lt;/td&gt;
+					&lt;td&gt;warmup 4000 steps, then ∝ d_model^-0.5 · step^-0.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Dropout&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Label smoothing&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;why-transformer-won&#34;&gt;Why Transformer Won
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Full parallelism&lt;/strong&gt; — all tokens processed simultaneously during training&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Direct long-range paths&lt;/strong&gt; — max path length between any two tokens is O(1)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalable&lt;/strong&gt; — architecture has no recurrence bottleneck, so it scales with compute&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This third property turned out to matter most. Transformer became the substrate for BERT, GPT, and every modern LLM — not because attention is theoretically optimal, but because it exploits GPUs perfectly and keeps getting better as you scale.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Vaswani, A., et al. (2017). &lt;em&gt;Attention Is All You Need&lt;/em&gt;. arXiv:1706.03762.&lt;/li&gt;
+&lt;li&gt;The Annotated Transformer: &lt;a class=&#34;link&#34; href=&#34;http://nlp.seas.harvard.edu/2018/04/03/attention.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://nlp.seas.harvard.edu/2018/04/03/attention.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

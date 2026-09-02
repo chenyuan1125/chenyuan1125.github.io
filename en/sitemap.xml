@@ -2,6 +2,357 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/en/categories/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/categories/"
+                />
+  </url><url>
+    <loc>/en/tags/few-shot/</loc>
+    <lastmod>2026-09-02T23:21:52+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/few-shot/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/few-shot/"
+                />
+  </url><url>
+    <loc>/en/tags/gpt-3/</loc>
+    <lastmod>2026-09-02T23:21:52+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/gpt-3/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/gpt-3/"
+                />
+  </url><url>
+    <loc>/en/p/gpt-03/</loc>
+    <lastmod>2026-09-02T23:21:52+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/gpt-03/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/gpt-03/"
+                />
+  </url><url>
+    <loc>/en/tags/in-context-learning/</loc>
+    <lastmod>2026-09-02T23:21:52+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/in-context-learning/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/in-context-learning/"
+                />
+  </url><url>
+    <loc>/en/tags/llm/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+  </url><url>
+    <loc>/en/categories/llm-architecture/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+  </url><url>
+    <loc>/en/post/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/en/tags/scaling-law/</loc>
+    <lastmod>2026-09-02T23:21:52+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/scaling-law/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/scaling-law/"
+                />
+  </url><url>
+    <loc>/en/tags/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/en/tags/deepseek/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/deepseek/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/deepseek/"
+                />
+  </url><url>
+    <loc>/en/p/deepseek-r1-reasoning-rl/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/deepseek-r1-reasoning-rl/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/"
+                />
+  </url><url>
+    <loc>/en/tags/grpo/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/grpo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/grpo/"
+                />
+  </url><url>
+    <loc>/en/tags/reasoning/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/reinforcement-learning/</loc>
+    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/containerd/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/containerd/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/containerd/"
+                />
+  </url><url>
+    <loc>/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"
+                />
+  </url><url>
+    <loc>/en/categories/containers/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/containers/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/generative-pretraining/</loc>
+    <lastmod>2026-09-02T23:20:45+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/gpt/</loc>
+    <lastmod>2026-09-02T23:20:45+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/gpt/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/gpt/"
+                />
+  </url><url>
+    <loc>/en/p/gpt-01/</loc>
+    <lastmod>2026-09-02T23:20:45+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/gpt-01/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/gpt-01/"
+                />
+  </url><url>
+    <loc>/en/tags/grpc/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/grpc/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/grpc/"
+                />
+  </url><url>
+    <loc>/en/tags/ipc/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/ipc/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/ipc/"
+                />
+  </url><url>
+    <loc>/en/categories/linux-kernel/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/linux-kernel/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/source-analysis/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/transformer/</loc>
+    <lastmod>2026-09-02T23:20:45+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/transformer/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/transformer/"
+                />
+  </url><url>
+    <loc>/en/tags/uds/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/uds/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/uds/"
+                />
+  </url><url>
+    <loc>/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
+                />
+  </url><url>
+    <loc>/en/tags/bert/</loc>
+    <lastmod>2026-09-02T23:19:43+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/bert/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/bert/"
+                />
+  </url><url>
+    <loc>/en/p/bert-02/</loc>
+    <lastmod>2026-09-02T23:19:43+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/bert-02/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/bert-02/"
+                />
+  </url><url>
+    <loc>/en/tags/mlm/</loc>
+    <lastmod>2026-09-02T23:19:43+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/mlm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/mlm/"
+                />
+  </url><url>
+    <loc>/en/tags/pretraining/</loc>
+    <lastmod>2026-09-02T23:19:43+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/architecture/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/attention/</loc>
+    <lastmod>2026-09-02T23:19:09+08:00</lastmod>
+  </url><url>
+    <loc>/en/p/transformer-01/</loc>
+    <lastmod>2026-09-02T23:19:09+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/transformer-01/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/"
+                />
+  </url><url>
     <loc>/en/p/bandit%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-02T21:36:09+08:00</lastmod>
     <xhtml:link
@@ -13,19 +364,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/p/bandit%E5%AE%9E%E9%AA%8C/"
-                />
-  </url><url>
-    <loc>/en/categories/</loc>
-    <lastmod>2026-09-02T22:38:44+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/categories/"
                 />
   </url><url>
     <loc>/en/tags/csapp/</loc>
@@ -80,19 +418,6 @@
                 href="/tags/ctf/"
                 />
   </url><url>
-    <loc>/en/post/</loc>
-    <lastmod>2026-09-02T21:36:09+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
     <loc>/en/series/</loc>
     <lastmod>2026-09-02T21:36:09+08:00</lastmod>
     <xhtml:link
@@ -104,19 +429,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/series/"
-                />
-  </url><url>
-    <loc>/en/tags/</loc>
-    <lastmod>2026-09-02T21:36:09+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
                 />
   </url><url>
     <loc>/en/p/csappattack%E5%AE%9E%E9%AA%8C/</loc>
@@ -144,6 +456,83 @@
                 hreflang="zh-cn"
                 href="/p/csappbomb%E5%AE%9E%E9%AA%8C/"
                 />
+  </url><url>
+    <loc>/en/p/ipc-introduction/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/ipc-introduction/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/"
+                />
+  </url><url>
+    <loc>/en/tags/cryptography/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/p/encryption-algorithm/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/encryption-algorithm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/"
+                />
+  </url><url>
+    <loc>/en/categories/tech-framework/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/categories/labs/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/os/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/os/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/os/"
+                />
+  </url><url>
+    <loc>/en/p/os/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/os/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/"
+                />
+  </url><url>
+    <loc>/en/p/architecture/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/architecture/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/"
+                />
+  </url><url>
+    <loc>/en/categories/courses/</loc>
+    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
   </url><url>
     <loc>/en/tags/hugo%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2026-09-02T21:36:09+08:00</lastmod>
@@ -288,6 +677,19 @@
                 href="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/"
                 />
   </url><url>
+    <loc>/en/categories/%E5%AE%9E%E9%AA%8C/</loc>
+    <lastmod>2026-09-02T23:18:15+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/categories/%E5%AE%9E%E9%AA%8C/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/categories/%E5%AE%9E%E9%AA%8C/"
+                />
+  </url><url>
     <loc>/en/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2026-09-02T22:38:12+08:00</lastmod>
     <xhtml:link
@@ -299,6 +701,19 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/"
+                />
+  </url><url>
+    <loc>/en/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
+    <lastmod>2026-09-02T23:18:15+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
                 />
   </url><url>
     <loc>/en/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</loc>
@@ -314,17 +729,17 @@
                 href="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/"
                 />
   </url><url>
-    <loc>/en/categories/%E5%AE%9E%E9%AA%8C/</loc>
-    <lastmod>2026-09-02T21:36:09+08:00</lastmod>
+    <loc>/en/categories/%E6%95%99%E7%A8%8B/</loc>
+    <lastmod>2026-09-02T23:18:15+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E5%AE%9E%E9%AA%8C/"
+                href="/en/categories/%E6%95%99%E7%A8%8B/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E5%AE%9E%E9%AA%8C/"
+                href="/categories/%E6%95%99%E7%A8%8B/"
                 />
   </url><url>
     <loc>/en/search/</loc>
@@ -338,32 +753,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/search/"
-                />
-  </url><url>
-    <loc>/en/categories/%E6%95%99%E7%A8%8B/</loc>
-    <lastmod>2026-09-02T21:36:09+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/categories/%E6%95%99%E7%A8%8B/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/categories/%E6%95%99%E7%A8%8B/"
-                />
-  </url><url>
-    <loc>/en/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
-    <lastmod>2026-09-02T21:36:09+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
                 />
   </url><url>
     <loc>/en/%E9%93%BE%E6%8E%A5/</loc>

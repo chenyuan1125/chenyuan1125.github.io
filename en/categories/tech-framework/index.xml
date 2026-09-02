@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Tech Framework on Lee</title>
+        <link>/en/categories/tech-framework/</link>
+        <description>Recent content in Tech Framework on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:23:22 +0800</lastBuildDate><atom:link href="/en/categories/tech-framework/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Encryption Algorithm Survey</title>
+        <link>/en/p/encryption-algorithm/</link>
+        <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/encryption-algorithm/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post Encryption Algorithm Survey" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
