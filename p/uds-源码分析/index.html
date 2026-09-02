@@ -4,13 +4,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。">
 <title>Unix Domain Socket 源码实现分析 (OLK 6.6)</title>
 
-
-<link rel="canonical" href="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
-
+<link rel='canonical' href='/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/'>
 
 <link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="Unix Domain Socket 源码实现分析 (OLK 6.6)">
 <meta property='og:description' content="深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。">
@@ -46,26 +40,32 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
     </button>
 
     <header>
-        <figure class="site-avatar">
+        
+            
+            <figure class="site-avatar">
                 <a href="/">
-                    <img src="/img/avatar.png" 
-                        width="300"
-                        height="300"
-                        class="site-logo"
-                        loading="lazy"
-                        alt="Avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_20837a20b60ee220.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
                 </a>
                 
                     <span class="emoji">🍥</span>
                 
             </figure>
+            
         
         
         <div class="site-meta">
@@ -99,7 +99,7 @@
                 <li>
                     <a 
                         href='https://github.com/chenyuan1125'
-                        
+                        target="_blank"
                         title="GitHub"
                         rel="me"
                     >
@@ -123,6 +123,8 @@
         <li >
             <a href='/%E5%85%B3%E4%BA%8E/' >
                 
+                
+                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="7" r="4" />
@@ -139,6 +141,8 @@
         
         <li >
             <a href='/archives/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -158,6 +162,8 @@
         <li >
             <a href='/search/' >
                 
+                
+                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="10" cy="10" r="7" />
@@ -175,6 +181,8 @@
         <li >
             <a href='/%E9%93%BE%E6%8E%A5/' >
                 
+                
+                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
@@ -190,8 +198,9 @@
         
         <li class="menu-bottom-section">
             <ol class="menu">
-                    <li id="i18n-switch">  
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4 5h7" />
   <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
@@ -202,24 +211,15 @@
 
 
 
-                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
-                            
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
                                 
+                                    <option value="/en/" >English</option>
                                 
-                                    
+                                    <option value="/" selected>中文</option>
                                 
-                                <option value="/en/" >English</option>
-                            
-                                
-                                
-                                    
-                                        
-                                    
-                                
-                                <option value="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" selected>中文</option>
-                            
-                        </select>
-                    </li>
+                            </select>
+                        </li>
+                    
                 
 
                 
@@ -240,7 +240,7 @@
 
 
 
-                        <span></span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -265,11 +265,10 @@
 
 
         </div>
-        <h2 class="widget-title section-title"></h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
-            <nav class="toc-nav" id="TableOfContents">
-                
+            <nav id="TableOfContents">
   <ol>
     <li><a href="#引子tcp-loopback-有什么问题">引子：TCP loopback 有什么问题？</a></li>
     <li><a href="#uds-最重要的设计决策地址用路径名">UDS 最重要的设计决策：地址用路径名</a></li>
@@ -300,8 +299,7 @@
     <li><a href="#总结">总结</a></li>
     <li><a href="#参考资料">参考资料</a></li>
   </ol>
-
-            </nav>
+</nav>
         </div>
     </section>
 
@@ -344,14 +342,10 @@
     
     
     
-    
-    
-    
-    <footer class="article-meta">
+    <footer class="article-time">
         
-            <div class="inline-meta">
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
   <circle cx="18" cy="18" r="4" />
@@ -360,11 +354,13 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                    <time class="article-time--published" datetime='2026-08-28T00:00:00Z'>2026-08-28</time>
-                
+                <time class="article-time--published" datetime='2026-08-28T00:00:00Z'>2026-08-28</time>
+            </div>
+        
 
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -372,68 +368,18 @@
 
 
 
-                    <time class="article-time--reading">
-                        
-                    </time>
-                
+                <time class="article-time--reading">
+                    阅读时长: 7 分钟
+                </time>
             </div>
         
-
-        
-
-        
     </footer>
+    
+
     
 </div>
 
 </header>
-
-    
-    <aside class="article-toc">
-        <details>
-            <summary>
-                <div class="article-toc-title">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
-                    <span></span>
-                </div>
-            </summary>
-            <nav class="toc-nav">
-                
-  <ol>
-    <li><a href="#引子tcp-loopback-有什么问题">引子：TCP loopback 有什么问题？</a></li>
-    <li><a href="#uds-最重要的设计决策地址用路径名">UDS 最重要的设计决策：地址用路径名</a></li>
-    <li><a href="#创建-socket比-tcp-少一层">创建 socket：比 TCP 少一层</a>
-      <ol>
-        <li><a href="#socket-系统调用">socket() 系统调用</a></li>
-        <li><a href="#创建-socket-对象__sys_socket_create--sock_create--__sock_create">创建 socket 对象：__sys_socket_create → sock_create → __sock_create</a></li>
-        <li><a href="#映射到文件描述符">映射到文件描述符</a></li>
-      </ol>
-    </li>
-    <li><a href="#bind把-socket-和路径绑定">bind：把 socket 和路径绑定</a></li>
-    <li><a href="#listenaccept连接管理">listen/accept：连接管理</a></li>
-    <li><a href="#connectuds-最关键的链路">connect：UDS 最关键的链路</a></li>
-    <li><a href="#数据收发不走网络栈">数据收发：不走网络栈</a>
-      <ol>
-        <li><a href="#send直接把数据放到接收队列">send：直接把数据放到接收队列</a></li>
-        <li><a href="#recv从接收队列取">recv：从接收队列取</a></li>
-      </ol>
-    </li>
-    <li><a href="#进阶uds-独有的能力">进阶：UDS 独有的能力</a>
-      <ol>
-        <li><a href="#1-文件描述符传递scm_rights">1. 文件描述符传递（SCM_RIGHTS）</a></li>
-        <li><a href="#2-证书传递scm_credentials">2. 证书传递（SCM_CREDENTIALS）</a></li>
-        <li><a href="#3-sock_seqpacket流式--保边界">3. SOCK_SEQPACKET：流式 + 保边界</a></li>
-      </ol>
-    </li>
-    <li><a href="#从-ai-安全视角看-uds">从 AI 安全视角看 UDS</a></li>
-    <li><a href="#总结">总结</a></li>
-    <li><a href="#参考资料">参考资料</a></li>
-  </ol>
-
-            </nav>
-        </details>
-    </aside>
-    
 
     <section class="article-content">
     
@@ -1112,7 +1058,7 @@
 </section>
 
 
-    <footer class="article-meta article-footer">
+    <footer class="article-footer">
     
     <section class="article-tags">
         
@@ -1128,7 +1074,7 @@
 
 
     
-    <section class="article-copyright inline-meta">
+    <section class="article-copyright">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
@@ -1139,7 +1085,7 @@
 
         <span>Licensed under CC BY-NC-SA 4.0</span>
     </section>
-    <section class="article-lastmod inline-meta">
+    <section class="article-lastmod">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
@@ -1149,7 +1095,7 @@
 
 
         <span>
-             2026-09-02
+            最后更新于 2026-09-02
         </span>
     </section></footer>
 
@@ -1193,14 +1139,15 @@
 
     
 
-<aside>
-    <h2 class="section-title"></h2>
-    <div class="subsection-list">
-        <div class="article-list--tile">
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
             
                 
 <article class="">
     <a href="/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/">
+        
         
 
         <div class="article-details">
@@ -1208,6 +1155,7 @@
         </div>
     </a>
 </article>
+
             
         </div>
     </div>
@@ -1216,8 +1164,7 @@
      
     
         
-
-        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
 <link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
 <div id="waline" class="waline-container"></div>
 <style>
@@ -1248,49 +1195,109 @@
     </section>
     
     <section class="powerby">
-         <br />
-        
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
 
     
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
-
-
-<script type="module">
-    import gallery from '\/ts\/gallery.js';
-
-    const articleContent = document.querySelector('.article-content');
-    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
     
-    if (shouldLoad) {
-        gallery(articleContent);
+    <div class="pswp__bg"></div>
 
-        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
-        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+    
+    <div class="pswp__scroll-wrap">
 
-        const styleTag = document.createElement('link');
-        styleTag.rel = 'stylesheet';
-        styleTag.href = styleHref;
-        document.head.appendChild(styleTag);
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
 
-        const lightbox = new PhotoSwipeLightbox({
-            gallerySelector: '.article-content',
-            childSelector: 'figure a.image-link',
-            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
-        });
-        lightbox.init();
-    }
-</script>
+        
+        <div class="pswp__ui pswp__ui--hidden">
 
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="/vendor/photoswipe/photoswipe.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/photoswipe/photoswipe-ui-default.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
+            >
     
 
             </main>
         </div>
-        
-<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+        <script 
+                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
 
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
 
 
     </body>

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>大模型 on 辰远</title>
         <link>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</link>
@@ -7,10 +8,221 @@
         <language>zh-cn</language>
         <copyright>Lee</copyright>
         <lastBuildDate>Wed, 02 Sep 2026 21:36:09 +0800</lastBuildDate><atom:link href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" /><item>
-            <title>01 | 一切的起点：Transformer 到底解决了什么问题？</title>
-            <link>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</link>
-            <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</guid>
-            <description>&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover.jpg&#34; alt=&#34;Featured image of post 01 | 一切的起点：Transformer 到底解决了什么问题？&#34; /&gt;&lt;blockquote class=&#34;alert alert-note&#34;&gt;&#xD;&#xA;    &lt;p&gt;系列第一篇。这个系列会从 2017 年的 Transformer 开始，一路读到今天，每天一篇经典模型架构的论文或技术报告。&lt;/p&gt;&#xA;&lt;p&gt;我是一名刚入行大模型算法、主攻 AI 安全的工程师，所以每篇结尾我都会留一块「护栏视角」，聊聊这篇论文和 AI 安全的关系。&lt;/p&gt;&#xA;&lt;p&gt;写得通俗一点，但该有的重点一个不少。&lt;/p&gt;&#xA;&#xD;&#xA;&lt;/blockquote&gt;&#xD;&#xA;&#xA;&lt;h2 id=&#34;先说结论transformer-做对了一件事&#34;&gt;先说结论：Transformer 做对了一件事&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;2017 年 Google 发了一篇论文叫 &lt;em&gt;Attention Is All You Need&lt;/em&gt;（注意力就是你所需要的一切）。&lt;/p&gt;&#xA;&lt;p&gt;这个名字很狂，但它是真话：&lt;strong&gt;它把「注意力机制」从配角变成了主角&lt;/strong&gt;，其他组件全部降级成辅助。此后的 GPT、BERT、Llama、DeepSeek……全都是这篇论文的子孙后代。&lt;/p&gt;&#xA;&lt;p&gt;作为系列的第一篇，我想先不聊公式，而是回答一个问题：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;在 Transformer 出现之前，处理「序列」（也就是有先后顺序的数据，比如一句话、一段声音、一帧帧视频）用的是 RNN。RNN 到底哪里不行，逼得大家非要发明一个新东西？&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;p&gt;搞清楚「它解决了什么问题」，比背下来它的结构重要一万倍。&lt;/p&gt;&#xA;&lt;h2 id=&#34;背景rnn-的困境一句话要一个字一个字地读&#34;&gt;背景：RNN 的困境——一句话要一个字一个字地读&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;RNN（循环神经网络）处理一句话的方式，很像一个只长了一只眼睛、而且&lt;strong&gt;没有记忆本&lt;/strong&gt;的人读书：&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/rnn-flow.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 1：RNN 串行读取示意——每一步的输出都依赖上一步（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;注意那个箭头：&lt;strong&gt;每一步的输出，都依赖上一步的结果&lt;/strong&gt;。第 3 步想理解「猫」，必须先等第 2 步算完；第 2 步又得等第 1 步。&lt;/p&gt;&#xA;&lt;p&gt;这带来两个致命问题：&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;问题 1：慢。&lt;/strong&gt; 句子有 100 个词，就得串行算 100 步。GPU 再强也只能干瞪眼，因为没法并行——这就像你雇了 100 个工人，却让他们排成一列传砖头。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;问题 2：健忘。&lt;/strong&gt; 信息要从第 1 步一路「传」到第 100 步，中间每传一手就磨损一点。这就是著名的&lt;strong&gt;长距离依赖问题&lt;/strong&gt;：句子开头提到的人名，到句尾早就被冲淡了。你读一段 200 字的推理小说，作者在第 3 句埋的线索，你读到第 50 句还记得；RNN 不记得。&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;我自己的体会：RNN 不是「笨」，是&lt;strong&gt;人的直觉害了它&lt;/strong&gt;。我们人类读句子确实是一个字一个字读的，所以最早做序列建模的人就照着这个直觉造了 RNN。但机器的优势从来不是「像人」，而是「可以同时看所有东西」。&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;h2 id=&#34;核心self-attention-在干嘛一次性看全再决定谁重要&#34;&gt;核心：Self-Attention 在干嘛？——一次性看全，再决定谁重要&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;Transformer 的答案简单粗暴：&lt;strong&gt;不要一个字一个字读了，把整句话一次性全部摊开，然后让每个词自己去找「谁对我重要」。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;这就是自注意力（Self-Attention）。&lt;/p&gt;&#xA;&lt;h3 id=&#34;用一个具体例子翻译我-爱-猫&#34;&gt;用一个具体例子：翻译「我 爱 猫」&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;假设输入只有三个词：&lt;code&gt;我&lt;/code&gt;、&lt;code&gt;爱&lt;/code&gt;、&lt;code&gt;猫&lt;/code&gt;。Transformer 会做三件事：&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;第一步：每个词都变成一串数字（向量）。&lt;/strong&gt;&#xA;&lt;code&gt;我&lt;/code&gt; → &lt;code&gt;[0.1, 0.8, ...]&lt;/code&gt;，&lt;code&gt;爱&lt;/code&gt; → &lt;code&gt;[0.5, 0.2, ...]&lt;/code&gt;，&lt;code&gt;猫&lt;/code&gt; → &lt;code&gt;[0.9, 0.4, ...]&lt;/code&gt;。数字具体是什么不重要，你只要知道：&lt;strong&gt;意思相近的词，向量距离近&lt;/strong&gt;。这一步叫 Embedding，相当于给每个词发了一张「身份证」。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;第二步：每个词对整句话做一次「注意力投票」。&lt;/strong&gt;&#xA;每个词都要回答一个问题：「这句话里，谁和我关系最大？」&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;我&lt;/code&gt; 看了看：&lt;code&gt;我&lt;/code&gt; 和我自己关系 0.3，&lt;code&gt;爱&lt;/code&gt; 和我关系 0.6，&lt;code&gt;猫&lt;/code&gt; 和我关系 0.1 → 归一化成权重 &lt;code&gt;[0.3, 0.6, 0.1]&lt;/code&gt;（和为 1）&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;爱&lt;/code&gt; 看了看：&lt;code&gt;我&lt;/code&gt; 0.4，&lt;code&gt;爱&lt;/code&gt; 自己 0.2，&lt;code&gt;猫&lt;/code&gt; 0.4&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;猫&lt;/code&gt; 看了看：&lt;code&gt;我&lt;/code&gt; 0.1，&lt;code&gt;爱&lt;/code&gt; 0.5，&lt;code&gt;猫&lt;/code&gt; 自己 0.4&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;这就得到一张 &lt;strong&gt;3×3 的注意力矩阵&lt;/strong&gt;，每一行代表「这个词怎么看整句话」：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;我&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;爱&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;猫&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&lt;strong&gt;我&lt;/strong&gt;&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&lt;strong&gt;爱&lt;/strong&gt;&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&lt;strong&gt;猫&lt;/strong&gt;&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;&lt;strong&gt;第三步：用这张表把每个词的信息重新混合一遍。&lt;/strong&gt;&#xA;&lt;code&gt;我&lt;/code&gt; 的新表示 = 0.3×&lt;code&gt;我&lt;/code&gt; + 0.6×&lt;code&gt;爱&lt;/code&gt; + 0.1×&lt;code&gt;猫&lt;/code&gt;。也就是说，&lt;code&gt;我&lt;/code&gt; 的最终表示里，混进了 60% 的 &lt;code&gt;爱&lt;/code&gt; 的信息——因为在这个句子里，「我」和「爱」关系最紧密。&lt;/p&gt;&#xA;&lt;p&gt;这一步做完，&lt;strong&gt;每个词都变成了「结合了上下文语境」的新向量&lt;/strong&gt;。这就是自注意力的全部核心：&lt;em&gt;加权求和&lt;/em&gt;。就这么简单。&lt;/p&gt;&#xA;&lt;h3 id=&#34;为什么它天然不怕长距离&#34;&gt;为什么它天然不怕长距离？&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;因为 &lt;code&gt;猫&lt;/code&gt; 想联系句首的 &lt;code&gt;我&lt;/code&gt;，&lt;strong&gt;一步就到&lt;/strong&gt;，不需要像 RNN 那样传 100 手。距离不是问题，注意力权重说了算。&lt;/p&gt;&#xA;&lt;h3 id=&#34;那-query--key--value-又是什么&#34;&gt;那 Query / Key / Value 又是什么？&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;这是所有讲 Transformer 的文章最容易把人劝退的地方。我的理解是这样的——想象你去图书馆借书：&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-lib.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 2：QKV 图书馆比喻——Query 找书、Key 是标签、Value 是内容（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Query（查询）&lt;/strong&gt; = 你想找什么：「我要找讲猫的书」&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Key（书脊标签）&lt;/strong&gt; = 每本书的标签：「这本讲猫」「这本讲狗」&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Value（书的内容）&lt;/strong&gt; = 书真正的内容&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;注意力做的事情就是：&lt;strong&gt;拿你的 Query 去和所有书的 Key 比对相似度，相似度高的书，多读一点它的 Value。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;公式长这样，但别怕，你已经懂了它的意思：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;&#xA;&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2&#xA;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&#xA;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Attention(Q, K, V) = softmax(Q·Kᵀ / √d) · V&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            └─ Q和每个K比相似度 ─┘   └─ 按权重取内容 ─┘&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&lt;p&gt;&lt;code&gt;√d&lt;/code&gt; 是除一个缩放因子，防止分数太大把 softmax 推成 0/1 两极分化（就是「防止一个人垄断投票」）。softmax 就是把一堆分数归一化成「和为 1 的权重」。&lt;/p&gt;&#xA;&lt;p&gt;论文原图把这个流程画得很清楚（左半部分就是上面的公式，右半部分是并行版）：&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/scaled-dot-product.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 3：Scaled Dot-Product Attention（左）与 Multi-Head Attention（右）（图源：Vaswani et al., 2017, Figure 2）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-flow.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 4：QKV 计算流程（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;一个经常被忽略但很重要的细节：Q、K、V 并不是词向量本身，而是&lt;strong&gt;各自经过一个不同的线性变换&lt;/strong&gt;得到的。为什么要分开变换？因为「我想找什么」和「我能提供什么」是两码事——在「猫」这个词上，&lt;code&gt;我&lt;/code&gt; 想找的信息和 &lt;code&gt;猫&lt;/code&gt; 能提供的信息，当然不该用同一副面孔。&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;h2 id=&#34;multi-head不要一个视角要八个&#34;&gt;Multi-Head：不要一个视角，要八个&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;单一注意力只有一种「关系观」。但句子里的关系是多种多样的：语法关系、指代关系、情感关系……&lt;/p&gt;&#xA;&lt;p&gt;Multi-Head Attention（多头注意力）就是把注意力&lt;strong&gt;同时做 8 份&lt;/strong&gt;（论文里是 8 个头），每份用不同的 Q/K/V 变换，相当于 8 个不同角度的「读书人」同时读这句话，最后把 8 份结果拼起来。论文里的结构是这样（右边就是 Multi-Head 的拼装方式）：&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 5：Multi-Head Attention 结构（图源：Vaswani et al., 2017, Figure 2 右）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead-flow.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 6：多头注意力——8 个分工不同的头（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;后来 Anthropic 等团队做可解释性研究时发现，这些「头」真的各司其职：有的头专门盯指代（it 指谁），有的头专门盯句法。&lt;strong&gt;多头注意力 = 模型的多个&amp;quot;分工器官&amp;quot;&lt;/strong&gt;，这个视角后面讲 AI 安全时还会用到。&lt;/p&gt;&#xA;&lt;h2 id=&#34;位置编码不按顺序读了怎么知道先后&#34;&gt;位置编码：不按顺序读了，怎么知道先后？&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;RNN 按顺序读，天然自带「顺序感」。Transformer 一次性全读，顺序信息就丢了——&lt;code&gt;猫爱我&lt;/code&gt; 和 &lt;code&gt;我爱猫&lt;/code&gt; 摊开后长得一模一样，这不行。&lt;/p&gt;&#xA;&lt;p&gt;解法：&lt;strong&gt;在词向量上叠加一个「位置信号」&lt;/strong&gt;，让每个位置的向量长得不一样。&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/posenc-flow.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 7：位置编码——词向量 &amp;#43; 位置向量 = 带顺序信息的向量（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;位置向量用正弦/余弦函数生成（论文里的做法），也可以学出来。它相当于给每个词发了一张「第几号座位」的票——向量相加之后，模型既知道词义，又知道顺序。&lt;/p&gt;&#xA;&lt;h2 id=&#34;看一眼论文里的完整架构&#34;&gt;看一眼论文里的完整架构&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;把上面几个零件拼起来，就是论文原版的 Transformer（下图）。左边是 Encoder：N 层堆叠，每层 = 多头注意力 + 前馈网络；右边是 Decoder：结构类似，但多了 Masked 多头注意力——它只能看已经生成的词（不然翻译的时候偷看答案）。&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/arch.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 8：Transformer 完整架构（图源：Vaswani et al., 2017, Figure 1）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;不过注意：&lt;strong&gt;论文版是 Encoder-Decoder（翻译场景），今天的大模型基本都是 Decoder-only（只留右半边，且没有 Masked 之前的那层交叉注意力）。&lt;/strong&gt; 下一篇读 BERT/GPT 时会讲到这条分岔路。你只需要知道：今天所有大模型的骨架，都能在这张图里找到原型。&lt;/p&gt;&#xA;&lt;h2 id=&#34;为什么它赢了三个字可扩展&#34;&gt;为什么它赢了？三个字：可扩展&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;Transformer 不是第一个用注意力的（2014 年就有 attention 了），但它是第一个&lt;strong&gt;把注意力用到极致、彻底去掉循环&lt;/strong&gt;的。赢在三点：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;可并行&lt;/strong&gt;：整句话一次性算完，GPU 吃满，训练速度快了几个数量级。&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;长距离能力&lt;/strong&gt;：一步直达任意远的词，长文本不再「传话传丢」。&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;可扩展（scaling）&lt;/strong&gt;：这是最关键的。结构简单 + 并行，意味着可以无限堆层、堆参数。后来的 GPT 系列证明了：&lt;strong&gt;模型越大、数据越多，能力越强&lt;/strong&gt;——这是 RNN 时代做不到的。&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;一句话总结这段历史：&lt;strong&gt;RNN 输在「只能顺着读」，Transformer 赢在「一次全读 + 自己决定谁重要」。&lt;/strong&gt; 这不是一个量级的改进，是赛道换了。&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;h2 id=&#34;护栏视角为什么做-ai-安全的人必须先懂注意力&#34;&gt;护栏视角：为什么做 AI 安全的人，必须先懂注意力？&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;你可能会想：我是做安全、做护栏的，架构细节跟我有什么关系？关系非常大，说三点：&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;第一，护栏的本质是「理解模型在想什么」。&lt;/strong&gt; 无论是提示注入防御、内容审核还是红队测试，说到底都是在猜模型的行为逻辑。而模型的行为逻辑，很大程度就写在这些注意力权重里。Anthropic 的可解释性团队（比如研究 Superposition、Circuit 的系列工作）就是在逐个解剖注意力头，试图回答「模型为什么会这样想」。你连它的思考器官长什么样都不知道，怎么给它装护栏？&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;第二，很多安全攻击，攻击的就是注意力机制本身。&lt;/strong&gt; 提示注入的本质，是攻击者想办法让模型把注意力从「用户的指令」挪到「隐藏的恶意指令」上——在注意力层面，这就是一场「抢权重」的战争。理解注意力，你才能理解攻击为什么有效、防御该怎么设计。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;第三，注意力图是可解释性的第一入口。&lt;/strong&gt; 对刚入门的算法工程师，注意力热力图是&lt;strong&gt;最容易上手&lt;/strong&gt;的模型可视化工具：输入一句话，画出词与词之间的注意力权重，你立刻能看到模型「在看什么」。这是做 AI 安全研究性价比最高的起点之一。&lt;/p&gt;&#xA;&lt;h2 id=&#34;本篇重点回顾&#34;&gt;本篇重点回顾&#xD;&#xA;&lt;/h2&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;概念&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;一句话版本&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;RNN 的痛点&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;串行 + 健忘，长文本记不住开头&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Self-Attention&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;一次看全句，加权求和，一步直达任意词&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Q/K/V&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Query 找书、Key 是标签、Value 是内容&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;多头&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;8 个分工不同的视角同时看&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;位置编码&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;用「座位号向量」补回顺序信息&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;为什么赢&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;并行 → 可扩展 → 堆出大模型&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;&lt;strong&gt;下篇预告&lt;/strong&gt;：Transformer 之后，模型开始分岔——一路走向 BERT（理解型），一路走向 GPT（生成型）。下一篇我们读 BERT，看看「双向」到底是什么意思，以及它为什么统治了 NLP 两年。&lt;/p&gt;&#xA;&lt;h3 id=&#34;参考资料&#34;&gt;参考资料&#xD;&#xA;&lt;/h3&gt;&lt;ul&gt;&#xA;&lt;li&gt;Vaswani et al., &lt;em&gt;Attention Is All You Need&lt;/em&gt;, 2017 — &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1706.03762&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;&#xD;&#xA;    &gt;arxiv.org/abs/1706.03762&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;Jay Alammar, &lt;em&gt;The Illustrated Transformer&lt;/em&gt; — 公认最好的可视化入门，强烈推荐（有中文翻译）&lt;/li&gt;&#xA;&lt;li&gt;Anthropic, &lt;em&gt;Towards Monosemanticity&lt;/em&gt; 等可解释性系列 — 理解注意力头如何工作&lt;/li&gt;&#xA;&lt;li&gt;3Blue1Brown 的《注意力与 Transformer》视频 — 直觉讲得极好&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;</description>
-        </item></channel>
+        <title>01 | 一切的起点：Transformer 到底解决了什么问题？</title>
+        <link>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</guid>
+        <description>&lt;img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover.jpg" alt="Featured image of post 01 | 一切的起点：Transformer 到底解决了什么问题？" /&gt;&lt;blockquote class=&#34;alert alert-note&#34;&gt;
+    &lt;p&gt;系列第一篇。这个系列会从 2017 年的 Transformer 开始，一路读到今天，每天一篇经典模型架构的论文或技术报告。&lt;/p&gt;
+&lt;p&gt;我是一名刚入行大模型算法、主攻 AI 安全的工程师，所以每篇结尾我都会留一块「护栏视角」，聊聊这篇论文和 AI 安全的关系。&lt;/p&gt;
+&lt;p&gt;写得通俗一点，但该有的重点一个不少。&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;先说结论transformer-做对了一件事&#34;&gt;先说结论：Transformer 做对了一件事
+&lt;/h2&gt;&lt;p&gt;2017 年 Google 发了一篇论文叫 &lt;em&gt;Attention Is All You Need&lt;/em&gt;（注意力就是你所需要的一切）。&lt;/p&gt;
+&lt;p&gt;这个名字很狂，但它是真话：&lt;strong&gt;它把「注意力机制」从配角变成了主角&lt;/strong&gt;，其他组件全部降级成辅助。此后的 GPT、BERT、Llama、DeepSeek……全都是这篇论文的子孙后代。&lt;/p&gt;
+&lt;p&gt;作为系列的第一篇，我想先不聊公式，而是回答一个问题：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在 Transformer 出现之前，处理「序列」（也就是有先后顺序的数据，比如一句话、一段声音、一帧帧视频）用的是 RNN。RNN 到底哪里不行，逼得大家非要发明一个新东西？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;搞清楚「它解决了什么问题」，比背下来它的结构重要一万倍。&lt;/p&gt;
+&lt;h2 id=&#34;背景rnn-的困境一句话要一个字一个字地读&#34;&gt;背景：RNN 的困境——一句话要一个字一个字地读
+&lt;/h2&gt;&lt;p&gt;RNN（循环神经网络）处理一句话的方式，很像一个只长了一只眼睛、而且&lt;strong&gt;没有记忆本&lt;/strong&gt;的人读书：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/rnn-flow.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 1：RNN 串行读取示意——每一步的输出都依赖上一步（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;注意那个箭头：&lt;strong&gt;每一步的输出，都依赖上一步的结果&lt;/strong&gt;。第 3 步想理解「猫」，必须先等第 2 步算完；第 2 步又得等第 1 步。&lt;/p&gt;
+&lt;p&gt;这带来两个致命问题：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;问题 1：慢。&lt;/strong&gt; 句子有 100 个词，就得串行算 100 步。GPU 再强也只能干瞪眼，因为没法并行——这就像你雇了 100 个工人，却让他们排成一列传砖头。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;问题 2：健忘。&lt;/strong&gt; 信息要从第 1 步一路「传」到第 100 步，中间每传一手就磨损一点。这就是著名的&lt;strong&gt;长距离依赖问题&lt;/strong&gt;：句子开头提到的人名，到句尾早就被冲淡了。你读一段 200 字的推理小说，作者在第 3 句埋的线索，你读到第 50 句还记得；RNN 不记得。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我自己的体会：RNN 不是「笨」，是&lt;strong&gt;人的直觉害了它&lt;/strong&gt;。我们人类读句子确实是一个字一个字读的，所以最早做序列建模的人就照着这个直觉造了 RNN。但机器的优势从来不是「像人」，而是「可以同时看所有东西」。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;核心self-attention-在干嘛一次性看全再决定谁重要&#34;&gt;核心：Self-Attention 在干嘛？——一次性看全，再决定谁重要
+&lt;/h2&gt;&lt;p&gt;Transformer 的答案简单粗暴：&lt;strong&gt;不要一个字一个字读了，把整句话一次性全部摊开，然后让每个词自己去找「谁对我重要」。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;这就是自注意力（Self-Attention）。&lt;/p&gt;
+&lt;h3 id=&#34;用一个具体例子翻译我-爱-猫&#34;&gt;用一个具体例子：翻译「我 爱 猫」
+&lt;/h3&gt;&lt;p&gt;假设输入只有三个词：&lt;code&gt;我&lt;/code&gt;、&lt;code&gt;爱&lt;/code&gt;、&lt;code&gt;猫&lt;/code&gt;。Transformer 会做三件事：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一步：每个词都变成一串数字（向量）。&lt;/strong&gt;
+&lt;code&gt;我&lt;/code&gt; → &lt;code&gt;[0.1, 0.8, ...]&lt;/code&gt;，&lt;code&gt;爱&lt;/code&gt; → &lt;code&gt;[0.5, 0.2, ...]&lt;/code&gt;，&lt;code&gt;猫&lt;/code&gt; → &lt;code&gt;[0.9, 0.4, ...]&lt;/code&gt;。数字具体是什么不重要，你只要知道：&lt;strong&gt;意思相近的词，向量距离近&lt;/strong&gt;。这一步叫 Embedding，相当于给每个词发了一张「身份证」。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：每个词对整句话做一次「注意力投票」。&lt;/strong&gt;
+每个词都要回答一个问题：「这句话里，谁和我关系最大？」&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;我&lt;/code&gt; 看了看：&lt;code&gt;我&lt;/code&gt; 和我自己关系 0.3，&lt;code&gt;爱&lt;/code&gt; 和我关系 0.6，&lt;code&gt;猫&lt;/code&gt; 和我关系 0.1 → 归一化成权重 &lt;code&gt;[0.3, 0.6, 0.1]&lt;/code&gt;（和为 1）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;爱&lt;/code&gt; 看了看：&lt;code&gt;我&lt;/code&gt; 0.4，&lt;code&gt;爱&lt;/code&gt; 自己 0.2，&lt;code&gt;猫&lt;/code&gt; 0.4&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;猫&lt;/code&gt; 看了看：&lt;code&gt;我&lt;/code&gt; 0.1，&lt;code&gt;爱&lt;/code&gt; 0.5，&lt;code&gt;猫&lt;/code&gt; 自己 0.4&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这就得到一张 &lt;strong&gt;3×3 的注意力矩阵&lt;/strong&gt;，每一行代表「这个词怎么看整句话」：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;&lt;/th&gt;
+					&lt;th&gt;我&lt;/th&gt;
+					&lt;th&gt;爱&lt;/th&gt;
+					&lt;th&gt;猫&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;我&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;0.3&lt;/td&gt;
+					&lt;td&gt;0.6&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;爱&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;0.4&lt;/td&gt;
+					&lt;td&gt;0.2&lt;/td&gt;
+					&lt;td&gt;0.4&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;猫&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+					&lt;td&gt;0.5&lt;/td&gt;
+					&lt;td&gt;0.4&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;第三步：用这张表把每个词的信息重新混合一遍。&lt;/strong&gt;
+&lt;code&gt;我&lt;/code&gt; 的新表示 = 0.3×&lt;code&gt;我&lt;/code&gt; + 0.6×&lt;code&gt;爱&lt;/code&gt; + 0.1×&lt;code&gt;猫&lt;/code&gt;。也就是说，&lt;code&gt;我&lt;/code&gt; 的最终表示里，混进了 60% 的 &lt;code&gt;爱&lt;/code&gt; 的信息——因为在这个句子里，「我」和「爱」关系最紧密。&lt;/p&gt;
+&lt;p&gt;这一步做完，&lt;strong&gt;每个词都变成了「结合了上下文语境」的新向量&lt;/strong&gt;。这就是自注意力的全部核心：&lt;em&gt;加权求和&lt;/em&gt;。就这么简单。&lt;/p&gt;
+&lt;h3 id=&#34;为什么它天然不怕长距离&#34;&gt;为什么它天然不怕长距离？
+&lt;/h3&gt;&lt;p&gt;因为 &lt;code&gt;猫&lt;/code&gt; 想联系句首的 &lt;code&gt;我&lt;/code&gt;，&lt;strong&gt;一步就到&lt;/strong&gt;，不需要像 RNN 那样传 100 手。距离不是问题，注意力权重说了算。&lt;/p&gt;
+&lt;h3 id=&#34;那-query--key--value-又是什么&#34;&gt;那 Query / Key / Value 又是什么？
+&lt;/h3&gt;&lt;p&gt;这是所有讲 Transformer 的文章最容易把人劝退的地方。我的理解是这样的——想象你去图书馆借书：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-lib.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 2：QKV 图书馆比喻——Query 找书、Key 是标签、Value 是内容（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Query（查询）&lt;/strong&gt; = 你想找什么：「我要找讲猫的书」&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Key（书脊标签）&lt;/strong&gt; = 每本书的标签：「这本讲猫」「这本讲狗」&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Value（书的内容）&lt;/strong&gt; = 书真正的内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注意力做的事情就是：&lt;strong&gt;拿你的 Query 去和所有书的 Key 比对相似度，相似度高的书，多读一点它的 Value。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;公式长这样，但别怕，你已经懂了它的意思：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Attention(Q, K, V) = softmax(Q·Kᵀ / √d) · V
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            └─ Q和每个K比相似度 ─┘   └─ 按权重取内容 ─┘
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;√d&lt;/code&gt; 是除一个缩放因子，防止分数太大把 softmax 推成 0/1 两极分化（就是「防止一个人垄断投票」）。softmax 就是把一堆分数归一化成「和为 1 的权重」。&lt;/p&gt;
+&lt;p&gt;论文原图把这个流程画得很清楚（左半部分就是上面的公式，右半部分是并行版）：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/scaled-dot-product.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 3：Scaled Dot-Product Attention（左）与 Multi-Head Attention（右）（图源：Vaswani et al., 2017, Figure 2）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-flow.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 4：QKV 计算流程（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;一个经常被忽略但很重要的细节：Q、K、V 并不是词向量本身，而是&lt;strong&gt;各自经过一个不同的线性变换&lt;/strong&gt;得到的。为什么要分开变换？因为「我想找什么」和「我能提供什么」是两码事——在「猫」这个词上，&lt;code&gt;我&lt;/code&gt; 想找的信息和 &lt;code&gt;猫&lt;/code&gt; 能提供的信息，当然不该用同一副面孔。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;multi-head不要一个视角要八个&#34;&gt;Multi-Head：不要一个视角，要八个
+&lt;/h2&gt;&lt;p&gt;单一注意力只有一种「关系观」。但句子里的关系是多种多样的：语法关系、指代关系、情感关系……&lt;/p&gt;
+&lt;p&gt;Multi-Head Attention（多头注意力）就是把注意力&lt;strong&gt;同时做 8 份&lt;/strong&gt;（论文里是 8 个头），每份用不同的 Q/K/V 变换，相当于 8 个不同角度的「读书人」同时读这句话，最后把 8 份结果拼起来。论文里的结构是这样（右边就是 Multi-Head 的拼装方式）：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 5：Multi-Head Attention 结构（图源：Vaswani et al., 2017, Figure 2 右）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead-flow.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 6：多头注意力——8 个分工不同的头（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;后来 Anthropic 等团队做可解释性研究时发现，这些「头」真的各司其职：有的头专门盯指代（it 指谁），有的头专门盯句法。&lt;strong&gt;多头注意力 = 模型的多个&amp;quot;分工器官&amp;quot;&lt;/strong&gt;，这个视角后面讲 AI 安全时还会用到。&lt;/p&gt;
+&lt;h2 id=&#34;位置编码不按顺序读了怎么知道先后&#34;&gt;位置编码：不按顺序读了，怎么知道先后？
+&lt;/h2&gt;&lt;p&gt;RNN 按顺序读，天然自带「顺序感」。Transformer 一次性全读，顺序信息就丢了——&lt;code&gt;猫爱我&lt;/code&gt; 和 &lt;code&gt;我爱猫&lt;/code&gt; 摊开后长得一模一样，这不行。&lt;/p&gt;
+&lt;p&gt;解法：&lt;strong&gt;在词向量上叠加一个「位置信号」&lt;/strong&gt;，让每个位置的向量长得不一样。&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/posenc-flow.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 7：位置编码——词向量 &amp;#43; 位置向量 = 带顺序信息的向量（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;位置向量用正弦/余弦函数生成（论文里的做法），也可以学出来。它相当于给每个词发了一张「第几号座位」的票——向量相加之后，模型既知道词义，又知道顺序。&lt;/p&gt;
+&lt;h2 id=&#34;看一眼论文里的完整架构&#34;&gt;看一眼论文里的完整架构
+&lt;/h2&gt;&lt;p&gt;把上面几个零件拼起来，就是论文原版的 Transformer（下图）。左边是 Encoder：N 层堆叠，每层 = 多头注意力 + 前馈网络；右边是 Decoder：结构类似，但多了 Masked 多头注意力——它只能看已经生成的词（不然翻译的时候偷看答案）。&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/arch.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 8：Transformer 完整架构（图源：Vaswani et al., 2017, Figure 1）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;不过注意：&lt;strong&gt;论文版是 Encoder-Decoder（翻译场景），今天的大模型基本都是 Decoder-only（只留右半边，且没有 Masked 之前的那层交叉注意力）。&lt;/strong&gt; 下一篇读 BERT/GPT 时会讲到这条分岔路。你只需要知道：今天所有大模型的骨架，都能在这张图里找到原型。&lt;/p&gt;
+&lt;h2 id=&#34;为什么它赢了三个字可扩展&#34;&gt;为什么它赢了？三个字：可扩展
+&lt;/h2&gt;&lt;p&gt;Transformer 不是第一个用注意力的（2014 年就有 attention 了），但它是第一个&lt;strong&gt;把注意力用到极致、彻底去掉循环&lt;/strong&gt;的。赢在三点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;可并行&lt;/strong&gt;：整句话一次性算完，GPU 吃满，训练速度快了几个数量级。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;长距离能力&lt;/strong&gt;：一步直达任意远的词，长文本不再「传话传丢」。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;可扩展（scaling）&lt;/strong&gt;：这是最关键的。结构简单 + 并行，意味着可以无限堆层、堆参数。后来的 GPT 系列证明了：&lt;strong&gt;模型越大、数据越多，能力越强&lt;/strong&gt;——这是 RNN 时代做不到的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一句话总结这段历史：&lt;strong&gt;RNN 输在「只能顺着读」，Transformer 赢在「一次全读 + 自己决定谁重要」。&lt;/strong&gt; 这不是一个量级的改进，是赛道换了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;护栏视角为什么做-ai-安全的人必须先懂注意力&#34;&gt;护栏视角：为什么做 AI 安全的人，必须先懂注意力？
+&lt;/h2&gt;&lt;p&gt;你可能会想：我是做安全、做护栏的，架构细节跟我有什么关系？关系非常大，说三点：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一，护栏的本质是「理解模型在想什么」。&lt;/strong&gt; 无论是提示注入防御、内容审核还是红队测试，说到底都是在猜模型的行为逻辑。而模型的行为逻辑，很大程度就写在这些注意力权重里。Anthropic 的可解释性团队（比如研究 Superposition、Circuit 的系列工作）就是在逐个解剖注意力头，试图回答「模型为什么会这样想」。你连它的思考器官长什么样都不知道，怎么给它装护栏？&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二，很多安全攻击，攻击的就是注意力机制本身。&lt;/strong&gt; 提示注入的本质，是攻击者想办法让模型把注意力从「用户的指令」挪到「隐藏的恶意指令」上——在注意力层面，这就是一场「抢权重」的战争。理解注意力，你才能理解攻击为什么有效、防御该怎么设计。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第三，注意力图是可解释性的第一入口。&lt;/strong&gt; 对刚入门的算法工程师，注意力热力图是&lt;strong&gt;最容易上手&lt;/strong&gt;的模型可视化工具：输入一句话，画出词与词之间的注意力权重，你立刻能看到模型「在看什么」。这是做 AI 安全研究性价比最高的起点之一。&lt;/p&gt;
+&lt;h2 id=&#34;本篇重点回顾&#34;&gt;本篇重点回顾
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;概念&lt;/th&gt;
+					&lt;th&gt;一句话版本&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RNN 的痛点&lt;/td&gt;
+					&lt;td&gt;串行 + 健忘，长文本记不住开头&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Self-Attention&lt;/td&gt;
+					&lt;td&gt;一次看全句，加权求和，一步直达任意词&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Q/K/V&lt;/td&gt;
+					&lt;td&gt;Query 找书、Key 是标签、Value 是内容&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;多头&lt;/td&gt;
+					&lt;td&gt;8 个分工不同的视角同时看&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;位置编码&lt;/td&gt;
+					&lt;td&gt;用「座位号向量」补回顺序信息&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;为什么赢&lt;/td&gt;
+					&lt;td&gt;并行 → 可扩展 → 堆出大模型&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;下篇预告&lt;/strong&gt;：Transformer 之后，模型开始分岔——一路走向 BERT（理解型），一路走向 GPT（生成型）。下一篇我们读 BERT，看看「双向」到底是什么意思，以及它为什么统治了 NLP 两年。&lt;/p&gt;
+&lt;h3 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Vaswani et al., &lt;em&gt;Attention Is All You Need&lt;/em&gt;, 2017 — &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1706.03762&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;arxiv.org/abs/1706.03762&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Jay Alammar, &lt;em&gt;The Illustrated Transformer&lt;/em&gt; — 公认最好的可视化入门，强烈推荐（有中文翻译）&lt;/li&gt;
+&lt;li&gt;Anthropic, &lt;em&gt;Towards Monosemanticity&lt;/em&gt; 等可解释性系列 — 理解注意力头如何工作&lt;/li&gt;
+&lt;li&gt;3Blue1Brown 的《注意力与 Transformer》视频 — 直觉讲得极好&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
 </rss>

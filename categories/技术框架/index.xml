@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>技术框架 on 辰远</title>
         <link>/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</link>
         <description>Recent content in 技术框架 on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <copyright>Lee</copyright><atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/index.xml" rel="self" type="application/rss+xml" /></channel>
+        <copyright>Lee</copyright><atom:link href="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
 </rss>

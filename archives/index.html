@@ -4,13 +4,7 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
 <title>归档</title>
 
-
-<link rel="canonical" href="/archives/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
-
+<link rel='canonical' href='/archives/'>
 
 <link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="归档">
 <meta property='og:description' content="">
@@ -44,26 +38,32 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
     </button>
 
     <header>
-        <figure class="site-avatar">
+        
+            
+            <figure class="site-avatar">
                 <a href="/">
-                    <img src="/img/avatar.png" 
-                        width="300"
-                        height="300"
-                        class="site-logo"
-                        loading="lazy"
-                        alt="Avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_20837a20b60ee220.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
                 </a>
                 
                     <span class="emoji">🍥</span>
                 
             </figure>
+            
         
         
         <div class="site-meta">
@@ -97,7 +97,7 @@
                 <li>
                     <a 
                         href='https://github.com/chenyuan1125'
-                        
+                        target="_blank"
                         title="GitHub"
                         rel="me"
                     >
@@ -121,6 +121,8 @@
         <li >
             <a href='/%E5%85%B3%E4%BA%8E/' >
                 
+                
+                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="7" r="4" />
@@ -135,8 +137,10 @@
         </li>
         
         
-        <li  class='current'>
+        <li  class='current' >
             <a href='/archives/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -156,6 +160,8 @@
         <li >
             <a href='/search/' >
                 
+                
+                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="10" cy="10" r="7" />
@@ -173,6 +179,8 @@
         <li >
             <a href='/%E9%93%BE%E6%8E%A5/' >
                 
+                
+                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
@@ -188,8 +196,9 @@
         
         <li class="menu-bottom-section">
             <ol class="menu">
-                    <li id="i18n-switch">  
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4 5h7" />
   <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
@@ -200,30 +209,15 @@
 
 
 
-                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
-                            
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
                                 
+                                    <option value="/en/" >English</option>
                                 
-                                    
-                                        
-                                    
+                                    <option value="/" selected>中文</option>
                                 
-                                    
-                                
-                                <option value="/en/archives/" >English</option>
-                            
-                                
-                                
-                                    
-                                
-                                    
-                                        
-                                    
-                                
-                                <option value="/archives/" selected>中文</option>
-                            
-                        </select>
-                    </li>
+                            </select>
+                        </li>
+                    
                 
 
                 
@@ -244,7 +238,7 @@
 
 
 
-                        <span></span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -254,7 +248,7 @@
 
             <main class="main full-width">
     <header>
-        <h2 class="section-title"></h2>
+        <h2 class="section-title">分类</h2>
         <div class="subsection-list">
             <div class="article-list--tile">
                 
@@ -262,16 +256,19 @@
 <article class="">
     <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/">
         
+        
 
         <div class="article-details">
             <h2 class="article-title">大模型架构学习</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="">
     <a href="/categories/linux%E5%86%85%E6%A0%B8/">
+        
         
 
         <div class="article-details">
@@ -279,10 +276,12 @@
         </div>
     </a>
 </article>
+
                 
                     
 <article class="">
     <a href="/categories/%E5%AE%B9%E5%99%A8/">
+        
         
 
         <div class="article-details">
@@ -290,124 +289,182 @@
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/ctf/">
         
-        <div class="article-image">
-            <img alt="Featured image of post CTF" height="150" loading="lazy" src="/categories/ctf/1_hu_b59734a61523f105.jpg" srcset="/categories/ctf/1_hu_b59734a61523f105.jpg 1x, /categories/ctf/1_hu_fd39ad327a6e742e.jpg 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/ctf/1.c8b78b94f7356bb6917fcb17e74a798a_hu_b59734a61523f105.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post CTF"
+                        data-key="CTF" 
+                        data-hash="md5-yLeLlPc1a7aRf8sX50p5ig==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #eca16580 0%, #342c2bC0 100%);">
+        <div class="article-details">
             <h2 class="article-title">CTF</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/">
         
-        <div class="article-image">
-            <img alt="Featured image of post 技术框架" height="150" loading="lazy" src="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/1_hu_8b8352566560aab6.jpg" srcset="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/1_hu_8b8352566560aab6.jpg 1x, /categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/1_hu_324fe7293270e12.jpg 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/1.dcf96db0857f66ab4b14d9a4384b2bde_hu_8b8352566560aab6.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 技术框架"
+                        data-key="技术框架" 
+                        data-hash="md5-3PltsIV/ZqtLFNmkOEsr3g==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #b2aaa480 0%, #4d525eC0 100%);">
+        <div class="article-details">
             <h2 class="article-title">技术框架</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/%E6%95%99%E7%A8%8B/">
         
-        <div class="article-image">
-            <img alt="Featured image of post 教程" height="150" loading="lazy" src="/categories/%E6%95%99%E7%A8%8B/1_hu_6c24557275597aa.png" srcset="/categories/%E6%95%99%E7%A8%8B/1_hu_6c24557275597aa.png 1x, /categories/%E6%95%99%E7%A8%8B/1_hu_d298506cb99d9eb0.png 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/%E6%95%99%E7%A8%8B/1.f6cc9dca33f337ca861f1fa4001903b1_hu_6c24557275597aa.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 教程"
+                        data-key="教程" 
+                        data-hash="md5-9sydyjPzN8qGHx&#43;kABkDsQ==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #17619b80 0%, #183a4aC0 100%);">
+        <div class="article-details">
             <h2 class="article-title">教程</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/%E8%AF%BE%E7%A8%8B/">
         
-        <div class="article-image">
-            <img alt="Featured image of post 课程" height="150" loading="lazy" src="/categories/%E8%AF%BE%E7%A8%8B/1_hu_dc57fc6d043647e1.jpg" srcset="/categories/%E8%AF%BE%E7%A8%8B/1_hu_dc57fc6d043647e1.jpg 1x, /categories/%E8%AF%BE%E7%A8%8B/1_hu_371c00bc47ec31c6.jpg 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/%E8%AF%BE%E7%A8%8B/1.f7ae469786d96c6c22e608388a0ec675_hu_dc57fc6d043647e1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 课程"
+                        data-key="课程" 
+                        data-hash="md5-965Gl4bZbGwi5gg4ig7GdQ==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #51c19b80 0%, #b0d49fC0 100%);">
+        <div class="article-details">
             <h2 class="article-title">课程</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/">
         
-        <div class="article-image">
-            <img alt="Featured image of post 日常研究" height="150" loading="lazy" src="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/1_hu_2be87ac5540d4a58.jpg" srcset="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/1_hu_2be87ac5540d4a58.jpg 1x, /categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/1_hu_310f2494f3aeebb.jpg 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/1.dc5e838b8c6aae5fdbcc6d3483dda94f_hu_2be87ac5540d4a58.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 日常研究"
+                        data-key="日常研究" 
+                        data-hash="md5-3F6Di4xqrl/bzG00g92pTw==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #e8afa080 0%, #413349C0 100%);">
+        <div class="article-details">
             <h2 class="article-title">日常研究</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/%E5%AE%9E%E9%AA%8C/">
         
-        <div class="article-image">
-            <img alt="Featured image of post 实验" height="150" loading="lazy" src="/categories/%E5%AE%9E%E9%AA%8C/1_hu_4d144fe384be909e.png" srcset="/categories/%E5%AE%9E%E9%AA%8C/1_hu_4d144fe384be909e.png 1x, /categories/%E5%AE%9E%E9%AA%8C/1_hu_b4065ded793b5d3f.png 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/%E5%AE%9E%E9%AA%8C/1.1ec210a21bac4fb7411875ea1c1c850f_hu_4d144fe384be909e.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 实验"
+                        data-key="实验" 
+                        data-hash="md5-HsIQohusT7dBGHXqHByFDw==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #bcb3bf80 0%, #413d4bC0 100%);">
+        <div class="article-details">
             <h2 class="article-title">实验</h2>
         </div>
     </a>
 </article>
+
                 
                     
 <article class="has-image">
     <a href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/">
         
-        <div class="article-image">
-            <img alt="Featured image of post 碎碎念" height="150" loading="lazy" src="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/1_hu_e542b68413500514.png" srcset="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/1_hu_e542b68413500514.png 1x, /categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/1_hu_90fb9a996a0f7c38.png 2x" width="250">
-
-        </div>
+        
+            <div class="article-image">
+                <img src="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/1.61ce56bcbd50642b57f16f02f11b34e6_hu_e542b68413500514.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 碎碎念"
+                        data-key="碎碎念" 
+                        data-hash="md5-Yc5WvL1QZCtX8W8C8Rs05g==">
+                
+            </div>
         
 
-        <div class="article-details"style="background: linear-gradient(0deg, #d79dc480 0%, #4e4cbcC0 100%);">
+        <div class="article-details">
             <h2 class="article-title">碎碎念</h2>
         </div>
     </a>
 </article>
+
                 
             </div>
         </div>
         
     </header>
 
+    
     
 
     
@@ -420,12 +477,18 @@
     <a href="/p/gpt-03/">
         <div class="article-details">
             <h2 class="article-title">GPT-3：In-Context Learning 与 Few-Shot 爆发</h2>
-                <footer class="article-meta"><time datetime="2026-09-02T00:00:00Z">2026-09-02</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="GPT-3：In-Context Learning 与 Few-Shot 爆发" height="60" loading="lazy" src="/p/gpt-03/cover_hu_e7311a2450e407cf.jpg" srcset="/p/gpt-03/cover_hu_e7311a2450e407cf.jpg 1x, /p/gpt-03/cover_hu_f0a25646c5fc83ac.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2026-09-02T00:00:00Z'>2026-09-02</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/gpt-03/cover_hu_f0a25646c5fc83ac.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="GPT-3：In-Context Learning 与 Few-Shot 爆发"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -434,8 +497,10 @@
     <a href="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
         <div class="article-details">
             <h2 class="article-title">Unix Domain Socket 源码实现分析 (OLK 6.6)</h2>
-                <footer class="article-meta"><time datetime="2026-08-28T00:00:00Z">2026-08-28</time>
-                </footer></div>
+            <footer class="article-time">
+                <time datetime='2026-08-28T00:00:00Z'>2026-08-28</time>
+            </footer>
+        </div>
     </a>
 </article>
             
@@ -443,12 +508,18 @@
     <a href="/p/gpt-01/">
         <div class="article-details">
             <h2 class="article-title">GPT-1/2：生成式预训练与 few-shot 萌芽</h2>
-                <footer class="article-meta"><time datetime="2026-08-28T00:00:00Z">2026-08-28</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="GPT-1/2：生成式预训练与 few-shot 萌芽" height="60" loading="lazy" src="/p/gpt-01/cover_hu_d412ed84c1621e31.jpg" srcset="/p/gpt-01/cover_hu_d412ed84c1621e31.jpg 1x, /p/gpt-01/cover_hu_e68cf6ed21452ed7.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2026-08-28T00:00:00Z'>2026-08-28</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/gpt-01/cover_hu_e68cf6ed21452ed7.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="GPT-1/2：生成式预训练与 few-shot 萌芽"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -457,8 +528,10 @@
     <a href="/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/">
         <div class="article-details">
             <h2 class="article-title">containerd 通信机制分析</h2>
-                <footer class="article-meta"><time datetime="2026-08-28T00:00:00Z">2026-08-28</time>
-                </footer></div>
+            <footer class="article-time">
+                <time datetime='2026-08-28T00:00:00Z'>2026-08-28</time>
+            </footer>
+        </div>
     </a>
 </article>
             
@@ -466,12 +539,18 @@
     <a href="/p/bert-02/">
         <div class="article-details">
             <h2 class="article-title">BERT：双向编码器，到底双在哪</h2>
-                <footer class="article-meta"><time datetime="2026-08-27T00:00:00Z">2026-08-27</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="BERT：双向编码器，到底双在哪" height="60" loading="lazy" src="/p/bert-02/cover_hu_6eb222dd4d8752e4.jpg" srcset="/p/bert-02/cover_hu_6eb222dd4d8752e4.jpg 1x, /p/bert-02/cover_hu_3c24a527296dbbad.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2026-08-27T00:00:00Z'>2026-08-27</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/bert-02/cover_hu_3c24a527296dbbad.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="BERT：双向编码器，到底双在哪"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -480,12 +559,18 @@
     <a href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
         <div class="article-details">
             <h2 class="article-title">01 | 一切的起点：Transformer 到底解决了什么问题？</h2>
-                <footer class="article-meta"><time datetime="2026-08-26T00:00:00Z">2026-08-26</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="01 | 一切的起点：Transformer 到底解决了什么问题？" height="60" loading="lazy" src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_440b2823c7b52394.jpg" srcset="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_440b2823c7b52394.jpg 1x, /p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_bb38a7ff50c49693.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2026-08-26T00:00:00Z'>2026-08-26</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_bb38a7ff50c49693.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="01 | 一切的起点：Transformer 到底解决了什么问题？"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -502,12 +587,18 @@
     <a href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/">
         <div class="article-details">
             <h2 class="article-title">DeepSeek-R1：用强化学习激发大模型推理能力</h2>
-                <footer class="article-meta"><time datetime="2025-09-01T00:00:00Z">2025-09-01</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="DeepSeek-R1：用强化学习激发大模型推理能力" height="60" loading="lazy" src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_9c0018acc876c26f.jpg" srcset="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_9c0018acc876c26f.jpg 1x, /p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_897ff2706b341789.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2025-09-01T00:00:00Z'>2025-09-01</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover_hu_897ff2706b341789.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="DeepSeek-R1：用强化学习激发大模型推理能力"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -524,12 +615,18 @@
     <a href="/p/csappbuffer%E5%AE%9E%E9%AA%8C/">
         <div class="article-details">
             <h2 class="article-title">CSAPP:buffer实验</h2>
-                <footer class="article-meta"><time datetime="2024-10-06T00:00:00Z">2024-10-06</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="CSAPP:buffer实验" height="60" loading="lazy" src="/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_d823827e188efade.jpg" srcset="/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_d823827e188efade.jpg 1x, /p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_764945d7455861fb.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-10-06T00:00:00Z'>2024-10-06</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/csappbuffer%E5%AE%9E%E9%AA%8C/1_hu_764945d7455861fb.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="CSAPP:buffer实验"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -538,12 +635,18 @@
     <a href="/p/bandit%E5%AE%9E%E9%AA%8C/">
         <div class="article-details">
             <h2 class="article-title">bandit实验</h2>
-                <footer class="article-meta"><time datetime="2024-10-06T00:00:00Z">2024-10-06</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="bandit实验" height="60" loading="lazy" src="/p/bandit%E5%AE%9E%E9%AA%8C/1_hu_a5834a6886114a34.jpg" srcset="/p/bandit%E5%AE%9E%E9%AA%8C/1_hu_a5834a6886114a34.jpg 1x, /p/bandit%E5%AE%9E%E9%AA%8C/1_hu_4145bffee6ba4027.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-10-06T00:00:00Z'>2024-10-06</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/bandit%E5%AE%9E%E9%AA%8C/1_hu_4145bffee6ba4027.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="bandit实验"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -552,12 +655,18 @@
     <a href="/p/csappbomb%E5%AE%9E%E9%AA%8C/">
         <div class="article-details">
             <h2 class="article-title">CSAPP:bomb实验</h2>
-                <footer class="article-meta"><time datetime="2024-09-29T00:00:00Z">2024-09-29</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="CSAPP:bomb实验" height="60" loading="lazy" src="/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_38624dbb1254dd25.jpg" srcset="/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_38624dbb1254dd25.jpg 1x, /p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_22403abeba8639e8.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-09-29T00:00:00Z'>2024-09-29</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/csappbomb%E5%AE%9E%E9%AA%8C/1_hu_22403abeba8639e8.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="CSAPP:bomb实验"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -566,12 +675,18 @@
     <a href="/p/csappattack%E5%AE%9E%E9%AA%8C/">
         <div class="article-details">
             <h2 class="article-title">CSAPP:attack实验</h2>
-                <footer class="article-meta"><time datetime="2024-09-29T00:00:00Z">2024-09-29</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="CSAPP:attack实验" height="60" loading="lazy" src="/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_2aaece0b452ad203.jpg" srcset="/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_2aaece0b452ad203.jpg 1x, /p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_4471f950dc4af1b2.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-09-29T00:00:00Z'>2024-09-29</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/csappattack%E5%AE%9E%E9%AA%8C/R_hu_4471f950dc4af1b2.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="CSAPP:attack实验"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -580,12 +695,18 @@
     <a href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/">
         <div class="article-details">
             <h2 class="article-title">进程间通信（IPC）源码分析及总结</h2>
-                <footer class="article-meta"><time datetime="2024-08-08T00:00:00Z">2024-08-08</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="进程间通信（IPC）源码分析及总结" height="60" loading="lazy" src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1_hu_23b544f6cd20a926.jpg" srcset="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1_hu_23b544f6cd20a926.jpg 1x, /p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1_hu_1091bbf7f70e955.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-08-08T00:00:00Z'>2024-08-08</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/1_hu_1091bbf7f70e955.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="进程间通信（IPC）源码分析及总结"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -594,12 +715,18 @@
     <a href="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/">
         <div class="article-details">
             <h2 class="article-title">加密算法调研</h2>
-                <footer class="article-meta"><time datetime="2024-07-20T00:00:00Z">2024-07-20</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="加密算法调研" height="60" loading="lazy" src="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu_4e4088e45e0540bb.jpg" srcset="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu_4e4088e45e0540bb.jpg 1x, /p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu_bcdf9535de828ac.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-07-20T00:00:00Z'>2024-07-20</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/1_hu_bcdf9535de828ac.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="加密算法调研"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -608,12 +735,18 @@
     <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/">
         <div class="article-details">
             <h2 class="article-title">操作系统大作业：内存故障检测和处理</h2>
-                <footer class="article-meta"><time datetime="2024-06-05T00:00:00Z">2024-06-05</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="操作系统大作业：内存故障检测和处理" height="60" loading="lazy" src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu_121c609c1630c8b2.jpg" srcset="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu_121c609c1630c8b2.jpg 1x, /p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu_4bf4be7ffe1b4d66.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2024-06-05T00:00:00Z'>2024-06-05</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/1_hu_4bf4be7ffe1b4d66.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="操作系统大作业：内存故障检测和处理"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -630,12 +763,18 @@
     <a href="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/">
         <div class="article-details">
             <h2 class="article-title">计算机体系结构课程笔记</h2>
-                <footer class="article-meta"><time datetime="2023-12-26T00:00:00Z">2023-12-26</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="计算机体系结构课程笔记" height="60" loading="lazy" src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu_a3758e73420f95f.jpg" srcset="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu_a3758e73420f95f.jpg 1x, /p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu_486463ff9ee2cde.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2023-12-26T00:00:00Z'>2023-12-26</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/1_hu_486463ff9ee2cde.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="计算机体系结构课程笔记"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -644,12 +783,18 @@
     <a href="/p/%E9%9A%8F%E6%83%B3%E5%BD%95/">
         <div class="article-details">
             <h2 class="article-title">随想录</h2>
-                <footer class="article-meta"><time datetime="2023-03-09T00:00:00Z">2023-03-09</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="随想录" height="60" loading="lazy" src="/p/%E9%9A%8F%E6%83%B3%E5%BD%95/1_hu_d1bc5c3b5b2d3b2b.jpg" srcset="/p/%E9%9A%8F%E6%83%B3%E5%BD%95/1_hu_d1bc5c3b5b2d3b2b.jpg 1x, /p/%E9%9A%8F%E6%83%B3%E5%BD%95/1_hu_bfdd183511fe6faf.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2023-03-09T00:00:00Z'>2023-03-09</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/%E9%9A%8F%E6%83%B3%E5%BD%95/1_hu_bfdd183511fe6faf.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="随想录"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -658,12 +803,18 @@
     <a href="/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
         <div class="article-details">
             <h2 class="article-title">个人博客搭建</h2>
-                <footer class="article-meta"><time datetime="2023-03-09T00:00:00Z">2023-03-09</time>
-                </footer></div>
-        <div class="article-image">
-            <img alt="个人博客搭建" height="60" loading="lazy" src="/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu_24823a98fb79a116.jpg" srcset="/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu_24823a98fb79a116.jpg 1x, /p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu_16a00235f94091bd.jpg 2x" width="60">
-
+            <footer class="article-time">
+                <time datetime='2023-03-09T00:00:00Z'>2023-03-09</time>
+            </footer>
         </div>
+            <div class="article-image">
+                <img src="/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1_hu_16a00235f94091bd.jpg" 
+                        width="120"
+                        height="120" 
+                        alt="个人博客搭建"
+                        loading="lazy">
+                
+            </div>
         
     </a>
 </article>
@@ -682,17 +833,30 @@
     </section>
     
     <section class="powerby">
-         <br />
-        
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
 
             </main>
         </div>
-        
-<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+        <script 
+                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
 
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
 
 
     </body>

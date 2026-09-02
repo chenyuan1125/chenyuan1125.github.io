@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Few-Shot on 辰远</title>
         <link>/tags/few-shot/</link>
@@ -7,16 +8,780 @@
         <language>zh-cn</language>
         <copyright>Lee</copyright>
         <lastBuildDate>Wed, 02 Sep 2026 21:36:09 +0800</lastBuildDate><atom:link href="/tags/few-shot/index.xml" rel="self" type="application/rss+xml" /><item>
-            <title>GPT-3：In-Context Learning 与 Few-Shot 爆发</title>
-            <link>/p/gpt-03/</link>
-            <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/p/gpt-03/</guid>
-            <description>&lt;img src=&#34;/p/gpt-03/cover.jpg&#34; alt=&#34;Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发&#34; /&gt;&lt;h2 id=&#34;引言gpt-2-的未竟之问&#34;&gt;引言：GPT-2 的未竟之问&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;GPT-2（2019）展示了两个令人震惊的发现：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;零样本能力&lt;/strong&gt;——模型没经过任何微调，就能做翻译、问答、摘要&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;规模无饱和&lt;/strong&gt;——从 124M 到 1.5B，模型越大零样本能力越强，曲线毫无放缓迹象&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;但 GPT-2 的发现也留下了一个尖锐的问题：&lt;strong&gt;如果继续放大 100 倍会怎样？&lt;/strong&gt; GPT-2 XL（1.5B）的零样本 CoQA 评分是 55 F1，而当时 SOTA 微调模型是 90.7 F1——差距依然巨大。零样本能力虽然惊艳，但离实用还差得远。&lt;/p&gt;&#xA;&lt;p&gt;OpenAI 的回答很简单：&lt;strong&gt;继续放大，直到看到天花板为止。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;2020 年 5 月，他们发布了 GPT-3，一个 1750 亿参数的自回归语言模型，比当时任何非稀疏模型大 10 倍以上。这篇论文《Language Models are Few-Shot Learners》不仅刷新了规模记录，更催生了一个全新的概念——&lt;strong&gt;In-Context Learning（上下文学习）&lt;/strong&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;核心架构gpt-2-的直系继承者&#34;&gt;核心架构：GPT-2 的直系继承者&#xD;&#xA;&lt;/h2&gt;&lt;h3 id=&#34;架构概览&#34;&gt;架构概览&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 的架构几乎原封不动地沿用了 GPT-2：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;&amp;ldquo;We use the same model and architecture as GPT-2, including the modified initialization, pre-normalization, and reversible tokenization described therein.&amp;rdquo;&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;p&gt;关键参数：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;参数&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-2 XL&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 175B&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;变化&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;层数（n_layers）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;48&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;96&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;2×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;隐藏维度（d_model）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;1600&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;12288&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;7.68×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;注意力头数（n_heads）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;25&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;96&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;3.84×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;每头维度（d_head）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;64&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;128&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;2×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;前馈网络维度（d_ff）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;6400&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;49152&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;7.68×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;上下文窗口（n_ctx）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;1024&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;2048&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;2×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;参数量&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;1.5B&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;175B&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;~117×&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h3 id=&#34;唯一架构改动交替稀疏注意力&#34;&gt;唯一架构改动：交替稀疏注意力&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 在注意力机制上做了一个重要改动：&lt;strong&gt;交替使用密集注意力和局部带状稀疏注意力&lt;/strong&gt;（alternating dense and locally banded sparse attention patterns），类似于 Sparse Transformer。&lt;/p&gt;&#xA;&lt;p&gt;具体来说，在 96 层中，每隔一层使用稀疏注意力：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;&#xA;&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2&#xA;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&#xA;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;密集层（第 0、2、4...层）：标准全局注意力，每个 token 可以看到所有之前的 token&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;稀疏层（第 1、3、5...层）：局部带状注意力，每个 token 只能看到附近固定窗口内的 token&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&lt;p&gt;这个设计的动机很直接——&lt;strong&gt;降低计算复杂度&lt;/strong&gt;。标准自注意力的复杂度是 O(n²·d)，当 n=2048 时，96 层全部使用密集注意力，计算量巨大。稀疏注意力将复杂度降到 O(n·k·d)，其中 k 是局部窗口大小。&lt;/p&gt;&#xA;&lt;p&gt;直觉上，这相当于让模型一部分层做&amp;quot;全局理解&amp;quot;，另一部分层做&amp;quot;局部精修&amp;quot;。后来 LLaMA 等模型放弃了这种设计，改用全密集注意力，因为现代 GPU 硬件对密集矩阵乘法的优化比稀疏模式更高效。&lt;/p&gt;&#xA;&lt;h3 id=&#34;训练配置&#34;&gt;训练配置&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 175B 的训练配置：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;超参数&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;值&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;总训练 token 数&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;3000 亿&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Batch size&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;320 万个 token（约 1562 个序列）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;学习率&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;6×10⁻⁵（余弦衰减）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;优化器&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Adam（β₁=0.9, β₂=0.95, ε=10⁻⁸）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;梯度裁剪&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;1.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;权重衰减&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;0.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Warmup 步数&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;375M token（约 1200 步）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;硬件&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;约 10,000 张 NVIDIA V100 GPU&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;训练时长&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;约 92 天&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;估算成本&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;约 1200 万美元（仅最终训练）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h3 id=&#34;模型并行策略&#34;&gt;模型并行策略&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 175B 需要约 700GB 显存（FP32 下每个参数 4 字节），远超当时任何单张 GPU 的容量（V100 仅 32GB）。OpenAI 使用了&lt;strong&gt;混合模型并行&lt;/strong&gt;策略：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;算子内并行&lt;/strong&gt;（Intra-operator）：将单个矩阵乘法拆分到多个 GPU 上&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;层间并行&lt;/strong&gt;（Inter-operator）：将不同层分配到不同 GPU，组成流水线&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;这种&amp;quot;沿深度和宽度两个维度分割&amp;quot;的策略，使得模型可以在 10,000 张 V100 上高效分布。&lt;/p&gt;&#xA;&lt;h2 id=&#34;训练数据质量优先的混合策略&#34;&gt;训练数据：质量优先的混合策略&#xD;&#xA;&lt;/h2&gt;&lt;h3 id=&#34;数据来源&#34;&gt;数据来源&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 的训练数据来自五个来源，经过精心筛选和去重：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;数据集&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;原始大小&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;过滤后大小&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;训练采样比例&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;训练 epoch 数&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;CommonCrawl（2016-2019）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;45TB&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;570GB（~4000 亿 token）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;60%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&amp;lt;1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;WebText2（扩展版）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;—&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;19GB&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;22%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;~2.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Books1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;—&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;14GB&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;8%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;~2.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Books2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;—&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;55GB&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;8%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&amp;lt;1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Wikipedia（英文）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;—&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;3GB&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;3%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;~3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h3 id=&#34;关键设计过采样高质量数据&#34;&gt;关键设计：过采样高质量数据&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;注意一个反直觉的设计：&lt;strong&gt;CommonCrawl 和 Books2 在整个训练过程中被采样不到一次（&amp;lt;1 epoch），而 Wikipedia 被采样了 3 次。&lt;/strong&gt; 这意味着模型会&amp;quot;看到&amp;quot;某些高质量数据多次，而低质量数据只看一次。&lt;/p&gt;&#xA;&lt;p&gt;这本质上是有意接受少量过拟合，换取训练数据质量的提升。论文中的原话是：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;&amp;ldquo;This essentially accepts a small amount of overfitting in exchange for higher quality training data.&amp;rdquo;&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;h3 id=&#34;数据过滤流程&#34;&gt;数据过滤流程&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;CommonCrawl 的过滤流程：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;基于质量过滤&lt;/strong&gt;：以 WebText、Wikipedia、Books 等高质语料为参考，用分类器筛选相似度高的网页&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;模糊去重&lt;/strong&gt;：在文档级别做模糊去重，防止训练集和验证集之间的数据泄露&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;混合高质语料&lt;/strong&gt;：加入 WebText2、Books1/2、Wikipedia 等精选数据集&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;in-context-learning新范式的诞生&#34;&gt;In-Context Learning：新范式的诞生&#xD;&#xA;&lt;/h2&gt;&lt;h3 id=&#34;从-fine-tuning-到-in-context-learning&#34;&gt;从 Fine-Tuning 到 In-Context Learning&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;在 GPT-3 之前，NLP 任务的范式是：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;预训练&lt;/strong&gt;：在大规模无标注语料上训练语言模型&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;微调&lt;/strong&gt;：在每个下游任务上，用数千条标注数据更新模型参数&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;GPT-3 提出了一个截然不同的范式——&lt;strong&gt;In-Context Learning（上下文学习）&lt;/strong&gt;：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;不需要微调，不需要更新参数，只需要在推理时把几个示例拼在输入前面，模型就能自动学会做这个任务。&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;p&gt;论文定义了三种上下文学习设置：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;&#xA;&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14&#xA;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&#xA;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;零样本（Zero-Shot）：&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#34;Translate English to French: cheese →&amp;#34;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;一样本（One-Shot）：&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#34;Translate English to French:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   sea otter → loutre de mer&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   cheese →&amp;#34;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;少样本（Few-Shot）：&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#34;Translate English to French:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   sea otter → loutre de mer&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   peppermint → menthe poivrée&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   plush girafe → girafe peluche&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   cheese →&amp;#34;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&lt;p&gt;关键的是，&lt;strong&gt;模型不更新任何参数&lt;/strong&gt;。Few-Shot 只是把 K 个示例（通常 10-100 个，受限于 2048 的上下文窗口）拼在输入中，模型通过&amp;quot;预测下一个词&amp;quot;的机制自动完成新任务。&lt;/p&gt;&#xA;&lt;h3 id=&#34;为什么-in-context-learning-可行&#34;&gt;为什么 In-Context Learning 可行？&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;论文提出了一个重要的概念框架——&lt;strong&gt;元学习（Meta-Learning）&lt;/strong&gt;：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;&amp;ldquo;Language models can also be understood as meta-learners where slow outer-loop gradient descent based learning is combined with fast &amp;lsquo;in-context&amp;rsquo; learning implemented within the context activations of the model.&amp;rdquo;&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;p&gt;这个框架包含两个循环：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;外循环（慢）&lt;/strong&gt;：预训练阶段，通过梯度下降逐步学习语言知识、模式识别能力&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;内循环（快）&lt;/strong&gt;：推理阶段，通过上下文中的示例，在 forward pass 内完成&amp;quot;学习&amp;quot;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;后来的研究（Dai et al., 2023）进一步揭示了数学机制：&lt;strong&gt;Transformer 注意力与梯度下降之间存在对偶形式&lt;/strong&gt;。简单来说，注意力机制中的 key-value 查找可以看作是对模型隐式参数的&amp;quot;梯度更新&amp;quot;，而上下文中的示例提供了这些&amp;quot;梯度&amp;quot;的方向。&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/gpt-03/icl-mechanism.svg&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 1：In-Context Learning 机制——Meta-Learning 框架下外循环（预训练梯度下降）与内循环（推理阶段 Forward Pass）的协作关系&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;h3 id=&#34;scale-的关键作用&#34;&gt;Scale 的关键作用&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 最重要的发现之一是：&lt;strong&gt;In-Context Learning 能力随模型规模急剧提升。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;从论文的 Figure 1.3 可以看出：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;零样本性能&lt;/strong&gt;：随模型规模稳步提升（线性）&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Few-Shot 性能&lt;/strong&gt;：随模型规模&lt;strong&gt;急剧提升&lt;/strong&gt;（超线性）&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;这意味着：&lt;strong&gt;更大的模型不仅是&amp;quot;更聪明&amp;quot;的语言模型，更是&amp;quot;更擅长从示例中学习&amp;quot;的元学习器。&lt;/strong&gt; 这个发现直接催生了后来所有大模型的 Prompt Engineering 范式。&lt;/p&gt;&#xA;&lt;h2 id=&#34;效果数据定量的跨越&#34;&gt;效果数据：定量的跨越&#xD;&#xA;&lt;/h2&gt;&lt;h3 id=&#34;语言建模&#34;&gt;语言建模&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;基准&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;之前 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;提升&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;PTB 困惑度&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;—&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;20.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;领先 15 个点&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;LAMBADA 准确率&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;76.0%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;86.4%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;+10.4%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h3 id=&#34;闭卷问答&#34;&gt;闭卷问答&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;基准&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;微调 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 One-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;TriviaQA&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;68.0（RAG, 开放域）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;64.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;68.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;&lt;strong&gt;71.2&lt;/strong&gt;&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;WebQuestions&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;44.7（T5-11B+SSM）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;14.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;25.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;41.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Natural Questions&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;36.6（T5-11B+SSM）&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;14.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;23.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;29.9&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;在 TriviaQA 上，GPT-3 &lt;strong&gt;零样本&lt;/strong&gt;就已经超过微调后的 T5-11B 14.2%，Few-Shot 更进一步达到 71.2%，超过当时所有微调模型（包括使用检索增强的 RAG）。&lt;/p&gt;&#xA;&lt;h3 id=&#34;阅读理解&#34;&gt;阅读理解&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;基准&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;微调 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 One-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;CoQA (F1)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;90.7&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;81.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;84.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;85.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;DROP (F1)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;89.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;23.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;34.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;36.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;CoQA 上 Few-Shot 仅差 SOTA 5.7 个点，而 DROP（需要离散推理和数值计算）差距较大——这暴露了纯语言模型在&amp;quot;数学推理&amp;quot;上的根本弱点。&lt;/p&gt;&#xA;&lt;h3 id=&#34;常识推理&#34;&gt;常识推理&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;基准&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;微调 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;ARC-Easy&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;92.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;68.8&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;70.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;ARC-Challenge&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;78.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;51.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;51.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;HellaSwag&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;91.8&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;76.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;86.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;h3 id=&#34;superglue&#34;&gt;SuperGLUE&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;任务&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;微调 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;微调 BERT-Large&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;BoolQ&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;91.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;77.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;71.8&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;CB (F1)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;96.9&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;83.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;75.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;COPA&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;94.8&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;70.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;92.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;RTE&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;92.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;71.7&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;69.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;WiC&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;76.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;69.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;49.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;WSC&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;93.8&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;64.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;80.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;MultiRC&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;88.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;70.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;75.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;ReCoRD (F1)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;93.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;72.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;91.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;GPT-3 在 COPA 和 ReCoRD 上接近 SOTA，在 WSC 和 MultiRC 上超越 BERT-Large。但 WiC 上只有随机水平——&lt;strong&gt;涉及句子间比较的任务是 GPT-3 的明显弱项&lt;/strong&gt;。&lt;/p&gt;&#xA;&lt;h3 id=&#34;机器翻译&#34;&gt;机器翻译&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;方向&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;有监督 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;无监督 SOTA&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;英→法&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;45.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;33.4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;32.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;法→英&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;35.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;34.9&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;39.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;英→德&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;41.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;28.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;29.7&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;德→英&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;40.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;34.3&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;40.6&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;英→罗&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;38.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;35.2&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;21.0&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;罗→英&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;39.9&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;33.1&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;39.5&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;在法→英和德→英上，GPT-3 Few-Shot 甚至超过了有监督 SOTA，反映了 GPT-3 作为英语语言模型的强大生成能力。&lt;/p&gt;&#xA;&lt;h3 id=&#34;语言模型规模的影响&#34;&gt;语言模型规模的影响&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;论文训练了 8 个不同规模的模型，从 125M 到 175B，所有模型都训练了 3000 亿 token：&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;/p/gpt-03/scaling-curves.svg&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 2：模型规模与性能关系——Zero-Shot 稳步提升，One-Shot 曲线变陡，Few-Shot 呈超线性增长&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;关键发现：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;零样本&lt;/strong&gt;：从 125M 到 175B，性能稳步提升，但曲线平缓&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;一样本&lt;/strong&gt;：曲线明显变陡——大模型更能从单个示例中受益&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;少样本&lt;/strong&gt;：曲线最陡——大模型更擅长从多个示例中学习规律&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;新闻生成真假难辨的分水岭&#34;&gt;新闻生成：真假难辨的分水岭&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;GPT-3 最令人不安的发现来自新闻生成实验。&lt;/p&gt;&#xA;&lt;p&gt;给定标题和副标题，GPT-3 能生成完整的新闻文章。在人类评估中，参与者&lt;strong&gt;无法区分&lt;/strong&gt; GPT-3 生成的文章和真实新闻：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;&amp;ldquo;We find that GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans.&amp;rdquo;&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;p&gt;这个发现直接引发了关于 AI 生成内容的社会影响讨论。论文也因此专门讨论了伦理问题、偏见和滥用风险，并发布了一份 Model Card 来记录这些考量。&lt;/p&gt;&#xA;&lt;h2 id=&#34;局限与失败案例&#34;&gt;局限与失败案例&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;GPT-3 论文最值得称道的是，它没有回避模型的失败。论文详细列出了 GPT-3 的局限：&lt;/p&gt;&#xA;&lt;h3 id=&#34;1-句子比较任务&#34;&gt;1. 句子比较任务&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 在 WiC（单词含义比较）、RTE（文本蕴含）、CB（承诺推理）等涉及句子间比较的任务上表现很差。论文的推测是：&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;blockquote&gt;&#xD;&#xA;        &lt;p&gt;&amp;ldquo;GPT-3 appears to be weak in the few-shot or one-shot setting at some tasks that involve comparing two sentences or snippets.&amp;rdquo;&lt;/p&gt;&#xA;&#xD;&#xA;    &lt;/blockquote&gt;&#xD;&#xA;&lt;h3 id=&#34;2-自然语言推理&#34;&gt;2. 自然语言推理&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;在 ANLI（对抗性自然语言推理）上，GPT-3 的 Few-Shot 性能远低于随机基线，即使使用了 50 个示例。&lt;/p&gt;&#xA;&lt;h3 id=&#34;3-阅读理解racequac&#34;&gt;3. 阅读理解（RACE/QuAC）&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;RACE 和 QuAC 需要多轮推理和长文本理解，GPT-3 的 Few-Shot 性能远低于微调模型。&lt;/p&gt;&#xA;&lt;h3 id=&#34;4-数值推理&#34;&gt;4. 数值推理&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;在 DROP（需要离散推理和数值计算）上，GPT-3 仅 36.5 F1，而 SOTA 是 89.1。&lt;/p&gt;&#xA;&lt;h3 id=&#34;5-数据泄露&#34;&gt;5. 数据泄露&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;论文发现训练集和测试集之间存在大量 13-gram 重叠。虽然消融实验表明这对结果影响不大，但数据泄露问题仍然是 GPT-3 方法论上的一个主要争议点。&lt;/p&gt;&#xA;&lt;h2 id=&#34;技术启示gpt-3-改变了什么&#34;&gt;技术启示：GPT-3 改变了什么&#xD;&#xA;&lt;/h2&gt;&lt;h3 id=&#34;1-in-context-learning-取代微调成为新范式&#34;&gt;1. In-Context Learning 取代微调成为新范式&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 之前，NLP 的默认流程是&amp;quot;预训练+微调&amp;quot;。GPT-3 之后，Prompt Engineering 成为一门&amp;quot;科学&amp;quot;。这个转变的影响极其深远：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;无需标注数据&lt;/strong&gt;：以前需要数千条标注数据才能做好的任务，现在只需要几个示例&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;模型即平台&lt;/strong&gt;：API 提供者不再需要为每个任务训练专用模型，一个通用模型就够了&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;快速迭代&lt;/strong&gt;：改 prompt 比改模型快得多&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;2-规模即能力&#34;&gt;2. 规模即能力&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 第一次用实验证明了：&lt;strong&gt;简单的架构 × 足够大的规模 = 涌现能力&lt;/strong&gt;。这个结论奠定了此后所有大模型（PaLM、LLaMA、Chinchilla、DeepSeek）的发展方向。&lt;/p&gt;&#xA;&lt;h3 id=&#34;3-元学习框架&#34;&gt;3. 元学习框架&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 将语言模型重新定义为&lt;strong&gt;元学习器&lt;/strong&gt;——预训练是&amp;quot;学会如何学习&amp;quot;，推理时的上下文是&amp;quot;应用学习方法&amp;quot;。这个框架直接影响了后来 In-Context Learning 的数学理论（Dai et al., 2023）。&lt;/p&gt;&#xA;&lt;h3 id=&#34;4-参数与数据同等重要&#34;&gt;4. 参数与数据同等重要&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-3 的训练数据只有 3000 亿 token，而模型有 1750 亿参数。这意味着参数比 token 还多（约 6:1 的比例）。后来的 Chinchilla（2022）发现最优比例是 20:1（token:参数），说明 GPT-3 实际上&lt;strong&gt;训练不足&lt;/strong&gt;——如果给它更多数据，同等参数下性能还能更好。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参考资料&#34;&gt;参考资料&#xD;&#xA;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;Brown, T., et al. (2020). &lt;em&gt;Language Models are Few-Shot Learners&lt;/em&gt;. NeurIPS 2020. arXiv:2005.14165.&lt;/li&gt;&#xA;&lt;li&gt;Radford, A., et al. (2019). &lt;em&gt;Language Models are Unsupervised Multitask Learners&lt;/em&gt;. OpenAI.&lt;/li&gt;&#xA;&lt;li&gt;Kaplan, J., et al. (2020). &lt;em&gt;Scaling Laws for Neural Language Models&lt;/em&gt;. arXiv:2001.08361.&lt;/li&gt;&#xA;&lt;li&gt;Dai, D., et al. (2023). &lt;em&gt;Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers&lt;/em&gt;. ACL 2023.&lt;/li&gt;&#xA;&lt;li&gt;Xie, S. M., et al. (2022). &lt;em&gt;An Explanation of In-context Learning as Implicit Bayesian Inference&lt;/em&gt;. ICLR 2022.&lt;/li&gt;&#xA;&lt;li&gt;Child, R., et al. (2019). &lt;em&gt;Generating Long Sequences with Sparse Transformers&lt;/em&gt;. arXiv:1904.10509.&lt;/li&gt;&#xA;&lt;li&gt;Jay Alammar. &lt;em&gt;How GPT3 Works - Visualizations and Animations&lt;/em&gt;. &lt;a class=&#34;link&#34; href=&#34;http://jalammar.github.io/how-gpt3-works-visualizations-animations/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;&#xD;&#xA;    &gt;http://jalammar.github.io/how-gpt3-works-visualizations-animations/&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;OpenAI GPT-3 Model Card. &lt;a class=&#34;link&#34; href=&#34;https://github.com/openai/gpt-3/blob/master/model-card.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;&#xD;&#xA;    &gt;https://github.com/openai/gpt-3/blob/master/model-card.md&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;NVIDIA Blog. &lt;em&gt;OpenAI Presents GPT-3, a 175 Billion Parameters Language Model&lt;/em&gt;. &lt;a class=&#34;link&#34; href=&#34;https://developer.nvidia.com/blog/openai-presents-gpt-3-a-175-billion-parameters-language-model/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;&#xD;&#xA;    &gt;https://developer.nvidia.com/blog/openai-presents-gpt-3-a-175-billion-parameters-language-model/&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;</description>
-        </item><item>
-            <title>GPT-1/2：生成式预训练与 few-shot 萌芽</title>
-            <link>/p/gpt-01/</link>
-            <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/p/gpt-01/</guid>
-            <description>&lt;img src=&#34;/p/gpt-01/cover.jpg&#34; alt=&#34;Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽&#34; /&gt;&lt;h2 id=&#34;从-bert-到-gpt一个对称的思路&#34;&gt;从 BERT 到 GPT：一个对称的思路&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;2018 年是 NLP 的转折年。Google 的 BERT 用双向编码器横扫了理解类任务，OpenAI 的 GPT-1 则在同一年走了另一条路——只用 Decoder，只做生成。&lt;/p&gt;&#xA;&lt;p&gt;BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。&lt;/p&gt;&#xA;&lt;h2 id=&#34;核心设计decoder-only-与自回归&#34;&gt;核心设计：Decoder-only 与自回归&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。&lt;/p&gt;&#xA;&lt;figure&gt;&lt;img src=&#34;gpt-architecture.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 1：GPT-1 Decoder-only 架构（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;h3 id=&#34;每一层的技术细节&#34;&gt;每一层的技术细节&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Masked Self-Attention&lt;/strong&gt;：每个 token 只能看到自己和左边的 token。实现方式是在 softmax 之前把未来位置的分数设为 &lt;code&gt;-∞&lt;/code&gt;：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;&#xA;&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4&#xA;&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5&#xA;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&#xA;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 因果掩码的伪代码&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;K&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d_k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;          &lt;span class=&#34;c1&#34;&gt;# [seq_len, seq_len]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;triu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;diagonal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;          &lt;span class=&#34;c1&#34;&gt;# 未来位置 → -∞&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;softmax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;# 未来位置 → 0&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&lt;p&gt;这个掩码是三角形的（triangular mask），对角线以下是可见的，对角线以上被遮住。softmax 之后，被遮位置的权重为 0，不会影响后续计算。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Feed Forward&lt;/strong&gt;：两层全连接网络，使用 GELU 激活函数：&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;&#xA;&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1&#xA;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&#xA;&lt;td class=&#34;lntd&#34;&gt;&#xA;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;FFN(x) = W2 · GELU(W1 · x + b1) + b2&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&#xA;&lt;/div&gt;&#xA;&lt;/div&gt;&lt;p&gt;GPT-1 的 inner 维度是 3072（隐藏维度 768 的 4 倍），输出维度 768。GELU 比 ReLU 更平滑，在负半轴保留非零梯度，对深层网络的训练更稳定。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Layer Normalization 的位置&lt;/strong&gt;：GPT-1 把 LayerNorm 放在每个子层&lt;strong&gt;之前&lt;/strong&gt;（pre-norm），而原始 Transformer 放在之后（post-norm）。这个看似微小的改动后来被证明对训练稳定性至关重要——pre-norm 更容易训练深层网络。&lt;/p&gt;&#xA;&lt;h3 id=&#34;训练细节&#34;&gt;训练细节&#xD;&#xA;&lt;/h3&gt;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;参数&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-1&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;GPT-2 Small&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;层数&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;12&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;12&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;隐藏维度&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;768&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;768&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;注意力头&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;12&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;12&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;参数量&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;117M&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;124M&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;训练数据&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;BookCorpus (~1B 词)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;WebText (~40GB)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Batch size&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;64&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;512&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;学习率&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;2.5e-4 (warmup + cosine)&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;2.5e-4&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;优化器&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Adam&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;Adam&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;最大序列长度&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;512&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;1024&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;GPT-2 的改动主要是加大序列长度（512→1024）和 batch size（64→512），架构几乎不变。&lt;/p&gt;&#xA;&lt;h2 id=&#34;核心思想为什么-decoder-only-能做理解&#34;&gt;核心思想：为什么 Decoder-only 能做理解？&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;当时的主流观点是：理解任务需要双向上下文，所以 Encoder-only（BERT）更合理。GPT 用实验证明了一个反直觉的结论：&lt;strong&gt;生成式预训练本身就能学会理解&lt;/strong&gt;。&lt;/p&gt;&#xA;&lt;p&gt;直觉是这样的：语言模型在预测下一个词时，必须理解前面所有词的含义、语法关系、指代关系、甚至常识。如果模型能准确预测&amp;quot;小明去了超市，他买了一个___&amp;quot;，它必须知道&amp;quot;他&amp;quot;指代&amp;quot;小明&amp;quot;、&amp;ldquo;超市&amp;quot;暗示可以买&amp;quot;苹果&amp;quot;而不是&amp;quot;汽车&amp;rdquo;。&lt;strong&gt;预测下一个词这个任务，天然包含了理解。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;GPT-1 在 12 个 NLP 任务中的 9 个上取得了 SOTA。虽然绝对分数不如 BERT（因为 BERT 的双向编码确实在理解任务上更优），但 GPT-1 证明了生成式预训练这条路是可行的。&lt;/p&gt;&#xA;&lt;h2 id=&#34;gpt-2-的关键发现隐式多任务学习&#34;&gt;GPT-2 的关键发现：隐式多任务学习&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;GPT-2 沿用了 GPT-1 的架构，核心变化是放大规模和数据，但发现了更重要的东西。&lt;/p&gt;&#xA;&lt;h3 id=&#34;零样本能力&#34;&gt;零样本能力&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-2 最令人惊讶的发现是：&lt;strong&gt;完全没有经过微调&lt;/strong&gt;，在零样本设定下测试：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;机器翻译&lt;/strong&gt;（WMT-14 英法）：零样本 BLEU 11.5——虽然远不如专有模型，但这是在没有任何平行语料的情况下做到的&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;阅读理解&lt;/strong&gt;（CoQA）：零样本 55 F1，接近有监督 baseline&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;摘要&lt;/strong&gt;（CNN/Daily Mail）：零样本 ROUGE-L 与有监督模型相当&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;这意味着什么？GPT-2 在训练时从没见过任何翻译任务的数据，但当给它一段&amp;quot;English sentence = French sentence&amp;quot;的格式时，它自动学会了翻译。&lt;strong&gt;模型在预训练过程中隐式地学习了一个多任务学习器。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;h3 id=&#34;规模的影响&#34;&gt;规模的影响&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-2 发布了四个版本，参数量从 124M 到 1.5B。实验发现：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;模型&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;参数量&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th&gt;零样本 LAMBADA 准确率&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;GPT-2 Small&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;124M&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;45.0%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;GPT-2 Medium&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;355M&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;55.0%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;GPT-2 Large&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;774M&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;58.0%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;GPT-2 XL&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;1.5B&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td&gt;63.0%&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;规模越大，零样本准确率越高，而且没有饱和的迹象。这个趋势直接影响了两件事：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;strong&gt;GPT-3 的 175B 参数决策&lt;/strong&gt;——既然 1.5B 还没饱和，再放大 100 倍会怎样？&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Scaling Law 的提出&lt;/strong&gt;——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h2 id=&#34;单向注意力掩码的可视化&#34;&gt;单向注意力掩码的可视化&#xD;&#xA;&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;gpt-mask.png&#34;&gt;&lt;figcaption&gt;&#xA;&#x9;&#x9;&#x9;&lt;h4&gt;图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）&lt;/h4&gt;&#xA;&#x9;&#x9;&lt;/figcaption&gt;&#xA;&lt;/figure&gt;&#xA;&#xA;&lt;p&gt;图中展示的是 GPT 在预测每个位置时的注意力可见范围。预测 SOS 时只能看自己，预测&amp;quot;你&amp;quot;时可以看到 SOS、我、爱，但看不到后面的 EOS。这个看似简单的三角掩码，决定了 GPT 的生成能力和理解局限。&lt;/p&gt;&#xA;&lt;h2 id=&#34;为什么-gpt-12-值得关注&#34;&gt;为什么 GPT-1/2 值得关注&#xD;&#xA;&lt;/h2&gt;&lt;h3 id=&#34;技术启示&#34;&gt;技术启示&#xD;&#xA;&lt;/h3&gt;&lt;ol&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;&lt;strong&gt;Decoder-only 成为主流&lt;/strong&gt;。GPT-3、LLaMA、Mistral、DeepSeek 都采用了 GPT 开创的 Decoder-only 路线。Decoder-only 最终被证明在大规模下最有效——原因是：Encoder-only 只能做理解，Encoder-Decoder 需要同步两个模块，而 Decoder-only 可以无限堆叠，单纯靠规模解决问题。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;&lt;strong&gt;零样本能力改变了一切&lt;/strong&gt;。GPT-2 证明了模型可以不经微调就迁移到未见过的任务。这个发现直接催生了 GPT-3 的 in-context learning，以及后来指令微调、RLHF 等技术路线。如果没有 GPT-2 的零样本发现，GPT-3 可能不会选择&amp;quot;few-shot prompt&amp;quot;这个方向。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;&lt;strong&gt;Scaling 路线的起点&lt;/strong&gt;。GPT-1 117M → GPT-2 1.5B → GPT-3 175B，这条增长曲线不是偶然的。GPT-2 的实验数据直接支持了&amp;quot;越大越好&amp;quot;的假设。&lt;/p&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h3 id=&#34;格局变化&#34;&gt;格局变化&#xD;&#xA;&lt;/h3&gt;&lt;p&gt;GPT-1 发布时（2018 年 6 月），NLP 领域的主流是 LSTM + Attention。GPT-1 证明了 Transformer 在生成任务上同样有效。半年后 BERT 在理解任务上全面超越 GPT-1，所以 GPT-1 的注意力被抢走了。&lt;/p&gt;&#xA;&lt;p&gt;但 GPT-2 发布时（2019 年 2 月），情况变了。OpenAI 因为担心滥用，最初只发布了 124M 的小模型，九个月后才全面开源 1.5B 的完整版。这个&amp;quot;不开源&amp;quot;的决定本身就说明：&lt;strong&gt;他们意识到这个方向可能比想象中更强大&lt;/strong&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参考资料&#34;&gt;参考资料&#xD;&#xA;&lt;/h2&gt;&lt;ul&gt;&#xA;&lt;li&gt;Radford, A., et al. (2018). &lt;em&gt;Improving Language Understanding by Generative Pre-Training&lt;/em&gt;. OpenAI.&lt;/li&gt;&#xA;&lt;li&gt;Radford, A., et al. (2019). &lt;em&gt;Language Models are Unsupervised Multitask Learners&lt;/em&gt;. OpenAI.&lt;/li&gt;&#xA;&lt;li&gt;Devlin, J., et al. (2018). &lt;em&gt;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&lt;/em&gt;. arXiv:1810.04805.&lt;/li&gt;&#xA;&lt;li&gt;Brown, T., et al. (2020). &lt;em&gt;Language Models are Few-Shot Learners&lt;/em&gt;. arXiv:2005.14165.&lt;/li&gt;&#xA;&lt;li&gt;The Illustrated GPT-2 (Jay Alammar): &lt;a class=&#34;link&#34; href=&#34;http://jalammar.github.io/illustrated-gpt2/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;&#xD;&#xA;    &gt;http://jalammar.github.io/illustrated-gpt2/&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;</description>
-        </item></channel>
+        <title>GPT-3：In-Context Learning 与 Few-Shot 爆发</title>
+        <link>/p/gpt-03/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/p/gpt-03/</guid>
+        <description>&lt;img src="/p/gpt-03/cover.jpg" alt="Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发" /&gt;&lt;h2 id=&#34;引言gpt-2-的未竟之问&#34;&gt;引言：GPT-2 的未竟之问
+&lt;/h2&gt;&lt;p&gt;GPT-2（2019）展示了两个令人震惊的发现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;零样本能力&lt;/strong&gt;——模型没经过任何微调，就能做翻译、问答、摘要&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;规模无饱和&lt;/strong&gt;——从 124M 到 1.5B，模型越大零样本能力越强，曲线毫无放缓迹象&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;但 GPT-2 的发现也留下了一个尖锐的问题：&lt;strong&gt;如果继续放大 100 倍会怎样？&lt;/strong&gt; GPT-2 XL（1.5B）的零样本 CoQA 评分是 55 F1，而当时 SOTA 微调模型是 90.7 F1——差距依然巨大。零样本能力虽然惊艳，但离实用还差得远。&lt;/p&gt;
+&lt;p&gt;OpenAI 的回答很简单：&lt;strong&gt;继续放大，直到看到天花板为止。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;2020 年 5 月，他们发布了 GPT-3，一个 1750 亿参数的自回归语言模型，比当时任何非稀疏模型大 10 倍以上。这篇论文《Language Models are Few-Shot Learners》不仅刷新了规模记录，更催生了一个全新的概念——&lt;strong&gt;In-Context Learning（上下文学习）&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;核心架构gpt-2-的直系继承者&#34;&gt;核心架构：GPT-2 的直系继承者
+&lt;/h2&gt;&lt;h3 id=&#34;架构概览&#34;&gt;架构概览
+&lt;/h3&gt;&lt;p&gt;GPT-3 的架构几乎原封不动地沿用了 GPT-2：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;We use the same model and architecture as GPT-2, including the modified initialization, pre-normalization, and reversible tokenization described therein.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;关键参数：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;参数&lt;/th&gt;
+					&lt;th&gt;GPT-2 XL&lt;/th&gt;
+					&lt;th&gt;GPT-3 175B&lt;/th&gt;
+					&lt;th&gt;变化&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;层数（n_layers）&lt;/td&gt;
+					&lt;td&gt;48&lt;/td&gt;
+					&lt;td&gt;96&lt;/td&gt;
+					&lt;td&gt;2×&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;隐藏维度（d_model）&lt;/td&gt;
+					&lt;td&gt;1600&lt;/td&gt;
+					&lt;td&gt;12288&lt;/td&gt;
+					&lt;td&gt;7.68×&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;注意力头数（n_heads）&lt;/td&gt;
+					&lt;td&gt;25&lt;/td&gt;
+					&lt;td&gt;96&lt;/td&gt;
+					&lt;td&gt;3.84×&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;每头维度（d_head）&lt;/td&gt;
+					&lt;td&gt;64&lt;/td&gt;
+					&lt;td&gt;128&lt;/td&gt;
+					&lt;td&gt;2×&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;前馈网络维度（d_ff）&lt;/td&gt;
+					&lt;td&gt;6400&lt;/td&gt;
+					&lt;td&gt;49152&lt;/td&gt;
+					&lt;td&gt;7.68×&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;上下文窗口（n_ctx）&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+					&lt;td&gt;2048&lt;/td&gt;
+					&lt;td&gt;2×&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;参数量&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;175B&lt;/td&gt;
+					&lt;td&gt;~117×&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;唯一架构改动交替稀疏注意力&#34;&gt;唯一架构改动：交替稀疏注意力
+&lt;/h3&gt;&lt;p&gt;GPT-3 在注意力机制上做了一个重要改动：&lt;strong&gt;交替使用密集注意力和局部带状稀疏注意力&lt;/strong&gt;（alternating dense and locally banded sparse attention patterns），类似于 Sparse Transformer。&lt;/p&gt;
+&lt;p&gt;具体来说，在 96 层中，每隔一层使用稀疏注意力：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;密集层（第 0、2、4...层）：标准全局注意力，每个 token 可以看到所有之前的 token
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;稀疏层（第 1、3、5...层）：局部带状注意力，每个 token 只能看到附近固定窗口内的 token
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这个设计的动机很直接——&lt;strong&gt;降低计算复杂度&lt;/strong&gt;。标准自注意力的复杂度是 O(n²·d)，当 n=2048 时，96 层全部使用密集注意力，计算量巨大。稀疏注意力将复杂度降到 O(n·k·d)，其中 k 是局部窗口大小。&lt;/p&gt;
+&lt;p&gt;直觉上，这相当于让模型一部分层做&amp;quot;全局理解&amp;quot;，另一部分层做&amp;quot;局部精修&amp;quot;。后来 LLaMA 等模型放弃了这种设计，改用全密集注意力，因为现代 GPU 硬件对密集矩阵乘法的优化比稀疏模式更高效。&lt;/p&gt;
+&lt;h3 id=&#34;训练配置&#34;&gt;训练配置
+&lt;/h3&gt;&lt;p&gt;GPT-3 175B 的训练配置：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;超参数&lt;/th&gt;
+					&lt;th&gt;值&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;总训练 token 数&lt;/td&gt;
+					&lt;td&gt;3000 亿&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Batch size&lt;/td&gt;
+					&lt;td&gt;320 万个 token（约 1562 个序列）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;学习率&lt;/td&gt;
+					&lt;td&gt;6×10⁻⁵（余弦衰减）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;优化器&lt;/td&gt;
+					&lt;td&gt;Adam（β₁=0.9, β₂=0.95, ε=10⁻⁸）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;梯度裁剪&lt;/td&gt;
+					&lt;td&gt;1.0&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;权重衰减&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Warmup 步数&lt;/td&gt;
+					&lt;td&gt;375M token（约 1200 步）&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;硬件&lt;/td&gt;
+					&lt;td&gt;约 10,000 张 NVIDIA V100 GPU&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;训练时长&lt;/td&gt;
+					&lt;td&gt;约 92 天&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;估算成本&lt;/td&gt;
+					&lt;td&gt;约 1200 万美元（仅最终训练）&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;模型并行策略&#34;&gt;模型并行策略
+&lt;/h3&gt;&lt;p&gt;GPT-3 175B 需要约 700GB 显存（FP32 下每个参数 4 字节），远超当时任何单张 GPU 的容量（V100 仅 32GB）。OpenAI 使用了&lt;strong&gt;混合模型并行&lt;/strong&gt;策略：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;算子内并行&lt;/strong&gt;（Intra-operator）：将单个矩阵乘法拆分到多个 GPU 上&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;层间并行&lt;/strong&gt;（Inter-operator）：将不同层分配到不同 GPU，组成流水线&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这种&amp;quot;沿深度和宽度两个维度分割&amp;quot;的策略，使得模型可以在 10,000 张 V100 上高效分布。&lt;/p&gt;
+&lt;h2 id=&#34;训练数据质量优先的混合策略&#34;&gt;训练数据：质量优先的混合策略
+&lt;/h2&gt;&lt;h3 id=&#34;数据来源&#34;&gt;数据来源
+&lt;/h3&gt;&lt;p&gt;GPT-3 的训练数据来自五个来源，经过精心筛选和去重：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;数据集&lt;/th&gt;
+					&lt;th&gt;原始大小&lt;/th&gt;
+					&lt;th&gt;过滤后大小&lt;/th&gt;
+					&lt;th&gt;训练采样比例&lt;/th&gt;
+					&lt;th&gt;训练 epoch 数&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CommonCrawl（2016-2019）&lt;/td&gt;
+					&lt;td&gt;45TB&lt;/td&gt;
+					&lt;td&gt;570GB（~4000 亿 token）&lt;/td&gt;
+					&lt;td&gt;60%&lt;/td&gt;
+					&lt;td&gt;&amp;lt;1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;WebText2（扩展版）&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;19GB&lt;/td&gt;
+					&lt;td&gt;22%&lt;/td&gt;
+					&lt;td&gt;~2.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Books1&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;14GB&lt;/td&gt;
+					&lt;td&gt;8%&lt;/td&gt;
+					&lt;td&gt;~2.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Books2&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;55GB&lt;/td&gt;
+					&lt;td&gt;8%&lt;/td&gt;
+					&lt;td&gt;&amp;lt;1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Wikipedia（英文）&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;3GB&lt;/td&gt;
+					&lt;td&gt;3%&lt;/td&gt;
+					&lt;td&gt;~3&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;关键设计过采样高质量数据&#34;&gt;关键设计：过采样高质量数据
+&lt;/h3&gt;&lt;p&gt;注意一个反直觉的设计：&lt;strong&gt;CommonCrawl 和 Books2 在整个训练过程中被采样不到一次（&amp;lt;1 epoch），而 Wikipedia 被采样了 3 次。&lt;/strong&gt; 这意味着模型会&amp;quot;看到&amp;quot;某些高质量数据多次，而低质量数据只看一次。&lt;/p&gt;
+&lt;p&gt;这本质上是有意接受少量过拟合，换取训练数据质量的提升。论文中的原话是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;This essentially accepts a small amount of overfitting in exchange for higher quality training data.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;数据过滤流程&#34;&gt;数据过滤流程
+&lt;/h3&gt;&lt;p&gt;CommonCrawl 的过滤流程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;基于质量过滤&lt;/strong&gt;：以 WebText、Wikipedia、Books 等高质语料为参考，用分类器筛选相似度高的网页&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模糊去重&lt;/strong&gt;：在文档级别做模糊去重，防止训练集和验证集之间的数据泄露&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;混合高质语料&lt;/strong&gt;：加入 WebText2、Books1/2、Wikipedia 等精选数据集&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;in-context-learning新范式的诞生&#34;&gt;In-Context Learning：新范式的诞生
+&lt;/h2&gt;&lt;h3 id=&#34;从-fine-tuning-到-in-context-learning&#34;&gt;从 Fine-Tuning 到 In-Context Learning
+&lt;/h3&gt;&lt;p&gt;在 GPT-3 之前，NLP 任务的范式是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;预训练&lt;/strong&gt;：在大规模无标注语料上训练语言模型&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;微调&lt;/strong&gt;：在每个下游任务上，用数千条标注数据更新模型参数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;GPT-3 提出了一个截然不同的范式——&lt;strong&gt;In-Context Learning（上下文学习）&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;不需要微调，不需要更新参数，只需要在推理时把几个示例拼在输入前面，模型就能自动学会做这个任务。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;论文定义了三种上下文学习设置：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;零样本（Zero-Shot）：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#34;Translate English to French: cheese →&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;一样本（One-Shot）：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#34;Translate English to French:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   sea otter → loutre de mer
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   cheese →&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;少样本（Few-Shot）：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &amp;#34;Translate English to French:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   sea otter → loutre de mer
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   peppermint → menthe poivrée
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   plush girafe → girafe peluche
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   cheese →&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;关键的是，&lt;strong&gt;模型不更新任何参数&lt;/strong&gt;。Few-Shot 只是把 K 个示例（通常 10-100 个，受限于 2048 的上下文窗口）拼在输入中，模型通过&amp;quot;预测下一个词&amp;quot;的机制自动完成新任务。&lt;/p&gt;
+&lt;h3 id=&#34;为什么-in-context-learning-可行&#34;&gt;为什么 In-Context Learning 可行？
+&lt;/h3&gt;&lt;p&gt;论文提出了一个重要的概念框架——&lt;strong&gt;元学习（Meta-Learning）&lt;/strong&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;Language models can also be understood as meta-learners where slow outer-loop gradient descent based learning is combined with fast &amp;lsquo;in-context&amp;rsquo; learning implemented within the context activations of the model.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个框架包含两个循环：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;外循环（慢）&lt;/strong&gt;：预训练阶段，通过梯度下降逐步学习语言知识、模式识别能力&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内循环（快）&lt;/strong&gt;：推理阶段，通过上下文中的示例，在 forward pass 内完成&amp;quot;学习&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;后来的研究（Dai et al., 2023）进一步揭示了数学机制：&lt;strong&gt;Transformer 注意力与梯度下降之间存在对偶形式&lt;/strong&gt;。简单来说，注意力机制中的 key-value 查找可以看作是对模型隐式参数的&amp;quot;梯度更新&amp;quot;，而上下文中的示例提供了这些&amp;quot;梯度&amp;quot;的方向。&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/gpt-03/icl-mechanism.svg&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 1：In-Context Learning 机制——Meta-Learning 框架下外循环（预训练梯度下降）与内循环（推理阶段 Forward Pass）的协作关系&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h3 id=&#34;scale-的关键作用&#34;&gt;Scale 的关键作用
+&lt;/h3&gt;&lt;p&gt;GPT-3 最重要的发现之一是：&lt;strong&gt;In-Context Learning 能力随模型规模急剧提升。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;从论文的 Figure 1.3 可以看出：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;零样本性能&lt;/strong&gt;：随模型规模稳步提升（线性）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Few-Shot 性能&lt;/strong&gt;：随模型规模&lt;strong&gt;急剧提升&lt;/strong&gt;（超线性）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这意味着：&lt;strong&gt;更大的模型不仅是&amp;quot;更聪明&amp;quot;的语言模型，更是&amp;quot;更擅长从示例中学习&amp;quot;的元学习器。&lt;/strong&gt; 这个发现直接催生了后来所有大模型的 Prompt Engineering 范式。&lt;/p&gt;
+&lt;h2 id=&#34;效果数据定量的跨越&#34;&gt;效果数据：定量的跨越
+&lt;/h2&gt;&lt;h3 id=&#34;语言建模&#34;&gt;语言建模
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;基准&lt;/th&gt;
+					&lt;th&gt;之前 SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;
+					&lt;th&gt;提升&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;PTB 困惑度&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;20.5&lt;/td&gt;
+					&lt;td&gt;领先 15 个点&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;LAMBADA 准确率&lt;/td&gt;
+					&lt;td&gt;76.0%&lt;/td&gt;
+					&lt;td&gt;86.4%&lt;/td&gt;
+					&lt;td&gt;+10.4%&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;闭卷问答&#34;&gt;闭卷问答
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;基准&lt;/th&gt;
+					&lt;th&gt;微调 SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 One-Shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;TriviaQA&lt;/td&gt;
+					&lt;td&gt;68.0（RAG, 开放域）&lt;/td&gt;
+					&lt;td&gt;64.3&lt;/td&gt;
+					&lt;td&gt;68.0&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;71.2&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;WebQuestions&lt;/td&gt;
+					&lt;td&gt;44.7（T5-11B+SSM）&lt;/td&gt;
+					&lt;td&gt;14.4&lt;/td&gt;
+					&lt;td&gt;25.3&lt;/td&gt;
+					&lt;td&gt;41.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Natural Questions&lt;/td&gt;
+					&lt;td&gt;36.6（T5-11B+SSM）&lt;/td&gt;
+					&lt;td&gt;14.6&lt;/td&gt;
+					&lt;td&gt;23.0&lt;/td&gt;
+					&lt;td&gt;29.9&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;在 TriviaQA 上，GPT-3 &lt;strong&gt;零样本&lt;/strong&gt;就已经超过微调后的 T5-11B 14.2%，Few-Shot 更进一步达到 71.2%，超过当时所有微调模型（包括使用检索增强的 RAG）。&lt;/p&gt;
+&lt;h3 id=&#34;阅读理解&#34;&gt;阅读理解
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;基准&lt;/th&gt;
+					&lt;th&gt;微调 SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 One-Shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CoQA (F1)&lt;/td&gt;
+					&lt;td&gt;90.7&lt;/td&gt;
+					&lt;td&gt;81.5&lt;/td&gt;
+					&lt;td&gt;84.0&lt;/td&gt;
+					&lt;td&gt;85.0&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;DROP (F1)&lt;/td&gt;
+					&lt;td&gt;89.1&lt;/td&gt;
+					&lt;td&gt;23.6&lt;/td&gt;
+					&lt;td&gt;34.3&lt;/td&gt;
+					&lt;td&gt;36.5&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;CoQA 上 Few-Shot 仅差 SOTA 5.7 个点，而 DROP（需要离散推理和数值计算）差距较大——这暴露了纯语言模型在&amp;quot;数学推理&amp;quot;上的根本弱点。&lt;/p&gt;
+&lt;h3 id=&#34;常识推理&#34;&gt;常识推理
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;基准&lt;/th&gt;
+					&lt;th&gt;微调 SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 Zero-Shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;ARC-Easy&lt;/td&gt;
+					&lt;td&gt;92.0&lt;/td&gt;
+					&lt;td&gt;68.8&lt;/td&gt;
+					&lt;td&gt;70.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;ARC-Challenge&lt;/td&gt;
+					&lt;td&gt;78.5&lt;/td&gt;
+					&lt;td&gt;51.4&lt;/td&gt;
+					&lt;td&gt;51.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;HellaSwag&lt;/td&gt;
+					&lt;td&gt;91.8&lt;/td&gt;
+					&lt;td&gt;76.2&lt;/td&gt;
+					&lt;td&gt;86.4&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;superglue&#34;&gt;SuperGLUE
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;任务&lt;/th&gt;
+					&lt;th&gt;微调 SOTA&lt;/th&gt;
+					&lt;th&gt;微调 BERT-Large&lt;/th&gt;
+					&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;BoolQ&lt;/td&gt;
+					&lt;td&gt;91.0&lt;/td&gt;
+					&lt;td&gt;77.4&lt;/td&gt;
+					&lt;td&gt;71.8&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;CB (F1)&lt;/td&gt;
+					&lt;td&gt;96.9&lt;/td&gt;
+					&lt;td&gt;83.6&lt;/td&gt;
+					&lt;td&gt;75.6&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;COPA&lt;/td&gt;
+					&lt;td&gt;94.8&lt;/td&gt;
+					&lt;td&gt;70.6&lt;/td&gt;
+					&lt;td&gt;92.0&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RTE&lt;/td&gt;
+					&lt;td&gt;92.5&lt;/td&gt;
+					&lt;td&gt;71.7&lt;/td&gt;
+					&lt;td&gt;69.0&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;WiC&lt;/td&gt;
+					&lt;td&gt;76.1&lt;/td&gt;
+					&lt;td&gt;69.6&lt;/td&gt;
+					&lt;td&gt;49.4&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;WSC&lt;/td&gt;
+					&lt;td&gt;93.8&lt;/td&gt;
+					&lt;td&gt;64.6&lt;/td&gt;
+					&lt;td&gt;80.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;MultiRC&lt;/td&gt;
+					&lt;td&gt;88.2&lt;/td&gt;
+					&lt;td&gt;70.0&lt;/td&gt;
+					&lt;td&gt;75.4&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;ReCoRD (F1)&lt;/td&gt;
+					&lt;td&gt;93.3&lt;/td&gt;
+					&lt;td&gt;72.0&lt;/td&gt;
+					&lt;td&gt;91.1&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;GPT-3 在 COPA 和 ReCoRD 上接近 SOTA，在 WSC 和 MultiRC 上超越 BERT-Large。但 WiC 上只有随机水平——&lt;strong&gt;涉及句子间比较的任务是 GPT-3 的明显弱项&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;机器翻译&#34;&gt;机器翻译
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;方向&lt;/th&gt;
+					&lt;th&gt;有监督 SOTA&lt;/th&gt;
+					&lt;th&gt;无监督 SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 Few-Shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;英→法&lt;/td&gt;
+					&lt;td&gt;45.6&lt;/td&gt;
+					&lt;td&gt;33.4&lt;/td&gt;
+					&lt;td&gt;32.6&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;法→英&lt;/td&gt;
+					&lt;td&gt;35.0&lt;/td&gt;
+					&lt;td&gt;34.9&lt;/td&gt;
+					&lt;td&gt;39.2&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;英→德&lt;/td&gt;
+					&lt;td&gt;41.2&lt;/td&gt;
+					&lt;td&gt;28.3&lt;/td&gt;
+					&lt;td&gt;29.7&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;德→英&lt;/td&gt;
+					&lt;td&gt;40.2&lt;/td&gt;
+					&lt;td&gt;34.3&lt;/td&gt;
+					&lt;td&gt;40.6&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;英→罗&lt;/td&gt;
+					&lt;td&gt;38.5&lt;/td&gt;
+					&lt;td&gt;35.2&lt;/td&gt;
+					&lt;td&gt;21.0&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;罗→英&lt;/td&gt;
+					&lt;td&gt;39.9&lt;/td&gt;
+					&lt;td&gt;33.1&lt;/td&gt;
+					&lt;td&gt;39.5&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;在法→英和德→英上，GPT-3 Few-Shot 甚至超过了有监督 SOTA，反映了 GPT-3 作为英语语言模型的强大生成能力。&lt;/p&gt;
+&lt;h3 id=&#34;语言模型规模的影响&#34;&gt;语言模型规模的影响
+&lt;/h3&gt;&lt;p&gt;论文训练了 8 个不同规模的模型，从 125M 到 175B，所有模型都训练了 3000 亿 token：&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/gpt-03/scaling-curves.svg&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 2：模型规模与性能关系——Zero-Shot 稳步提升，One-Shot 曲线变陡，Few-Shot 呈超线性增长&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;关键发现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;零样本&lt;/strong&gt;：从 125M 到 175B，性能稳步提升，但曲线平缓&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;一样本&lt;/strong&gt;：曲线明显变陡——大模型更能从单个示例中受益&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;少样本&lt;/strong&gt;：曲线最陡——大模型更擅长从多个示例中学习规律&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;新闻生成真假难辨的分水岭&#34;&gt;新闻生成：真假难辨的分水岭
+&lt;/h2&gt;&lt;p&gt;GPT-3 最令人不安的发现来自新闻生成实验。&lt;/p&gt;
+&lt;p&gt;给定标题和副标题，GPT-3 能生成完整的新闻文章。在人类评估中，参与者&lt;strong&gt;无法区分&lt;/strong&gt; GPT-3 生成的文章和真实新闻：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;We find that GPT-3 can generate samples of news articles which human evaluators have difficulty distinguishing from articles written by humans.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个发现直接引发了关于 AI 生成内容的社会影响讨论。论文也因此专门讨论了伦理问题、偏见和滥用风险，并发布了一份 Model Card 来记录这些考量。&lt;/p&gt;
+&lt;h2 id=&#34;局限与失败案例&#34;&gt;局限与失败案例
+&lt;/h2&gt;&lt;p&gt;GPT-3 论文最值得称道的是，它没有回避模型的失败。论文详细列出了 GPT-3 的局限：&lt;/p&gt;
+&lt;h3 id=&#34;1-句子比较任务&#34;&gt;1. 句子比较任务
+&lt;/h3&gt;&lt;p&gt;GPT-3 在 WiC（单词含义比较）、RTE（文本蕴含）、CB（承诺推理）等涉及句子间比较的任务上表现很差。论文的推测是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;GPT-3 appears to be weak in the few-shot or one-shot setting at some tasks that involve comparing two sentences or snippets.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;2-自然语言推理&#34;&gt;2. 自然语言推理
+&lt;/h3&gt;&lt;p&gt;在 ANLI（对抗性自然语言推理）上，GPT-3 的 Few-Shot 性能远低于随机基线，即使使用了 50 个示例。&lt;/p&gt;
+&lt;h3 id=&#34;3-阅读理解racequac&#34;&gt;3. 阅读理解（RACE/QuAC）
+&lt;/h3&gt;&lt;p&gt;RACE 和 QuAC 需要多轮推理和长文本理解，GPT-3 的 Few-Shot 性能远低于微调模型。&lt;/p&gt;
+&lt;h3 id=&#34;4-数值推理&#34;&gt;4. 数值推理
+&lt;/h3&gt;&lt;p&gt;在 DROP（需要离散推理和数值计算）上，GPT-3 仅 36.5 F1，而 SOTA 是 89.1。&lt;/p&gt;
+&lt;h3 id=&#34;5-数据泄露&#34;&gt;5. 数据泄露
+&lt;/h3&gt;&lt;p&gt;论文发现训练集和测试集之间存在大量 13-gram 重叠。虽然消融实验表明这对结果影响不大，但数据泄露问题仍然是 GPT-3 方法论上的一个主要争议点。&lt;/p&gt;
+&lt;h2 id=&#34;技术启示gpt-3-改变了什么&#34;&gt;技术启示：GPT-3 改变了什么
+&lt;/h2&gt;&lt;h3 id=&#34;1-in-context-learning-取代微调成为新范式&#34;&gt;1. In-Context Learning 取代微调成为新范式
+&lt;/h3&gt;&lt;p&gt;GPT-3 之前，NLP 的默认流程是&amp;quot;预训练+微调&amp;quot;。GPT-3 之后，Prompt Engineering 成为一门&amp;quot;科学&amp;quot;。这个转变的影响极其深远：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;无需标注数据&lt;/strong&gt;：以前需要数千条标注数据才能做好的任务，现在只需要几个示例&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;模型即平台&lt;/strong&gt;：API 提供者不再需要为每个任务训练专用模型，一个通用模型就够了&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;快速迭代&lt;/strong&gt;：改 prompt 比改模型快得多&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-规模即能力&#34;&gt;2. 规模即能力
+&lt;/h3&gt;&lt;p&gt;GPT-3 第一次用实验证明了：&lt;strong&gt;简单的架构 × 足够大的规模 = 涌现能力&lt;/strong&gt;。这个结论奠定了此后所有大模型（PaLM、LLaMA、Chinchilla、DeepSeek）的发展方向。&lt;/p&gt;
+&lt;h3 id=&#34;3-元学习框架&#34;&gt;3. 元学习框架
+&lt;/h3&gt;&lt;p&gt;GPT-3 将语言模型重新定义为&lt;strong&gt;元学习器&lt;/strong&gt;——预训练是&amp;quot;学会如何学习&amp;quot;，推理时的上下文是&amp;quot;应用学习方法&amp;quot;。这个框架直接影响了后来 In-Context Learning 的数学理论（Dai et al., 2023）。&lt;/p&gt;
+&lt;h3 id=&#34;4-参数与数据同等重要&#34;&gt;4. 参数与数据同等重要
+&lt;/h3&gt;&lt;p&gt;GPT-3 的训练数据只有 3000 亿 token，而模型有 1750 亿参数。这意味着参数比 token 还多（约 6:1 的比例）。后来的 Chinchilla（2022）发现最优比例是 20:1（token:参数），说明 GPT-3 实际上&lt;strong&gt;训练不足&lt;/strong&gt;——如果给它更多数据，同等参数下性能还能更好。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Brown, T., et al. (2020). &lt;em&gt;Language Models are Few-Shot Learners&lt;/em&gt;. NeurIPS 2020. arXiv:2005.14165.&lt;/li&gt;
+&lt;li&gt;Radford, A., et al. (2019). &lt;em&gt;Language Models are Unsupervised Multitask Learners&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;Kaplan, J., et al. (2020). &lt;em&gt;Scaling Laws for Neural Language Models&lt;/em&gt;. arXiv:2001.08361.&lt;/li&gt;
+&lt;li&gt;Dai, D., et al. (2023). &lt;em&gt;Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers&lt;/em&gt;. ACL 2023.&lt;/li&gt;
+&lt;li&gt;Xie, S. M., et al. (2022). &lt;em&gt;An Explanation of In-context Learning as Implicit Bayesian Inference&lt;/em&gt;. ICLR 2022.&lt;/li&gt;
+&lt;li&gt;Child, R., et al. (2019). &lt;em&gt;Generating Long Sequences with Sparse Transformers&lt;/em&gt;. arXiv:1904.10509.&lt;/li&gt;
+&lt;li&gt;Jay Alammar. &lt;em&gt;How GPT3 Works - Visualizations and Animations&lt;/em&gt;. &lt;a class=&#34;link&#34; href=&#34;http://jalammar.github.io/how-gpt3-works-visualizations-animations/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://jalammar.github.io/how-gpt3-works-visualizations-animations/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;OpenAI GPT-3 Model Card. &lt;a class=&#34;link&#34; href=&#34;https://github.com/openai/gpt-3/blob/master/model-card.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/openai/gpt-3/blob/master/model-card.md&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;NVIDIA Blog. &lt;em&gt;OpenAI Presents GPT-3, a 175 Billion Parameters Language Model&lt;/em&gt;. &lt;a class=&#34;link&#34; href=&#34;https://developer.nvidia.com/blog/openai-presents-gpt-3-a-175-billion-parameters-language-model/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://developer.nvidia.com/blog/openai-presents-gpt-3-a-175-billion-parameters-language-model/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>GPT-1/2：生成式预训练与 few-shot 萌芽</title>
+        <link>/p/gpt-01/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/p/gpt-01/</guid>
+        <description>&lt;img src="/p/gpt-01/cover.jpg" alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" /&gt;&lt;h2 id=&#34;从-bert-到-gpt一个对称的思路&#34;&gt;从 BERT 到 GPT：一个对称的思路
+&lt;/h2&gt;&lt;p&gt;2018 年是 NLP 的转折年。Google 的 BERT 用双向编码器横扫了理解类任务，OpenAI 的 GPT-1 则在同一年走了另一条路——只用 Decoder，只做生成。&lt;/p&gt;
+&lt;p&gt;BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。&lt;/p&gt;
+&lt;h2 id=&#34;核心设计decoder-only-与自回归&#34;&gt;核心设计：Decoder-only 与自回归
+&lt;/h2&gt;&lt;p&gt;GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。&lt;/p&gt;
+&lt;figure&gt;&lt;img src=&#34;gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 1：GPT-1 Decoder-only 架构（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h3 id=&#34;每一层的技术细节&#34;&gt;每一层的技术细节
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Masked Self-Attention&lt;/strong&gt;：每个 token 只能看到自己和左边的 token。实现方式是在 softmax 之前把未来位置的分数设为 &lt;code&gt;-∞&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 因果掩码的伪代码&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;K&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d_k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;          &lt;span class=&#34;c1&#34;&gt;# [seq_len, seq_len]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;triu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;diagonal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;          &lt;span class=&#34;c1&#34;&gt;# 未来位置 → -∞&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;softmax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;# 未来位置 → 0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这个掩码是三角形的（triangular mask），对角线以下是可见的，对角线以上被遮住。softmax 之后，被遮位置的权重为 0，不会影响后续计算。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Feed Forward&lt;/strong&gt;：两层全连接网络，使用 GELU 激活函数：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;FFN(x) = W2 · GELU(W1 · x + b1) + b2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;GPT-1 的 inner 维度是 3072（隐藏维度 768 的 4 倍），输出维度 768。GELU 比 ReLU 更平滑，在负半轴保留非零梯度，对深层网络的训练更稳定。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Layer Normalization 的位置&lt;/strong&gt;：GPT-1 把 LayerNorm 放在每个子层&lt;strong&gt;之前&lt;/strong&gt;（pre-norm），而原始 Transformer 放在之后（post-norm）。这个看似微小的改动后来被证明对训练稳定性至关重要——pre-norm 更容易训练深层网络。&lt;/p&gt;
+&lt;h3 id=&#34;训练细节&#34;&gt;训练细节
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;参数&lt;/th&gt;
+					&lt;th&gt;GPT-1&lt;/th&gt;
+					&lt;th&gt;GPT-2 Small&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;层数&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;隐藏维度&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;注意力头&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;参数量&lt;/td&gt;
+					&lt;td&gt;117M&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;训练数据&lt;/td&gt;
+					&lt;td&gt;BookCorpus (~1B 词)&lt;/td&gt;
+					&lt;td&gt;WebText (~40GB)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Batch size&lt;/td&gt;
+					&lt;td&gt;64&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;学习率&lt;/td&gt;
+					&lt;td&gt;2.5e-4 (warmup + cosine)&lt;/td&gt;
+					&lt;td&gt;2.5e-4&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;优化器&lt;/td&gt;
+					&lt;td&gt;Adam&lt;/td&gt;
+					&lt;td&gt;Adam&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;最大序列长度&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;GPT-2 的改动主要是加大序列长度（512→1024）和 batch size（64→512），架构几乎不变。&lt;/p&gt;
+&lt;h2 id=&#34;核心思想为什么-decoder-only-能做理解&#34;&gt;核心思想：为什么 Decoder-only 能做理解？
+&lt;/h2&gt;&lt;p&gt;当时的主流观点是：理解任务需要双向上下文，所以 Encoder-only（BERT）更合理。GPT 用实验证明了一个反直觉的结论：&lt;strong&gt;生成式预训练本身就能学会理解&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;直觉是这样的：语言模型在预测下一个词时，必须理解前面所有词的含义、语法关系、指代关系、甚至常识。如果模型能准确预测&amp;quot;小明去了超市，他买了一个___&amp;quot;，它必须知道&amp;quot;他&amp;quot;指代&amp;quot;小明&amp;quot;、&amp;ldquo;超市&amp;quot;暗示可以买&amp;quot;苹果&amp;quot;而不是&amp;quot;汽车&amp;rdquo;。&lt;strong&gt;预测下一个词这个任务，天然包含了理解。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;GPT-1 在 12 个 NLP 任务中的 9 个上取得了 SOTA。虽然绝对分数不如 BERT（因为 BERT 的双向编码确实在理解任务上更优），但 GPT-1 证明了生成式预训练这条路是可行的。&lt;/p&gt;
+&lt;h2 id=&#34;gpt-2-的关键发现隐式多任务学习&#34;&gt;GPT-2 的关键发现：隐式多任务学习
+&lt;/h2&gt;&lt;p&gt;GPT-2 沿用了 GPT-1 的架构，核心变化是放大规模和数据，但发现了更重要的东西。&lt;/p&gt;
+&lt;h3 id=&#34;零样本能力&#34;&gt;零样本能力
+&lt;/h3&gt;&lt;p&gt;GPT-2 最令人惊讶的发现是：&lt;strong&gt;完全没有经过微调&lt;/strong&gt;，在零样本设定下测试：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;机器翻译&lt;/strong&gt;（WMT-14 英法）：零样本 BLEU 11.5——虽然远不如专有模型，但这是在没有任何平行语料的情况下做到的&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;阅读理解&lt;/strong&gt;（CoQA）：零样本 55 F1，接近有监督 baseline&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;摘要&lt;/strong&gt;（CNN/Daily Mail）：零样本 ROUGE-L 与有监督模型相当&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这意味着什么？GPT-2 在训练时从没见过任何翻译任务的数据，但当给它一段&amp;quot;English sentence = French sentence&amp;quot;的格式时，它自动学会了翻译。&lt;strong&gt;模型在预训练过程中隐式地学习了一个多任务学习器。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;规模的影响&#34;&gt;规模的影响
+&lt;/h3&gt;&lt;p&gt;GPT-2 发布了四个版本，参数量从 124M 到 1.5B。实验发现：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;模型&lt;/th&gt;
+					&lt;th&gt;参数量&lt;/th&gt;
+					&lt;th&gt;零样本 LAMBADA 准确率&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Small&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+					&lt;td&gt;45.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Medium&lt;/td&gt;
+					&lt;td&gt;355M&lt;/td&gt;
+					&lt;td&gt;55.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Large&lt;/td&gt;
+					&lt;td&gt;774M&lt;/td&gt;
+					&lt;td&gt;58.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 XL&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;63.0%&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;规模越大，零样本准确率越高，而且没有饱和的迹象。这个趋势直接影响了两件事：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;GPT-3 的 175B 参数决策&lt;/strong&gt;——既然 1.5B 还没饱和，再放大 100 倍会怎样？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scaling Law 的提出&lt;/strong&gt;——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;单向注意力掩码的可视化&#34;&gt;单向注意力掩码的可视化
+&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;gpt-mask.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;图中展示的是 GPT 在预测每个位置时的注意力可见范围。预测 SOS 时只能看自己，预测&amp;quot;你&amp;quot;时可以看到 SOS、我、爱，但看不到后面的 EOS。这个看似简单的三角掩码，决定了 GPT 的生成能力和理解局限。&lt;/p&gt;
+&lt;h2 id=&#34;为什么-gpt-12-值得关注&#34;&gt;为什么 GPT-1/2 值得关注
+&lt;/h2&gt;&lt;h3 id=&#34;技术启示&#34;&gt;技术启示
+&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Decoder-only 成为主流&lt;/strong&gt;。GPT-3、LLaMA、Mistral、DeepSeek 都采用了 GPT 开创的 Decoder-only 路线。Decoder-only 最终被证明在大规模下最有效——原因是：Encoder-only 只能做理解，Encoder-Decoder 需要同步两个模块，而 Decoder-only 可以无限堆叠，单纯靠规模解决问题。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;零样本能力改变了一切&lt;/strong&gt;。GPT-2 证明了模型可以不经微调就迁移到未见过的任务。这个发现直接催生了 GPT-3 的 in-context learning，以及后来指令微调、RLHF 等技术路线。如果没有 GPT-2 的零样本发现，GPT-3 可能不会选择&amp;quot;few-shot prompt&amp;quot;这个方向。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Scaling 路线的起点&lt;/strong&gt;。GPT-1 117M → GPT-2 1.5B → GPT-3 175B，这条增长曲线不是偶然的。GPT-2 的实验数据直接支持了&amp;quot;越大越好&amp;quot;的假设。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;格局变化&#34;&gt;格局变化
+&lt;/h3&gt;&lt;p&gt;GPT-1 发布时（2018 年 6 月），NLP 领域的主流是 LSTM + Attention。GPT-1 证明了 Transformer 在生成任务上同样有效。半年后 BERT 在理解任务上全面超越 GPT-1，所以 GPT-1 的注意力被抢走了。&lt;/p&gt;
+&lt;p&gt;但 GPT-2 发布时（2019 年 2 月），情况变了。OpenAI 因为担心滥用，最初只发布了 124M 的小模型，九个月后才全面开源 1.5B 的完整版。这个&amp;quot;不开源&amp;quot;的决定本身就说明：&lt;strong&gt;他们意识到这个方向可能比想象中更强大&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;参考资料&#34;&gt;参考资料
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Radford, A., et al. (2018). &lt;em&gt;Improving Language Understanding by Generative Pre-Training&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;Radford, A., et al. (2019). &lt;em&gt;Language Models are Unsupervised Multitask Learners&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;Devlin, J., et al. (2018). &lt;em&gt;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&lt;/em&gt;. arXiv:1810.04805.&lt;/li&gt;
+&lt;li&gt;Brown, T., et al. (2020). &lt;em&gt;Language Models are Few-Shot Learners&lt;/em&gt;. arXiv:2005.14165.&lt;/li&gt;
+&lt;li&gt;The Illustrated GPT-2 (Jay Alammar): &lt;a class=&#34;link&#34; href=&#34;http://jalammar.github.io/illustrated-gpt2/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://jalammar.github.io/illustrated-gpt2/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
 </rss>
