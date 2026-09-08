@@ -1,0 +1,41 @@
+{{ if .Page.HasShortcode "mermaid" }}
+<script src="https://registry.npmmirror.com/mermaid/10.9.1/files/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!window.mermaid) return;
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'neutral',
+      securityLevel: 'loose',
+      maxTextSize: 200000,
+      flowchart: {
+        curve: 'linear',
+        htmlLabels: true,
+        nodeSpacing: 40,
+        rankSpacing: 50,
+        padding: 15,
+        wrappingWidth: 240
+      },
+      themeVariables: {
+        fontSize: '15px',
+        fontFamily: 'inherit'
+      }
+    });
+    document.querySelectorAll('div.mermaid, pre.mermaid').forEach(function (el, i) {
+      var code = el.textContent.trim();
+      mermaid.render('mmd-' + i + '-' + Math.random().toString(36).slice(2, 8), code)
+        .then(function (result) {
+          var wrap = document.createElement('div');
+          wrap.className = 'mermaid-figure';
+          wrap.innerHTML = result.svg;
+          el.replaceWith(wrap);
+        })
+        .catch(function (err) {
+          // 渲染失败时展示源码，不黑屏
+          el.classList.add('mermaid-fallback');
+          el.textContent = '⚠️ 图表渲染失败，源码如下：\n' + code;
+        });
+    });
+  });
+</script>
+{{ end }}

@@ -1,0 +1,20 @@
+{
+  "nodes": [
+    {"id":"1","x":50,"y":50,"w":220,"h":60,"text":"预训练语料\n(海量文本)","color":"blue","fill":"solid","geo":"rectangle"},
+    {"id":"2","x":50,"y":200,"w":220,"h":60,"text":"语言模型\n(GPT-3 175B)","color":"light-blue","fill":"solid","geo":"rectangle"},
+    {"id":"3","x":500,"y":50,"w":220,"h":60,"text":"上下文示例\n(K 个示例 + 查询)","color":"green","fill":"solid","geo":"rectangle"},
+    {"id":"4","x":500,"y":200,"w":220,"h":130,"text":"Forward Pass 隐式梯度\n注意力 = 梯度下降\n(Key/Value 查询 = 参数更新)","color":"orange","fill":"solid","geo":"rectangle"},
+    {"id":"5","x":500,"y":400,"w":220,"h":60,"text":"输出预测","color":"red","fill":"solid","geo":"rectangle"},
+    {"id":"6","x":50,"y":400,"w":220,"h":60,"text":"模型参数更新\n(梯度下降)","color":"violet","fill":"solid","geo":"rectangle"}
+  ],
+  "arrows": [
+    {"id":"a1","x1":160,"y1":110,"x2":160,"y2":200,"color":"black","arrowheadEnd":"arrow","text":"外循环（慢）：梯度下降"},
+    {"id":"a2","x1":610,"y1":110,"x2":610,"y2":200,"color":"black","arrowheadEnd":"arrow","text":"内循环（快）：Forward Pass"},
+    {"id":"a3","x1":610,"y1":330,"x2":610,"y2":400,"color":"black","arrowheadEnd":"arrow"},
+    {"id":"a4","x1":160,"y1":260,"x2":500,"y2":260,"color":"gray","dash":"dashed","arrowheadEnd":"arrow","text":"共享权重"}
+  ],
+  "texts": [
+    {"id":"t1","x":50,"y":310,"w":400,"text":"外循环：预训练阶段通过梯度下降逐步学习语言知识","color":"gray","size":"s"},
+    {"id":"t2","x":300,"y":450,"w":400,"text":"内循环：推理阶段通过上下文示例在 forward pass 内完成学习","color":"gray","size":"s"}
+  ]
+}

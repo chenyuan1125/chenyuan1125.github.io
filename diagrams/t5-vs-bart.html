@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T5 vs BART — Pretraining Objectives</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #f5f5fa;
+      --color-ink:     #2c3e50;
+      --color-muted:   #707070;
+      --color-accent:  #2e5aa8;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+
+    .frame { max-width: 900px; width: 100%; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+
+    svg { width: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · Diagram Design</p>
+    <h1>T5 vs BART — what each objective asks the model to predict</h1>
+
+    <svg viewBox="0 0 672 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t5-vs-bart-title t5-vs-bart-desc">
+      <title id="t5-vs-bart-title">T5 vs BART — Pretraining Objectives</title>
+      <desc id="t5-vs-bart-desc">Side-by-side comparison: T5 corrupts spans into sentinel tokens and predicts only the masked spans, while BART masks spans and shuffles sentences, then reconstructs the entire input.</desc>
+
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#707070"/></marker>
+      </defs>
+
+      <!-- Background -->
+      <rect width="672" height="580" fill="#f5f5fa"/>
+
+      <!-- ── Method headers ─────────────────────────────────────────────── -->
+      <text x="172" y="44" fill="#2c3e50" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">T5 · SPAN CORRUPTION</text>
+      <text x="500" y="44" fill="#2c3e50" font-size="12" font-weight="600" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.10em">BART · DENOISING</text>
+
+      <!-- ── Arrows (before node rects) ─────────────────────────────────── -->
+      <line x1="172" y1="184" x2="172" y2="212" stroke="#707070" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="184" x2="500" y2="212" stroke="#707070" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="172" y1="320" x2="172" y2="348" stroke="#707070" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="500" y1="320" x2="500" y2="348" stroke="#707070" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ── Row 1 · INPUT ──────────────────────────────────────────────── -->
+      <rect x="32" y="80" width="280" height="104" rx="6" fill="#f5f5fa"/>
+      <rect x="32" y="80" width="280" height="104" rx="6" fill="#ffffff" stroke="#c8ccd4" stroke-width="1"/>
+      <text x="172" y="106" fill="#949ba5" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">INPUT</text>
+      <text x="172" y="138" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">the cat sat on the mat</text>
+      <text x="172" y="162" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">original text</text>
+
+      <rect x="360" y="80" width="280" height="104" rx="6" fill="#f5f5fa"/>
+      <rect x="360" y="80" width="280" height="104" rx="6" fill="#ffffff" stroke="#c8ccd4" stroke-width="1"/>
+      <text x="500" y="106" fill="#949ba5" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">INPUT</text>
+      <text x="500" y="138" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">the cat sat on the mat</text>
+      <text x="500" y="162" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">original text</text>
+
+      <!-- ── Row 2 · CORRUPTION (focal) ─────────────────────────────────── -->
+      <rect x="32" y="216" width="280" height="104" rx="6" fill="#f5f5fa"/>
+      <rect x="32" y="216" width="280" height="104" rx="6" fill="rgba(46,90,168,0.08)" stroke="#2e5aa8" stroke-width="1.5"/>
+      <text x="172" y="242" fill="#2e5aa8" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">CORRUPTION</text>
+      <text x="172" y="274" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">the &lt;X&gt; sat &lt;Y&gt; the mat</text>
+      <text x="172" y="298" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">spans → sentinel tokens</text>
+
+      <rect x="360" y="216" width="280" height="104" rx="6" fill="#f5f5fa"/>
+      <rect x="360" y="216" width="280" height="104" rx="6" fill="rgba(46,90,168,0.08)" stroke="#2e5aa8" stroke-width="1.5"/>
+      <text x="500" y="242" fill="#2e5aa8" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">CORRUPTION</text>
+      <text x="500" y="274" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">the cat [MASK] the mat</text>
+      <text x="500" y="298" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">infilling + sentence shuffle</text>
+
+      <!-- ── Row 3 · TARGET ─────────────────────────────────────────────── -->
+      <rect x="32" y="352" width="280" height="104" rx="6" fill="#f5f5fa"/>
+      <rect x="32" y="352" width="280" height="104" rx="6" fill="#ffffff" stroke="#c8ccd4" stroke-width="1"/>
+      <text x="172" y="378" fill="#949ba5" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">TARGET</text>
+      <text x="172" y="410" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">→ &lt;X&gt; cat &lt;Y&gt; on</text>
+      <text x="172" y="434" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">predict masked spans only</text>
+
+      <rect x="360" y="352" width="280" height="104" rx="6" fill="#f5f5fa"/>
+      <rect x="360" y="352" width="280" height="104" rx="6" fill="#ffffff" stroke="#c8ccd4" stroke-width="1"/>
+      <text x="500" y="378" fill="#949ba5" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">TARGET</text>
+      <text x="500" y="410" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">→ the cat sat on the mat</text>
+      <text x="500" y="434" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">reconstruct the full input</text>
+
+      <!-- ── Legend ─────────────────────────────────────────────────────── -->
+      <line x1="32" y1="496" x2="640" y2="496" stroke="rgba(44,62,80,0.10)" stroke-width="0.8"/>
+      <text x="32" y="524" fill="#707070" font-size="12" font-family="'Geist Mono', monospace" letter-spacing="0.14em">LEGEND</text>
+
+      <rect x="112" y="512" width="18" height="14" rx="2" fill="rgba(46,90,168,0.08)" stroke="#2e5aa8" stroke-width="1.5"/>
+      <text x="140" y="524" fill="#707070" font-size="12" font-family="'Geist Mono', monospace">CORRUPTION — where the two objectives diverge</text>
+
+      <line x1="112" y1="548" x2="126" y2="548" stroke="#707070" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="140" y="552" fill="#707070" font-size="12" font-family="'Geist Mono', monospace">TRANSFORMATION</text>
+    </svg>
+  </div>
+</body>
+</html>
