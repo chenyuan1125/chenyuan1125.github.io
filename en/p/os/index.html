@@ -4,13 +4,19 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Design and implementation of a memory fault detector for a teaching OS, including page table walking and exception handling.">
 <title>OS Course Project: Memory Fault Detection and Handling</title>
 
-<link rel='canonical' href='/en/p/os/'>
+
+<link rel="canonical" href="/en/p/os/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
 
 <link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="OS Course Project: Memory Fault Detection and Handling">
 <meta property='og:description' content="Design and implementation of a memory fault detector for a teaching OS, including page table walking and exception handling.">
 <meta property='og:url' content='/en/p/os/'>
 <meta property='og:site_name' content='Lee'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='OS' /><meta property='article:published_time' content='2024-06-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-02T23:23:22&#43;08:00'/><meta property='og:image' content='/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='OS' /><meta property='article:published_time' content='2024-06-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T22:25:43&#43;08:00'/><meta property='og:image' content='/cover.jpg' />
 <meta name="twitter:title" content="OS Course Project: Memory Fault Detection and Handling">
 <meta name="twitter:description" content="Design and implementation of a memory fault detector for a teaching OS, including page table walking and exception handling."><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/cover.jpg' />
@@ -48,25 +54,19 @@
     </button>
 
     <header>
-        
-            
-            <figure class="site-avatar">
+        <figure class="site-avatar">
                 <a href="/en/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu_20837a20b60ee220.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
                 </a>
                 
                     <span class="emoji">🍥</span>
                 
             </figure>
-            
         
         
         <div class="site-meta">
@@ -100,7 +100,7 @@
                 <li>
                     <a 
                         href='https://github.com/chenyuan1125'
-                        target="_blank"
+                        
                         title="GitHub"
                         rel="me"
                     >
@@ -124,8 +124,6 @@
         <li >
             <a href='/en/' >
                 
-                
-                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="5 12 3 12 12 3 21 12 19 12" />
@@ -144,8 +142,6 @@
         <li >
             <a href='/en/search/' >
                 
-                
-                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="10" cy="10" r="7" />
@@ -162,8 +158,6 @@
         
         <li >
             <a href='/en/archives/' >
-                
-                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -183,8 +177,6 @@
         <li >
             <a href='/en/page/about/' >
                 
-                
-                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="7" r="4" />
@@ -202,8 +194,6 @@
         <li >
             <a href='/en/page/links/' >
                 
-                
-                
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
@@ -219,9 +209,8 @@
         
         <li class="menu-bottom-section">
             <ol class="menu">
-                    
-                        <li id="i18n-switch">  
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4 5h7" />
   <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
@@ -232,15 +221,30 @@
 
 
 
-                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
                                 
-                                    <option value="/en/" selected>English</option>
                                 
-                                    <option value="/" >中文</option>
+                                    
+                                        
+                                    
                                 
-                            </select>
-                        </li>
-                    
+                                    
+                                
+                                <option value="/en/p/os/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/" >中文</option>
+                            
+                        </select>
+                    </li>
                 
 
                 
@@ -274,13 +278,11 @@
             <main class="main full-width">
     <article class="has-image main-article">
     <header class="article-header">
-        <div class="article-image">
-            <a href="/en/p/os/">
-                
-                    <img src="/cover.jpg" loading="lazy" alt="Featured image of post OS Course Project: Memory Fault Detection and Handling" />
-                
-            </a>
-        </div>
+    <div class="article-image">
+        <a href="/en/p/os/">
+            <img alt="Featured image of post OS Course Project: Memory Fault Detection and Handling" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="cover.jpg">
+        </a>
+    </div>
     
 
     <div class="article-details">
@@ -313,10 +315,14 @@
     
     
     
-    <footer class="article-time">
+    
+    
+    
+    <footer class="article-meta">
         
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
   <circle cx="18" cy="18" r="4" />
@@ -325,13 +331,11 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2024-06-05T00:00:00Z'>2024-06-05</time>
-            </div>
-        
+                    <time class="article-time--published" datetime='2024-06-05T00:00:00Z'>2024-06-05</time>
+                
 
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -339,17 +343,16 @@
 
 
 
-                <time class="article-time--reading">
-                    1 minute read
-                </time>
+                    <time class="article-time--reading">
+                        1 minute read
+                    </time>
+                
             </div>
         
-    </footer>
-    
 
-    
-        <footer class="article-translations">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4 5h7" />
   <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
@@ -360,16 +363,20 @@
 
 
 
-            <div>
                 
                     <a href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/" class="link">中文</a>
                 
             </div>
-        </footer>
+        
+
+        
+    </footer>
     
 </div>
 
 </header>
+
+    
 
     <section class="article-content">
     
@@ -379,7 +386,7 @@
 </section>
 
 
-    <footer class="article-footer">
+    <footer class="article-meta article-footer">
     
     <section class="article-tags">
         
@@ -389,7 +396,7 @@
 
 
     
-    <section class="article-copyright">
+    <section class="article-copyright inline-meta">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
@@ -400,7 +407,7 @@
 
         <span>Licensed under CC BY-NC-SA 4.0</span>
     </section>
-    <section class="article-lastmod">
+    <section class="article-lastmod inline-meta">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
@@ -410,7 +417,7 @@
 
 
         <span>
-            Last updated on 2026-09-02
+            Last updated on 2026-09-08
         </span>
     </section></footer>
 
@@ -457,7 +464,8 @@
      
     
         
-    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
 <link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
 <div id="waline" class="waline-container"></div>
 <style>
@@ -489,108 +497,48 @@
     
     <section class="powerby">
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
 
 
     
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
     
-    <div class="pswp__bg"></div>
+    if (shouldLoad) {
+        gallery(articleContent);
 
-    
-    <div class="pswp__scroll-wrap">
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
 
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
 
-        
-        <div class="pswp__ui pswp__ui--hidden">
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
 
-            <div class="pswp__top-bar">
-
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div><script 
-                src="/vendor/photoswipe/photoswipe.min.js"crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="/vendor/photoswipe/photoswipe-ui-default.min.js"crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="/vendor/photoswipe/default-skin/default-skin.min.css"crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
-            >
     
 
             </main>
         </div>
-        <script 
-                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
-<script>
-    (function () {
-        const customFont = document.createElement('link');
-        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
 
-        customFont.type = "text/css";
-        customFont.rel = "stylesheet";
-
-        document.head.appendChild(customFont);
-    }());
-</script>
 
 
     </body>
