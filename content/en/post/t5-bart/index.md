@@ -87,7 +87,7 @@ BART tested several noise functions; the best combination was:
 
 The final configuration used **text infilling + sentence permutation**: 30% of tokens masked (span lengths Poisson λ=3), with sentences shuffled.
 
-{{< figure src="pipeline.svg" title="Figure 1: T5 span corruption vs BART denoising reconstruction" >}}
+{{< figure src="t5-vs-bart.svg" title="Figure 1: T5 span corruption vs BART denoising reconstruction (generated with Diagram Design)" >}}
 
 ### Why BART Excels at Generation
 

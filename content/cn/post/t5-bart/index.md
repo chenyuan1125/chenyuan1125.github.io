@@ -87,7 +87,7 @@ BART 论文测试了多种噪声，其中效果最好的组合是：
 
 最终配置用 **text infilling + sentence permutation**：遮蔽 30% 的 token（片段长度服从泊松分布 λ=3），并把句子打乱。
 
-{{< figure src="pipeline.svg" title="图 1：T5 的 span corruption vs BART 的去噪重建" >}}
+{{< figure src="t5-vs-bart.svg" title="图 1：T5 的 span corruption vs BART 的去噪重建（由 Diagram Design 生成）" >}}
 
 ### 为什么 BART 适合生成
 
