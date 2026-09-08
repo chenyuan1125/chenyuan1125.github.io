@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Courses on Lee</title>
+        <link>/en/categories/courses/</link>
+        <description>Recent content in Courses on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:23:22 +0800</lastBuildDate><atom:link href="/en/categories/courses/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Computer Architecture Course Notes</title>
+        <link>/en/p/architecture/</link>
+        <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/architecture/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post Computer Architecture Course Notes" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

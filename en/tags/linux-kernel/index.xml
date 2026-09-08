@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Linux Kernel on Lee</title>
+        <link>/en/tags/linux-kernel/</link>
+        <description>Recent content in Linux Kernel on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:23:22 +0800</lastBuildDate><atom:link href="/en/tags/linux-kernel/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Unix Domain Socket Source Code Analysis (OLK 6.6)</title>
+        <link>/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>&lt;img src="/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/cover.jpg" alt="Featured image of post Unix Domain Socket Source Code Analysis (OLK 6.6)" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>IPC Source Code Analysis and Summary</title>
+        <link>/en/p/ipc-introduction/</link>
+        <pubDate>Thu, 08 Aug 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/ipc-introduction/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post IPC Source Code Analysis and Summary" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

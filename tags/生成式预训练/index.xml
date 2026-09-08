@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Fri, 28 Aug 2026 22:58:11 +0800</lastBuildDate><atom:link href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Sep 2026 21:36:09 +0800</lastBuildDate><atom:link href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>GPT-1/2：生成式预训练与 few-shot 萌芽</title>
         <link>/p/gpt-01/</link>
         <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
@@ -18,9 +18,9 @@
 &lt;p&gt;BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。&lt;/p&gt;
 &lt;h2 id=&#34;核心设计decoder-only-与自回归&#34;&gt;核心设计：Decoder-only 与自回归
 &lt;/h2&gt;&lt;p&gt;GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/p/gpt-01/gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 1：GPT-1 Decoder-only 架构（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+&lt;figure&gt;&lt;img src=&#34;gpt-architecture.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 1：GPT-1 Decoder-only 架构（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;h3 id=&#34;每一层的技术细节&#34;&gt;每一层的技术细节
@@ -55,60 +55,60 @@
 &lt;p&gt;&lt;strong&gt;Layer Normalization 的位置&lt;/strong&gt;：GPT-1 把 LayerNorm 放在每个子层&lt;strong&gt;之前&lt;/strong&gt;（pre-norm），而原始 Transformer 放在之后（post-norm）。这个看似微小的改动后来被证明对训练稳定性至关重要——pre-norm 更容易训练深层网络。&lt;/p&gt;
 &lt;h3 id=&#34;训练细节&#34;&gt;训练细节
 &lt;/h3&gt;&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;参数&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;GPT-1&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;GPT-2 Small&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;层数&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;12&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;12&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;隐藏维度&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;768&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;768&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;注意力头&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;12&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;12&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;参数量&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;117M&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;124M&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;训练数据&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;BookCorpus (~1B 词)&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;WebText (~40GB)&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;Batch size&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;64&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;512&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;学习率&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;2.5e-4 (warmup + cosine)&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;2.5e-4&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;优化器&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;Adam&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;Adam&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;最大序列长度&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;512&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;1024&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;参数&lt;/th&gt;
+					&lt;th&gt;GPT-1&lt;/th&gt;
+					&lt;th&gt;GPT-2 Small&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;层数&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;隐藏维度&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;注意力头&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;参数量&lt;/td&gt;
+					&lt;td&gt;117M&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;训练数据&lt;/td&gt;
+					&lt;td&gt;BookCorpus (~1B 词)&lt;/td&gt;
+					&lt;td&gt;WebText (~40GB)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Batch size&lt;/td&gt;
+					&lt;td&gt;64&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;学习率&lt;/td&gt;
+					&lt;td&gt;2.5e-4 (warmup + cosine)&lt;/td&gt;
+					&lt;td&gt;2.5e-4&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;优化器&lt;/td&gt;
+					&lt;td&gt;Adam&lt;/td&gt;
+					&lt;td&gt;Adam&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;最大序列长度&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;GPT-2 的改动主要是加大序列长度（512→1024）和 batch size（64→512），架构几乎不变。&lt;/p&gt;
 &lt;h2 id=&#34;核心思想为什么-decoder-only-能做理解&#34;&gt;核心思想：为什么 Decoder-only 能做理解？
@@ -128,35 +128,35 @@
 &lt;h3 id=&#34;规模的影响&#34;&gt;规模的影响
 &lt;/h3&gt;&lt;p&gt;GPT-2 发布了四个版本，参数量从 124M 到 1.5B。实验发现：&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;模型&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;参数量&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;零样本 LAMBADA 准确率&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;GPT-2 Small&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;124M&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;45.0%&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;GPT-2 Medium&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;355M&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;55.0%&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;GPT-2 Large&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;774M&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;58.0%&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;GPT-2 XL&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;1.5B&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;63.0%&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;模型&lt;/th&gt;
+					&lt;th&gt;参数量&lt;/th&gt;
+					&lt;th&gt;零样本 LAMBADA 准确率&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Small&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+					&lt;td&gt;45.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Medium&lt;/td&gt;
+					&lt;td&gt;355M&lt;/td&gt;
+					&lt;td&gt;55.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Large&lt;/td&gt;
+					&lt;td&gt;774M&lt;/td&gt;
+					&lt;td&gt;58.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 XL&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;63.0%&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;规模越大，零样本准确率越高，而且没有饱和的迹象。这个趋势直接影响了两件事：&lt;/p&gt;
 &lt;ol&gt;
@@ -164,9 +164,9 @@
 &lt;li&gt;&lt;strong&gt;Scaling Law 的提出&lt;/strong&gt;——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;单向注意力掩码的可视化&#34;&gt;单向注意力掩码的可视化
-&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;/p/gpt-01/gpt-mask.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+&lt;/h2&gt;&lt;figure&gt;&lt;img src=&#34;gpt-mask.png&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;图中展示的是 GPT 在预测每个位置时的注意力可见范围。预测 SOS 时只能看自己，预测&amp;quot;你&amp;quot;时可以看到 SOS、我、爱，但看不到后面的 EOS。这个看似简单的三角掩码，决定了 GPT 的生成能力和理解局限。&lt;/p&gt;

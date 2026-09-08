@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Labs on Lee</title>
+        <link>/en/categories/labs/</link>
+        <description>Recent content in Labs on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:23:22 +0800</lastBuildDate><atom:link href="/en/categories/labs/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>OS Course Project: Memory Fault Detection and Handling</title>
+        <link>/en/p/os/</link>
+        <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/os/</guid>
+        <description>&lt;img src="/cover.jpg" alt="Featured image of post OS Course Project: Memory Fault Detection and Handling" /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

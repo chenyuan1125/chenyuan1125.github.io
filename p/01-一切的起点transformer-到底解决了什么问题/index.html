@@ -10,12 +10,10 @@
 <meta property='og:description' content="从 Attention Is All You Need 出发，用一个翻译小例子讲透自注意力、多头和位置编码，以及为什么搞懂它，是做 AI 护栏的人绕不开的第一课。">
 <meta property='og:url' content='/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='大模型' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='论文精读' /><meta property='article:published_time' content='2026-08-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-08-28T21:29:20&#43;08:00'/><meta property='og:image' content='/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='大模型' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='论文精读' /><meta property='article:published_time' content='2026-08-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-02T21:36:09&#43;08:00'/><meta property='og:image' content='/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover.jpg' />
 <meta name="twitter:title" content="01 | 一切的起点：Transformer 到底解决了什么问题？">
 <meta name="twitter:description" content="从 Attention Is All You Need 出发，用一个翻译小例子讲透自注意力、多头和位置编码，以及为什么搞懂它，是做 AI 护栏的人绕不开的第一课。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover.jpg' />
-
-<link rel="stylesheet" href="https://s1.hdslb.com/bfs/static/jinkela/long/font/regular.css" />
     </head>
     <body class="
     article-page
@@ -59,7 +57,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu4999655723030452168.png" width="300"
+                        <img src="/img/avatar_hu_20837a20b60ee220.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -144,20 +142,20 @@
         
         
         <li >
-            <a href='/%E5%85%B3%E4%BA%8E/' >
+            <a href='/search/' >
                 
                 
                 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="7" r="4" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
 </svg>
 
 
 
                 
-                <span>关于</span>
+                <span>搜索</span>
             </a>
         </li>
         
@@ -183,26 +181,26 @@
         
         
         <li >
-            <a href='/search/' >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
                 
                 
                 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
 </svg>
 
 
 
                 
-                <span>搜索</span>
+                <span>关于</span>
             </a>
         </li>
         
         
         <li >
-            <a href='/%E9%93%BE%E6%8E%A5/' >
+            <a href='/%e9%93%be%e6%8e%a5/' >
                 
                 
                 
@@ -327,8 +325,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
-                <img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu13415247244105323506.jpg"
-                        srcset="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu13415247244105323506.jpg 800w, /p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu1514462293288491475.jpg 1600w"
+                <img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_be1a0e2bc36ff485.jpg"
+                        srcset="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_be1a0e2bc36ff485.jpg 800w, /p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_5d4da1533dc230d8.jpg 1600w"
                         width="800" 
                         height="250" 
                         loading="lazy"
@@ -342,7 +340,10 @@
     
     <header class="article-category">
         
-            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" >
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
                 大模型架构学习
             </a>
         
@@ -377,7 +378,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">2026-08-26</time>
+                <time class="article-time--published" datetime='2026-08-26T00:00:00Z'>2026-08-26</time>
             </div>
         
 
@@ -396,20 +397,28 @@
                 </time>
             </div>
         
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-</svg>
-                <time class="article-words">
-                    3918字
-                </time>
-        </div>
-        
-
     </footer>
     
 
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="/en/p/transformer-01/" class="link">English</a>
+                
+            </div>
+        </footer>
     
 </div>
 
@@ -436,8 +445,8 @@
 <h2 id="背景rnn-的困境一句话要一个字一个字地读">背景：RNN 的困境——一句话要一个字一个字地读
 </h2><p>RNN（循环神经网络）处理一句话的方式，很像一个只长了一只眼睛、而且<strong>没有记忆本</strong>的人读书：</p>
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/rnn-flow.png"><figcaption>
-      <h4>图 1：RNN 串行读取示意——每一步的输出都依赖上一步（tldraw 绘制）</h4>
-    </figcaption>
+			<h4>图 1：RNN 串行读取示意——每一步的输出都依赖上一步（tldraw 绘制）</h4>
+		</figcaption>
 </figure>
 
 <p>注意那个箭头：<strong>每一步的输出，都依赖上一步的结果</strong>。第 3 步想理解「猫」，必须先等第 2 步算完；第 2 步又得等第 1 步。</p>
@@ -463,34 +472,34 @@
 </ul>
 <p>这就得到一张 <strong>3×3 的注意力矩阵</strong>，每一行代表「这个词怎么看整句话」：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: left"></th>
-          <th style="text-align: left">我</th>
-          <th style="text-align: left">爱</th>
-          <th style="text-align: left">猫</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left"><strong>我</strong></td>
-          <td style="text-align: left">0.3</td>
-          <td style="text-align: left">0.6</td>
-          <td style="text-align: left">0.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>爱</strong></td>
-          <td style="text-align: left">0.4</td>
-          <td style="text-align: left">0.2</td>
-          <td style="text-align: left">0.4</td>
-      </tr>
-      <tr>
-          <td style="text-align: left"><strong>猫</strong></td>
-          <td style="text-align: left">0.1</td>
-          <td style="text-align: left">0.5</td>
-          <td style="text-align: left">0.4</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th></th>
+					<th>我</th>
+					<th>爱</th>
+					<th>猫</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>我</strong></td>
+					<td>0.3</td>
+					<td>0.6</td>
+					<td>0.1</td>
+			</tr>
+			<tr>
+					<td><strong>爱</strong></td>
+					<td>0.4</td>
+					<td>0.2</td>
+					<td>0.4</td>
+			</tr>
+			<tr>
+					<td><strong>猫</strong></td>
+					<td>0.1</td>
+					<td>0.5</td>
+					<td>0.4</td>
+			</tr>
+	</tbody>
 </table></div>
 <p><strong>第三步：用这张表把每个词的信息重新混合一遍。</strong>
 <code>我</code> 的新表示 = 0.3×<code>我</code> + 0.6×<code>爱</code> + 0.1×<code>猫</code>。也就是说，<code>我</code> 的最终表示里，混进了 60% 的 <code>爱</code> 的信息——因为在这个句子里，「我」和「爱」关系最紧密。</p>
@@ -500,8 +509,8 @@
 <h3 id="那-query--key--value-又是什么">那 Query / Key / Value 又是什么？
 </h3><p>这是所有讲 Transformer 的文章最容易把人劝退的地方。我的理解是这样的——想象你去图书馆借书：</p>
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-lib.png"><figcaption>
-      <h4>图 2：QKV 图书馆比喻——Query 找书、Key 是标签、Value 是内容（tldraw 绘制）</h4>
-    </figcaption>
+			<h4>图 2：QKV 图书馆比喻——Query 找书、Key 是标签、Value 是内容（tldraw 绘制）</h4>
+		</figcaption>
 </figure>
 
 <ul>
@@ -524,13 +533,13 @@
 </div><p><code>√d</code> 是除一个缩放因子，防止分数太大把 softmax 推成 0/1 两极分化（就是「防止一个人垄断投票」）。softmax 就是把一堆分数归一化成「和为 1 的权重」。</p>
 <p>论文原图把这个流程画得很清楚（左半部分就是上面的公式，右半部分是并行版）：</p>
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/scaled-dot-product.png"><figcaption>
-      <h4>图 3：Scaled Dot-Product Attention（左）与 Multi-Head Attention（右）（图源：Vaswani et al., 2017, Figure 2）</h4>
-    </figcaption>
+			<h4>图 3：Scaled Dot-Product Attention（左）与 Multi-Head Attention（右）（图源：Vaswani et al., 2017, Figure 2）</h4>
+		</figcaption>
 </figure>
 
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-flow.png"><figcaption>
-      <h4>图 4：QKV 计算流程（tldraw 绘制）</h4>
-    </figcaption>
+			<h4>图 4：QKV 计算流程（tldraw 绘制）</h4>
+		</figcaption>
 </figure>
 
 <blockquote>
@@ -540,13 +549,13 @@
 </h2><p>单一注意力只有一种「关系观」。但句子里的关系是多种多样的：语法关系、指代关系、情感关系……</p>
 <p>Multi-Head Attention（多头注意力）就是把注意力<strong>同时做 8 份</strong>（论文里是 8 个头），每份用不同的 Q/K/V 变换，相当于 8 个不同角度的「读书人」同时读这句话，最后把 8 份结果拼起来。论文里的结构是这样（右边就是 Multi-Head 的拼装方式）：</p>
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead.png"><figcaption>
-      <h4>图 5：Multi-Head Attention 结构（图源：Vaswani et al., 2017, Figure 2 右）</h4>
-    </figcaption>
+			<h4>图 5：Multi-Head Attention 结构（图源：Vaswani et al., 2017, Figure 2 右）</h4>
+		</figcaption>
 </figure>
 
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead-flow.png"><figcaption>
-      <h4>图 6：多头注意力——8 个分工不同的头（tldraw 绘制）</h4>
-    </figcaption>
+			<h4>图 6：多头注意力——8 个分工不同的头（tldraw 绘制）</h4>
+		</figcaption>
 </figure>
 
 <p>后来 Anthropic 等团队做可解释性研究时发现，这些「头」真的各司其职：有的头专门盯指代（it 指谁），有的头专门盯句法。<strong>多头注意力 = 模型的多个&quot;分工器官&quot;</strong>，这个视角后面讲 AI 安全时还会用到。</p>
@@ -554,16 +563,16 @@
 </h2><p>RNN 按顺序读，天然自带「顺序感」。Transformer 一次性全读，顺序信息就丢了——<code>猫爱我</code> 和 <code>我爱猫</code> 摊开后长得一模一样，这不行。</p>
 <p>解法：<strong>在词向量上叠加一个「位置信号」</strong>，让每个位置的向量长得不一样。</p>
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/posenc-flow.png"><figcaption>
-      <h4>图 7：位置编码——词向量 &#43; 位置向量 = 带顺序信息的向量（tldraw 绘制）</h4>
-    </figcaption>
+			<h4>图 7：位置编码——词向量 &#43; 位置向量 = 带顺序信息的向量（tldraw 绘制）</h4>
+		</figcaption>
 </figure>
 
 <p>位置向量用正弦/余弦函数生成（论文里的做法），也可以学出来。它相当于给每个词发了一张「第几号座位」的票——向量相加之后，模型既知道词义，又知道顺序。</p>
 <h2 id="看一眼论文里的完整架构">看一眼论文里的完整架构
 </h2><p>把上面几个零件拼起来，就是论文原版的 Transformer（下图）。左边是 Encoder：N 层堆叠，每层 = 多头注意力 + 前馈网络；右边是 Decoder：结构类似，但多了 Masked 多头注意力——它只能看已经生成的词（不然翻译的时候偷看答案）。</p>
 <figure><img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/arch.png"><figcaption>
-      <h4>图 8：Transformer 完整架构（图源：Vaswani et al., 2017, Figure 1）</h4>
-    </figcaption>
+			<h4>图 8：Transformer 完整架构（图源：Vaswani et al., 2017, Figure 1）</h4>
+		</figcaption>
 </figure>
 
 <p>不过注意：<strong>论文版是 Encoder-Decoder（翻译场景），今天的大模型基本都是 Decoder-only（只留右半边，且没有 Masked 之前的那层交叉注意力）。</strong> 下一篇读 BERT/GPT 时会讲到这条分岔路。你只需要知道：今天所有大模型的骨架，都能在这张图里找到原型。</p>
@@ -584,38 +593,38 @@
 <p><strong>第三，注意力图是可解释性的第一入口。</strong> 对刚入门的算法工程师，注意力热力图是<strong>最容易上手</strong>的模型可视化工具：输入一句话，画出词与词之间的注意力权重，你立刻能看到模型「在看什么」。这是做 AI 安全研究性价比最高的起点之一。</p>
 <h2 id="本篇重点回顾">本篇重点回顾
 </h2><div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th style="text-align: left">概念</th>
-          <th style="text-align: left">一句话版本</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">RNN 的痛点</td>
-          <td style="text-align: left">串行 + 健忘，长文本记不住开头</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Self-Attention</td>
-          <td style="text-align: left">一次看全句，加权求和，一步直达任意词</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Q/K/V</td>
-          <td style="text-align: left">Query 找书、Key 是标签、Value 是内容</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">多头</td>
-          <td style="text-align: left">8 个分工不同的视角同时看</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">位置编码</td>
-          <td style="text-align: left">用「座位号向量」补回顺序信息</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">为什么赢</td>
-          <td style="text-align: left">并行 → 可扩展 → 堆出大模型</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>概念</th>
+					<th>一句话版本</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>RNN 的痛点</td>
+					<td>串行 + 健忘，长文本记不住开头</td>
+			</tr>
+			<tr>
+					<td>Self-Attention</td>
+					<td>一次看全句，加权求和，一步直达任意词</td>
+			</tr>
+			<tr>
+					<td>Q/K/V</td>
+					<td>Query 找书、Key 是标签、Value 是内容</td>
+			</tr>
+			<tr>
+					<td>多头</td>
+					<td>8 个分工不同的视角同时看</td>
+			</tr>
+			<tr>
+					<td>位置编码</td>
+					<td>用「座位号向量」补回顺序信息</td>
+			</tr>
+			<tr>
+					<td>为什么赢</td>
+					<td>并行 → 可扩展 → 堆出大模型</td>
+			</tr>
+	</tbody>
 </table></div>
 <p><strong>下篇预告</strong>：Transformer 之后，模型开始分岔——一路走向 BERT（理解型），一路走向 GPT（生成型）。下一篇我们读 BERT，看看「双向」到底是什么意思，以及它为什么统治了 NLP 两年。</p>
 <h3 id="参考资料">参考资料
@@ -665,7 +674,7 @@
 
 
         <span>
-            最后更新于 2026-08-28
+            最后更新于 2026-09-02
         </span>
     </section></footer>
 
@@ -684,15 +693,23 @@
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
-            delimiters: [
-                { left: "$$", right: "$$", display: true },
-                { left: "$", right: "$", display: false },
-                { left: "\\(", right: "\\)", display: false },
-                { left: "\\[", right: "\\]", display: true }
-            ],
-            ignoredClasses: ["gist", "waline-container"]
-        });})
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
 </script>
     
 </article>
@@ -712,13 +729,13 @@
         
         
             <div class="article-image">
-                <img src="/p/gpt-01/cover.624cb4b79710d9e6dcbd9f305278adde_hu11691919844391666909.jpg" 
+                <img src="/p/gpt-01/cover.25c6721e5ce67f2733192ac554bb4bde_hu_4837811e0a817e15.jpg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽"
                         data-key="gpt-01" 
-                        data-hash="md5-Yky0t5cQ2ebcvZ8wUnit3g==">
+                        data-hash="md5-JcZyHlzmfyczGSrFVLtL3g==">
                 
             </div>
         
@@ -736,19 +753,67 @@
         
         
             <div class="article-image">
-                <img src="/p/bert-02/cover.98b2d602c17a13a71d925fe284c12de4_hu13884211622526357901.jpg" 
+                <img src="/p/bert-02/cover.c7bdac7c6c58707d20a235a6ea6ed3bf_hu_71acb6ae207a1f3b.jpg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
                         alt="Featured image of post BERT：双向编码器，到底双在哪"
                         data-key="bert-02" 
-                        data-hash="md5-mLLWAsF6E6cdkl/ihMEt5A==">
+                        data-hash="md5-x72sfGxYcH0gojWm6m7Tvw==">
                 
             </div>
         
 
         <div class="article-details">
             <h2 class="article-title">BERT：双向编码器，到底双在哪</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/">
+        
+        
+            <div class="article-image">
+                <img src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover.0c92215db13e2df1672670d145e4a37a_hu_7e19977a34734f54.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post DeepSeek-R1：用强化学习激发大模型推理能力"
+                        
+                        data-hash="md5-DJIhXbE&#43;LfFnJnDRReSjeg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepSeek-R1：用强化学习激发大模型推理能力</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-03/">
+        
+        
+            <div class="article-image">
+                <img src="/p/gpt-03/cover.6227c529517ec910514157c2713c50f1_hu_8c0eab218c39fe1c.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发"
+                        data-key="gpt-03" 
+                        data-hash="md5-YifFKVF&#43;yRBRQVfCcTxQ8Q==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT-3：In-Context Learning 与 Few-Shot 爆发</h2>
         </div>
     </a>
 </article>
@@ -761,7 +826,8 @@
      
     
         
-    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
 <div id="waline" class="waline-container"></div>
 <style>
     .waline-container {
@@ -771,13 +837,12 @@
         padding: var(--card-padding);
         --waline-font-size: var(--article-font-size);
     }
-
     .waline-container .wl-count {
         color: var(--card-text-color-main);
     }
-</style><script type="module">
-    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
-    init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top","visitor":true});
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
 </script>
 
     
@@ -793,7 +858,7 @@
     
     <section class="powerby">
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.27.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -875,6 +940,7 @@
                 rel="stylesheet" 
                 href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
             >
+    
 
             </main>
         </div>
@@ -882,7 +948,7 @@
                 src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

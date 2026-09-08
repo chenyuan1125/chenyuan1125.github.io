@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Fri, 28 Aug 2026 21:29:20 +0800</lastBuildDate><atom:link href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 02 Sep 2026 21:36:09 +0800</lastBuildDate><atom:link href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>01 | 一切的起点：Transformer 到底解决了什么问题？</title>
         <link>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</link>
         <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
@@ -31,8 +31,8 @@
 &lt;h2 id=&#34;背景rnn-的困境一句话要一个字一个字地读&#34;&gt;背景：RNN 的困境——一句话要一个字一个字地读
 &lt;/h2&gt;&lt;p&gt;RNN（循环神经网络）处理一句话的方式，很像一个只长了一只眼睛、而且&lt;strong&gt;没有记忆本&lt;/strong&gt;的人读书：&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/rnn-flow.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 1：RNN 串行读取示意——每一步的输出都依赖上一步（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 1：RNN 串行读取示意——每一步的输出都依赖上一步（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;注意那个箭头：&lt;strong&gt;每一步的输出，都依赖上一步的结果&lt;/strong&gt;。第 3 步想理解「猫」，必须先等第 2 步算完；第 2 步又得等第 1 步。&lt;/p&gt;
@@ -58,34 +58,34 @@
 &lt;/ul&gt;
 &lt;p&gt;这就得到一张 &lt;strong&gt;3×3 的注意力矩阵&lt;/strong&gt;，每一行代表「这个词怎么看整句话」：&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;我&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;爱&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;猫&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;我&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.3&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.6&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.1&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;爱&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.4&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.2&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.4&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;&lt;strong&gt;猫&lt;/strong&gt;&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.1&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.5&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;0.4&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;&lt;/th&gt;
+					&lt;th&gt;我&lt;/th&gt;
+					&lt;th&gt;爱&lt;/th&gt;
+					&lt;th&gt;猫&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;我&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;0.3&lt;/td&gt;
+					&lt;td&gt;0.6&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;爱&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;0.4&lt;/td&gt;
+					&lt;td&gt;0.2&lt;/td&gt;
+					&lt;td&gt;0.4&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;猫&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;0.1&lt;/td&gt;
+					&lt;td&gt;0.5&lt;/td&gt;
+					&lt;td&gt;0.4&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;strong&gt;第三步：用这张表把每个词的信息重新混合一遍。&lt;/strong&gt;
 &lt;code&gt;我&lt;/code&gt; 的新表示 = 0.3×&lt;code&gt;我&lt;/code&gt; + 0.6×&lt;code&gt;爱&lt;/code&gt; + 0.1×&lt;code&gt;猫&lt;/code&gt;。也就是说，&lt;code&gt;我&lt;/code&gt; 的最终表示里，混进了 60% 的 &lt;code&gt;爱&lt;/code&gt; 的信息——因为在这个句子里，「我」和「爱」关系最紧密。&lt;/p&gt;
@@ -95,8 +95,8 @@
 &lt;h3 id=&#34;那-query--key--value-又是什么&#34;&gt;那 Query / Key / Value 又是什么？
 &lt;/h3&gt;&lt;p&gt;这是所有讲 Transformer 的文章最容易把人劝退的地方。我的理解是这样的——想象你去图书馆借书：&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-lib.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 2：QKV 图书馆比喻——Query 找书、Key 是标签、Value 是内容（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 2：QKV 图书馆比喻——Query 找书、Key 是标签、Value 是内容（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;ul&gt;
@@ -119,13 +119,13 @@
 &lt;/div&gt;&lt;p&gt;&lt;code&gt;√d&lt;/code&gt; 是除一个缩放因子，防止分数太大把 softmax 推成 0/1 两极分化（就是「防止一个人垄断投票」）。softmax 就是把一堆分数归一化成「和为 1 的权重」。&lt;/p&gt;
 &lt;p&gt;论文原图把这个流程画得很清楚（左半部分就是上面的公式，右半部分是并行版）：&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/scaled-dot-product.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 3：Scaled Dot-Product Attention（左）与 Multi-Head Attention（右）（图源：Vaswani et al., 2017, Figure 2）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 3：Scaled Dot-Product Attention（左）与 Multi-Head Attention（右）（图源：Vaswani et al., 2017, Figure 2）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/qkv-flow.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 4：QKV 计算流程（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 4：QKV 计算流程（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;blockquote&gt;
@@ -135,13 +135,13 @@
 &lt;/h2&gt;&lt;p&gt;单一注意力只有一种「关系观」。但句子里的关系是多种多样的：语法关系、指代关系、情感关系……&lt;/p&gt;
 &lt;p&gt;Multi-Head Attention（多头注意力）就是把注意力&lt;strong&gt;同时做 8 份&lt;/strong&gt;（论文里是 8 个头），每份用不同的 Q/K/V 变换，相当于 8 个不同角度的「读书人」同时读这句话，最后把 8 份结果拼起来。论文里的结构是这样（右边就是 Multi-Head 的拼装方式）：&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 5：Multi-Head Attention 结构（图源：Vaswani et al., 2017, Figure 2 右）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 5：Multi-Head Attention 结构（图源：Vaswani et al., 2017, Figure 2 右）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/multihead-flow.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 6：多头注意力——8 个分工不同的头（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 6：多头注意力——8 个分工不同的头（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;后来 Anthropic 等团队做可解释性研究时发现，这些「头」真的各司其职：有的头专门盯指代（it 指谁），有的头专门盯句法。&lt;strong&gt;多头注意力 = 模型的多个&amp;quot;分工器官&amp;quot;&lt;/strong&gt;，这个视角后面讲 AI 安全时还会用到。&lt;/p&gt;
@@ -149,16 +149,16 @@
 &lt;/h2&gt;&lt;p&gt;RNN 按顺序读，天然自带「顺序感」。Transformer 一次性全读，顺序信息就丢了——&lt;code&gt;猫爱我&lt;/code&gt; 和 &lt;code&gt;我爱猫&lt;/code&gt; 摊开后长得一模一样，这不行。&lt;/p&gt;
 &lt;p&gt;解法：&lt;strong&gt;在词向量上叠加一个「位置信号」&lt;/strong&gt;，让每个位置的向量长得不一样。&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/posenc-flow.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 7：位置编码——词向量 &amp;#43; 位置向量 = 带顺序信息的向量（tldraw 绘制）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 7：位置编码——词向量 &amp;#43; 位置向量 = 带顺序信息的向量（tldraw 绘制）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;位置向量用正弦/余弦函数生成（论文里的做法），也可以学出来。它相当于给每个词发了一张「第几号座位」的票——向量相加之后，模型既知道词义，又知道顺序。&lt;/p&gt;
 &lt;h2 id=&#34;看一眼论文里的完整架构&#34;&gt;看一眼论文里的完整架构
 &lt;/h2&gt;&lt;p&gt;把上面几个零件拼起来，就是论文原版的 Transformer（下图）。左边是 Encoder：N 层堆叠，每层 = 多头注意力 + 前馈网络；右边是 Decoder：结构类似，但多了 Masked 多头注意力——它只能看已经生成的词（不然翻译的时候偷看答案）。&lt;/p&gt;
 &lt;figure&gt;&lt;img src=&#34;/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/arch.png&#34;&gt;&lt;figcaption&gt;
-      &lt;h4&gt;图 8：Transformer 完整架构（图源：Vaswani et al., 2017, Figure 1）&lt;/h4&gt;
-    &lt;/figcaption&gt;
+			&lt;h4&gt;图 8：Transformer 完整架构（图源：Vaswani et al., 2017, Figure 1）&lt;/h4&gt;
+		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;不过注意：&lt;strong&gt;论文版是 Encoder-Decoder（翻译场景），今天的大模型基本都是 Decoder-only（只留右半边，且没有 Masked 之前的那层交叉注意力）。&lt;/strong&gt; 下一篇读 BERT/GPT 时会讲到这条分岔路。你只需要知道：今天所有大模型的骨架，都能在这张图里找到原型。&lt;/p&gt;
@@ -179,38 +179,38 @@
 &lt;p&gt;&lt;strong&gt;第三，注意力图是可解释性的第一入口。&lt;/strong&gt; 对刚入门的算法工程师，注意力热力图是&lt;strong&gt;最容易上手&lt;/strong&gt;的模型可视化工具：输入一句话，画出词与词之间的注意力权重，你立刻能看到模型「在看什么」。这是做 AI 安全研究性价比最高的起点之一。&lt;/p&gt;
 &lt;h2 id=&#34;本篇重点回顾&#34;&gt;本篇重点回顾
 &lt;/h2&gt;&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;概念&lt;/th&gt;
-          &lt;th style=&#34;text-align: left&#34;&gt;一句话版本&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;RNN 的痛点&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;串行 + 健忘，长文本记不住开头&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;Self-Attention&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;一次看全句，加权求和，一步直达任意词&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;Q/K/V&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;Query 找书、Key 是标签、Value 是内容&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;多头&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;8 个分工不同的视角同时看&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;位置编码&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;用「座位号向量」补回顺序信息&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;为什么赢&lt;/td&gt;
-          &lt;td style=&#34;text-align: left&#34;&gt;并行 → 可扩展 → 堆出大模型&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;概念&lt;/th&gt;
+					&lt;th&gt;一句话版本&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;RNN 的痛点&lt;/td&gt;
+					&lt;td&gt;串行 + 健忘，长文本记不住开头&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Self-Attention&lt;/td&gt;
+					&lt;td&gt;一次看全句，加权求和，一步直达任意词&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Q/K/V&lt;/td&gt;
+					&lt;td&gt;Query 找书、Key 是标签、Value 是内容&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;多头&lt;/td&gt;
+					&lt;td&gt;8 个分工不同的视角同时看&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;位置编码&lt;/td&gt;
+					&lt;td&gt;用「座位号向量」补回顺序信息&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;为什么赢&lt;/td&gt;
+					&lt;td&gt;并行 → 可扩展 → 堆出大模型&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;strong&gt;下篇预告&lt;/strong&gt;：Transformer 之后，模型开始分岔——一路走向 BERT（理解型），一路走向 GPT（生成型）。下一篇我们读 BERT，看看「双向」到底是什么意思，以及它为什么统治了 NLP 两年。&lt;/p&gt;
 &lt;h3 id=&#34;参考资料&#34;&gt;参考资料

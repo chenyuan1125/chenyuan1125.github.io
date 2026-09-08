@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Few-Shot on Lee</title>
+        <link>/en/tags/few-shot/</link>
+        <description>Recent content in Few-Shot on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:21:52 +0800</lastBuildDate><atom:link href="/en/tags/few-shot/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GPT-3: In-Context Learning and the Few-Shot Explosion</title>
+        <link>/en/p/gpt-03/</link>
+        <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/gpt-03/</guid>
+        <description>&lt;img src="/en/p/gpt-03/cover.jpg" alt="Featured image of post GPT-3: In-Context Learning and the Few-Shot Explosion" /&gt;&lt;h2 id=&#34;gpt-2s-unfinished-question&#34;&gt;GPT-2&amp;rsquo;s Unfinished Question
+&lt;/h2&gt;&lt;p&gt;GPT-2 showed two things: zero-shot capability exists, and scaling shows no saturation. But at 1.5B, zero-shot CoQA scored 55 F1 while fine-tuned SOTA was 90.7 — a huge gap.&lt;/p&gt;
+&lt;p&gt;GPT-3&amp;rsquo;s question: &lt;strong&gt;what happens at 100× the scale?&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;the-175b-configuration&#34;&gt;The 175B Configuration
+&lt;/h2&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;&lt;/th&gt;
+					&lt;th&gt;GPT-2 XL&lt;/th&gt;
+					&lt;th&gt;GPT-3&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Layers&lt;/td&gt;
+					&lt;td&gt;48&lt;/td&gt;
+					&lt;td&gt;96&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;d_model&lt;/td&gt;
+					&lt;td&gt;1600&lt;/td&gt;
+					&lt;td&gt;12288&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heads&lt;/td&gt;
+					&lt;td&gt;25&lt;/td&gt;
+					&lt;td&gt;96&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Context&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+					&lt;td&gt;2048&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Params&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;175B&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Trained on ~300B tokens (Common Crawl + WebText + books + Wikipedia), roughly 570× the text of GPT-2.&lt;/p&gt;
+&lt;h2 id=&#34;in-context-learning-the-core-discovery&#34;&gt;In-Context Learning: The Core Discovery
+&lt;/h2&gt;&lt;p&gt;GPT-3&amp;rsquo;s headline result: &lt;strong&gt;few-shot learning via prompts, no gradient updates at all.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Translate English to French:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sea otter =&amp;gt; loutre de mer
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cheese =&amp;gt; fromage
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;hello =&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The model completes &amp;ldquo;bonjour&amp;rdquo; — not because it was fine-tuned on translation, but because attention over the prompt&amp;rsquo;s examples conditions the output distribution.&lt;/p&gt;
+&lt;h3 id=&#34;the-scaling-pattern&#34;&gt;The Scaling Pattern
+&lt;/h3&gt;&lt;p&gt;Across tasks, performance follows a consistent pattern: &lt;strong&gt;zero-shot &amp;lt; one-shot &amp;lt; few-shot&lt;/strong&gt;, and the gap widens with model size. Small models barely benefit from examples; 175B models benefit dramatically.&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Task&lt;/th&gt;
+					&lt;th&gt;Fine-tuned SOTA&lt;/th&gt;
+					&lt;th&gt;GPT-3 zero-shot&lt;/th&gt;
+					&lt;th&gt;GPT-3 few-shot&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;SuperGLUE&lt;/td&gt;
+					&lt;td&gt;89.8&lt;/td&gt;
+					&lt;td&gt;52.9&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;85.6&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;TriviaQA&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;54.2&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;71.2&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;LAMBADA&lt;/td&gt;
+					&lt;td&gt;63.2&lt;/td&gt;
+					&lt;td&gt;63.8&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;76.2&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Arithmetic (2-digit +)&lt;/td&gt;
+					&lt;td&gt;—&lt;/td&gt;
+					&lt;td&gt;26.5&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;80.4&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Few-shot GPT-3 matches or exceeds fine-tuned models on many tasks — with zero parameter updates.&lt;/p&gt;
+&lt;h2 id=&#34;why-icl-works-mechanistically&#34;&gt;Why ICL Works (Mechanistically)
+&lt;/h2&gt;&lt;p&gt;In-context learning is not fully understood, but the leading hypotheses:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Implicit gradient descent&lt;/strong&gt; — the forward pass over examples approximates a meta-learned update (von Oswald et al., 2022)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Induction heads&lt;/strong&gt; — specific attention heads implement &amp;ldquo;find previous occurrence of current token, copy what followed&amp;rdquo; (Olsson et al., 2022)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bayesian inference&lt;/strong&gt; — the model treats the prompt as evidence and conditions on a latent task distribution (Xie et al., 2021)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;None is the full story; all capture parts of it.&lt;/p&gt;
+&lt;h2 id=&#34;the-scaling-laws-connection&#34;&gt;The Scaling Laws Connection
+&lt;/h2&gt;&lt;p&gt;Kaplan et al. (2020) showed loss follows power laws in parameters, data, and compute:&lt;/p&gt;
+$$L(N) \propto N^{-0.076}$$&lt;p&gt;GPT-3 sits on the predicted curve. Chinchilla (2022) later showed the optimal token/parameter ratio is ~20 tokens per parameter — GPT-3 was undertrained by that measure, which is why LLaMA-65B (1.4T tokens) matches it at ~⅓ the size.&lt;/p&gt;
+&lt;h2 id=&#34;what-gpt-3-changed&#34;&gt;What GPT-3 Changed
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Prompting as interface&lt;/strong&gt; — natural language became the programming interface for models&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The API economy&lt;/strong&gt; — no fine-tuning means one model serves all users&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scaling as business strategy&lt;/strong&gt; — GPT-3 justified compute investment at a scale no paper had before&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hallucination&lt;/strong&gt; — fluent but factually wrong outputs (the term entered common usage with GPT-3)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No memory&lt;/strong&gt; — 2048-token context is tiny; later models extended this by orders of magnitude&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Compute cost&lt;/strong&gt; — few-shot inference on 175B was extremely expensive&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Undertrained by modern standards&lt;/strong&gt; — Chinchilla-optimal training would use ~3.5T tokens&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Brown, T., et al. (2020). &lt;em&gt;Language Models are Few-Shot Learners&lt;/em&gt;. arXiv:2005.14165.&lt;/li&gt;
+&lt;li&gt;Kaplan, J., et al. (2020). &lt;em&gt;Scaling Laws for Neural Language Models&lt;/em&gt;. arXiv:2001.08361.&lt;/li&gt;
+&lt;li&gt;Hoffmann, J., et al. (2022). &lt;em&gt;Training Compute-Optimal Large Language Models&lt;/em&gt;. arXiv:2203.15556.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>GPT-1/2: Generative Pretraining and the Seeds of Few-Shot</title>
+        <link>/en/p/gpt-01/</link>
+        <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/gpt-01/</guid>
+        <description>&lt;img src="/en/p/gpt-01/cover.jpg" alt="Featured image of post GPT-1/2: Generative Pretraining and the Seeds of Few-Shot" /&gt;&lt;h2 id=&#34;from-bert-to-gpt-two-symmetric-bets&#34;&gt;From BERT to GPT: Two Symmetric Bets
+&lt;/h2&gt;&lt;p&gt;2018 split NLP into two lines. BERT went bidirectional-encoder for understanding. GPT-1 went decoder-only for generation. Same Transformer substrate, opposite architecture configurations — a fork that defined the next five years.&lt;/p&gt;
+&lt;h2 id=&#34;core-design-decoder-only-and-autoregression&#34;&gt;Core Design: Decoder-Only and Autoregression
+&lt;/h2&gt;&lt;p&gt;GPT-1 extracts the Transformer decoder, drops cross-attention, stacks 12 layers of masked self-attention + FFN.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Masked self-attention&lt;/strong&gt; — each token sees only itself and the left context. Future scores are set to -∞ before softmax, so their weights become 0:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Q&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;@&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;K&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sqrt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d_k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;triu&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;torch&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;L&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;diagonal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mask&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;attn&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;softmax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;scores&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;dim&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Pre-norm&lt;/strong&gt; — GPT-1 places LayerNorm before each sublayer (post-norm in the original Transformer). This small change makes deep stacks trainable.&lt;/p&gt;
+&lt;h3 id=&#34;training-details&#34;&gt;Training Details
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;&lt;/th&gt;
+					&lt;th&gt;GPT-1&lt;/th&gt;
+					&lt;th&gt;GPT-2 Small&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Layers&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Hidden dim&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+					&lt;td&gt;768&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Heads&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+					&lt;td&gt;12&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Params&lt;/td&gt;
+					&lt;td&gt;117M&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Data&lt;/td&gt;
+					&lt;td&gt;BookCorpus (~1B words)&lt;/td&gt;
+					&lt;td&gt;WebText (~40GB)&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Batch&lt;/td&gt;
+					&lt;td&gt;64&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;Sequence length&lt;/td&gt;
+					&lt;td&gt;512&lt;/td&gt;
+					&lt;td&gt;1024&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;why-decoder-only-can-understand&#34;&gt;Why Decoder-Only Can Understand
+&lt;/h2&gt;&lt;p&gt;The counterintuitive claim: predicting the next token requires understanding everything before it — syntax, coreference, commonsense. If the model predicts &amp;ldquo;groceries&amp;rdquo; after &amp;ldquo;Xiaoming went to the supermarket and bought some ___&amp;rdquo;, it must resolve what supermarkets sell.&lt;/p&gt;
+&lt;p&gt;GPT-1 hit SOTA on 9 of 12 NLP tasks — behind BERT on absolute scores, but proof that generation subsumes understanding.&lt;/p&gt;
+&lt;h2 id=&#34;gpt-2-implicit-multitask-learning&#34;&gt;GPT-2: Implicit Multitask Learning
+&lt;/h2&gt;&lt;p&gt;GPT-2 scaled up (1.5B max) and found something more important: &lt;strong&gt;zero-shot task transfer&lt;/strong&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Machine translation (WMT-14 En→Fr): zero-shot BLEU 11.5 — no parallel data ever seen&lt;/li&gt;
+&lt;li&gt;Reading comprehension (CoQA): 55 F1 zero-shot&lt;/li&gt;
+&lt;li&gt;Summarization (CNN/DM): competitive ROUGE-L without fine-tuning&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The model learned multiple tasks implicitly from language modeling alone.&lt;/p&gt;
+&lt;h3 id=&#34;scaling-without-saturation&#34;&gt;Scaling Without Saturation
+&lt;/h3&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Model&lt;/th&gt;
+					&lt;th&gt;Params&lt;/th&gt;
+					&lt;th&gt;LAMBADA (zero-shot)&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Small&lt;/td&gt;
+					&lt;td&gt;124M&lt;/td&gt;
+					&lt;td&gt;45.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Medium&lt;/td&gt;
+					&lt;td&gt;355M&lt;/td&gt;
+					&lt;td&gt;55.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 Large&lt;/td&gt;
+					&lt;td&gt;774M&lt;/td&gt;
+					&lt;td&gt;58.0%&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;GPT-2 XL&lt;/td&gt;
+					&lt;td&gt;1.5B&lt;/td&gt;
+					&lt;td&gt;63.0%&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;No plateau. This curve directly motivated GPT-3&amp;rsquo;s 175B and the scaling-laws program.&lt;/p&gt;
+&lt;h2 id=&#34;why-gpt-12-matters&#34;&gt;Why GPT-1/2 Matters
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Decoder-only won&lt;/strong&gt; — GPT-3, LLaMA, Mistral, DeepSeek all follow this line&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Zero-shot changed everything&lt;/strong&gt; — GPT-2&amp;rsquo;s discovery that models transfer without fine-tuning led directly to in-context learning, instruction tuning, and RLHF&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scaling as strategy&lt;/strong&gt; — 117M → 1.5B → 175B was not accidental; GPT-2&amp;rsquo;s data justified it&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Radford, A., et al. (2018). &lt;em&gt;Improving Language Understanding by Generative Pre-Training&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;Radford, A., et al. (2019). &lt;em&gt;Language Models are Unsupervised Multitask Learners&lt;/em&gt;. OpenAI.&lt;/li&gt;
+&lt;li&gt;The Illustrated GPT-2: &lt;a class=&#34;link&#34; href=&#34;http://jalammar.github.io/illustrated-gpt2/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://jalammar.github.io/illustrated-gpt2/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>MLM on Lee</title>
+        <link>/en/tags/mlm/</link>
+        <description>Recent content in MLM on Lee</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en</language>
+        <copyright>Lee</copyright>
+        <lastBuildDate>Wed, 02 Sep 2026 23:19:43 +0800</lastBuildDate><atom:link href="/en/tags/mlm/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>BERT: What Exactly Is &#39;Bidirectional&#39;?</title>
+        <link>/en/p/bert-02/</link>
+        <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/p/bert-02/</guid>
+        <description>&lt;img src="/en/p/bert-02/cover.jpg" alt="Featured image of post BERT: What Exactly Is &#39;Bidirectional&#39;?" /&gt;&lt;h2 id=&#34;prologue-gpt-1s-unidirectional-constraint&#34;&gt;Prologue: GPT-1&amp;rsquo;s Unidirectional Constraint
+&lt;/h2&gt;&lt;p&gt;GPT-1 uses a Transformer decoder as an autoregressive LM: each token attends only to itself and previous tokens. Reading a sentence becomes &amp;ldquo;forward-only&amp;rdquo;. For &amp;ldquo;Xiaoming gave Xiaohong ___ a book&amp;rdquo;, GPT cannot see the object &amp;ldquo;book&amp;rdquo; that follows the blank.&lt;/p&gt;
+&lt;p&gt;BERT&amp;rsquo;s name — Bidirectional Encoder Representations from Transformers — is about fixing exactly this.&lt;/p&gt;
+&lt;p&gt;But &amp;ldquo;bidirectional&amp;rdquo; costs almost nothing architecturally: &lt;strong&gt;the only change is the attention mask&lt;/strong&gt;. The hard part is training it without label leakage.&lt;/p&gt;
+&lt;h2 id=&#34;1-bidirectionality-lives-in-the-attention-mask&#34;&gt;1. Bidirectionality Lives in the Attention Mask
+&lt;/h2&gt;&lt;p&gt;GPT uses a lower-triangular causal mask. BERT uses a full matrix — every token attends to every token, including itself and future positions. No new parameters, no layer changes. Just a mask of ones instead of a triangle.&lt;/p&gt;
+&lt;h2 id=&#34;2-why-you-cant-use-a-standard-lm-objective&#34;&gt;2. Why You Can&amp;rsquo;t Use a Standard LM Objective
+&lt;/h2&gt;&lt;p&gt;If the model can see token t when predicting token t, the optimal solution is to copy the input. The LM objective degenerates into transcription. BERT&amp;rsquo;s solution: Masked Language Modeling.&lt;/p&gt;
+&lt;h3 id=&#34;the-15-masking-rate&#34;&gt;The 15% Masking Rate
+&lt;/h3&gt;&lt;p&gt;The paper states: &amp;ldquo;we mask 15% of all WordPiece tokens in each sequence at random.&amp;rdquo; No ablation over mask rates exists in the paper — 15% is a heuristic, not an optimized value.&lt;/p&gt;
+&lt;h3 id=&#34;the-801010-split&#34;&gt;The 80/10/10 Split
+&lt;/h3&gt;&lt;p&gt;Selected positions are replaced:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;80% → [MASK] token&lt;/li&gt;
+&lt;li&gt;10% → random token&lt;/li&gt;
+&lt;li&gt;10% → unchanged&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The 10% unchanged keeps the model honest: it must maintain a distributional representation for every input token, because it never knows which positions will be queried.&lt;/p&gt;
+&lt;h2 id=&#34;3-nsp-the-task-that-later-fell&#34;&gt;3. NSP: The Task That Later Fell
+&lt;/h2&gt;&lt;p&gt;Next Sentence Prediction: 50% of pairs are real adjacent sentences, 50% random. [CLS] output is used for binary classification.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The actual ablation numbers (Table 5 of the paper):&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Task&lt;/th&gt;
+					&lt;th&gt;MNLI-m&lt;/th&gt;
+					&lt;th&gt;QNLI&lt;/th&gt;
+					&lt;th&gt;MRPC&lt;/th&gt;
+					&lt;th&gt;SST-2&lt;/th&gt;
+					&lt;th&gt;SQuAD&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;BERT_BASE&lt;/td&gt;
+					&lt;td&gt;84.4&lt;/td&gt;
+					&lt;td&gt;88.4&lt;/td&gt;
+					&lt;td&gt;86.7&lt;/td&gt;
+					&lt;td&gt;92.7&lt;/td&gt;
+					&lt;td&gt;88.5&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;No NSP&lt;/td&gt;
+					&lt;td&gt;83.9&lt;/td&gt;
+					&lt;td&gt;84.9&lt;/td&gt;
+					&lt;td&gt;86.5&lt;/td&gt;
+					&lt;td&gt;92.6&lt;/td&gt;
+					&lt;td&gt;87.9&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Removing NSP costs &lt;strong&gt;3.5 points on QNLI&lt;/strong&gt; (a sentence-pair task) but only 0.5 on MNLI and 0.1 on SST-2. The effect is task-dependent.&lt;/p&gt;
+&lt;p&gt;RoBERTa (2019) later showed that with more data and longer training, removing NSP is neutral or slightly better:&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Setup&lt;/th&gt;
+					&lt;th&gt;SQuAD 1.1/2.0&lt;/th&gt;
+					&lt;th&gt;MNLI&lt;/th&gt;
+					&lt;th&gt;RACE&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;SEGMENT-PAIR + NSP&lt;/td&gt;
+					&lt;td&gt;90.4 / 78.7&lt;/td&gt;
+					&lt;td&gt;84.0&lt;/td&gt;
+					&lt;td&gt;64.2&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;FULL-SENTENCES, no NSP&lt;/td&gt;
+					&lt;td&gt;90.4 / 79.1&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;84.7&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;&lt;strong&gt;64.8&lt;/strong&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;ALBERT replaced NSP with SOP (Sentence Order Prediction) — harder and more useful for discourse coherence.&lt;/p&gt;
+&lt;h2 id=&#34;4-details-often-gotten-wrong&#34;&gt;4. Details Often Gotten Wrong
+&lt;/h2&gt;&lt;h3 id=&#34;gelu-attribution&#34;&gt;GELU Attribution
+&lt;/h3&gt;&lt;p&gt;BERT uses GELU &amp;ldquo;following OpenAI GPT&amp;rdquo; — GPT-1 (June 2018) adopted GELU first. BERT is the inheritor, not the inventor.&lt;/p&gt;
+&lt;h3 id=&#34;squad-fine-tuning-has-parameters&#34;&gt;SQuAD Fine-tuning Has Parameters
+&lt;/h3&gt;&lt;p&gt;The start/end predictors are linear layers on top of BERT output: start_logits = W_s·h_i + b_s. Claiming &amp;ldquo;no additional parameters&amp;rdquo; is wrong.&lt;/p&gt;
+&lt;h3 id=&#34;pre-training-compute&#34;&gt;Pre-training Compute
+&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Batch: 256 sequences × 512 tokens = 128,000 tokens/batch&lt;/li&gt;
+&lt;li&gt;1M steps ≈ 40 epochs over 3.3B words&lt;/li&gt;
+&lt;li&gt;90% of steps use seq_len 128 (attention is quadratic); 10% use 512&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5-berts-real-contribution&#34;&gt;5. BERT&amp;rsquo;s Real Contribution
+&lt;/h2&gt;&lt;p&gt;Three layers:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Architecture&lt;/strong&gt;: full attention instead of causal — near-zero cost, huge representational gain&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Training&lt;/strong&gt;: MLM solves the &amp;ldquo;seeing yourself&amp;rdquo; problem — the objective itself prevents leakage&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Paradigm&lt;/strong&gt;: universal pretraining + lightweight fine-tuning replaced task-specific architectures&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;512 max sequence length (learned positional embeddings)&lt;/li&gt;
+&lt;li&gt;Pretrain/fine-tune mismatch persists ([MASK] never appears downstream)&lt;/li&gt;
+&lt;li&gt;Cannot generate — encoder-only has no causal factorization&lt;/li&gt;
+&lt;li&gt;NSP is inefficient: half the training signal is about sentence adjacency, later shown to be replaceable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;Devlin, J., et al. (2018). &lt;em&gt;BERT: Pre-training of Deep Bidirectional Transformers&lt;/em&gt;. arXiv:1810.04805.&lt;/li&gt;
+&lt;li&gt;Liu, Y., et al. (2019). &lt;em&gt;RoBERTa&lt;/em&gt;. arXiv:1907.11692.&lt;/li&gt;
+&lt;li&gt;Lan, Z., et al. (2020). &lt;em&gt;ALBERT&lt;/em&gt;. arXiv:1909.11942.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
