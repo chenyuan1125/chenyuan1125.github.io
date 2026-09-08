@@ -6,7 +6,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 08 Sep 2026 22:20:50 +0800</lastBuildDate><atom:link href="/tags/bart/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Sep 2026 22:57:30 +0800</lastBuildDate><atom:link href="/tags/bart/index.xml" rel="self" type="application/rss+xml" /><item>
             <title>T5 / BART：把一切 NLP 任务统一成 Text-to-Text</title>
             <link>/p/t5-bart/</link>
             <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
