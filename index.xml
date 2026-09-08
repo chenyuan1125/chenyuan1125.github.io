@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 08 Sep 2026 20:03:22 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Sep 2026 22:20:50 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>T5 / BART：把一切 NLP 任务统一成 Text-to-Text</title>
         <link>/p/t5-bart/</link>
         <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
@@ -136,8 +136,8 @@
 &lt;li&gt;&lt;strong&gt;Document Rotation&lt;/strong&gt;：随机旋转文档，让模型找到真正的起点&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;最终配置用 &lt;strong&gt;text infilling + sentence permutation&lt;/strong&gt;：遮蔽 30% 的 token（片段长度服从泊松分布 λ=3），并把句子打乱。&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/p/t5-bart/pipeline.svg&#34;&gt;&lt;figcaption&gt;
-			&lt;h4&gt;图 1：T5 的 span corruption vs BART 的去噪重建&lt;/h4&gt;
+&lt;figure&gt;&lt;img src=&#34;/p/t5-bart/t5-vs-bart.svg&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;图 1：T5 的 span corruption vs BART 的去噪重建（由 Diagram Design 生成）&lt;/h4&gt;
 		&lt;/figcaption&gt;
 &lt;/figure&gt;
 

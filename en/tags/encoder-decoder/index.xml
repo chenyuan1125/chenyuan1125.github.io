@@ -7,7 +7,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 08 Sep 2026 20:03:22 +0800</lastBuildDate><atom:link href="/en/tags/encoder-decoder/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Sep 2026 22:20:50 +0800</lastBuildDate><atom:link href="/en/tags/encoder-decoder/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>T5 / BART: Unifying Every NLP Task as Text-to-Text</title>
         <link>/en/p/t5-bart/</link>
         <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
@@ -136,8 +136,8 @@
 &lt;li&gt;&lt;strong&gt;Document Rotation&lt;/strong&gt;: rotate the document, forcing the model to find the true start&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;The final configuration used &lt;strong&gt;text infilling + sentence permutation&lt;/strong&gt;: 30% of tokens masked (span lengths Poisson λ=3), with sentences shuffled.&lt;/p&gt;
-&lt;figure&gt;&lt;img src=&#34;/en/p/t5-bart/pipeline.svg&#34;&gt;&lt;figcaption&gt;
-			&lt;h4&gt;Figure 1: T5 span corruption vs BART denoising reconstruction&lt;/h4&gt;
+&lt;figure&gt;&lt;img src=&#34;/en/p/t5-bart/t5-vs-bart.svg&#34;&gt;&lt;figcaption&gt;
+			&lt;h4&gt;Figure 1: T5 span corruption vs BART denoising reconstruction (generated with Diagram Design)&lt;/h4&gt;
 		&lt;/figcaption&gt;
 &lt;/figure&gt;
 
