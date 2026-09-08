@@ -1,0 +1,19 @@
+{
+  "nodes": [
+    {"id": "input", "x": 40, "y": 160, "w": 250, "h": 170, "text": "原始句子\n我喜欢猫", "color": "light-violet"},
+    {"id": "masked", "x": 370, "y": 160, "w": 250, "h": 170, "text": "MLM 遮蔽\n我喜欢 [MASK]", "color": "light-red"},
+    {"id": "nsp", "x": 700, "y": 160, "w": 250, "h": 170, "text": "NSP 任务\nB 是 A 的下一句？", "color": "light-blue"},
+    {"id": "model", "x": 370, "y": 430, "w": 250, "h": 150, "text": "Transformer\nEncoder", "color": "yellow"},
+    {"id": "output", "x": 700, "y": 430, "w": 250, "h": 150, "text": "输出\n补词 + 判断下一句", "color": "light-green"}
+  ],
+  "texts": [
+    {"id": "title", "x": 40, "y": 30, "w": 910, "text": "BERT 预训练：MLM + NSP", "color": "black", "size": "m"},
+    {"id": "note1", "x": 40, "y": 100, "w": 910, "text": "15% 遮蔽：80% [MASK] / 10% 随机词 / 10% 保留", "color": "grey", "size": "s"}
+  ],
+  "arrows": [
+    {"id": "a1", "x1": 290, "y1": 245, "x2": 370, "y2": 245},
+    {"id": "a2", "x1": 495, "y1": 330, "x2": 495, "y2": 430},
+    {"id": "a3", "x1": 620, "y1": 245, "x2": 700, "y2": 245},
+    {"id": "a4", "x1": 620, "y1": 505, "x2": 700, "y2": 505}
+  ]
+}

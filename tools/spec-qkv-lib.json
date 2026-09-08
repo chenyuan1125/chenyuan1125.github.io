@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    {"id": "q", "x": 40, "y": 200, "w": 160, "h": 100, "text": "你\nQuery:\n想找讲猫的书", "color": "light-blue"},
+    {"id": "shelf", "x": 260, "y": 380, "w": 520, "h": 40, "text": "书架", "color": "light-violet", "fill": "none"},
+    {"id": "b1", "x": 275, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b2", "x": 315, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b3a", "x": 355, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b4", "x": 435, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b5", "x": 475, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b6", "x": 515, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b7", "x": 555, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b8", "x": 595, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b9", "x": 635, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "b10", "x": 675, "y": 320, "w": 30, "h": 60, "text": "", "color": "grey"},
+    {"id": "key", "x": 375, "y": 270, "w": 36, "h": 110, "text": "Key", "color": "yellow"},
+    {"id": "v", "x": 860, "y": 200, "w": 160, "h": 100, "text": "拿到的书\nValue:\n内容", "color": "light-green"}
+  ],
+  "texts": [
+    {"id": "title", "x": 20, "y": 30, "w": 800, "text": "类比：去图书馆借书", "color": "black", "size": "m"},
+    {"id": "keylbl", "x": 363, "y": 390, "w": 60, "text": "Key", "color": "black", "size": "m"}
+  ],
+  "arrows": [
+    {"id": "a1", "x1": 200, "y1": 250, "x2": 360, "y2": 280},
+    {"id": "a2", "x1": 412, "y1": 300, "x2": 860, "y2": 250}
+  ]
+}
