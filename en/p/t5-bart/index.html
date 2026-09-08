@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line.">
+<title>T5 / BART: Unifying Every NLP Task as Text-to-Text</title>
+
+<link rel='canonical' href='/en/p/t5-bart/'>
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="T5 / BART: Unifying Every NLP Task as Text-to-Text">
+<meta property='og:description' content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line.">
+<meta property='og:url' content='/en/p/t5-bart/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='Pretraining' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T20:03:22&#43;08:00'/><meta property='og:image' content='/en/p/t5-bart/cover.jpg' />
+<meta name="twitter:title" content="T5 / BART: Unifying Every NLP Task as Text-to-Text">
+<meta name="twitter:description" content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/t5-bart/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/en/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_20837a20b60ee220.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="/en/" selected>English</option>
+                                
+                                    <option value="/" >中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#prologue-the-gaps-in-bert-and-gpt">Prologue: The Gaps in BERT and GPT</a></li>
+    <li><a href="#t5-everything-is-text-to-text">T5: Everything Is Text-to-Text</a>
+      <ol>
+        <li><a href="#relative-position-encoding">Relative Position Encoding</a></li>
+        <li><a href="#pretraining-objective-span-corruption">Pretraining Objective: Span Corruption</a></li>
+        <li><a href="#the-c4-dataset">The C4 Dataset</a></li>
+        <li><a href="#model-sizes">Model Sizes</a></li>
+      </ol>
+    </li>
+    <li><a href="#bart-a-denoising-autoencoder">BART: A Denoising Autoencoder</a>
+      <ol>
+        <li><a href="#five-noise-types">Five Noise Types</a></li>
+        <li><a href="#why-bart-excels-at-generation">Why BART Excels at Generation</a></li>
+      </ol>
+    </li>
+    <li><a href="#t5-vs-bart">T5 vs BART</a></li>
+    <li><a href="#the-rise-and-fall-of-encoder-decoder">The Rise and Fall of Encoder-Decoder</a></li>
+    <li><a href="#takeaways">Takeaways</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/en/p/t5-bart/">
+                <img src="/en/p/t5-bart/cover_hu_b4d36315acf2a32b.jpg"
+                        srcset="/en/p/t5-bart/cover_hu_b4d36315acf2a32b.jpg 800w, /en/p/t5-bart/cover_hu_f121d2cbab43ff73.jpg 1600w"
+                        width="800" 
+                        height="420" 
+                        loading="lazy"
+                        alt="Featured image of post T5 / BART: Unifying Every NLP Task as Text-to-Text" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/t5-bart/">T5 / BART: Unifying Every NLP Task as Text-to-Text</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            T5&#39;s unified text-to-text framework swallows all NLP tasks; BART fuses BERT&#39;s bidirectional understanding with GPT&#39;s generation via denoising — the peak of the encoder-decoder line.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-09-05T00:00:00Z'>2026-09-05</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="/p/t5-bart/" class="link">中文</a>
+                
+            </div>
+        </footer>
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="prologue-the-gaps-in-bert-and-gpt">Prologue: The Gaps in BERT and GPT
+</h2><p>By 2018-2019, NLP was split across two lines:</p>
+<ul>
+<li><strong>BERT (encoder-only)</strong>: strong bidirectional understanding, but cannot generate</li>
+<li><strong>GPT (decoder-only)</strong>: strong generation, but unidirectional attention hurts understanding tasks</li>
+</ul>
+<p>Could one architecture do both? The answer is <strong>encoder-decoder</strong> — the original Transformer, which BERT and GPT each tore apart.</p>
+<p>In 2019, Google&rsquo;s T5 and Facebook&rsquo;s BART gave two different but complementary answers.</p>
+<h2 id="t5-everything-is-text-to-text">T5: Everything Is Text-to-Text
+</h2><p>T5 (Text-to-Text Transfer Transformer) made a radical claim: <strong>rewrite every NLP task as &ldquo;input text → output text&rdquo;</strong>.</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>Task</th>
+					<th>Input</th>
+					<th>Output</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Translation</td>
+					<td><code>translate English to German: That is good.</code></td>
+					<td><code>Das ist gut.</code></td>
+			</tr>
+			<tr>
+					<td>Classification</td>
+					<td><code>sst2 sentence: This movie is great.</code></td>
+					<td><code>positive</code></td>
+			</tr>
+			<tr>
+					<td>Similarity</td>
+					<td><code>stsb sentence1: ... sentence2: ...</code></td>
+					<td><code>3.8</code></td>
+			</tr>
+			<tr>
+					<td>Summarization</td>
+					<td><code>summarize: &lt;long text&gt;</code></td>
+					<td><code>&lt;summary&gt;</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>The model needs no task-specific output layer — classification emits the token sequence &ldquo;positive&rdquo;, regression emits the numeric string &ldquo;3.8&rdquo;. <strong>What&rsquo;s unified isn&rsquo;t the architecture, it&rsquo;s the interface.</strong></p>
+<h3 id="relative-position-encoding">Relative Position Encoding
+</h3><p>T5 uses a simplified relative position bias: each attention head learns a set of scalar biases indexed by query-key relative distance, added to attention scores. Compared to absolute positions, it extrapolates better to unseen lengths.</p>
+<h3 id="pretraining-objective-span-corruption">Pretraining Objective: Span Corruption
+</h3><p>T5 doesn&rsquo;t mask individual tokens like BERT — it masks <strong>contiguous spans</strong>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Original:  The quick brown fox jumps over the lazy dog
+</span></span><span class="line"><span class="cl">Corrupted: The &lt;X&gt; fox jumps &lt;Y&gt; dog
+</span></span><span class="line"><span class="cl">Target:    &lt;X&gt; quick brown &lt;Y&gt; over the lazy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Each span is replaced by a sentinel token (<code>&lt;X&gt;</code>, <code>&lt;Y&gt;</code>), and the model must emit all masked spans. Average span length 3, 15% masked.</p>
+<p>This is harder than token masking and closer to a generation task.</p>
+<h3 id="the-c4-dataset">The C4 Dataset
+</h3><p>T5 built <strong>C4</strong> (Colossal Clean Crawled Corpus, 750GB) — English text cleaned from Common Crawl. Rules included: keep only lines ending in punctuation, deduplicate, filter profanity pages.</p>
+<h3 id="model-sizes">Model Sizes
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>Model</th>
+					<th>Params</th>
+					<th>Layers</th>
+					<th>d_model</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T5-Small</td>
+					<td>60M</td>
+					<td>6/6</td>
+					<td>512</td>
+			</tr>
+			<tr>
+					<td>T5-Base</td>
+					<td>220M</td>
+					<td>12/12</td>
+					<td>768</td>
+			</tr>
+			<tr>
+					<td>T5-Large</td>
+					<td>770M</td>
+					<td>24/24</td>
+					<td>1024</td>
+			</tr>
+			<tr>
+					<td>T5-3B</td>
+					<td>3B</td>
+					<td>24/24</td>
+					<td>1024</td>
+			</tr>
+			<tr>
+					<td>T5-11B</td>
+					<td>11B</td>
+					<td>24/24</td>
+					<td>1024</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>One of T5&rsquo;s most valuable contributions is its <strong>systematic ablation study</strong>: encoder-decoder vs decoder-only, denoising vs language modeling objectives, C4 vs other datasets, pretraining data volume. The conclusion: encoder-decoder + span corruption wins at equal compute budget.</p>
+<h2 id="bart-a-denoising-autoencoder">BART: A Denoising Autoencoder
+</h2><p>BART (Bidirectional and Auto-Regressive Transformer) takes a different angle: <strong>corrupt text with arbitrary noise, then reconstruct the original</strong>.</p>
+<p>Its structure is the full Transformer encoder-decoder:</p>
+<ul>
+<li>Encoder uses bidirectional attention (like BERT)</li>
+<li>Decoder uses causal attention (like GPT) plus cross-attention over encoder output</li>
+</ul>
+<h3 id="five-noise-types">Five Noise Types
+</h3><p>BART tested several noise functions; the best combination was:</p>
+<ol>
+<li><strong>Token Masking</strong>: random token masking (same as BERT)</li>
+<li><strong>Token Deletion</strong>: random deletion — the model must infer both position and content</li>
+<li><strong>Text Infilling</strong>: mask contiguous spans with a single mask (same as SpanBERT)</li>
+<li><strong>Sentence Permutation</strong>: shuffle sentence order</li>
+<li><strong>Document Rotation</strong>: rotate the document, forcing the model to find the true start</li>
+</ol>
+<p>The final configuration used <strong>text infilling + sentence permutation</strong>: 30% of tokens masked (span lengths Poisson λ=3), with sentences shuffled.</p>
+<figure><img src="/en/p/t5-bart/pipeline.svg"><figcaption>
+			<h4>Figure 1: T5 span corruption vs BART denoising reconstruction</h4>
+		</figcaption>
+</figure>
+
+<h3 id="why-bart-excels-at-generation">Why BART Excels at Generation
+</h3><p>BART&rsquo;s decoder is autoregressive, so it naturally does summarization, translation, and dialogue. Its encoder is bidirectional, so it fully understands the input. This combination is especially strong for summarization — BART beats T5 on XSum.</p>
+<h2 id="t5-vs-bart">T5 vs BART
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>Dimension</th>
+					<th>T5</th>
+					<th>BART</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Architecture</td>
+					<td>Encoder-Decoder</td>
+					<td>Encoder-Decoder</td>
+			</tr>
+			<tr>
+					<td>Objective</td>
+					<td>Span corruption (predict masked spans)</td>
+					<td>Denoising reconstruction (rebuild the whole input)</td>
+			</tr>
+			<tr>
+					<td>Corruption</td>
+					<td>Contiguous spans → sentinels</td>
+					<td>Text infilling + sentence shuffle</td>
+			</tr>
+			<tr>
+					<td>Strength</td>
+					<td>Classification, translation, multi-task unification</td>
+					<td>Summarization, generation</td>
+			</tr>
+			<tr>
+					<td>Position encoding</td>
+					<td>Relative position bias</td>
+					<td>Learned absolute positions</td>
+			</tr>
+			<tr>
+					<td>Scale</td>
+					<td>60M - 11B</td>
+					<td>140M - 400M</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>Core difference</strong>: T5 predicts only the corrupted parts; BART reconstructs the full sequence. The former is more compute-efficient, the latter more generation-friendly.</p>
+<h2 id="the-rise-and-fall-of-encoder-decoder">The Rise and Fall of Encoder-Decoder
+</h2><p>After 2020, decoder-only became dominant (GPT-3, LLaMA, DeepSeek are all decoder-only). Why?</p>
+<ol>
+<li><strong>Scaling efficiency</strong>: no encoder-decoder communication overhead; same parameter count buys more depth</li>
+<li><strong>Training simplicity</strong>: one language-modeling objective, no noise design needed</li>
+<li><strong>Generality</strong>: in-context learning lets &ldquo;understanding&rdquo; tasks be solved by generation too</li>
+</ol>
+<p>But encoder-decoder didn&rsquo;t vanish: T5 remains the backbone of many RAG, translation, and summarization systems, and Flan-T5 is still a strong choice among open small models.</p>
+<h2 id="takeaways">Takeaways
+</h2><ol>
+<li><strong>Unified interface &gt; unified architecture</strong>: T5&rsquo;s text-to-text proved the value of a common interface — an idea inherited by instruction tuning</li>
+<li><strong>The denoising design space is large</strong>: T5&rsquo;s span corruption and BART&rsquo;s text infilling are both denoising, but details determine task fit</li>
+<li><strong>Ablation studies are rarer than architecture novelty</strong>: T5&rsquo;s most valuable artifact is that ablation table, not the model itself</li>
+</ol>
+<h2 id="references">References
+</h2><ul>
+<li>Raffel, C., et al. (2019). <em>Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer</em>. arXiv:1910.10683.</li>
+<li>Lewis, M., et al. (2019). <em>BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension</em>. arXiv:1910.13461.</li>
+<li>Hugging Face T5 docs: <a class="link" href="https://huggingface.co/docs/transformers/model_doc/t5"  target="_blank" rel="noopener"
+    >https://huggingface.co/docs/transformers/model_doc/t5</a></li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/t5/">T5</a>
+        
+            <a href="/en/tags/bart/">BART</a>
+        
+            <a href="/en/tags/encoder-decoder/">Encoder-Decoder</a>
+        
+            <a href="/en/tags/pretraining/">Pretraining</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-08
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/bert-02/">
+        
+        
+            <div class="article-image">
+                <img src="/en/p/bert-02/cover.c7bdac7c6c58707d20a235a6ea6ed3bf_hu_71acb6ae207a1f3b.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post BERT: What Exactly Is &#39;Bidirectional&#39;?"
+                        data-key="bert-02" 
+                        data-hash="md5-x72sfGxYcH0gojWm6m7Tvw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">BERT: What Exactly Is &#39;Bidirectional&#39;?</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/en/p/transformer-01/">
+        
+        
+            <div class="article-image">
+                <img src="/en/p/transformer-01/cover.1dd94f16a879c102453c158e9e3167c8_hu_81f7b587c5dc4c25.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?"
+                        data-key="transformer-01" 
+                        data-hash="md5-HdlPFqh5wQJFPBWOnjFnyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/en/p/gpt-03/">
+        
+        
+            <div class="article-image">
+                <img src="/en/p/gpt-03/cover.6227c529517ec910514157c2713c50f1_hu_8c0eab218c39fe1c.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post GPT-3: In-Context Learning and the Few-Shot Explosion"
+                        data-key="gpt-03" 
+                        data-hash="md5-YifFKVF&#43;yRBRQVfCcTxQ8Q==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT-3: In-Context Learning and the Few-Shot Explosion</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/en/p/deepseek-r1-reasoning-rl/">
+        
+        
+            <div class="article-image">
+                <img src="/en/p/deepseek-r1-reasoning-rl/cover.0c92215db13e2df1672670d145e4a37a_hu_7e19977a34734f54.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning"
+                        data-key="deepseek-r1-reasoning-rl" 
+                        data-hash="md5-DJIhXbE&#43;LfFnJnDRReSjeg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/en/p/gpt-01/">
+        
+        
+            <div class="article-image">
+                <img src="/en/p/gpt-01/cover.25c6721e5ce67f2733192ac554bb4bde_hu_4837811e0a817e15.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post GPT-1/2: Generative Pretraining and the Seeds of Few-Shot"
+                        data-key="gpt-01" 
+                        data-hash="md5-JcZyHlzmfyczGSrFVLtL3g==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT-1/2: Generative Pretraining and the Seeds of Few-Shot</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="/vendor/photoswipe/photoswipe.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/photoswipe/photoswipe-ui-default.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+
+    </body>
+</html>

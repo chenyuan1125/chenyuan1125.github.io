@@ -7,7 +7,39 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 02 Sep 2026 23:23:22 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Sep 2026 20:03:22 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>BART</title>
+        <link>/en/tags/bart/</link>
+        <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/bart/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Encoder-Decoder</title>
+        <link>/en/tags/encoder-decoder/</link>
+        <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/encoder-decoder/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Pretraining</title>
+        <link>/en/tags/pretraining/</link>
+        <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/pretraining/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>T5</title>
+        <link>/en/tags/t5/</link>
+        <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
+        
+        <guid>/en/tags/t5/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>Few-Shot</title>
         <link>/en/tags/few-shot/</link>
         <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
@@ -173,14 +205,6 @@
         <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
         
         <guid>/en/tags/mlm/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Pretraining</title>
-        <link>/en/tags/pretraining/</link>
-        <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
-        
-        <guid>/en/tags/pretraining/</guid>
         <description></description>
         </item>
         <item>

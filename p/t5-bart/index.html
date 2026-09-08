@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="T5 用一个统一的 text-to-text 框架吞下所有 NLP 任务，BART 用去噪自编码器把 BERT 的双向理解与 GPT 的生成能力拼在一起——Encoder-Decoder 路线的巅峰。">
+<title>T5 / BART：把一切 NLP 任务统一成 Text-to-Text</title>
+
+<link rel='canonical' href='/p/t5-bart/'>
+
+<link rel="stylesheet" href="/scss/style.min.fc63a74a267099258a7827a936bd9888079f22ea5553f59e32246308d90e4ee7.css"><meta property='og:title' content="T5 / BART：把一切 NLP 任务统一成 Text-to-Text">
+<meta property='og:description' content="T5 用一个统一的 text-to-text 框架吞下所有 NLP 任务，BART 用去噪自编码器把 BERT 的双向理解与 GPT 的生成能力拼在一起——Encoder-Decoder 路线的巅峰。">
+<meta property='og:url' content='/p/t5-bart/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='预训练' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T20:03:22&#43;08:00'/><meta property='og:image' content='/p/t5-bart/cover.jpg' />
+<meta name="twitter:title" content="T5 / BART：把一切 NLP 任务统一成 Text-to-Text">
+<meta name="twitter:description" content="T5 用一个统一的 text-to-text 框架吞下所有 NLP 任务，BART 用去噪自编码器把 BERT 的双向理解与 GPT 的生成能力拼在一起——Encoder-Decoder 路线的巅峰。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/t5-bart/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_20837a20b60ee220.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    
+                        <li id="i18n-switch">  
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                            <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                                
+                                    <option value="/en/" >English</option>
+                                
+                                    <option value="/" selected>中文</option>
+                                
+                            </select>
+                        </li>
+                    
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#引子bert-和-gpt-各自的缺口">引子：BERT 和 GPT 各自的缺口</a></li>
+    <li><a href="#t5一切皆-text-to-text">T5：一切皆 Text-to-Text</a>
+      <ol>
+        <li><a href="#相对位置编码">相对位置编码</a></li>
+        <li><a href="#预训练任务span-corruption">预训练任务：Span Corruption</a></li>
+        <li><a href="#c4-数据集">C4 数据集</a></li>
+        <li><a href="#训练规模">训练规模</a></li>
+      </ol>
+    </li>
+    <li><a href="#bart去噪自编码器">BART：去噪自编码器</a>
+      <ol>
+        <li><a href="#五种加噪方式">五种加噪方式</a></li>
+        <li><a href="#为什么-bart-适合生成">为什么 BART 适合生成</a></li>
+      </ol>
+    </li>
+    <li><a href="#t5-vs-bart-对比">T5 vs BART 对比</a></li>
+    <li><a href="#encoder-decoder-的兴衰">Encoder-Decoder 的兴衰</a></li>
+    <li><a href="#技术启示">技术启示</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/t5-bart/">
+                <img src="/p/t5-bart/cover_hu_b4d36315acf2a32b.jpg"
+                        srcset="/p/t5-bart/cover_hu_b4d36315acf2a32b.jpg 800w, /p/t5-bart/cover_hu_f121d2cbab43ff73.jpg 1600w"
+                        width="800" 
+                        height="420" 
+                        loading="lazy"
+                        alt="Featured image of post T5 / BART：把一切 NLP 任务统一成 Text-to-Text" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/t5-bart/">T5 / BART：把一切 NLP 任务统一成 Text-to-Text</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            T5 用一个统一的 text-to-text 框架吞下所有 NLP 任务，BART 用去噪自编码器把 BERT 的双向理解与 GPT 的生成能力拼在一起——Encoder-Decoder 路线的巅峰。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-09-05T00:00:00Z'>2026-09-05</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 4 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+        <footer class="article-translations">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+            <div>
+                
+                    <a href="/en/p/t5-bart/" class="link">English</a>
+                
+            </div>
+        </footer>
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="引子bert-和-gpt-各自的缺口">引子：BERT 和 GPT 各自的缺口
+</h2><p>2018-2019 年，NLP 被两条路线割裂：</p>
+<ul>
+<li><strong>BERT（Encoder-only）</strong>：双向理解强，但不能生成</li>
+<li><strong>GPT（Decoder-only）</strong>：生成强，但单向注意力让理解任务吃亏</li>
+</ul>
+<p>有没有一种架构能同时要？答案是 <strong>Encoder-Decoder</strong>——Transformer 原版就是它，只是被 BERT 和 GPT 各拆走了一半。</p>
+<p>2019 年 Google 的 T5 和 Facebook 的 BART 给出了两种不同但互补的答案。</p>
+<h2 id="t5一切皆-text-to-text">T5：一切皆 Text-to-Text
+</h2><p>T5（Text-to-Text Transfer Transformer）的核心主张激进到近乎粗暴：<strong>把所有 NLP 任务都改写成&quot;输入文本 → 输出文本&quot;</strong>。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>任务</th>
+					<th>输入</th>
+					<th>输出</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>翻译</td>
+					<td><code>translate English to German: That is good.</code></td>
+					<td><code>Das ist gut.</code></td>
+			</tr>
+			<tr>
+					<td>分类</td>
+					<td><code>sst2 sentence: This movie is great.</code></td>
+					<td><code>positive</code></td>
+			</tr>
+			<tr>
+					<td>相似度</td>
+					<td><code>stsb sentence1: ... sentence2: ...</code></td>
+					<td><code>3.8</code></td>
+			</tr>
+			<tr>
+					<td>摘要</td>
+					<td><code>summarize: &lt;长文&gt;</code></td>
+					<td><code>&lt;摘要&gt;</code></td>
+			</tr>
+	</tbody>
+</table></div>
+<p>模型不需要任何任务特定的输出层——分类任务输出 &ldquo;positive&rdquo; 这个 token 序列，回归任务输出 &ldquo;3.8&rdquo; 这个数字字符串。<strong>统一的不是架构，是接口</strong>。</p>
+<h3 id="相对位置编码">相对位置编码
+</h3><p>T5 用简化的相对位置编码（relative position bias）：每个注意力头学习一组标量偏置，按 query-key 相对距离查表加到注意力分数上。相比绝对位置编码，它更容易外推到训练时没见过的长度。</p>
+<h3 id="预训练任务span-corruption">预训练任务：Span Corruption
+</h3><p>T5 不用 BERT 的单 token 遮蔽，而是<strong>遮蔽连续片段</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">原文:  The quick brown fox jumps over the lazy dog
+</span></span><span class="line"><span class="cl">遮蔽:  The &lt;X&gt; fox jumps &lt;Y&gt; dog
+</span></span><span class="line"><span class="cl">目标:  &lt;X&gt; quick brown &lt;Y&gt; over the lazy
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>每个片段用一个 sentinel token（<code>&lt;X&gt;</code>、<code>&lt;Y&gt;</code>）替换，模型需要输出所有被遮蔽的片段。平均片段长度 3，遮蔽 15%。</p>
+<p>这比单 token 遮蔽更难，也更接近生成任务。</p>
+<h3 id="c4-数据集">C4 数据集
+</h3><p>T5 专门构建了 <strong>C4</strong>（Colossal Clean Crawled Corpus，750GB）——从 Common Crawl 清洗出的英文文本。清洗规则包括：只保留以标点结尾的行、去除重复行、过滤脏词页面等。</p>
+<h3 id="训练规模">训练规模
+</h3><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>模型</th>
+					<th>参数量</th>
+					<th>层数</th>
+					<th>d_model</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>T5-Small</td>
+					<td>60M</td>
+					<td>6/6</td>
+					<td>512</td>
+			</tr>
+			<tr>
+					<td>T5-Base</td>
+					<td>220M</td>
+					<td>12/12</td>
+					<td>768</td>
+			</tr>
+			<tr>
+					<td>T5-Large</td>
+					<td>770M</td>
+					<td>24/24</td>
+					<td>1024</td>
+			</tr>
+			<tr>
+					<td>T5-3B</td>
+					<td>3B</td>
+					<td>24/24</td>
+					<td>1024</td>
+			</tr>
+			<tr>
+					<td>T5-11B</td>
+					<td>11B</td>
+					<td>24/24</td>
+					<td>1024</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>T5 论文最有价值的贡献之一是<strong>系统性的消融实验</strong>：他们比较了 encoder-decoder vs decoder-only、去噪目标 vs 语言模型目标、C4 vs 其他数据集、预训练数据量等。结论是 encoder-decoder + span corruption 在相同计算预算下最优。</p>
+<h2 id="bart去噪自编码器">BART：去噪自编码器
+</h2><p>BART（Bidirectional and Auto-Regressive Transformer）的思路不同：<strong>先用任意噪声破坏文本，再让模型重建原文</strong>。</p>
+<p>它的结构就是完整的 Transformer encoder-decoder：</p>
+<ul>
+<li>Encoder 用双向注意力（像 BERT）</li>
+<li>Decoder 用因果注意力（像 GPT），并且对 encoder 输出做交叉注意力</li>
+</ul>
+<h3 id="五种加噪方式">五种加噪方式
+</h3><p>BART 论文测试了多种噪声，其中效果最好的组合是：</p>
+<ol>
+<li><strong>Token Masking</strong>：随机遮蔽 token（同 BERT）</li>
+<li><strong>Token Deletion</strong>：随机删除 token，模型必须推断位置和内容</li>
+<li><strong>Text Infilling</strong>：遮蔽连续片段，用单个 mask 替换（同 SpanBERT）</li>
+<li><strong>Sentence Permutation</strong>：打乱句子顺序</li>
+<li><strong>Document Rotation</strong>：随机旋转文档，让模型找到真正的起点</li>
+</ol>
+<p>最终配置用 <strong>text infilling + sentence permutation</strong>：遮蔽 30% 的 token（片段长度服从泊松分布 λ=3），并把句子打乱。</p>
+<figure><img src="/p/t5-bart/pipeline.svg"><figcaption>
+			<h4>图 1：T5 的 span corruption vs BART 的去噪重建</h4>
+		</figcaption>
+</figure>
+
+<h3 id="为什么-bart-适合生成">为什么 BART 适合生成
+</h3><p>BART 的 decoder 是自回归的，所以它天生能做摘要、翻译、对话。而 encoder 是双向的，所以它能充分理解输入。这种组合在摘要任务上特别强——BART 在 XSum 上比 T5 更好。</p>
+<h2 id="t5-vs-bart-对比">T5 vs BART 对比
+</h2><div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>维度</th>
+					<th>T5</th>
+					<th>BART</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>架构</td>
+					<td>Encoder-Decoder</td>
+					<td>Encoder-Decoder</td>
+			</tr>
+			<tr>
+					<td>预训练目标</td>
+					<td>Span corruption（预测被遮蔽片段）</td>
+					<td>去噪重建（重建整个原文）</td>
+			</tr>
+			<tr>
+					<td>加噪方式</td>
+					<td>连续片段替换为 sentinel</td>
+					<td>Text infilling + 句子打乱</td>
+			</tr>
+			<tr>
+					<td>优势任务</td>
+					<td>分类、翻译、多任务统一</td>
+					<td>摘要、生成</td>
+			</tr>
+			<tr>
+					<td>位置编码</td>
+					<td>相对位置偏置</td>
+					<td>绝对位置编码（学习）</td>
+			</tr>
+			<tr>
+					<td>参数量</td>
+					<td>60M - 11B</td>
+					<td>140M - 400M</td>
+			</tr>
+	</tbody>
+</table></div>
+<p><strong>核心差异</strong>：T5 只预测被破坏的部分，BART 重建整个序列。前者更高效，后者对生成任务更友好。</p>
+<h2 id="encoder-decoder-的兴衰">Encoder-Decoder 的兴衰
+</h2><p>2020 年后，Decoder-only 逐渐成为主流（GPT-3、LLaMA、DeepSeek 都是 Decoder-only）。为什么？</p>
+<ol>
+<li><strong>规模效率</strong>：Decoder-only 没有 encoder-decoder 之间的通信开销，同样参数量下更&quot;深&quot;</li>
+<li><strong>训练简单</strong>：只需一个语言模型目标，不需要设计噪声策略</li>
+<li><strong>通用性</strong>：in-context learning 让&quot;理解&quot;任务也能用生成范式解决</li>
+</ol>
+<p>但 Encoder-Decoder 没有消失：T5 依然是很多 RAG、翻译、摘要系统的底座，Flan-T5 至今是开源小模型的重要选择。</p>
+<h2 id="技术启示">技术启示
+</h2><ol>
+<li><strong>接口统一 &gt; 架构统一</strong>：T5 的 text-to-text 证明了&quot;统一接口&quot;的价值，这个思想后来被 instruction tuning 继承</li>
+<li><strong>去噪目标的设计空间很大</strong>：T5 的 span corruption 和 BART 的 text infilling 都是去噪，但细节决定任务适配性</li>
+<li><strong>消融实验比架构创新更稀缺</strong>：T5 论文最有价值的是那张消融表，不是模型本身</li>
+</ol>
+<h2 id="参考资料">参考资料
+</h2><ul>
+<li>Raffel, C., et al. (2019). <em>Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer</em>. arXiv:1910.10683.</li>
+<li>Lewis, M., et al. (2019). <em>BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension</em>. arXiv:1910.13461.</li>
+<li>Hugging Face T5 文档：https://huggingface.co/docs/transformers/model_doc/t5</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/t5/">T5</a>
+        
+            <a href="/tags/bart/">BART</a>
+        
+            <a href="/tags/encoder-decoder/">Encoder-Decoder</a>
+        
+            <a href="/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/">预训练</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-08
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/bert-02/">
+        
+        
+            <div class="article-image">
+                <img src="/p/bert-02/cover.c7bdac7c6c58707d20a235a6ea6ed3bf_hu_71acb6ae207a1f3b.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post BERT：双向编码器，到底双在哪"
+                        data-key="bert-02" 
+                        data-hash="md5-x72sfGxYcH0gojWm6m7Tvw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">BERT：双向编码器，到底双在哪</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-03/">
+        
+        
+            <div class="article-image">
+                <img src="/p/gpt-03/cover.6227c529517ec910514157c2713c50f1_hu_8c0eab218c39fe1c.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发"
+                        data-key="gpt-03" 
+                        data-hash="md5-YifFKVF&#43;yRBRQVfCcTxQ8Q==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT-3：In-Context Learning 与 Few-Shot 爆发</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-01/">
+        
+        
+            <div class="article-image">
+                <img src="/p/gpt-01/cover.25c6721e5ce67f2733192ac554bb4bde_hu_4837811e0a817e15.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽"
+                        data-key="gpt-01" 
+                        data-hash="md5-JcZyHlzmfyczGSrFVLtL3g==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT-1/2：生成式预训练与 few-shot 萌芽</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
+        
+        
+            <div class="article-image">
+                <img src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover.1dd94f16a879c102453c158e9e3167c8_hu_81f7b587c5dc4c25.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 01 | 一切的起点：Transformer 到底解决了什么问题？"
+                        
+                        data-hash="md5-HdlPFqh5wQJFPBWOnjFnyA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">01 | 一切的起点：Transformer 到底解决了什么问题？</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/">
+        
+        
+            <div class="article-image">
+                <img src="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/cover.0c92215db13e2df1672670d145e4a37a_hu_7e19977a34734f54.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post DeepSeek-R1：用强化学习激发大模型推理能力"
+                        
+                        data-hash="md5-DJIhXbE&#43;LfFnJnDRReSjeg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepSeek-R1：用强化学习激发大模型推理能力</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="/vendor/photoswipe/photoswipe.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/photoswipe/photoswipe-ui-default.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="/vendor/photoswipe/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="/vendor/vibrant/vibrant.min.js"crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+
+    </body>
+</html>

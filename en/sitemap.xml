@@ -2,8 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/en/tags/bart/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/bart/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/bart/"
+                />
+  </url><url>
     <loc>/en/categories/</loc>
-    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -13,6 +26,77 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/categories/"
+                />
+  </url><url>
+    <loc>/en/tags/encoder-decoder/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/encoder-decoder/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/encoder-decoder/"
+                />
+  </url><url>
+    <loc>/en/categories/llm-architecture/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/post/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/en/tags/pretraining/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/t5/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/t5/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/t5/"
+                />
+  </url><url>
+    <loc>/en/p/t5-bart/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/t5-bart/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/t5-bart/"
+                />
+  </url><url>
+    <loc>/en/tags/</loc>
+    <lastmod>2026-09-08T20:03:22+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
                 />
   </url><url>
     <loc>/en/tags/few-shot/</loc>
@@ -70,22 +154,6 @@
     <loc>/en/tags/llm/</loc>
     <lastmod>2026-09-02T23:22:23+08:00</lastmod>
   </url><url>
-    <loc>/en/categories/llm-architecture/</loc>
-    <lastmod>2026-09-02T23:22:23+08:00</lastmod>
-  </url><url>
-    <loc>/en/post/</loc>
-    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
     <loc>/en/tags/scaling-law/</loc>
     <lastmod>2026-09-02T23:21:52+08:00</lastmod>
     <xhtml:link
@@ -97,19 +165,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/tags/scaling-law/"
-                />
-  </url><url>
-    <loc>/en/tags/</loc>
-    <lastmod>2026-09-02T23:23:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
                 />
   </url><url>
     <loc>/en/tags/deepseek/</loc>
@@ -330,9 +385,6 @@
                 hreflang="zh-cn"
                 href="/tags/mlm/"
                 />
-  </url><url>
-    <loc>/en/tags/pretraining/</loc>
-    <lastmod>2026-09-02T23:19:43+08:00</lastmod>
   </url><url>
     <loc>/en/tags/architecture/</loc>
     <lastmod>2026-09-02T23:23:22+08:00</lastmod>
