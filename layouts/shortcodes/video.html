@@ -1,0 +1,4 @@
+<video controls preload="metadata" {{ with .Get "width" }}width="{{ . }}"{{ end }} {{ with .Get "height" }}height="{{ . }}"{{ end }}>
+    <source src="{{ .Get 0 }}" type="video/mp4">
+    您的浏览器不支持 video 标签。
+</video>
