@@ -1,8 +1,8 @@
-languageCode: zh-cn
+locale: zh-cn
 theme: hugo-theme-stack
 title: Lee's Blog
 copyright: Lee
-paginate: 6
+paginate: 5
 taxonomies:
   # 标签
   tag: tags
@@ -21,17 +21,115 @@ hasCJKLanguage: true
 
 languages:
   en:
-    languageName: English
+    label: English
     contentDir: content/en
     title: Lee
     weight: 1
+    menu:
+      main:
+        - identifier: home
+          name: Home
+          url: /en/
+          weight: -100
+          params:
+            icon: home
+
+        - identifier: search
+          name: Search
+          url: /en/search/
+          weight: -90
+          params:
+            icon: search
+
+        - identifier: archives
+          name: Archives
+          url: /en/archives/
+          weight: -80
+          params:
+            icon: archives
+
+        - identifier: about
+          name: About
+          url: /en/page/about/
+          weight: -70
+          params:
+            icon: user
+
+        - identifier: links
+          name: Links
+          url: /en/page/links/
+          weight: -60
+          params:
+            icon: link
+      social:
+        - identifier: github
+          name: GitHub
+          url: https://github.com/chenyuan1125
+          params:
+            icon: brand-github
+        - identifier: home
+          name: Home
+          url: /en/
+          weight: -100
+          params:
+            newTab: false
+            icon: home
     params:
       description: Stay hungry, Stay foolish.
   zh-cn:
-    languageName: 中文
+    label: 中文
     contentDir: content/cn
     title: 辰远
     weight: 2
+    menu:
+      main:
+        - identifier: home
+          name: 主页
+          url: /
+          weight: -100
+          params:
+            icon: home
+
+        - identifier: search
+          name: 搜索
+          url: /search/
+          weight: -90
+          params:
+            icon: search
+
+        - identifier: archives
+          name: 归档
+          url: /archives/
+          weight: -80
+          params:
+            icon: archives
+
+        - identifier: about
+          name: 关于
+          url: /%E5%85%B3%E4%BA%8E/
+          weight: -70
+          params:
+            icon: user
+
+        - identifier: links
+          name: 链接
+          url: /%E9%93%BE%E6%8E%A5/
+          weight: -60
+          params:
+            icon: link
+      social:
+        - identifier: github
+          name: GitHub
+          url: https://github.com/chenyuan1125
+          params:
+            icon: brand-github
+        - identifier: home
+          name: 首页&关于
+          url: /
+          weight: -100
+          params:
+            newTab: false
+            icon: home
     params:
       description: 智者不入爱河
 
@@ -44,7 +142,7 @@ services:
     id:
 
 pagination:
-  pagerSize: 3
+  pagerSize: 5
 
 permalinks:
   post: /p/:slug/
@@ -211,30 +309,6 @@ params:
 ### Custom menu
 ### See https://stack.jimmycai.com/config/menu
 ### To remove about, archive and search page menu item, remove `menu` field from their FrontMatter
-menu:
-  main: []
-
-  social:
-    - identifier: github
-      name: GitHub
-      url: https://github.com/chenyuan1125
-      params:
-        icon: brand-github
-
-    # - identifier: twitter
-    #   name: Twitter
-    #   url: https://twitter.com
-    #   params:
-    #     icon: brand-twitter
-    - identifier: home
-      name: 首页&关于
-      url: /
-      weight: -100 #权重
-      params:
-        ### For demonstration purpose, the home link will be open in a new tab
-        newTab: false
-        icon: home #更多的图标信息见后
-
 related:
   includeNewer: true
   threshold: 60

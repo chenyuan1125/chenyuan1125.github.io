@@ -4,7 +4,7 @@ author: "chenyuan"
 description: "从源码出发，拆解 containerd 的 gRPC、TTRPC、UDS 三层通信架构，理解一个容器运行时如何管理进程生命周期。"
 date: 2026-08-28
 slug: "containerd-通信机制"
-image: ""
+image: "cover.jpg"
 tags: ["containerd", "容器", "gRPC", "IPC", "源码分析"]
 categories: ["容器"]
 ---

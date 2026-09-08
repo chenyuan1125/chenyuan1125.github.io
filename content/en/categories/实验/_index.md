@@ -1,5 +1,5 @@
 ---
-title: "实验"
+title: "Labs"
 description: "This is an example category"
 slug: "实验"
 image: "1.png"

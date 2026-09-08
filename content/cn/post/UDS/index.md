@@ -4,7 +4,7 @@ author: "chenyuan"
 description: "深入内核源码，拆解 UDS 从 socket 创建到数据收发全过程，理解为什么本地 IPC 不走网络栈反而更快。"
 date: 2026-08-28
 slug: "uds-源码分析"
-image: ""
+image: "cover.jpg"
 tags: ["IPC", "UDS", "Linux内核", "源码分析"]
 categories: ["Linux内核"]
 ---

@@ -1,5 +1,5 @@
 ---
-title: "教程"
+title: "Tutorials"
 description: "This is an example category"
 slug: "教程"
 image: "1.png"
