@@ -3,10 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/en/tags/alignment/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
   </url><url>
     <loc>/en/categories/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -19,7 +19,7 @@
                 />
   </url><url>
     <loc>/en/tags/gpt-3/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -32,7 +32,7 @@
                 />
   </url><url>
     <loc>/en/tags/instructgpt/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -44,12 +44,12 @@
                 href="/tags/instructgpt/"
                 />
   </url><url>
-    <loc>/en/p/instructgpt-teaching-llms-to-be-helpful-with-rlhf/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <loc>/en/p/instructgpt-rlhf/</loc>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/instructgpt-teaching-llms-to-be-helpful-with-rlhf/"
+                href="/en/p/instructgpt-rlhf/"
                 />
     <xhtml:link
                 rel="alternate"
@@ -58,10 +58,10 @@
                 />
   </url><url>
     <loc>/en/categories/llm-architecture/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
   </url><url>
     <loc>/en/post/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -74,7 +74,7 @@
                 />
   </url><url>
     <loc>/en/tags/ppo/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -87,7 +87,7 @@
                 />
   </url><url>
     <loc>/en/tags/rlhf/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -100,7 +100,7 @@
                 />
   </url><url>
     <loc>/en/tags/</loc>
-    <lastmod>2026-09-09T22:25:01+08:00</lastmod>
+    <lastmod>2026-09-09T23:37:19+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
