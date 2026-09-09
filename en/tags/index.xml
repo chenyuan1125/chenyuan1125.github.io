@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 08 Sep 2026 22:57:30 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 09 Sep 2026 22:25:01 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Alignment</title>
+            <link>/en/tags/alignment/</link>
+            <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/alignment/</guid>
+            <description></description>
+        </item><item>
+            <title>GPT-3</title>
+            <link>/en/tags/gpt-3/</link>
+            <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/gpt-3/</guid>
+            <description></description>
+        </item><item>
+            <title>InstructGPT</title>
+            <link>/en/tags/instructgpt/</link>
+            <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/instructgpt/</guid>
+            <description></description>
+        </item><item>
+            <title>PPO</title>
+            <link>/en/tags/ppo/</link>
+            <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/ppo/</guid>
+            <description></description>
+        </item><item>
+            <title>RLHF</title>
+            <link>/en/tags/rlhf/</link>
+            <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/rlhf/</guid>
+            <description></description>
+        </item><item>
             <title>BART</title>
             <link>/en/tags/bart/</link>
             <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
@@ -35,12 +65,6 @@
             <link>/en/tags/few-shot/</link>
             <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/few-shot/</guid>
-            <description></description>
-        </item><item>
-            <title>GPT-3</title>
-            <link>/en/tags/gpt-3/</link>
-            <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/gpt-3/</guid>
             <description></description>
         </item><item>
             <title>In-Context Learning</title>

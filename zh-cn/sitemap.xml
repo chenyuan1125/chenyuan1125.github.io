@@ -2,6 +2,126 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/categories/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/categories/"
+                />
+  </url><url>
+    <loc>/tags/gpt-3/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/gpt-3/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/gpt-3/"
+                />
+  </url><url>
+    <loc>/tags/instructgpt/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/instructgpt/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/instructgpt/"
+                />
+  </url><url>
+    <loc>/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/instructgpt-teaching-llms-to-be-helpful-with-rlhf/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/"
+                />
+  </url><url>
+    <loc>/post/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/tags/ppo/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/ppo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/ppo/"
+                />
+  </url><url>
+    <loc>/tags/rlhf/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/rlhf/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/rlhf/"
+                />
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/"
+                />
+  </url><url>
+    <loc>/tags/%E5%AF%B9%E9%BD%90/</loc>
+    <lastmod>2026-09-09T22:24:55+08:00</lastmod>
+  </url><url>
     <loc>/tags/bart/</loc>
     <lastmod>2026-09-08T22:57:30+08:00</lastmod>
     <xhtml:link
@@ -15,19 +135,6 @@
                 href="/tags/bart/"
                 />
   </url><url>
-    <loc>/categories/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/categories/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/categories/"
-                />
-  </url><url>
     <loc>/tags/encoder-decoder/</loc>
     <lastmod>2026-09-08T22:57:30+08:00</lastmod>
     <xhtml:link
@@ -39,19 +146,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/tags/encoder-decoder/"
-                />
-  </url><url>
-    <loc>/post/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
                 />
   </url><url>
     <loc>/tags/t5/</loc>
@@ -80,32 +174,6 @@
                 href="/p/t5-bart/"
                 />
   </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/"
-                />
-  </url><url>
     <loc>/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
     <lastmod>2026-09-08T22:57:30+08:00</lastmod>
   </url><url>
@@ -120,19 +188,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/tags/few-shot/"
-                />
-  </url><url>
-    <loc>/tags/gpt-3/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/gpt-3/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/gpt-3/"
                 />
   </url><url>
     <loc>/p/gpt-03/</loc>

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="模型越大，不一定越懂你。OpenAI 用人类反馈强化学习（RLHF）三步走，让 1.3B 的 InstructGPT 比 175B 的 GPT-3 更受用户青睐。本文拆解 SFT、奖励建模、PPO 的每个环节。">
+<title>InstructGPT：用 RLHF 教会大模型「听话」</title>
+
+
+<link rel="canonical" href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.71379a630a7e8c5d56004d36fe593599fbd4f6bef93385e175df6b589147faff.css"><meta property='og:title' content="InstructGPT：用 RLHF 教会大模型「听话」">
+<meta property='og:description' content="模型越大，不一定越懂你。OpenAI 用人类反馈强化学习（RLHF）三步走，让 1.3B 的 InstructGPT 比 175B 的 GPT-3 更受用户青睐。本文拆解 SFT、奖励建模、PPO 的每个环节。">
+<meta property='og:url' content='/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='InstructGPT' /><meta property='article:tag' content='RLHF' /><meta property='article:tag' content='PPO' /><meta property='article:tag' content='对齐' /><meta property='article:tag' content='GPT-3' /><meta property='article:published_time' content='2026-09-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-09T22:24:55&#43;08:00'/><meta property='og:image' content='/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg' />
+<meta name="twitter:title" content="InstructGPT：用 RLHF 教会大模型「听话」">
+<meta name="twitter:description" content="模型越大，不一定越懂你。OpenAI 用人类反馈强化学习（RLHF）三步走，让 1.3B 的 InstructGPT 比 175B 的 GPT-3 更受用户青睐。本文拆解 SFT、奖励建模、PPO 的每个环节。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/instructgpt-teaching-llms-to-be-helpful-with-rlhf/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#引言模型变大--更懂你">引言：模型变大 ≠ 更懂你</a></li>
+    <li><a href="#step-1监督微调sft-让模型先学好答案">Step 1：监督微调（SFT）—— 让模型先学「好答案」</a></li>
+    <li><a href="#step-2奖励模型reward-model-让模型学会分辨好坏">Step 2：奖励模型（Reward Model）—— 让模型学会分辨好坏</a></li>
+    <li><a href="#step-3ppo-强化学习--用奖励信号驱动对齐">Step 3：PPO 强化学习 —— 用奖励信号驱动对齐</a></li>
+    <li><a href="#惊人的效果对比">惊人的效果对比</a></li>
+    <li><a href="#对齐税模型变得更聪明但也在某些地方变慢了">对齐税：模型变得更聪明，但也在某些地方变慢了</a></li>
+    <li><a href="#护栏视角">护栏视角</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/">
+            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="630" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg" srcset="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover_hu_86b4a72150146bfc.jpg 800w, /p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg 1200w" width="1200">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/">InstructGPT：用 RLHF 教会大模型「听话」</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            模型越大，不一定越懂你。OpenAI 用人类反馈强化学习（RLHF）三步走，让 1.3B 的 InstructGPT 比 175B 的 GPT-3 更受用户青睐。本文拆解 SFT、奖励建模、PPO 的每个环节。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-08T00:00:00Z'>2026-09-08</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 7 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/instructgpt-teaching-llms-to-be-helpful-with-rlhf/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#引言模型变大--更懂你">引言：模型变大 ≠ 更懂你</a></li>
+    <li><a href="#step-1监督微调sft-让模型先学好答案">Step 1：监督微调（SFT）—— 让模型先学「好答案」</a></li>
+    <li><a href="#step-2奖励模型reward-model-让模型学会分辨好坏">Step 2：奖励模型（Reward Model）—— 让模型学会分辨好坏</a></li>
+    <li><a href="#step-3ppo-强化学习--用奖励信号驱动对齐">Step 3：PPO 强化学习 —— 用奖励信号驱动对齐</a></li>
+    <li><a href="#惊人的效果对比">惊人的效果对比</a></li>
+    <li><a href="#对齐税模型变得更聪明但也在某些地方变慢了">对齐税：模型变得更聪明，但也在某些地方变慢了</a></li>
+    <li><a href="#护栏视角">护栏视角</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <h2 id="引言模型变大--更懂你">引言：模型变大 ≠ 更懂你
+</h2><p>2020 年 GPT-3 以 175B 参数震惊世界，但用户很快发现一个尴尬的事实：这个怪兽经常「好心办坏事」。你让它写一段代码注释，它给你生成一篇技术博客；你问它事实性问题，它一本正经地编造；你让它拒绝不当请求，它被诱导几句就说出有害内容。</p>
+<p>换句话说，GPT-3 <strong>没对齐（misaligned）</strong>——它的语言建模目标（预测下一个 token）和用户的使用意图之间存在鸿沟。</p>
+<p>2022 年 3 月，OpenAI 发表了一篇后来改变了整个行业走向的论文：<em>Training Language Models to Follow Instructions with Human Feedback</em>。这篇论文提出了一种叫 <strong>RLHF（Reinforcement Learning from Human Feedback，人类反馈强化学习）</strong> 的方法，分三步把 GPT-3 改造成了能更好理解用户意图的 InstructGPT。而 ChatGPT 的诞生，正是沿着这条路线走下去的结果。</p>
+<p>本文将拆解 InstructGPT 的三个训练阶段、关键超参、定量效果，以及它留下的「对齐税」问题。</p>
+<h2 id="step-1监督微调sft-让模型先学好答案">Step 1：监督微调（SFT）—— 让模型先学「好答案」
+</h2><p>RLHF 的第一步是最直观的：<strong>找人来写好答案，然后让模型照猫画虎</strong>。</p>
+<p>OpenAI 雇佣了标注员，针对从 API 收集的 prompt（用户提问）写出高质量的回答。这些 prompt 覆盖了生成、问答、写作、总结、代码等九大类任务。标注员写的回答不追求完美，但要「有用」——回答 prompt 所问、不编造事实、不给有害建议。</p>
+<p>最终收集了约 <strong>13k 条标注员演示数据</strong>（train 12,725 + valid 1,653），再加上一小部分（约 1.4k）真实用户提交的 prompt 作为补充。</p>
+<p>在这些数据上，用监督学习微调 GPT-3 的预训练权重。1.3B 和 6B 模型训练 16 个 epoch，更大 batch size（32），学习率 9.65e-6；175B 用 batch size 8 和学习率 5.03e-6。所有模型使用 residual dropout 0.2 和余弦衰减学习率。对每个模型规模，选择验证集上 RM 分数最高的 checkpoint。</p>
+<figure><img src="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/rlhf-pipeline.svg"><figcaption>
+			<h4>图 1：InstructGPT 的 RLHF 三步流程——SFT 学习人类的示范回答，奖励模型学习人类的偏好排序，PPO 用奖励信号优化策略</h4>
+		</figcaption>
+</figure>
+
+<p>这一步产出一个「会回答」但还不极致对齐的模型 π_SFT。</p>
+<h2 id="step-2奖励模型reward-model-让模型学会分辨好坏">Step 2：奖励模型（Reward Model）—— 让模型学会分辨好坏
+</h2><p>SFT 只能让模型「会写」，但无法教它「哪种写法更好」。第二步要做的就是训练一个<strong>打分器</strong>，让它学会预测人类更喜欢哪个回答。</p>
+<p>具体做法：对一批 prompt，用 SFT 模型采样 K = 4~9 个不同回答（不同的 temperature），然后标注员对这些回答<strong>排序</strong>（从最好到最差）。每个 prompt 的排序产生 C(K, 2) 个比较对（两个回答中哪个更好）。</p>
+<p>这里有一个精妙的设计：<strong>用排序而非打分</strong>。让两个标注员各自给同一个回答打 1-5 分，一致性很差——每个人对「3 分」的标准不同。但如果只让他们比较「A 还是 B」更好，一致性就高得多。这也是 RLHF 方法论的基石思想之一。</p>
+<p>奖励模型用这些对比数据训练。约 <strong>33k 个 prompt</strong>（训练集），每个产生多次采样。关键发现：只用 <strong>6B 参数</strong>做奖励模型——尝试 175B 会导致训练极不稳定。训练 1 个 epoch，学习率 9e-6，batch size 64（每 batch 可含 2,304 个比较对）。</p>
+<p>损失函数很直觉：给定两个回答 y_w（更好）和 y_l（更差），最大化打分差异：</p>
+$$L(θ) = -log(σ(r_θ(x, y_w) - r_θ(x, y_l)))$$<p>这里的 σ 是 sigmoid。两个回答间奖励差越大，模型越有信心区分。最终奖励会加归一化 bias，使来自标注员的示范回答得分为 0——这样就为 PPO 阶段建立了参照系。</p>
+<h2 id="step-3ppo-强化学习--用奖励信号驱动对齐">Step 3：PPO 强化学习 —— 用奖励信号驱动对齐
+</h2><p>有了奖励模型，第三步就是用它来优化语言模型策略。</p>
+<p>PPO（Proximal Policy Optimization）是一种可以稳定训练的策略优化算法。OpenAI 的 RLHF 实现直接使用了 Schulman et al. (2017) 的原始 PPO 算法。</p>
+<p>每个 episode，从 prompt 集合中采样一个 prompt，用当前策略生成回答 y，然后：</p>
+<ul>
+<li><strong>正向信号</strong>：奖励模型打分 r_θ(x, y)，越高越好</li>
+<li><strong>负向约束</strong>：KL 散度惩罚，如果策略偏离 SFT 模型太远</li>
+</ul>
+<p>后者至关重要。没有 KL 惩罚，模型会迅速学会「取悦奖励模型」——它可能生成一些语法不通但你发现奖励模型给高分的话术（这叫 reward hacking）。KL 散度把策略锚定在 SFT 的分布附近，防止这种退化。</p>
+<p>目标函数：</p>
+$$max_φ E[r_θ(x, y)] - β · KL(π_φ ‖ π_{SFT})$$<p>其中 KL 惩罚系数 β = <strong>0.02</strong>。OpenAI 还实验了 PPO-ptx 变体——在 RL 目标中加入预训练梯度（系数 γ = 27.8），混合 10% 预训练数据。PPO-ptx 版本的「对齐税」更低：在保持对齐效果的同时，对 NLP benchmark 性能的负面影响更小。</p>
+<p>关键超参：batch size 512、minibatch 64（只有 1 个 inner epoch）、PPO clip ratio 0.2、常数学习率、采样温度 1（无衰减）、权重 EMA 衰减率 0.992。value function 从奖励模型初始化，6B 参数。总计 256k 个 episode（约 31k 去重 prompt）。</p>
+<h2 id="惊人的效果对比">惊人的效果对比
+</h2><p>InstructGPT 最震撼的结果是在人工评估中：</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>对比</th>
+					<th>胜率</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>175B InstructGPT vs 175B GPT-3</strong></td>
+					<td><strong>85% ± 3%</strong> 用户更喜欢 InstructGPT</td>
+			</tr>
+			<tr>
+					<td><strong>175B InstructGPT vs few-shot 175B GPT-3</strong></td>
+					<td><strong>71% ± 4%</strong></td>
+			</tr>
+			<tr>
+					<td><strong>1.3B InstructGPT vs 175B GPT-3</strong></td>
+					<td><strong>胜出</strong>（参数不到对方 1%）</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>最后一条特别说明问题：用户宁愿用一个 <strong>1.3B 的对齐模型</strong>，也不用 <strong>175B 的未对齐模型</strong>。对齐的价值大于规模。</p>
+<p>在具体维度上：</p>
+<ul>
+<li><strong>指令遵循</strong>：InstructGPT 更擅长完成用户的请求（「不忽略约束」「不说废话」）</li>
+<li><strong>真实性</strong>：TruthfulQA 上 InstructGPT 产生真实答案的概率比 GPT-3 高约 <strong>1 倍</strong>；封闭域幻觉率从 GPT-3 的 41% 降至 <strong>21%</strong></li>
+<li><strong>有害性</strong>：当提示「保持礼貌」时，InstructGPT 的有害输出比 GPT-3 少约 <strong>25%</strong></li>
+<li><strong>偏见</strong>：Winogender 和 CrowS-Pairs 数据集上没有明显改善</li>
+</ul>
+<p>但要注意，这些有害性改善是 <strong>modest</strong> 的——论文作者自己也坦诚地说，RLHF 不是安全的银弹。</p>
+<h2 id="对齐税模型变得更聪明但也在某些地方变慢了">对齐税：模型变得更聪明，但也在某些地方变慢了
+</h2><p>RLHF 引入了「对齐税（alignment tax）」：对齐后模型在部分标准 NLP benchmark 上出现性能退化（如 DROP 问答集和翻译任务）。PPO-ptx 变体大大缓解了这个问题。</p>
+<p>更重要的发现是：InstructGPT 能<strong>泛化到未见过的标注员偏好</strong>。训练数据之外的标注员同样更喜欢 InstructGPT 的输出，说明模型学到的不是迎合特定标注员，而是学到了更普遍的「有用性」标准。这种泛化也延伸到代码任务和非英文指令上。</p>
+<figure><img src="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/metrics.svg"><figcaption>
+			<h4>图 2：InstructGPT vs GPT-3 关键指标对比——人类偏好胜率 85%、幻觉率从 41% 降至 21%、有害输出减少 25%</h4>
+		</figcaption>
+</figure>
+
+<h2 id="护栏视角">护栏视角
+</h2><p>作为一名关注 AI 安全的工作者，我认为 InstructGPT 的技术路线在安全方面有两个重要启示：</p>
+<p><strong>正面</strong>：</p>
+<ul>
+<li><strong>人类的排序比打分更可靠</strong>。排序方案让标注员之间的一致性大幅提升，减少了训练数据中的噪声和歧义</li>
+<li><strong>KL 惩罚是一道天然的开发护栏</strong>。它让模型不会为了取悦奖励模型而放弃语言能力，这在架构层面防止了一种 reward hacking</li>
+<li><strong>PPO-ptx 证明了对齐和安全可以和解</strong>。混入预训练目标后，能力退化（alignment tax）大幅降低，说明安全优化不必然以牺牲性能为代价</li>
+</ul>
+<p><strong>挑战</strong>：</p>
+<ul>
+<li><strong>有害性改善有限</strong>。论文坦诚指出有害内容只减少了约 25%，在恶意 prompt 下模型仍可能越狱</li>
+<li><strong>奖励模型自身的安全盲区</strong>。奖励模型只在「两段回答哪个更好」的数据上训练，它无法评估一段回答中的微妙歧视或间接有害性</li>
+<li><strong>标注员偏见进入对齐目标</strong>。如果标注员群体本身存在文化偏见，排序数据就无法具有普适性。论文作者也承认这是他们面临的主要限制之一</li>
+</ul>
+<p><strong>我的判断</strong>：InstructGPT 定义了一个技术路线图，但它把一个关键问题留给了后来者——<strong>谁来定义「好」？</strong> RLHF 把这个问题外包给了标注员，而标注员的偏好并不是普遍价值的代理。这解释了为什么后来的 Anthropic Constitutional AI 和 DeepSeek-R1 的规则奖励都在试图回答同一个问题：对齐目标不应该是纯粹的统计偏好聚合。</p>
+<h2 id="总结">总结
+</h2><p>InstructGPT 的贡献不在于算法创新（PPO 和 RLHF 都出自更早的工作），而在于它<strong>第一次证明了：对齐比规模更重要</strong>。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>维度</th>
+					<th>核心发现</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>方法论</td>
+					<td>SFT → Reward Model → PPO 三步流水线，每步数据规模和超参都经过精心设计</td>
+			</tr>
+			<tr>
+					<td>关键取舍</td>
+					<td>KL 惩罚 β=0.02 平衡对齐与能力；PPO-ptx 降低对齐税</td>
+			</tr>
+			<tr>
+					<td>效果</td>
+					<td>1.3B 对齐模型优于 175B 原始模型，幻觉率减半</td>
+			</tr>
+			<tr>
+					<td>局限</td>
+					<td>有害性改善有限，偏见无显著改善，对齐受限于标注员偏好</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>回头看，这篇论文是 ChatGPT 和整个对齐 / 后训练时代的技术基石。后来的 RLHF 变体——InstructGPT → ChatGPT → Constitutional AI → DPO → R1 的 GRPO——都是在它开辟的框架内扩展。但它的核心洞察至今未变：<strong>把模型做小不难，把模型做对才是最值得做的事。</strong></p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li><strong>原论文</strong>：Ouyang, L., Wu, J., Jiang, X. et al. <em>Training Language Models to Follow Instructions with Human Feedback</em>. NeurIPS 2022. <a class="link" href="https://arxiv.org/abs/2203.02155"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/2203.02155</a></li>
+<li><strong>OpenAI 官方博客</strong>：<em>Aligning Language Models to Follow Instructions</em>. <a class="link" href="https://openai.com/index/instruction-following/"  target="_blank" rel="noopener"
+    >https://openai.com/index/instruction-following/</a></li>
+<li><strong>技术解读</strong>：ArthurChiao. <em>InstructGPT 论文精读</em>. <a class="link" href="http://arthurchiao.art/blog/instructgpt-paper-zh/"  target="_blank" rel="noopener"
+    >http://arthurchiao.art/blog/instructgpt-paper-zh/</a></li>
+<li><strong>PPO 算法原论文</strong>：Schulman, J. et al. <em>Proximal Policy Optimization Algorithms</em>. 2017. <a class="link" href="https://arxiv.org/abs/1707.06347"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/1707.06347</a></li>
+<li><strong>RLHF 基础</strong>：Christiano, P. et al. <em>Deep Reinforcement Learning from Human Preferences</em>. NeurIPS 2017. <a class="link" href="https://arxiv.org/abs/1706.03741"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/1706.03741</a></li>
+<li><strong>对齐框架</strong>：Askell, A. et al. <em>A General Language Assistant as a Laboratory for Alignment</em>. 2021. <a class="link" href="https://arxiv.org/abs/2112.00861"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/2112.00861</a></li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/instructgpt/">InstructGPT</a>
+        
+            <a href="/tags/rlhf/">RLHF</a>
+        
+            <a href="/tags/ppo/">PPO</a>
+        
+            <a href="/tags/%E5%AF%B9%E9%BD%90/">对齐</a>
+        
+            <a href="/tags/gpt-3/">GPT-3</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-09
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-03/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发" height="150" loading="lazy" src="/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg" srcset="/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg 1x, /p/gpt-03/cover_hu_8b791036cb6c2ce1.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #332e3880 0%, #d1c9c7C0 100%);">
+            <h2 class="article-title">GPT-3：In-Context Learning 与 Few-Shot 爆发</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART：把一切 NLP 任务统一成 Text-to-Text" height="150" loading="lazy" src="/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART：把一切 NLP 任务统一成 Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-01/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" height="150" loading="lazy" src="/p/gpt-01/cover_hu_4837811e0a817e15.jpg" srcset="/p/gpt-01/cover_hu_4837811e0a817e15.jpg 1x, /p/gpt-01/cover_hu_3b7fc40c1b5c9ea8.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #574f4780 0%, #b0a7a4C0 100%);">
+            <h2 class="article-title">GPT-1/2：生成式预训练与 few-shot 萌芽</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/bert-02/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post BERT：双向编码器，到底双在哪" height="150" loading="lazy" src="/p/bert-02/cover_hu_71acb6ae207a1f3b.jpg" srcset="/p/bert-02/cover_hu_71acb6ae207a1f3b.jpg 1x, /p/bert-02/cover_hu_9eb2554fa400abae.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #95603d80 0%, #2e2720C0 100%);">
+            <h2 class="article-title">BERT：双向编码器，到底双在哪</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post 01 | 一切的起点：Transformer 到底解决了什么问题？" height="150" loading="lazy" src="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_81f7b587c5dc4c25.jpg" srcset="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_81f7b587c5dc4c25.jpg 1x, /p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/cover_hu_fe0f8b5434d015dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #08070780 0%, #f4f3ebC0 100%);">
+            <h2 class="article-title">01 | 一切的起点：Transformer 到底解决了什么问题？</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>
