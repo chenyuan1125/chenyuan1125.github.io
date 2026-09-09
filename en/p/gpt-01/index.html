@@ -16,7 +16,7 @@
 <meta property='og:description' content="OpenAI's GPT-1/2 proved an intuition: given enough scale and data, generative pretraining alone learns grammar, common sense, and reasoning — no labels required.">
 <meta property='og:url' content='/en/p/gpt-01/'>
 <meta property='og:site_name' content='Lee'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPT' /><meta property='article:tag' content='Generative Pretraining' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='Few-Shot' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T22:25:43&#43;08:00'/><meta property='og:image' content='/en/p/gpt-01/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPT' /><meta property='article:tag' content='Generative Pretraining' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='Few-Shot' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-10T01:00:28&#43;08:00'/><meta property='og:image' content='/en/p/gpt-01/cover.jpg' />
 <meta name="twitter:title" content="GPT-1/2: Generative Pretraining and the Seeds of Few-Shot">
 <meta name="twitter:description" content="OpenAI's GPT-1/2 proved an intuition: given enough scale and data, generative pretraining alone learns grammar, common sense, and reasoning — no labels required."><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/en/p/gpt-01/cover.jpg' />
@@ -309,6 +309,7 @@
       </ol>
     </li>
     <li><a href="#why-gpt-12-matters">Why GPT-1/2 Matters</a></li>
+    <li><a href="#technical-reflection">Technical Reflection</a></li>
     <li><a href="#references">References</a></li>
   </ol>
 
@@ -390,7 +391,7 @@
 
 
                     <time class="article-time--reading">
-                        2 minutes read
+                        3 minutes read
                     </time>
                 
             </div>
@@ -447,6 +448,7 @@
       </ol>
     </li>
     <li><a href="#why-gpt-12-matters">Why GPT-1/2 Matters</a></li>
+    <li><a href="#technical-reflection">Technical Reflection</a></li>
     <li><a href="#references">References</a></li>
   </ol>
 
@@ -575,6 +577,8 @@
 <li><strong>Zero-shot changed everything</strong> — GPT-2&rsquo;s discovery that models transfer without fine-tuning led directly to in-context learning, instruction tuning, and RLHF</li>
 <li><strong>Scaling as strategy</strong> — 117M → 1.5B → 175B was not accidental; GPT-2&rsquo;s data justified it</li>
 </ol>
+<h2 id="technical-reflection">Technical Reflection
+</h2><p>GPT-1/2 left three legacies that still shape AI development today: the decoder-only architecture became the dominant design lineage, zero-shot capability unlocked the prompt engineering era, and the early scaling experiments provided solid empirical support for the hypothesis that bigger models consistently prove more capable. If BERT proved the power of the pretrain-and-finetune paradigm, GPT-1/2 proved the hypothesis that pretraining itself encodes capability — models can perform tasks they were never explicitly trained on, simply through larger scale.</p>
 <h2 id="references">References
 </h2><ul>
 <li>Radford, A., et al. (2018). <em>Improving Language Understanding by Generative Pre-Training</em>. OpenAI.</li>
@@ -623,7 +627,7 @@
 
 
         <span>
-            Last updated on 2026-09-08
+            Last updated on 2026-09-10
         </span>
     </section></footer>
 

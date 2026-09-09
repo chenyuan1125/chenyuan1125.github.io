@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 576 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t5tasks-title t5tasks-desc">
+      <title id="t5tasks-title">T5 — 统一 Text-to-Text 框架</title>
+      <desc id="t5tasks-desc">Four NLP tasks mapped into T5's unified text-to-text format: translation, classification, QA, and summarization. Each task becomes a "text prefix → target text" pair.</desc>
+      <rect width="576" height="420" fill="#f5f5fa"/>
+
+      <!-- Header row -->
+      <rect x="24" y="24" width="160" height="28" rx="4" fill="rgba(44,62,80,0.08)"/>
+      <text x="104" y="43" fill="#2c3e50" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">任务</text>
+
+      <rect x="192" y="24" width="180" height="28" rx="4" fill="rgba(44,62,80,0.08)"/>
+      <text x="282" y="43" fill="#2c3e50" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">输入（带任务前缀）</text>
+
+      <rect x="380" y="24" width="172" height="28" rx="4" fill="rgba(46,90,168,0.12)"/>
+      <text x="466" y="43" fill="#2e5aa8" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">目标输出</text>
+
+      <!-- Row 1: Translation -->
+      <rect x="24" y="72" width="160" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="104" y="100" fill="#2c3e50" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">翻译 (Translation)</text>
+      <text x="104" y="118" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">WMT En→De</text>
+
+      <rect x="192" y="72" width="180" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="282" y="96" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">translate English to German:</text>
+      <text x="282" y="114" fill="#2c3e50" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">That is good.</text>
+
+      <rect x="380" y="72" width="172" height="56" rx="4" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1"/>
+      <text x="466" y="106" fill="#2c3e50" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Das ist gut.</text>
+
+      <line x1="184" y1="100" x2="192" y2="100" stroke="#707070" stroke-width="1" marker-end="url(#arrow)"/>
+
+      <!-- Row 2: Classification -->
+      <rect x="24" y="148" width="160" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="104" y="176" fill="#2c3e50" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">情感分类 (Sentiment)</text>
+      <text x="104" y="194" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">SST-2</text>
+
+      <rect x="192" y="148" width="180" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="282" y="172" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">sst2 sentence:</text>
+      <text x="282" y="190" fill="#2c3e50" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">This movie is great.</text>
+
+      <rect x="380" y="148" width="172" height="56" rx="4" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1"/>
+      <text x="466" y="182" fill="#2c3e50" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">positive</text>
+
+      <!-- Row 3: QA -->
+      <rect x="24" y="224" width="160" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="104" y="252" fill="#2c3e50" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">问答 (QA)</text>
+      <text x="104" y="270" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">SQuAD</text>
+
+      <rect x="192" y="224" width="180" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="282" y="248" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">question: Where is Paris?  context:</text>
+      <text x="282" y="266" fill="#2c3e50" font-size="12" font-weight="500" font-family="'Geist', sans-serif" text-anchor="middle">Paris is in France.</text>
+
+      <rect x="380" y="224" width="172" height="56" rx="4" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1"/>
+      <text x="466" y="258" fill="#2c3e50" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">France</text>
+
+      <!-- Row 4: Summarization -->
+      <rect x="24" y="300" width="160" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="104" y="328" fill="#2c3e50" font-size="13" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">摘要 (Summarization)</text>
+      <text x="104" y="346" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">CNN/Daily Mail</text>
+
+      <rect x="192" y="300" width="180" height="56" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+      <text x="282" y="326" fill="#707070" font-size="10" font-family="'Geist Mono', monospace" text-anchor="middle">summarize: [article]</text>
+      <text x="282" y="344" fill="#949ba5" font-size="11" font-family="'Geist', sans-serif" text-anchor="middle">...</text>
+
+      <rect x="380" y="300" width="172" height="56" rx="4" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1"/>
+      <text x="466" y="334" fill="#2c3e50" font-size="14" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">摘要文本</text>
+
+      <!-- Bottom insight bar -->
+      <rect x="24" y="380" width="528" height="28" rx="4" fill="rgba(44,62,80,0.04)"/>
+      <text x="288" y="399" fill="#707070" font-size="11" font-family="'Geist Mono', monospace" text-anchor="middle">T5 的理念：「所有 NLP 任务都是输入文本 → 输出文本」</text>
+
+      <defs><style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+        <marker id="arrow" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#707070"/></marker>
+      </defs>
+    </svg>

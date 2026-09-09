@@ -16,7 +16,7 @@
 <meta property='og:description' content="OpenAI 的 GPT-1/2 证明了一个直觉：只要模型够大、数据够多，生成式预训练自己就能学会语法、常识和推理，无需人工标注。">
 <meta property='og:url' content='/p/gpt-01/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPT' /><meta property='article:tag' content='生成式预训练' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='few-shot' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T22:25:43&#43;08:00'/><meta property='og:image' content='/p/gpt-01/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='GPT' /><meta property='article:tag' content='生成式预训练' /><meta property='article:tag' content='Transformer' /><meta property='article:tag' content='few-shot' /><meta property='article:published_time' content='2026-08-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-10T00:59:44&#43;08:00'/><meta property='og:image' content='/p/gpt-01/cover.jpg' />
 <meta name="twitter:title" content="GPT-1/2：生成式预训练与 few-shot 萌芽">
 <meta name="twitter:description" content="OpenAI 的 GPT-1/2 证明了一个直觉：只要模型够大、数据够多，生成式预训练自己就能学会语法、常识和推理，无需人工标注。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/p/gpt-01/cover.jpg' />
@@ -317,6 +317,7 @@
         <li><a href="#格局变化">格局变化</a></li>
       </ol>
     </li>
+    <li><a href="#技术启示-1">技术启示</a></li>
     <li><a href="#参考资料">参考资料</a></li>
   </ol>
 
@@ -398,7 +399,7 @@
 
 
                     <time class="article-time--reading">
-                        阅读时长: 5 分钟
+                        阅读时长: 6 分钟
                     </time>
                 
             </div>
@@ -463,6 +464,7 @@
         <li><a href="#格局变化">格局变化</a></li>
       </ol>
     </li>
+    <li><a href="#技术启示-1">技术启示</a></li>
     <li><a href="#参考资料">参考资料</a></li>
   </ol>
 
@@ -479,7 +481,7 @@
 <p>BERT 擅长把一句话变成一组向量然后分类，GPT 擅长从一段文字续写下一段。两者共享同一个技术底座——Transformer——但选择了完全相反的架构配置。这个架构上的分歧决定了此后五年大模型发展的两条主线，直到 GPT-3 出现后生成式路线才逐渐成为主流。</p>
 <h2 id="核心设计decoder-only-与自回归">核心设计：Decoder-only 与自回归
 </h2><p>GPT-1 的架构改动非常小：从 Transformer 原论文里取出 Decoder 部分，去掉 Encoder-Decoder 交叉注意力层，只保留 Masked Multi-Head Self-Attention + Feed Forward，堆 12 层。</p>
-<figure><img src="gpt-architecture.png"><figcaption>
+<figure><img src="/p/gpt-01/gpt-architecture.svg"><figcaption>
 			<h4>图 1：GPT-1 Decoder-only 架构（tldraw 绘制）</h4>
 		</figcaption>
 </figure>
@@ -625,7 +627,7 @@
 <li><strong>Scaling Law 的提出</strong>——Kaplan 等人 2020 年的 Scaling Law 论文直接引用了 GPT 系列的数据</li>
 </ol>
 <h2 id="单向注意力掩码的可视化">单向注意力掩码的可视化
-</h2><figure><img src="gpt-mask.png"><figcaption>
+</h2><figure><img src="/p/gpt-01/gpt-mask.svg"><figcaption>
 			<h4>图 2：GPT 因果掩码——每个 token 只能看到自己和左边（tldraw 绘制）</h4>
 		</figcaption>
 </figure>
@@ -647,12 +649,18 @@
 <h3 id="格局变化">格局变化
 </h3><p>GPT-1 发布时（2018 年 6 月），NLP 领域的主流是 LSTM + Attention。GPT-1 证明了 Transformer 在生成任务上同样有效。半年后 BERT 在理解任务上全面超越 GPT-1，所以 GPT-1 的注意力被抢走了。</p>
 <p>但 GPT-2 发布时（2019 年 2 月），情况变了。OpenAI 因为担心滥用，最初只发布了 124M 的小模型，九个月后才全面开源 1.5B 的完整版。这个&quot;不开源&quot;的决定本身就说明：<strong>他们意识到这个方向可能比想象中更强大</strong>。</p>
+<h2 id="技术启示-1">技术启示
+</h2><p>GPT-1/2 留下了三个至今仍在影响 AI 发展的遗产：Decoder-only 架构成为主流路线、零样本能力开启了 prompt 时代、以及 Scaling Law 的早期实验证据。如果说 BERT 证明了&quot;预训练+微调&quot;范式的威力，GPT-1/2 则证明了&quot;预训练=能力&quot;的假设——模型不需要微调，只需要更大的规模，就能在未曾训练过的任务上表现出色。</p>
 <h2 id="参考资料">参考资料
 </h2><ul>
-<li>Radford, A., et al. (2018). <em>Improving Language Understanding by Generative Pre-Training</em>. OpenAI.</li>
-<li>Radford, A., et al. (2019). <em>Language Models are Unsupervised Multitask Learners</em>. OpenAI.</li>
-<li>Devlin, J., et al. (2018). <em>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</em>. arXiv:1810.04805.</li>
-<li>Brown, T., et al. (2020). <em>Language Models are Few-Shot Learners</em>. arXiv:2005.14165.</li>
+<li>Radford, A., et al. (2018). <em>Improving Language Understanding by Generative Pre-Training</em>. OpenAI. <a class="link" href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf"  target="_blank" rel="noopener"
+    >https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf</a></li>
+<li>Radford, A., et al. (2019). <em>Language Models are Unsupervised Multitask Learners</em>. OpenAI. <a class="link" href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf"  target="_blank" rel="noopener"
+    >https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf</a></li>
+<li>Devlin, J., et al. (2018). <em>BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</em>. arXiv:1810.04805. <a class="link" href="https://arxiv.org/abs/1810.04805"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/1810.04805</a></li>
+<li>Brown, T., et al. (2020). <em>Language Models are Few-Shot Learners</em>. arXiv:2005.14165. <a class="link" href="https://arxiv.org/abs/2005.14165"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/2005.14165</a></li>
 <li>The Illustrated GPT-2 (Jay Alammar): <a class="link" href="http://jalammar.github.io/illustrated-gpt2/"  target="_blank" rel="noopener"
     >http://jalammar.github.io/illustrated-gpt2/</a></li>
 </ul>
@@ -697,7 +705,7 @@
 
 
         <span>
-            最后更新于 2026-09-08
+            最后更新于 2026-09-10
         </span>
     </section></footer>
 

@@ -16,7 +16,7 @@
 <meta property='og:description' content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line.">
 <meta property='og:url' content='/en/p/t5-bart/'>
 <meta property='og:site_name' content='Lee'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='Pretraining' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T22:57:30&#43;08:00'/><meta property='og:image' content='/en/p/t5-bart/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='Pretraining' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-10T00:54:20&#43;08:00'/><meta property='og:image' content='/en/p/t5-bart/cover.jpg' />
 <meta name="twitter:title" content="T5 / BART: Unifying Every NLP Task as Text-to-Text">
 <meta name="twitter:description" content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line."><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/en/p/t5-bart/cover.jpg' />
@@ -512,6 +512,11 @@
 <p>The model needs no task-specific output layer — classification emits the token sequence &ldquo;positive&rdquo;, regression emits the numeric string &ldquo;3.8&rdquo;. <strong>What&rsquo;s unified isn&rsquo;t the architecture, it&rsquo;s the interface.</strong></p>
 <h3 id="relative-position-encoding">Relative Position Encoding
 </h3><p>T5 uses a simplified relative position bias: each attention head learns a set of scalar biases indexed by query-key relative distance, added to attention scores. Compared to absolute positions, it extrapolates better to unseen lengths.</p>
+<figure><img src="/en/p/t5-bart/t5-task-mapping.svg"><figcaption>
+			<h4>Figure 2: T5 unified Text-to-Text framework — translation, classification, QA, summarization all mapped to prefix text → target text</h4>
+		</figcaption>
+</figure>
+
 <h3 id="pretraining-objective-span-corruption">Pretraining Objective: Span Corruption
 </h3><p>T5 doesn&rsquo;t mask individual tokens like BERT — it masks <strong>contiguous spans</strong>:</p>
 <div class="highlight"><div class="chroma">
@@ -703,7 +708,7 @@
 
 
         <span>
-            Last updated on 2026-09-08
+            Last updated on 2026-09-10
         </span>
     </section></footer>
 

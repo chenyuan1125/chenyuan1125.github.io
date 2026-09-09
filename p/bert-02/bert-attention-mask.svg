@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 340"><style>@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');</style>
+<rect width="576" height="340" fill="#f5f5fa"/>
+<text x="24" y="36" fill="#2c3e50" font-size="15" font-weight="600" font-family="'Geist',sans-serif">GPT/Decoder：因果注意力掩码</text>
+<rect x="24" y="56" width="248" height="248" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="148" y="82" fill="#2c3e50" font-size="11" font-weight="600" font-family="'Geist',sans-serif" text-anchor="middle">只能看到当前及之前</text>
+<!-- Causal mask grid -->
+<g transform="translate(48,100)">
+  <line x1="0" y1="0" x2="0" y2="176" stroke="#2e5aa8" stroke-width="0.8"/>
+  <line x1="200" y1="176" x2="200" y2="176" stroke="#2e5aa8" stroke-width="0.8"/>
+  <line x1="200" y1="176" x2="200" y2="0" stroke="#2e5aa8" stroke-width="0.8"/>
+  <polygon points="0,0 200,0 200,176 0,176" fill="rgba(46,90,168,0.12)"/>
+  <polygon points="0,0 200,0 200,176 0,0" fill="rgba(44,62,80,0.08)"/>
+</g>
+<text x="148" y="330" fill="#707070" font-size="11" font-family="'Geist Mono',monospace" text-anchor="middle">每个 token 只能 attend 到自身及之前的 token</text>
+
+<text x="304" y="36" fill="#2c3e50" font-size="15" font-weight="600" font-family="'Geist',sans-serif">BERT/Encoder：双向注意力掩码</text>
+<rect x="304" y="56" width="248" height="248" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="428" y="82" fill="#2c3e50" font-size="11" font-weight="600" font-family="'Geist',sans-serif" text-anchor="middle">能看到所有 token</text>
+<g transform="translate(328,100)">
+  <rect x="0" y="0" width="200" height="176" rx="2" fill="rgba(46,90,168,0.12)"/>
+</g>
+<text x="428" y="330" fill="#707070" font-size="11" font-family="'Geist Mono',monospace" text-anchor="middle">每个 token 可以 attend 到所有其他 token</text>
+</svg>

@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2026-09-09T22:29:32+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -16,7 +16,7 @@
                 />
   </url><url>
     <loc>/tags/gpt-3/</loc>
-    <lastmod>2026-09-09T22:29:32+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -55,7 +55,7 @@
                 />
   </url><url>
     <loc>/post/</loc>
-    <lastmod>2026-09-09T22:29:32+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -94,7 +94,7 @@
                 />
   </url><url>
     <loc>/tags/</loc>
-    <lastmod>2026-09-09T22:29:32+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -107,7 +107,7 @@
                 />
   </url><url>
     <loc>/</loc>
-    <lastmod>2026-09-09T22:29:32+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -123,7 +123,7 @@
     <lastmod>2026-09-09T22:29:32+08:00</lastmod>
   </url><url>
     <loc>/tags/bart/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
+    <lastmod>2026-09-10T00:58:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -136,7 +136,7 @@
                 />
   </url><url>
     <loc>/tags/encoder-decoder/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
+    <lastmod>2026-09-10T00:58:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -149,7 +149,7 @@
                 />
   </url><url>
     <loc>/tags/t5/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
+    <lastmod>2026-09-10T00:58:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -162,7 +162,7 @@
                 />
   </url><url>
     <loc>/p/t5-bart/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
+    <lastmod>2026-09-10T00:58:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -175,10 +175,10 @@
                 />
   </url><url>
     <loc>/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
-    <lastmod>2026-09-08T22:57:30+08:00</lastmod>
+    <lastmod>2026-09-10T00:58:29+08:00</lastmod>
   </url><url>
     <loc>/tags/few-shot/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -191,7 +191,7 @@
                 />
   </url><url>
     <loc>/p/gpt-03/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -204,7 +204,7 @@
                 />
   </url><url>
     <loc>/tags/in-context-learning/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -217,7 +217,7 @@
                 />
   </url><url>
     <loc>/tags/scaling-law/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -230,7 +230,7 @@
                 />
   </url><url>
     <loc>/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
   </url><url>
     <loc>/tags/containerd/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
@@ -259,7 +259,7 @@
                 />
   </url><url>
     <loc>/tags/gpt/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -272,7 +272,7 @@
                 />
   </url><url>
     <loc>/p/gpt-01/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -317,7 +317,7 @@
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
     <loc>/tags/transformer/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -362,13 +362,13 @@
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
     <loc>/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:44+08:00</lastmod>
   </url><url>
     <loc>/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
     <loc>/tags/bert/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:57:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -381,7 +381,7 @@
                 />
   </url><url>
     <loc>/p/bert-02/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:57:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -394,7 +394,7 @@
                 />
   </url><url>
     <loc>/tags/mlm/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:57:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -407,7 +407,7 @@
                 />
   </url><url>
     <loc>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:07+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -420,7 +420,7 @@
                 />
   </url><url>
     <loc>/series/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:07+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -433,16 +433,16 @@
                 />
   </url><url>
     <loc>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:07+08:00</lastmod>
   </url><url>
     <loc>/series/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:07+08:00</lastmod>
   </url><url>
     <loc>/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:59:07+08:00</lastmod>
   </url><url>
     <loc>/tags/deepseek/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -455,7 +455,7 @@
                 />
   </url><url>
     <loc>/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -468,7 +468,7 @@
                 />
   </url><url>
     <loc>/tags/grpo/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -481,10 +481,10 @@
                 />
   </url><url>
     <loc>/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
   </url><url>
     <loc>/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
+    <lastmod>2026-09-10T00:51:52+08:00</lastmod>
   </url><url>
     <loc>/p/bandit%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>

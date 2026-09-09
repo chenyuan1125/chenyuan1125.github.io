@@ -16,7 +16,7 @@
 <meta property='og:description' content="T5 用一个统一的 text-to-text 框架吞下所有 NLP 任务，BART 用去噪自编码器把 BERT 的双向理解与 GPT 的生成能力拼在一起——Encoder-Decoder 路线的巅峰。">
 <meta property='og:url' content='/p/t5-bart/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='预训练' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-08T22:57:30&#43;08:00'/><meta property='og:image' content='/p/t5-bart/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='预训练' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-10T00:58:29&#43;08:00'/><meta property='og:image' content='/p/t5-bart/cover.jpg' />
 <meta name="twitter:title" content="T5 / BART：把一切 NLP 任务统一成 Text-to-Text">
 <meta name="twitter:description" content="T5 用一个统一的 text-to-text 框架吞下所有 NLP 任务，BART 用去噪自编码器把 BERT 的双向理解与 GPT 的生成能力拼在一起——Encoder-Decoder 路线的巅峰。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/p/t5-bart/cover.jpg' />
@@ -395,7 +395,7 @@
 
 
                     <time class="article-time--reading">
-                        阅读时长: 4 分钟
+                        阅读时长: 5 分钟
                     </time>
                 
             </div>
@@ -512,6 +512,11 @@
 <p>模型不需要任何任务特定的输出层——分类任务输出 &ldquo;positive&rdquo; 这个 token 序列，回归任务输出 &ldquo;3.8&rdquo; 这个数字字符串。<strong>统一的不是架构，是接口</strong>。</p>
 <h3 id="相对位置编码">相对位置编码
 </h3><p>T5 用简化的相对位置编码（relative position bias）：每个注意力头学习一组标量偏置，按 query-key 相对距离查表加到注意力分数上。相比绝对位置编码，它更容易外推到训练时没见过的长度。</p>
+<figure><img src="/p/t5-bart/t5-task-mapping.svg"><figcaption>
+			<h4>图 2：T5 统一 Text-to-Text 框架——翻译、分类、问答、摘要都映射为「前缀文本 → 目标文本」</h4>
+		</figcaption>
+</figure>
+
 <h3 id="预训练任务span-corruption">预训练任务：Span Corruption
 </h3><p>T5 不用 BERT 的单 token 遮蔽，而是<strong>遮蔽连续片段</strong>：</p>
 <div class="highlight"><div class="chroma">
@@ -654,12 +659,16 @@
 <li><strong>接口统一 &gt; 架构统一</strong>：T5 的 text-to-text 证明了&quot;统一接口&quot;的价值，这个思想后来被 instruction tuning 继承</li>
 <li><strong>去噪目标的设计空间很大</strong>：T5 的 span corruption 和 BART 的 text infilling 都是去噪，但细节决定任务适配性</li>
 <li><strong>消融实验比架构创新更稀缺</strong>：T5 论文最有价值的是那张消融表，不是模型本身</li>
+<li><strong>Encoder-Decoder 虽退居二线但未消失</strong>：Flan-T5 至今仍是开源小模型的重要选择，在 RAG 和翻译场景中仍然实用</li>
 </ol>
 <h2 id="参考资料">参考资料
 </h2><ul>
-<li>Raffel, C., et al. (2019). <em>Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer</em>. arXiv:1910.10683.</li>
-<li>Lewis, M., et al. (2019). <em>BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension</em>. arXiv:1910.13461.</li>
+<li>Raffel, C., et al. (2019). <em>Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer</em>. arXiv:1910.10683. <a class="link" href="https://arxiv.org/abs/1910.10683"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/1910.10683</a></li>
+<li>Lewis, M., et al. (2019). <em>BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension</em>. arXiv:1910.13461. <a class="link" href="https://arxiv.org/abs/1910.13461"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/1910.13461</a></li>
 <li>Hugging Face T5 文档：https://huggingface.co/docs/transformers/model_doc/t5</li>
+<li>Hugging Face BART 文档：https://huggingface.co/docs/transformers/model_doc/bart</li>
 </ul>
 
 </section>
@@ -702,7 +711,7 @@
 
 
         <span>
-            最后更新于 2026-09-08
+            最后更新于 2026-09-10
         </span>
     </section></footer>
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 380"><style>@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap');</style>
+<rect width="576" height="380" fill="#f5f5fa"/>
+<text x="24" y="34" fill="#2c3e50" font-size="15" font-weight="600" font-family="'Geist',sans-serif">GPT-1 Decoder-only 架构</text>
+
+<!-- Input -->
+<rect x="162" y="56" width="252" height="32" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="288" y="77" fill="#2c3e50" font-size="12" font-family="'Geist',sans-serif" text-anchor="middle">Text + Position Embeddings</text>
+<line x1="288" y1="88" x2="288" y2="112" stroke="#707070" stroke-width="1" marker-end="url(#a)"/>
+
+<!-- Transformer Block -->
+<rect x="112" y="116" width="352" height="120" rx="6" fill="rgba(46,90,168,0.06)" stroke="#2e5aa8" stroke-width="1.2"/>
+<text x="128" y="136" fill="#2e5aa8" font-size="10" font-family="'Geist Mono',monospace">Masked Multi-Head Self-Attention</text>
+<text x="128" y="154" fill="#707070" font-size="9" font-family="'Geist Mono',monospace">&darr;</text>
+<text x="128" y="172" fill="#707070" font-size="9" font-family="'Geist Mono',monospace">Add &amp; Norm</text>
+<text x="128" y="190" fill="#707070" font-size="9" font-family="'Geist Mono',monospace">&darr;</text>
+<text x="128" y="208" fill="#2c3e50" font-size="10" font-family="'Geist Mono',monospace">Feed Forward Network</text>
+<text x="128" y="226" fill="#707070" font-size="9" font-family="'Geist Mono',monospace">&darr; Add &amp; Norm</text>
+<text x="352" y="170" fill="#707070" font-size="10" font-family="'Geist Mono',monospace">&times;12 layers</text>
+<rect x="338" y="130" width="2" height="96" fill="#c8ccd4"/>
+
+<line x1="288" y1="236" x2="288" y2="260" stroke="#707070" stroke-width="1" marker-end="url(#a)"/>
+
+<!-- Output -->
+<rect x="162" y="264" width="252" height="32" rx="4" fill="#ffffff" stroke="#c8ccd4" stroke-width="0.8"/>
+<text x="288" y="285" fill="#2c3e50" font-size="12" font-family="'Geist',sans-serif" text-anchor="middle">Linear + Softmax</text>
+<line x1="288" y1="296" x2="288" y2="320" stroke="#707070" stroke-width="1" marker-end="url(#a)"/>
+
+<rect x="212" y="324" width="152" height="32" rx="4" fill="rgba(46,90,168,0.10)" stroke="#2e5aa8" stroke-width="1"/>
+<text x="288" y="345" fill="#2c3e50" font-size="12" font-weight="600" font-family="'Geist',sans-serif" text-anchor="middle">Next Token</text>
+
+<!-- Causal attention indicator -->
+<text x="24" y="368" fill="#707070" font-size="10" font-family="'Geist Mono',monospace">Masked Self-Attention = 只能看到左侧上下文（因果掩码）</text>
+<defs><marker id="a" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" fill="#707070"/></marker></defs>
+</svg>
