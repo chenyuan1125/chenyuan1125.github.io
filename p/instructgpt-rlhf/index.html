@@ -5,7 +5,7 @@
 <title>InstructGPT：用 RLHF 教会大模型「听话」</title>
 
 
-<link rel="canonical" href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/">
+<link rel="canonical" href="/p/instructgpt-rlhf/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
@@ -14,12 +14,12 @@
 
 <link rel="stylesheet" href="/scss/style.min.71379a630a7e8c5d56004d36fe593599fbd4f6bef93385e175df6b589147faff.css"><meta property='og:title' content="InstructGPT：用 RLHF 教会大模型「听话」">
 <meta property='og:description' content="模型越大，不一定越懂你。OpenAI 用人类反馈强化学习（RLHF）三步走，让 1.3B 的 InstructGPT 比 175B 的 GPT-3 更受用户青睐。本文拆解 SFT、奖励建模、PPO 的每个环节。">
-<meta property='og:url' content='/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/'>
+<meta property='og:url' content='/p/instructgpt-rlhf/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='InstructGPT' /><meta property='article:tag' content='RLHF' /><meta property='article:tag' content='PPO' /><meta property='article:tag' content='对齐' /><meta property='article:tag' content='GPT-3' /><meta property='article:published_time' content='2026-09-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-09T22:24:55&#43;08:00'/><meta property='og:image' content='/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='InstructGPT' /><meta property='article:tag' content='RLHF' /><meta property='article:tag' content='PPO' /><meta property='article:tag' content='对齐' /><meta property='article:tag' content='GPT-3' /><meta property='article:published_time' content='2026-09-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-09T22:29:32&#43;08:00'/><meta property='og:image' content='/p/instructgpt-rlhf/cover.jpg' />
 <meta name="twitter:title" content="InstructGPT：用 RLHF 教会大模型「听话」">
 <meta name="twitter:description" content="模型越大，不一定越懂你。OpenAI 用人类反馈强化学习（RLHF）三步走，让 1.3B 的 InstructGPT 比 175B 的 GPT-3 更受用户青睐。本文拆解 SFT、奖励建模、PPO 的每个环节。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg' />
+    <meta name="twitter:image" content='/p/instructgpt-rlhf/cover.jpg' />
     </head>
     <body class="
     article-page
@@ -241,7 +241,7 @@
                                         
                                     
                                 
-                                <option value="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/" selected>中文</option>
+                                <option value="/p/instructgpt-rlhf/" selected>中文</option>
                             
                         </select>
                     </li>
@@ -320,8 +320,8 @@
     <article class="has-image main-article">
     <header class="article-header">
     <div class="article-image">
-        <a href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/">
-            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="630" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg" srcset="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover_hu_86b4a72150146bfc.jpg 800w, /p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/cover.jpg 1200w" width="1200">
+        <a href="/p/instructgpt-rlhf/">
+            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="630" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/instructgpt-rlhf/cover.jpg" srcset="/p/instructgpt-rlhf/cover_hu_86b4a72150146bfc.jpg 800w, /p/instructgpt-rlhf/cover.jpg 1200w" width="1200">
         </a>
     </div>
     
@@ -342,7 +342,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/">InstructGPT：用 RLHF 教会大模型「听话」</a>
+            <a href="/p/instructgpt-rlhf/">InstructGPT：用 RLHF 教会大模型「听话」</a>
         </h2>
     
         
@@ -458,7 +458,7 @@
 <p>OpenAI 雇佣了标注员，针对从 API 收集的 prompt（用户提问）写出高质量的回答。这些 prompt 覆盖了生成、问答、写作、总结、代码等九大类任务。标注员写的回答不追求完美，但要「有用」——回答 prompt 所问、不编造事实、不给有害建议。</p>
 <p>最终收集了约 <strong>13k 条标注员演示数据</strong>（train 12,725 + valid 1,653），再加上一小部分（约 1.4k）真实用户提交的 prompt 作为补充。</p>
 <p>在这些数据上，用监督学习微调 GPT-3 的预训练权重。1.3B 和 6B 模型训练 16 个 epoch，更大 batch size（32），学习率 9.65e-6；175B 用 batch size 8 和学习率 5.03e-6。所有模型使用 residual dropout 0.2 和余弦衰减学习率。对每个模型规模，选择验证集上 RM 分数最高的 checkpoint。</p>
-<figure><img src="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/rlhf-pipeline.svg"><figcaption>
+<figure><img src="/p/instructgpt-rlhf/rlhf-pipeline.svg"><figcaption>
 			<h4>图 1：InstructGPT 的 RLHF 三步流程——SFT 学习人类的示范回答，奖励模型学习人类的偏好排序，PPO 用奖励信号优化策略</h4>
 		</figcaption>
 </figure>
@@ -519,7 +519,7 @@ $$max_φ E[r_θ(x, y)] - β · KL(π_φ ‖ π_{SFT})$$<p>其中 KL 惩罚系数
 <h2 id="对齐税模型变得更聪明但也在某些地方变慢了">对齐税：模型变得更聪明，但也在某些地方变慢了
 </h2><p>RLHF 引入了「对齐税（alignment tax）」：对齐后模型在部分标准 NLP benchmark 上出现性能退化（如 DROP 问答集和翻译任务）。PPO-ptx 变体大大缓解了这个问题。</p>
 <p>更重要的发现是：InstructGPT 能<strong>泛化到未见过的标注员偏好</strong>。训练数据之外的标注员同样更喜欢 InstructGPT 的输出，说明模型学到的不是迎合特定标注员，而是学到了更普遍的「有用性」标准。这种泛化也延伸到代码任务和非英文指令上。</p>
-<figure><img src="/p/instructgpt%E7%94%A8-rlhf-%E6%95%99%E4%BC%9A%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%90%AC%E8%AF%9D/metrics.svg"><figcaption>
+<figure><img src="/p/instructgpt-rlhf/metrics.svg"><figcaption>
 			<h4>图 2：InstructGPT vs GPT-3 关键指标对比——人类偏好胜率 85%、幻觉率从 41% 降至 21%、有害输出减少 25%</h4>
 		</figcaption>
 </figure>
