@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 576 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t5tasks-title t5tasks-desc">
+<svg width="576" height="420" viewBox="0 0 576 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t5tasks-title t5tasks-desc">
       <title id="t5tasks-title">T5 — 统一 Text-to-Text 框架</title>
       <desc id="t5tasks-desc">Four NLP tasks mapped into T5's unified text-to-text format: translation, classification, QA, and summarization. Each task becomes a "text prefix → target text" pair.</desc>
       <rect width="576" height="420" fill="#f5f5fa"/>
