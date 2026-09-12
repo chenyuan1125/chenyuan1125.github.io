@@ -1,4 +1,4 @@
-<svg viewBox="0 0 576 562" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t5-vs-bart-title t5-vs-bart-desc">
+<svg width="576" height="562" viewBox="0 0 576 562" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="t5-vs-bart-title t5-vs-bart-desc">
       <title id="t5-vs-bart-title">T5 vs BART — Pretraining Objectives</title>
       <desc id="t5-vs-bart-desc">Side-by-side comparison: T5 corrupts spans into sentinel tokens and predicts only the masked spans, while BART masks spans and shuffles sentences, then reconstructs the entire input.</desc>
 
