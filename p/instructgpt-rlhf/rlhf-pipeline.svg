@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 576 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="rlhf-title rlhf-desc">
+<svg width="576" height="760" viewBox="0 0 576 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="rlhf-title rlhf-desc">
       <title id="rlhf-title">InstructGPT — RLHF Three-Step Pipeline</title>
       <desc id="rlhf-desc">Three sequential stages: Step 1 collects human demonstrations and trains an SFT model; Step 2 collects ranked model outputs and trains a reward model; Step 3 optimizes the policy with PPO against the reward model, with a KL penalty anchoring the policy to the SFT reference.</desc>
 
-      <defs><style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
+      <defs><style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style>
         <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#707070"/></marker>
         <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
       </defs>

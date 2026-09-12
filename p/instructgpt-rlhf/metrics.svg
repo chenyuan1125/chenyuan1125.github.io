@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 576 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="metrics-title metrics-desc">
+<svg width="576" height="520" viewBox="0 0 576 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="metrics-title metrics-desc">
       <title id="metrics-title">InstructGPT vs GPT-3 — Key Metrics</title>
       <desc id="metrics-desc">Side-by-side comparison: human preference win rate, hallucination rate, and toxicity reduction between GPT-3 and InstructGPT.</desc>
 
-      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&amp;display=swap');</style><rect width="576" height="520" fill="#f5f5fa"/>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;display=swap');</style><rect width="576" height="520" fill="#f5f5fa"/>
 
       <!-- ── Chart 1 · Win Rate ─────────────────────────────────────────── -->
       <text x="24" y="48" fill="#2c3e50" font-size="16" font-weight="600" font-family="'Geist', sans-serif">人类偏好胜率</text>
