@@ -16,7 +16,7 @@
 <meta property='og:description' content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line.">
 <meta property='og:url' content='/en/p/t5-bart/'>
 <meta property='og:site_name' content='Lee'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='Pretraining' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-10T00:54:20&#43;08:00'/><meta property='og:image' content='/en/p/t5-bart/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='T5' /><meta property='article:tag' content='BART' /><meta property='article:tag' content='Encoder-Decoder' /><meta property='article:tag' content='Pretraining' /><meta property='article:published_time' content='2026-09-05T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-12T10:40:52&#43;08:00'/><meta property='og:image' content='/en/p/t5-bart/cover.jpg' />
 <meta name="twitter:title" content="T5 / BART: Unifying Every NLP Task as Text-to-Text">
 <meta name="twitter:description" content="T5's unified text-to-text framework swallows all NLP tasks; BART fuses BERT's bidirectional understanding with GPT's generation via denoising — the peak of the encoder-decoder line."><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/en/p/t5-bart/cover.jpg' />
@@ -312,7 +312,11 @@
       </ol>
     </li>
     <li><a href="#t5-vs-bart">T5 vs BART</a></li>
-    <li><a href="#the-rise-and-fall-of-encoder-decoder">The Rise and Fall of Encoder-Decoder</a></li>
+    <li><a href="#the-rise-and-fall-of-encoder-decoder">The Rise and Fall of Encoder-Decoder</a>
+      <ol>
+        <li><a href="#my-take">My Take</a></li>
+      </ol>
+    </li>
     <li><a href="#takeaways">Takeaways</a></li>
     <li><a href="#references">References</a></li>
   </ol>
@@ -395,7 +399,7 @@
 
 
                     <time class="article-time--reading">
-                        4 minutes read
+                        5 minutes read
                     </time>
                 
             </div>
@@ -455,7 +459,11 @@
       </ol>
     </li>
     <li><a href="#t5-vs-bart">T5 vs BART</a></li>
-    <li><a href="#the-rise-and-fall-of-encoder-decoder">The Rise and Fall of Encoder-Decoder</a></li>
+    <li><a href="#the-rise-and-fall-of-encoder-decoder">The Rise and Fall of Encoder-Decoder</a>
+      <ol>
+        <li><a href="#my-take">My Take</a></li>
+      </ol>
+    </li>
     <li><a href="#takeaways">Takeaways</a></li>
     <li><a href="#references">References</a></li>
   </ol>
@@ -654,6 +662,21 @@
 <li><strong>Generality</strong>: in-context learning lets &ldquo;understanding&rdquo; tasks be solved by generation too</li>
 </ol>
 <p>But encoder-decoder didn&rsquo;t vanish: T5 remains the backbone of many RAG, translation, and summarization systems, and Flan-T5 is still a strong choice among open small models.</p>
+<blockquote class="alert alert-note">
+        <div class="alert-header">
+            <span class="alert-icon">📝</span>
+            <span class="alert-title">Reading Note</span>
+        </div>
+        <div class="alert-body">
+            <p>This article covers T5 and BART (2019-2020), both encoder-decoder architectures. Decoder-only has dominated since 2022, but understanding T5/BART&rsquo;s design is crucial for understanding why that shift happened.</p>
+        </div>
+    </blockquote>
+<h3 id="my-take">My Take
+</h3><ol>
+<li><strong>Span corruption&rsquo;s success is partly coincidental</strong>. T5&rsquo;s ablation studies showed it worked best on original benchmarks, but Flan-T5 later used the exact same T5 checkpoint for instruction tuning — nobody proved span corruption is superior to text infilling for that setting. It won by empirical luck, not theoretical necessity.</li>
+<li><strong>T5&rsquo;s most underappreciated contribution is C4, not the model</strong>. The 750GB cleaning pipeline (sentence boundaries, dedup, language filtering) was reused by many later projects. Yet almost nobody cites T5 for C4 — everyone talks about text-to-text.</li>
+<li><strong>Encoder-Decoder&rsquo;s greatest value today is explaining why decoder-only won</strong>. Reading T5 and GPT-3 side by side, you see cross-attention becomes a scaling bottleneck. That&rsquo;s not T5/BART&rsquo;s failure — it&rsquo;s a validated negative result that helped the field move forward.</li>
+</ol>
 <h2 id="takeaways">Takeaways
 </h2><ol>
 <li><strong>Unified interface &gt; unified architecture</strong>: T5&rsquo;s text-to-text proved the value of a common interface — an idea inherited by instruction tuning</li>
@@ -708,7 +731,7 @@
 
 
         <span>
-            Last updated on 2026-09-10
+            Last updated on 2026-09-12
         </span>
     </section></footer>
 
