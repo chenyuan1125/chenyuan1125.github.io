@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="With the same training compute, a 70B Chinchilla trained on 1.4T tokens beat the 280B Gopher. This article explains compute-optimal scaling, the paper's three fitting methods, and its lasting impact.">
+<title>Chinchilla: Why Bigger Models Are Not Always Better</title>
+
+
+<link rel="canonical" href="/en/p/chinchilla-scaling-laws/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="Chinchilla: Why Bigger Models Are Not Always Better">
+<meta property='og:description' content="With the same training compute, a 70B Chinchilla trained on 1.4T tokens beat the 280B Gopher. This article explains compute-optimal scaling, the paper's three fitting methods, and its lasting impact.">
+<meta property='og:url' content='/en/p/chinchilla-scaling-laws/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Chinchilla' /><meta property='article:tag' content='Scaling Laws' /><meta property='article:tag' content='Pretraining' /><meta property='article:tag' content='Compute Optimality' /><meta property='article:tag' content='Data Engineering' /><meta property='article:published_time' content='2026-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-21T09:08:59&#43;08:00'/><meta property='og:image' content='/en/p/chinchilla-scaling-laws/cover.jpg' />
+<meta name="twitter:title" content="Chinchilla: Why Bigger Models Are Not Always Better">
+<meta name="twitter:description" content="With the same training compute, a 70B Chinchilla trained on 1.4T tokens beat the 280B Gopher. This article explains compute-optimal scaling, the paper's three fitting methods, and its lasting impact."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/chinchilla-scaling-laws/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/chinchilla-scaling-laws/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/chinchilla-scaling-laws/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#introduction-the-parameter-race-missed-half-the-equation">Introduction: The Parameter Race Missed Half the Equation</a></li>
+    <li><a href="#the-compute-budget-what-are-we-actually-spending">The Compute Budget: What Are We Actually Spending?</a></li>
+    <li><a href="#three-methods-one-conclusion">Three Methods, One Conclusion</a></li>
+    <li><a href="#same-compute-how-70b-beat-280b">Same Compute: How 70B Beat 280B</a></li>
+    <li><a href="#training-optimal-is-not-product-optimal">Training-Optimal Is Not Product-Optimal</a></li>
+    <li><a href="#data-becomes-the-scarce-resource">Data Becomes the Scarce Resource</a></li>
+    <li><a href="#guardrail-perspective">Guardrail Perspective</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/chinchilla-scaling-laws/">
+            <img alt="Featured image of post Chinchilla: Why Bigger Models Are Not Always Better" height="941" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/chinchilla-scaling-laws/cover.jpg" srcset="/en/p/chinchilla-scaling-laws/cover_hu_4f93989d0594e62c.jpg 800w, /en/p/chinchilla-scaling-laws/cover_hu_963e28d0b9233e81.jpg 1600w, /en/p/chinchilla-scaling-laws/cover.jpg 1672w" width="1672">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/chinchilla-scaling-laws/">Chinchilla: Why Bigger Models Are Not Always Better</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            With the same training compute, a 70B Chinchilla trained on 1.4T tokens beat the 280B Gopher. This article explains compute-optimal scaling, the paper&#39;s three fitting methods, and its lasting impact.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-21T00:00:00Z'>2026-09-21</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        8 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/chinchilla-scaling-laws/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#introduction-the-parameter-race-missed-half-the-equation">Introduction: The Parameter Race Missed Half the Equation</a></li>
+    <li><a href="#the-compute-budget-what-are-we-actually-spending">The Compute Budget: What Are We Actually Spending?</a></li>
+    <li><a href="#three-methods-one-conclusion">Three Methods, One Conclusion</a></li>
+    <li><a href="#same-compute-how-70b-beat-280b">Same Compute: How 70B Beat 280B</a></li>
+    <li><a href="#training-optimal-is-not-product-optimal">Training-Optimal Is Not Product-Optimal</a></li>
+    <li><a href="#data-becomes-the-scarce-resource">Data Becomes the Scarce Resource</a></li>
+    <li><a href="#guardrail-perspective">Guardrail Perspective</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <h2 id="introduction-the-parameter-race-missed-half-the-equation">Introduction: The Parameter Race Missed Half the Equation
+</h2><p>The large-model race of 2020–2021 had an easy scoreboard: more accelerators should produce more parameters. GPT-3 had 175B parameters, Gopher had 280B, and Megatron-Turing NLG reached 530B. Parameter count kept rising while training datasets often remained near the 300B-token scale.</p>
+<p>That strategy was not irrational. Kaplan et al.&rsquo;s 2020 scaling laws suggested that larger models were more sample-efficient. Under a fixed compute budget, the apparent optimum was to spend aggressively on model size and stop training well before convergence. But would the same allocation remain optimal across wider model sizes and longer training runs?</p>
+<p>DeepMind&rsquo;s 2022 paper, <em>Training Compute-Optimal Large Language Models</em>, gave a striking answer: for their available compute, the leading models of the time were generally too large and trained on too little data. A smaller model that reads much more data can be better than a giant, undertrained one.</p>
+<figure><img src="/en/p/chinchilla-scaling-laws/cover.jpg"><figcaption>
+			<h4>Cover: model capacity and training data must share the same compute budget</h4>
+		</figcaption>
+</figure>
+
+<p>The researchers trained more than 400 models ranging from 70M to over 16B parameters and from 5B to 500B training tokens. They then ran the decisive test: using essentially Gopher&rsquo;s training FLOPs, they trained Chinchilla with only 70B parameters but 1.4T tokens. The model was four times smaller than Gopher and nevertheless won across almost every measured task.</p>
+<p>Chinchilla therefore matters less as a particular model than as a reframing of the design question. Instead of asking “How large can we make the model?”, it asks: <strong>Given a compute budget, how should we divide it between parameters and data?</strong></p>
+<h2 id="the-compute-budget-what-are-we-actually-spending">The Compute Budget: What Are We Actually Spending?
+</h2><p>For a standard dense Transformer, dominant training compute can be approximated as:</p>
+$$C \approx 6ND$$<p>Here, $C$ is training FLOPs, $N$ is the number of non-embedding parameters, and $D$ is the number of training tokens. The constant six approximates forward and backward computation. Real engineering costs vary with sequence length, activation recomputation, and implementation details, but this expression captures the scaling trade-off.</p>
+<p>With $C$ fixed, $N$ and $D$ sit on a seesaw. Doubling parameters requires halving tokens. The goal is not to maximize either variable; it is to minimize the final validation loss.</p>
+<p>The paper expresses the two bottlenecks with a separable empirical loss model:</p>
+$$L(N,D)=E+\frac{A}{N^\alpha}+\frac{B}{D^\beta}$$<ul>
+<li>$E$ is the irreducible entropy of the data distribution.</li>
+<li>$A/N^\alpha$ captures loss from insufficient model capacity.</li>
+<li>$B/D^\beta$ captures loss from insufficient data and optimization.</li>
+</ul>
+<p>A very large model does not make the data-limited term disappear. In Chinchilla&rsquo;s context, an “undertrained” model is not merely one whose optimizer stopped early. It is a model that has seen too few tokens relative to its capacity.</p>
+<h2 id="three-methods-one-conclusion">Three Methods, One Conclusion
+</h2><p>The paper did not trust a single fitted curve. It estimated the compute-optimal frontier in three independent ways.</p>
+<p>The first method fixed model size, varied training-token count, and used the learning curves to identify the lowest attainable loss at each compute budget. It then fit optimal model and data sizes as functions of compute:</p>
+$$N_{opt}\propto C^{0.50},\qquad D_{opt}\propto C^{0.50}$$<p>The second method created IsoFLOP profiles. For each fixed FLOP budget, the team trained several combinations of parameter count and token count. Plotting final loss against model size produces a visible valley; the bottom of that valley is the optimum for that budget. Fitting those minima produced exponents near 0.49 for parameters and 0.51 for tokens.</p>
+<p>The third method fit the parametric loss function directly to all final-loss observations. Its exponents, approximately 0.46 and 0.54, were not identical, but the direction was the same. Across all three approaches, increased compute should be allocated in roughly equal proportions to model size and training data.</p>
+<p>This corrected the earlier Kaplan prescription, which directed most additional compute toward a larger model. Engineers often summarize Chinchilla as “about 20 tokens per parameter”: 70B × 20 is roughly 1.4T. That ratio is a useful landmark, not a law of nature. It depends on the model family, data distribution, objective, and fitted range. The durable result is joint scaling, not blind adherence to 20:1.</p>
+<h2 id="same-compute-how-70b-beat-280b">Same Compute: How 70B Beat 280B
+</h2><figure><img src="/en/p/chinchilla-scaling-laws/compute-allocation.png"><figcaption>
+			<h4>Figure 1: Gopher and Chinchilla use similar training compute; Chinchilla reallocates the budget from parameters to tokens</h4>
+		</figcaption>
+</figure>
+
+<p>Gopher has 280B parameters and was trained on about 300B tokens. Chinchilla has 70B parameters and was trained on 1.4T tokens. Roughly speaking, the model became four times smaller while the dataset became about four times larger, leaving the product $N\times D$ in the same range.</p>
+<p>This was not a win produced by a revolutionary architecture. The paper says Chinchilla largely retained Gopher&rsquo;s architecture and training setup, with differences that included the data mixture, AdamW, and a slightly modified SentencePiece tokenizer. The central evidence is about <strong>compute allocation</strong>, not an architectural trick.</p>
+<p>The results were broad:</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>Metric</th>
+					<th style="text-align: right">Gopher 280B</th>
+					<th style="text-align: right">Chinchilla 70B</th>
+					<th>Interpretation</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Training tokens</td>
+					<td style="text-align: right">about 300B</td>
+					<td style="text-align: right">1.4T</td>
+					<td>More complete use of model capacity</td>
+			</tr>
+			<tr>
+					<td>MMLU 5-shot</td>
+					<td style="text-align: right">about 60.0%</td>
+					<td style="text-align: right">67.6%</td>
+					<td>A 7.6-point average gain</td>
+			</tr>
+			<tr>
+					<td>LAMBADA</td>
+					<td style="text-align: right">74.5%</td>
+					<td style="text-align: right">77.4%</td>
+					<td>Better prediction with a smaller model</td>
+			</tr>
+			<tr>
+					<td>BIG-bench average</td>
+					<td style="text-align: right">54.4%</td>
+					<td style="text-align: right">65.1%</td>
+					<td>Behind on only 4 of 62 tasks</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>On MMLU, Chinchilla beat Gopher on 51 of 57 tasks, tied on two, and lost on only four. It also outperformed GPT-3, Jurassic-1, and 530B MT-NLG across a wide range of evaluations. The most important finding is not a particular benchmark decimal. It is the counterfactual: spending the same compute on excessive parameter count can produce a worse model.</p>
+<h2 id="training-optimal-is-not-product-optimal">Training-Optimal Is Not Product-Optimal
+</h2><p>Chinchilla optimizes a narrow objective: minimize training loss for a fixed pretraining FLOP budget. A deployed product has another large cost center—serving the model.</p>
+<p>In this experiment, Chinchilla improved both quality and deployment economics. A 70B model needs less memory, bandwidth, and inference compute than a 280B model. More generally, however, “train once” and “serve a billion times” belong in the same lifetime budget.</p>
+<p>The 2024 paper <em>Beyond Chinchilla-Optimal</em> adds expected inference demand to the optimization. Its conclusion is that heavily used models may rationally be smaller than the Chinchilla training optimum and trained for longer. Extra one-time pretraining compute can be exchanged for lower cost on every future request.</p>
+<p>Meta&rsquo;s official Llama 3 report illustrates this shift. Meta says the Chinchilla-optimal training amount for an 8B model is around 200B tokens, yet both its 8B and 70B models continued improving when trained on as many as 15T tokens. This does not refute Chinchilla. The objective changed from lowest loss at fixed training FLOPs to a product trade-off that includes quality and repeated inference efficiency.</p>
+<p>A practical decision process therefore has three layers:</p>
+<ol>
+<li>Estimate parameter-data-loss relationships with scaling experiments.</li>
+<li>Add constraints from data quality, hardware, and the training window.</li>
+<li>Include expected lifetime traffic, latency, memory, and serving cost.</li>
+</ol>
+<p>The 20-token heuristic is a starting point, not a purchase order.</p>
+<h2 id="data-becomes-the-scarce-resource">Data Becomes the Scarce Resource
+</h2><p>Before Chinchilla, the obvious bottleneck was distributing a larger model over more accelerators. After Chinchilla, data engineering became equally central. The paper estimated that a 175B model on its compute-optimal frontier would need several trillion tokens rather than GPT-3&rsquo;s roughly 300B. At larger scales, the demand for high-quality, deduplicated, legally usable data grows rapidly.</p>
+<p>“More tokens” cannot simply mean crawling and repeating more web pages. Poor data changes the constants and exponents in the loss relationship. Repetition can encourage memorization rather than generalization. Deduplication, filtering, language and domain balance, provenance, and contamination checks determine whether an additional token contributes new information.</p>
+<p>To me, Chinchilla&rsquo;s deepest industrial effect was to turn data from a pipeline input into a first-class model-design variable. An architecture team should not pick a parameter count first and ask the data team to fill it later. Capacity and corpus have to be designed under one budget.</p>
+<h2 id="guardrail-perspective">Guardrail Perspective
+</h2><p>Scaling laws look like efficiency research, but they directly shape safety boundaries.</p>
+<p>First, compute-optimal is not risk-optimal. More high-quality tokens increase coverage and generalization, but they can also improve capabilities in cyber operations, persuasion, or other sensitive domains. Capability evaluations and dangerous-capability evaluations must scale with pretraining, not arrive as an afterthought.</p>
+<p>Second, pressure for trillions of tokens creates provenance and privacy hazards. Teams may be tempted to relax licensing, personal-data removal, or traceability standards. A corpus that is compute-optimal can still be unacceptable on copyright, privacy, bias, or consent grounds. Data governance belongs inside the optimization constraints.</p>
+<p>Third, a scaling law is an extrapolation tool, not a safety proof. The fits come from particular architectures, mixtures, and compute ranges. Extrapolating several orders of magnitude carries uncertainty, and predictable loss does not imply predictable behavior. Deployment still requires empirical evaluations, red teaming, tiered access, and monitoring.</p>
+<p>My conclusion is that Chinchilla taught the industry not to waste training compute. Safety practice adds a necessary second sentence: <strong>do not consume governance and evaluation margins merely to satisfy a scaling curve.</strong> A useful optimum must account for engineering, economics, and risk together.</p>
+<h2 id="conclusion">Conclusion
+</h2><p>Chinchilla ended the simplistic parameter-count race with an unusually clean comparison: a 70B model trained on 1.4T tokens beat 280B Gopher at roughly the same training compute.</p>
+<p>Three principles remain useful:</p>
+<ul>
+<li>Jointly optimize parameters and data under a fixed training budget.</li>
+<li>Scaling parameter count and token count in roughly equal proportions is more efficient than scaling parameters alone.</li>
+<li>Training optimality is only one objective; data quality and lifetime inference economics can favor smaller models trained for longer.</li>
+</ul>
+<p>Parameter count describes how much capacity a model contains. Token count determines whether that capacity is actually trained. After Chinchilla, model “scale” is no longer one number—it is a system formed by parameters, data, compute, and deployment demand.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Hoffmann, J. et al. <em>Training Compute-Optimal Large Language Models</em>. NeurIPS 2022. <a class="link" href="https://arxiv.org/abs/2203.15556"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/2203.15556</a></li>
+<li>Google DeepMind. <em>An empirical analysis of compute-optimal large language model training</em>. <a class="link" href="https://deepmind.google/blog/an-empirical-analysis-of-compute-optimal-large-language-model-training/"  target="_blank" rel="noopener"
+    >https://deepmind.google/blog/an-empirical-analysis-of-compute-optimal-large-language-model-training/</a></li>
+<li>Kaplan, J. et al. <em>Scaling Laws for Neural Language Models</em>. 2020. <a class="link" href="https://arxiv.org/abs/2001.08361"  target="_blank" rel="noopener"
+    >https://arxiv.org/abs/2001.08361</a></li>
+<li>OpenAI. <em>Scaling laws for neural language models</em>. <a class="link" href="https://openai.com/index/scaling-laws-for-neural-language-models/"  target="_blank" rel="noopener"
+    >https://openai.com/index/scaling-laws-for-neural-language-models/</a></li>
+<li>Sardana, N. et al. <em>Beyond Chinchilla-Optimal: Accounting for Inference in Language Model Scaling Laws</em>. ICML 2024. <a class="link" href="https://proceedings.mlr.press/v235/sardana24a.html"  target="_blank" rel="noopener"
+    >https://proceedings.mlr.press/v235/sardana24a.html</a></li>
+<li>Meta AI. <em>Introducing Meta Llama 3</em>. <a class="link" href="https://ai.meta.com/blog/meta-llama-3/"  target="_blank" rel="noopener"
+    >https://ai.meta.com/blog/meta-llama-3/</a></li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/chinchilla/">Chinchilla</a>
+        
+            <a href="/en/tags/scaling-laws/">Scaling Laws</a>
+        
+            <a href="/en/tags/pretraining/">Pretraining</a>
+        
+            <a href="/en/tags/compute-optimality/">Compute Optimality</a>
+        
+            <a href="/en/tags/data-engineering/">Data Engineering</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-21
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART: Unifying Every NLP Task as Text-to-Text" height="150" loading="lazy" src="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /en/p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART: Unifying Every NLP Task as Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/bert-02/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post BERT: What Exactly Is 'Bidirectional'?" height="150" loading="lazy" src="/en/p/bert-02/cover_hu_71acb6ae207a1f3b.jpg" srcset="/en/p/bert-02/cover_hu_71acb6ae207a1f3b.jpg 1x, /en/p/bert-02/cover_hu_9eb2554fa400abae.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #95603d80 0%, #2e2720C0 100%);">
+            <h2 class="article-title">BERT: What Exactly Is &#39;Bidirectional&#39;?</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/transformer-01/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?" height="150" loading="lazy" src="/en/p/transformer-01/cover_hu_81f7b587c5dc4c25.jpg" srcset="/en/p/transformer-01/cover_hu_81f7b587c5dc4c25.jpg 1x, /en/p/transformer-01/cover_hu_fe0f8b5434d015dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #08070780 0%, #f4f3ebC0 100%);">
+            <h2 class="article-title">Transformer: The Starting Point of Everything — What Problem Did It Actually Solve?</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT: Teaching LLMs to Be Helpful with RLHF" height="150" loading="lazy" src="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /en/p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT: Teaching LLMs to Be Helpful with RLHF</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/gpt-03/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-3: In-Context Learning and the Few-Shot Explosion" height="150" loading="lazy" src="/en/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg" srcset="/en/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg 1x, /en/p/gpt-03/cover_hu_8b791036cb6c2ce1.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #332e3880 0%, #d1c9c7C0 100%);">
+            <h2 class="article-title">GPT-3: In-Context Learning and the Few-Shot Explosion</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sat, 12 Sep 2026 10:40:52 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 21 Sep 2026 09:08:59 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Chinchilla</title>
+            <link>/en/tags/chinchilla/</link>
+            <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/chinchilla/</guid>
+            <description></description>
+        </item><item>
+            <title>Compute Optimality</title>
+            <link>/en/tags/compute-optimality/</link>
+            <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/compute-optimality/</guid>
+            <description></description>
+        </item><item>
+            <title>Data Engineering</title>
+            <link>/en/tags/data-engineering/</link>
+            <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/data-engineering/</guid>
+            <description></description>
+        </item><item>
+            <title>Pretraining</title>
+            <link>/en/tags/pretraining/</link>
+            <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/pretraining/</guid>
+            <description></description>
+        </item><item>
+            <title>Scaling Laws</title>
+            <link>/en/tags/scaling-laws/</link>
+            <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/scaling-laws/</guid>
+            <description></description>
+        </item><item>
             <title>Alignment</title>
             <link>/en/tags/alignment/</link>
             <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
@@ -47,12 +77,6 @@
             <link>/en/tags/encoder-decoder/</link>
             <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/encoder-decoder/</guid>
-            <description></description>
-        </item><item>
-            <title>Pretraining</title>
-            <link>/en/tags/pretraining/</link>
-            <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/pretraining/</guid>
             <description></description>
         </item><item>
             <title>T5</title>
