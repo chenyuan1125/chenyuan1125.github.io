@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="LLaMA introduced no new Transformer core, yet fuller training, proven components such as RoPE, and deployable sizes reshaped the open-model ecosystem. This article explains the recipe and where GQA actually entered the family.">
+<title>LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation</title>
+
+
+<link rel="canonical" href="/en/p/llama-open-ecosystem/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation">
+<meta property='og:description' content="LLaMA introduced no new Transformer core, yet fuller training, proven components such as RoPE, and deployable sizes reshaped the open-model ecosystem. This article explains the recipe and where GQA actually entered the family.">
+<meta property='og:url' content='/en/p/llama-open-ecosystem/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LLaMA' /><meta property='article:tag' content='RoPE' /><meta property='article:tag' content='GQA' /><meta property='article:tag' content='Inference Efficiency' /><meta property='article:tag' content='Open Models' /><meta property='article:published_time' content='2026-09-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-22T09:14:54&#43;08:00'/><meta property='og:image' content='/en/p/llama-open-ecosystem/cover.jpg' />
+<meta name="twitter:title" content="LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation">
+<meta name="twitter:description" content="LLaMA introduced no new Transformer core, yet fuller training, proven components such as RoPE, and deployable sizes reshaped the open-model ecosystem. This article explains the recipe and where GQA actually entered the family."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/llama-open-ecosystem/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/llama-open-ecosystem/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/llama-open-ecosystem/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#make-the-model-worth-deploying">Make the Model Worth Deploying</a></li>
+    <li><a href="#an-architecture-recipe-without-an-invention-myth">An Architecture Recipe Without an Invention Myth</a></li>
+    <li><a href="#gqa-was-not-an-original-llama-feature">GQA Was Not an Original LLaMA Feature</a></li>
+    <li><a href="#from-a-research-release-to-an-ecosystem-standard">From a Research Release to an Ecosystem Standard</a></li>
+    <li><a href="#where-the-success-story-stops">Where the Success Story Stops</a></li>
+    <li><a href="#the-design-principles-that-lasted">The Design Principles That Lasted</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/llama-open-ecosystem/">
+            <img alt="Featured image of post LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/llama-open-ecosystem/cover.jpg" srcset="/en/p/llama-open-ecosystem/cover_hu_2ff31519de39ec55.jpg 800w, /en/p/llama-open-ecosystem/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/llama-open-ecosystem/">LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            LLaMA introduced no new Transformer core, yet fuller training, proven components such as RoPE, and deployable sizes reshaped the open-model ecosystem. This article explains the recipe and where GQA actually entered the family.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-22T00:00:00Z'>2026-09-22</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        8 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/llama-open-ecosystem/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#make-the-model-worth-deploying">Make the Model Worth Deploying</a></li>
+    <li><a href="#an-architecture-recipe-without-an-invention-myth">An Architecture Recipe Without an Invention Myth</a></li>
+    <li><a href="#gqa-was-not-an-original-llama-feature">GQA Was Not an Original LLaMA Feature</a></li>
+    <li><a href="#from-a-research-release-to-an-ecosystem-standard">From a Research Release to an Ecosystem Standard</a></li>
+    <li><a href="#where-the-success-story-stops">Where the Success Story Stops</a></li>
+    <li><a href="#the-design-principles-that-lasted">The Design Principles That Lasted</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>The LLaMA paper, released in February 2023, was unusual for a supposed breakthrough: it barely claimed a new core component. The network remained a decoder-only Transformer. RMSNorm, SwiGLU, and RoPE all came from earlier work. What changed was the result of combining those choices well. Models from 7B to 65B parameters were trained on 1.0T or 1.4T tokens from publicly available sources, then matched or exceeded much larger models at sizes that were comparatively practical to run.</p>
+<p>That outcome mattered more than a temporary leaderboard win. A model family that was strong enough, structurally conventional, and available in several useful sizes gave fine-tuning tools, quantizers, inference engines, and applications a common foundation. LLaMA&rsquo;s historical importance is not that it replaced the Transformer. It showed that <strong>a careful combination of proven components, training allocation, and release strategy can change how quickly a technology spreads.</strong></p>
+<figure><img src="/en/p/llama-open-ecosystem/cover.jpg"><figcaption>
+			<h4>Cover: a relatively compact model foundation supports an ecosystem much larger than itself</h4>
+		</figcaption>
+</figure>
+
+<h2 id="make-the-model-worth-deploying">Make the Model Worth Deploying
+</h2><p>LLaMA inherited Chinchilla&rsquo;s concern with training allocation but moved the objective one step toward deployment. The paper noted that a compute-optimal training prescription ignores inference cost. If a model will be called many times, a smaller model trained on more tokens may have a lower lifetime cost even if reaching the target quality requires more pretraining.</p>
+<p>LLaMA-7B was therefore trained on 1T tokens, while the 33B and 65B models saw 1.4T. The paper reported that 13B beat 175B GPT-3 on most of its benchmarks and that 65B was competitive with Chinchilla-70B and PaLM-540B. Two qualifications matter. These were the academic evaluations used in 2023, not a complete measure of present-day product quality; “most benchmarks” does not mean every capability. The evidence still supported an important conclusion: parameter count was no longer the only route to useful capability.</p>
+<p>Smaller models also reduced the cost of research. Meta emphasized that the 13B model could run inference on a single V100 GPU. Training remained expensive, but experimenting with adapters, quantization, inference kernels, or safety methods no longer required owning a training cluster. LLaMA separated “being able to study a frontier-class model” from “being able to pretrain one from scratch.”</p>
+<h2 id="an-architecture-recipe-without-an-invention-myth">An Architecture Recipe Without an Invention Myth
+</h2><figure><img src="/en/p/llama-open-ecosystem/architecture-recipe.png"><figcaption>
+			<h4>Figure 1: the original LLaMA combined three existing mechanisms—RMSNorm, SwiGLU, and RoPE—inside a standard decoder-only Transformer</h4>
+		</figcaption>
+</figure>
+
+<p>The original architecture can be summarized by three substitutions. None originated in the LLaMA paper. Their value was to form a simple, stable default recipe that had now been validated at substantial scale.</p>
+<p>The first was <strong>pre-normalization with RMSNorm</strong>. The original Transformer applies LayerNorm after adding a residual. LLaMA normalizes the input before each attention or feed-forward sublayer. RMSNorm controls scale without subtracting the mean:</p>
+$$\operatorname{RMSNorm}(x)=\frac{x}{\sqrt{\frac{1}{d}\sum_i x_i^2+\epsilon}}\odot g$$<p>Its immediate purpose is not a new capability. It makes deep-network training more stable while using a simpler statistic for scale control.</p>
+<p>The second substitution was a <strong>SwiGLU feed-forward block</strong>. A conventional ReLU feed-forward network has one activated path. SwiGLU lets one projection produce a gate and another carry content, then multiplies them element by element:</p>
+$$\operatorname{SwiGLU}(x)=\operatorname{SiLU}(xW_g)\odot(xW_v)$$<p>The gate lets the network vary which features pass for each input. LLaMA also set the hidden width to roughly $\frac{2}{3}\times4d$, balancing the extra gated projection against the total parameter budget.</p>
+<p>The third substitution was <strong>RoPE</strong>. Instead of adding an absolute position vector to each token embedding, rotary position embedding rotates pairs of query and key channels by a position-dependent angle at every layer. If positions $m$ and $n$ use rotation matrices $R_m$ and $R_n$, then:</p>
+$$ (R_m q)^\top(R_n k)=q^\top R_{n-m}k $$<p>The right-hand side depends on the relative offset $n-m$. That is RoPE&rsquo;s elegant property: absolute positions enter through rotations, while query-key matching naturally exposes relative distance. RoPE became a default in many open models, but popularity should not be confused with unlimited extrapolation. Beyond the training length, frequency scaling, further training, or other long-context techniques are still required.</p>
+<h2 id="gqa-was-not-an-original-llama-feature">GQA Was Not an Original LLaMA Feature
+</h2><p>Timelines often put LLaMA, RoPE, and GQA in one box, which can blur the chronology. <strong>LLaMA 1 used ordinary multi-head attention (MHA), not GQA.</strong> Grouped-query attention entered the family with Llama 2, and only for the 34B and 70B configurations described in the paper; the 7B and 13B models still used MHA. Llama 3 later adopted GQA for both its 8B and 70B models.</p>
+<p>GQA addresses memory bandwidth during autoregressive decoding. To generate the next token, a model caches the key and value vectors for every previous token. Its memory use can be approximated as:</p>
+$$M_{KV}\approx 2LSn_{kv}d_hb$$<p>Here, $L$ is the number of layers, $S$ is the cached sequence length, $n_{kv}$ is the number of key-value heads, $d_h$ is each head&rsquo;s dimension, and $b$ is bytes per element. Longer sequences and larger batches make reading the KV cache a growing bottleneck.</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>Attention</th>
+					<th style="text-align: right">Query heads</th>
+					<th style="text-align: right">KV heads</th>
+					<th>Trade-off</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MHA</td>
+					<td style="text-align: right">Many</td>
+					<td style="text-align: right">As many as query heads</td>
+					<td>Richest representation, largest KV cache</td>
+			</tr>
+			<tr>
+					<td>MQA</td>
+					<td style="text-align: right">Many</td>
+					<td style="text-align: right">1</td>
+					<td>Smallest cache, possible quality loss</td>
+			</tr>
+			<tr>
+					<td>GQA</td>
+					<td style="text-align: right">Many</td>
+					<td style="text-align: right">Several groups</td>
+					<td>Middle ground between quality and bandwidth</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>GQA lets a group of query heads share one key-value head. The original GQA paper found quality close to MHA and speed comparable to MQA. Llama 2&rsquo;s larger models used eight KV projections because cache pressure becomes especially costly for large models and high-throughput serving. The progression captures a recurring Llama design preference: do not chase naming rights for modules; select validated components that improve total system cost.</p>
+<h2 id="from-a-research-release-to-an-ecosystem-standard">From a Research Release to an Ecosystem Standard
+</h2><p>The original release&rsquo;s “openness” needs precise language. In February 2023, Meta distributed the weights case by case under a noncommercial research license and published inference code. It was not a permissive open-source release that anyone could immediately use commercially. In July 2023, Llama 2 made pretrained and chat models available for research and commercial use under a custom community license, together with weights and starter code.</p>
+<p>The more accurate term is therefore an <strong>open-weight ecosystem</strong>, not a perfect synonym for traditional open-source software. Weight access lets the community inspect behavior, fine-tune the model, and replace its inference implementation. But the cleaned training dataset was not released in full, and the licenses included use restrictions. The complete training process could not be reconstructed from the weights alone.</p>
+<p>Even with those limits, the ecosystem grew quickly. In September 2023, Meta reported more than 30 million downloads of Llama-based models through Hugging Face, over 7,000 derivative models, and more than 7,000 GitHub projects that built on or mentioned Llama. Cloud providers, chip vendors, quantization tools, and local inference engines began treating Llama compatibility as a basic feature.</p>
+<p>Those numbers mean more than popularity. Once layer shapes, tensor names, tokenizers, and weight formats become a de facto interface, a new quantization method can begin by supporting one dominant family. Inference engines can optimize kernels around the same set of model sizes. The ecosystem lowers deployment cost, which attracts more fine-tunes and tools, creating a feedback loop. <strong>LLaMA&rsquo;s strongest moat was not a benchmark score; it was the growing expectation that every useful tool should answer, “Yes, it works with Llama.”</strong></p>
+<h2 id="where-the-success-story-stops">Where the Success Story Stops
+</h2><p>“Publicly available data” does not mean controversy-free data or complete reproducibility. The LLaMA paper disclosed sources and mixture weights: CommonCrawl provided 67%, followed by C4, GitHub, Wikipedia, books, arXiv, and Stack Exchange. The community did not receive the exact cleaned dataset, however. Deduplication, filters, and source versions can materially change the resulting model.</p>
+<p>Language coverage was also uneven. The first paper selected the twenty languages with the most speakers but focused on Latin and Cyrillic scripts. The Llama 2 paper later acknowledged that its pretraining data was predominantly English and that non-English performance remained fragile. Open weights reduce the cost of adaptation, but they do not automatically remove gaps in corpora and evaluation.</p>
+<p>Finally, weight access moves part of the responsibility from the model provider to the deployer. Llama 2 shipped with chat tuning, safety evaluations, and a responsible-use guide, while its paper also stated that testing could not cover every scenario. A base model can become a medical assistant, coding tool, or offline agent; each system has a different risk surface and cannot inherit one generic safety scorecard. Openness makes auditing and improvement easier. It can also make capability replication and misuse easier. Both claims can be true at the same time.</p>
+<h2 id="the-design-principles-that-lasted">The Design Principles That Lasted
+</h2><p>The lesson is not to copy RMSNorm, SwiGLU, RoPE, and GQA one more time. It is to understand the three layers of trade-offs behind them.</p>
+<p>First, model design should optimize both training and long-run inference, not only one compute-optimal training run. Second, architectural innovation does not require novelty in every layer; combining mature components into a stable, implementable, deployable system is a real contribution. Third, release strategy changes technical value. Weights without usable code, licensing, and tool support remain a research result. A model that becomes a shared interface can become a platform.</p>
+<p>LLaMA&rsquo;s central story is therefore not another reversal in which a small model beats a large one. It demonstrates a different kind of scaling effect: the model can remain comparatively compact while the collaboration network around it becomes enormous. What scaled was not only the parameter count. It was reuse.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Touvron et al., <a class="link" href="https://arxiv.org/abs/2302.13971"  target="_blank" rel="noopener"
+    >LLaMA: Open and Efficient Foundation Language Models</a>, 2023.</li>
+<li>Meta AI, <a class="link" href="https://ai.meta.com/blog/large-language-model-llama-meta-ai/"  target="_blank" rel="noopener"
+    >Introducing LLaMA: A foundational, 65-billion-parameter large language model</a>, 2023.</li>
+<li>Touvron et al., <a class="link" href="https://arxiv.org/abs/2307.09288"  target="_blank" rel="noopener"
+    >Llama 2: Open Foundation and Fine-Tuned Chat Models</a>, 2023.</li>
+<li>Ainslie et al., <a class="link" href="https://arxiv.org/abs/2305.13245"  target="_blank" rel="noopener"
+    >GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints</a>, 2023.</li>
+<li>Su et al., <a class="link" href="https://arxiv.org/abs/2104.09864"  target="_blank" rel="noopener"
+    >RoFormer: Enhanced Transformer with Rotary Position Embedding</a>, 2021.</li>
+<li>Meta AI, <a class="link" href="https://ai.meta.com/blog/llama-2-updates-connect-2023/"  target="_blank" rel="noopener"
+    >The Llama Ecosystem: Past, Present, and Future</a>, 2023.</li>
+<li>Meta AI, <a class="link" href="https://ai.meta.com/blog/meta-llama-3/"  target="_blank" rel="noopener"
+    >Introducing Meta Llama 3</a>, 2024.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/llama/">LLaMA</a>
+        
+            <a href="/en/tags/rope/">RoPE</a>
+        
+            <a href="/en/tags/gqa/">GQA</a>
+        
+            <a href="/en/tags/inference-efficiency/">Inference Efficiency</a>
+        
+            <a href="/en/tags/open-models/">Open Models</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-22
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/chinchilla-scaling-laws/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Chinchilla: Why Bigger Models Are Not Always Better" height="150" loading="lazy" src="/en/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg" srcset="/en/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg 1x, /en/p/chinchilla-scaling-laws/cover_hu_8efef5f297f5000b.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c8e0d480 0%, #171d23C0 100%);">
+            <h2 class="article-title">Chinchilla: Why Bigger Models Are Not Always Better</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT: Teaching LLMs to Be Helpful with RLHF" height="150" loading="lazy" src="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /en/p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT: Teaching LLMs to Be Helpful with RLHF</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART: Unifying Every NLP Task as Text-to-Text" height="150" loading="lazy" src="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /en/p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART: Unifying Every NLP Task as Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/gpt-03/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-3: In-Context Learning and the Few-Shot Explosion" height="150" loading="lazy" src="/en/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg" srcset="/en/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg 1x, /en/p/gpt-03/cover_hu_8b791036cb6c2ce1.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #332e3880 0%, #d1c9c7C0 100%);">
+            <h2 class="article-title">GPT-3: In-Context Learning and the Few-Shot Explosion</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/deepseek-r1-reasoning-rl/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning" height="150" loading="lazy" src="/en/p/deepseek-r1-reasoning-rl/cover_hu_7e19977a34734f54.jpg" srcset="/en/p/deepseek-r1-reasoning-rl/cover_hu_7e19977a34734f54.jpg 1x, /en/p/deepseek-r1-reasoning-rl/cover_hu_3f572a106f5c78c6.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #54463d80 0%, #f0ebe7C0 100%);">
+            <h2 class="article-title">DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

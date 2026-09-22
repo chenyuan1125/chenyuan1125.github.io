@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="LLaMA 没有发明全新的 Transformer，却用更充分的训练、RoPE 等成熟组件和可部署的模型尺寸改变了开放模型生态。本文拆解它的配方，并澄清 GQA 到底从哪一代开始。">
+<title>LLaMA：没有架构革命，为什么成了开放模型的共同底座</title>
+
+
+<link rel="canonical" href="/p/llama-open-ecosystem/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="LLaMA：没有架构革命，为什么成了开放模型的共同底座">
+<meta property='og:description' content="LLaMA 没有发明全新的 Transformer，却用更充分的训练、RoPE 等成熟组件和可部署的模型尺寸改变了开放模型生态。本文拆解它的配方，并澄清 GQA 到底从哪一代开始。">
+<meta property='og:url' content='/p/llama-open-ecosystem/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LLaMA' /><meta property='article:tag' content='RoPE' /><meta property='article:tag' content='GQA' /><meta property='article:tag' content='推理效率' /><meta property='article:tag' content='开放模型' /><meta property='article:published_time' content='2026-09-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-22T09:14:52&#43;08:00'/><meta property='og:image' content='/p/llama-open-ecosystem/cover.jpg' />
+<meta name="twitter:title" content="LLaMA：没有架构革命，为什么成了开放模型的共同底座">
+<meta name="twitter:description" content="LLaMA 没有发明全新的 Transformer，却用更充分的训练、RoPE 等成熟组件和可部署的模型尺寸改变了开放模型生态。本文拆解它的配方，并澄清 GQA 到底从哪一代开始。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/llama-open-ecosystem/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/llama-open-ecosystem/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/llama-open-ecosystem/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#先把模型做得值得部署">先把模型做得值得部署</a></li>
+    <li><a href="#一套没有原创神话的架构配方">一套没有原创神话的架构配方</a></li>
+    <li><a href="#gqa-不是初代-llama-的发明">GQA 不是初代 LLaMA 的发明</a></li>
+    <li><a href="#从研究发布到生态标准">从研究发布到生态标准</a></li>
+    <li><a href="#这套成功也有边界">这套成功也有边界</a></li>
+    <li><a href="#真正留下来的设计原则">真正留下来的设计原则</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/llama-open-ecosystem/">
+            <img alt="Featured image of post LLaMA：没有架构革命，为什么成了开放模型的共同底座" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/llama-open-ecosystem/cover.jpg" srcset="/p/llama-open-ecosystem/cover_hu_5c6ee8349ccbf571.jpg 800w, /p/llama-open-ecosystem/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/llama-open-ecosystem/">LLaMA：没有架构革命，为什么成了开放模型的共同底座</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            LLaMA 没有发明全新的 Transformer，却用更充分的训练、RoPE 等成熟组件和可部署的模型尺寸改变了开放模型生态。本文拆解它的配方，并澄清 GQA 到底从哪一代开始。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-22T00:00:00Z'>2026-09-22</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 7 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/llama-open-ecosystem/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#先把模型做得值得部署">先把模型做得值得部署</a></li>
+    <li><a href="#一套没有原创神话的架构配方">一套没有原创神话的架构配方</a></li>
+    <li><a href="#gqa-不是初代-llama-的发明">GQA 不是初代 LLaMA 的发明</a></li>
+    <li><a href="#从研究发布到生态标准">从研究发布到生态标准</a></li>
+    <li><a href="#这套成功也有边界">这套成功也有边界</a></li>
+    <li><a href="#真正留下来的设计原则">真正留下来的设计原则</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>2023 年 2 月的 LLaMA 论文有一个不太像“突破”的地方：它几乎没有宣称发明新的核心模块。网络仍是 decoder-only Transformer；RMSNorm、SwiGLU 和 RoPE 都来自已有工作。它真正改变的，是一组工程选择被组合之后产生的结果——7B 到 65B 的模型，用公开可获得的数据训练到 1.0T 或 1.4T token，在相对容易部署的尺寸上逼近甚至超过更大的模型。</p>
+<p>这件事后来比单次榜单胜负更重要。一个性能足够强、结构足够标准、尺寸覆盖足够完整的模型族，让微调、量化、推理框架和下游工具终于可以围绕同一套“共同底座”协作。LLaMA 的历史意义，不是把 Transformer 推倒重来，而是证明：<strong>把成熟组件、训练预算和发布方式配得足够好，也能改变技术扩散的速度。</strong></p>
+<figure><img src="/p/llama-open-ecosystem/cover.jpg"><figcaption>
+			<h4>封面：一个相对紧凑的模型底座，连接起远大于自身的工具与部署生态</h4>
+		</figcaption>
+</figure>
+
+<h2 id="先把模型做得值得部署">先把模型做得值得部署
+</h2><p>LLaMA 直接承接了 Chinchilla 的问题意识，却把目标从“固定训练算力下的最低损失”向部署端移动了一步。论文指出，Chinchilla 式计算最优没有计入推理预算；如果模型要被调用很多次，更小的模型即使需要看更多 token，生命周期总成本也可能更低。</p>
+<p>于是 LLaMA-7B 训练了 1T token，33B 和 65B 训练了 1.4T token。论文报告，13B 在多数基准上超过 175B 的 GPT-3，65B 则与 Chinchilla-70B、PaLM-540B 竞争。这里需要保留两个限定：这些是论文当时采用的学术基准，不等于今天的产品体验；“多数基准超过”也不等于所有能力都更强。但它足以支持一个关键判断：参数规模不再是获得可用能力的唯一通道。</p>
+<p>更小的模型把研究门槛也一起压低。Meta 当时明确强调，13B 可以在单张 V100 上推理。训练仍然昂贵，但复现实验、做适配器微调、测试量化与安全方法，不必先拥有一座训练集群。LLaMA 把“能研究前沿模型”和“能从头训练前沿模型”分成了两件事。</p>
+<h2 id="一套没有原创神话的架构配方">一套没有原创神话的架构配方
+</h2><figure><img src="/p/llama-open-ecosystem/architecture-recipe.png"><figcaption>
+			<h4>图 1：初代 LLaMA 把 RMSNorm、SwiGLU 与 RoPE 三种已有机制组合进标准 decoder-only Transformer</h4>
+		</figcaption>
+</figure>
+
+<p>初代 LLaMA 的主干可以概括为三处替换。它们都不是论文首创，价值在于经过大规模训练验证后形成了一套简洁、稳定的默认配方。</p>
+<p>第一处是 <strong>pre-normalization + RMSNorm</strong>。原始 Transformer 在残差相加后做 LayerNorm，LLaMA 则在每个子层进入注意力或前馈网络之前归一化。RMSNorm 只按均方根缩放，不减去均值：</p>
+$$\operatorname{RMSNorm}(x)=\frac{x}{\sqrt{\frac{1}{d}\sum_i x_i^2+\epsilon}}\odot g$$<p>它的直接目的不是制造新能力，而是让深层网络的训练更稳定，并用更简单的统计量完成尺度控制。</p>
+<p>第二处是 <strong>SwiGLU 前馈层</strong>。传统 ReLU 前馈网络只有一条激活路径；SwiGLU 用一条分支生成门，另一条承载内容，再逐元素相乘：</p>
+$$\operatorname{SwiGLU}(x)=\operatorname{SiLU}(xW_g)\odot(xW_v)$$<p>门控让网络能按输入调节哪些特征通过。LLaMA 同时把前馈隐藏维度设为约 $\frac{2}{3}\times4d$，在门控带来的额外投影与总参数量之间做平衡。</p>
+<p>第三处是 <strong>RoPE</strong>。它不把绝对位置向量加到 token embedding 上，而是在每一层对 query 和 key 的二维通道对施加随位置变化的旋转。若位置 $m,n$ 分别使用旋转矩阵 $R_m,R_n$，注意力内积满足：</p>
+$$ (R_m q)^\top(R_n k)=q^\top R_{n-m}k $$<p>右侧只与相对位移 $n-m$ 有关。这是 RoPE 最漂亮的地方：绝对位置通过旋转进入向量，而 query-key 的匹配自然显出相对距离。它后来成为许多开放模型的默认选择，但“流行”不代表可以无限外推；超过训练长度时仍需要频率缩放、重新训练或其他长上下文策略。</p>
+<h2 id="gqa-不是初代-llama-的发明">GQA 不是初代 LLaMA 的发明
+</h2><p>时间线常把 LLaMA、RoPE、GQA 写在同一格里，容易造成误解。<strong>LLaMA 1 使用标准多头注意力（MHA），没有 GQA。</strong> GQA 在 Llama 2 中进入该模型族，而且只用于论文中的 34B 和 70B；Llama 2 的 7B、13B 仍用 MHA。到了 Llama 3，Meta 才把 GQA 同时用于 8B 与 70B。</p>
+<p>GQA 解决的是自回归生成时的内存带宽问题。生成下一个 token 时，模型会缓存之前所有 token 的 key 和 value。其显存量可粗略写为：</p>
+$$M_{KV}\approx 2LSn_{kv}d_hb$$<p>其中 $L$ 是层数，$S$ 是已生成长度，$n_{kv}$ 是 KV head 数，$d_h$ 是每个 head 的维度，$b$ 是每个元素的字节数。序列越长、并发越大，读取 KV cache 越容易成为瓶颈。</p>
+<div class="table-wrapper"><table>
+	<thead>
+			<tr>
+					<th>注意力形式</th>
+					<th style="text-align: right">Query heads</th>
+					<th style="text-align: right">KV heads</th>
+					<th>取舍</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>MHA</td>
+					<td style="text-align: right">多个</td>
+					<td style="text-align: right">与 Query 一样多</td>
+					<td>表达最充分，KV cache 最大</td>
+			</tr>
+			<tr>
+					<td>MQA</td>
+					<td style="text-align: right">多个</td>
+					<td style="text-align: right">1 个</td>
+					<td>cache 最小，可能损失质量</td>
+			</tr>
+			<tr>
+					<td>GQA</td>
+					<td style="text-align: right">多个</td>
+					<td style="text-align: right">若干组</td>
+					<td>在质量与带宽之间折中</td>
+			</tr>
+	</tbody>
+</table></div>
+<p>GQA 让一组 query head 共享同一组 key/value head。原始 GQA 论文报告，它能得到接近 MHA 的质量和接近 MQA 的速度。Llama 2 的大模型采用 8 个 KV 投影，正是因为 KV cache 在大模型与高并发服务中更容易成为瓶颈。这里的演进很能说明 Llama 系列的设计风格：不追求模块命名权，而是挑选已被验证、能改善系统总成本的组件。</p>
+<h2 id="从研究发布到生态标准">从研究发布到生态标准
+</h2><p>初代 LLaMA 的“开放”需要准确描述。2023 年 2 月，Meta 以非商业研究许可、逐案申请的方式提供权重，并发布推理代码；它不是任何人都可直接商用的宽松开源许可证。2023 年 7 月，Llama 2 才把预训练与聊天模型以自定义社区许可证开放给研究和商业使用，同时提供权重与起始代码。</p>
+<p>因此，更严谨的说法是 <strong>开放权重生态</strong>，而不是把它与传统软件开源完全等同。权重可获得，让社区能检查行为、微调模型、改变推理实现；但训练数据没有完整发布，许可证也包含使用限制，社区无法仅凭权重重现整个训练过程。</p>
+<p>即便如此，生态扩张非常快。Meta 在 2023 年 9 月披露，Llama 系模型在 Hugging Face 上累计下载超过 3000 万次，已有 7000 多个衍生模型、7000 多个构建或提及 Llama 的 GitHub 项目。云平台、芯片厂商、量化工具和本地推理框架开始把 Llama 兼容性当作基础能力。</p>
+<p>这些数字的意义不只在“受欢迎”。当模型的层结构、张量命名、tokenizer 与权重格式成为事实接口，新的量化方法只需先支持一套主流模型，推理引擎也能围绕同一组尺寸优化内核。生态反过来降低模型的部署成本，又吸引更多微调与工具加入，形成正反馈。<strong>LLaMA 最强的护城河不只是某个 benchmark 分数，而是大量工具默认先问一句：能不能兼容 Llama？</strong></p>
+<h2 id="这套成功也有边界">这套成功也有边界
+</h2><p>“公开可获得的数据”不等于数据没有争议，也不等于训练可完整复现。LLaMA 论文公开了数据来源和混合比例，其中 CommonCrawl 占 67%，还包括 C4、GitHub、Wikipedia、Books、arXiv 与 Stack Exchange；但社区并没有得到经过清洗后的精确训练集。数据去重、过滤和版本差异足以显著改变模型。</p>
+<p>语言覆盖也不均衡。初代论文选择了使用人数最多的 20 种语言，但重点是拉丁和西里尔字母；Llama 2 论文进一步承认其预训练数据以英语为主，非英语性能脆弱。对中文场景而言，“开放权重”降低了适配门槛，却没有自动消除语料与评测缺口。</p>
+<p>最后，权重开放把一部分责任从模型提供方移到部署者。Llama 2 同时发布了聊天微调、安全评估和使用指南，但论文也明确说测试不可能覆盖所有场景。一个基础模型可以被改造成医疗问答、代码助手或离线代理；这些系统拥有不同的风险面，不能继承一张通用安全成绩单。开放让审计与改进更容易，也让能力复制与误用更容易——两面都是真的。</p>
+<h2 id="真正留下来的设计原则">真正留下来的设计原则
+</h2><p>回看 LLaMA，最值得学习的不是把 RMSNorm、SwiGLU、RoPE 和 GQA 再抄一遍，而是它背后的三层取舍。</p>
+<p>第一，模型设计应同时优化训练与长期推理，而不是只追求一次训练的算力最优。第二，架构创新不必每层都新；把成熟组件组成稳定、可实现、可部署的系统，本身就是重要贡献。第三，发布策略会改变技术价值：相同权重如果没有可用代码、许可证和工具支持，只是一份研究结果；一旦形成共同接口，就可能变成平台。</p>
+<p>所以 LLaMA 的核心故事并不是“小模型打败大模型”的又一次反转。它展示的是另一种规模效应：模型本身可以更紧凑，但围绕它形成的协作网络可以非常大。真正被放大的，不只是参数，而是复用。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li>Touvron et al., <a class="link" href="https://arxiv.org/abs/2302.13971"  target="_blank" rel="noopener"
+    >LLaMA: Open and Efficient Foundation Language Models</a>, 2023.</li>
+<li>Meta AI, <a class="link" href="https://ai.meta.com/blog/large-language-model-llama-meta-ai/"  target="_blank" rel="noopener"
+    >Introducing LLaMA: A foundational, 65-billion-parameter large language model</a>, 2023.</li>
+<li>Touvron et al., <a class="link" href="https://arxiv.org/abs/2307.09288"  target="_blank" rel="noopener"
+    >Llama 2: Open Foundation and Fine-Tuned Chat Models</a>, 2023.</li>
+<li>Ainslie et al., <a class="link" href="https://arxiv.org/abs/2305.13245"  target="_blank" rel="noopener"
+    >GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints</a>, 2023.</li>
+<li>Su et al., <a class="link" href="https://arxiv.org/abs/2104.09864"  target="_blank" rel="noopener"
+    >RoFormer: Enhanced Transformer with Rotary Position Embedding</a>, 2021.</li>
+<li>Meta AI, <a class="link" href="https://ai.meta.com/blog/llama-2-updates-connect-2023/"  target="_blank" rel="noopener"
+    >The Llama Ecosystem: Past, Present, and Future</a>, 2023.</li>
+<li>Meta AI, <a class="link" href="https://ai.meta.com/blog/meta-llama-3/"  target="_blank" rel="noopener"
+    >Introducing Meta Llama 3</a>, 2024.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/llama/">LLaMA</a>
+        
+            <a href="/tags/rope/">RoPE</a>
+        
+            <a href="/tags/gqa/">GQA</a>
+        
+            <a href="/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/">推理效率</a>
+        
+            <a href="/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/">开放模型</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-22
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/chinchilla-scaling-laws/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Chinchilla：大模型不是越大越好，数据也要一起扩展" height="150" loading="lazy" src="/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg" srcset="/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg 1x, /p/chinchilla-scaling-laws/cover_hu_8efef5f297f5000b.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c8e0d480 0%, #171d23C0 100%);">
+            <h2 class="article-title">Chinchilla：大模型不是越大越好，数据也要一起扩展</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="150" loading="lazy" src="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT：用 RLHF 教会大模型「听话」</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART：把一切 NLP 任务统一成 Text-to-Text" height="150" loading="lazy" src="/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART：把一切 NLP 任务统一成 Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-03/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-3：In-Context Learning 与 Few-Shot 爆发" height="150" loading="lazy" src="/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg" srcset="/p/gpt-03/cover_hu_8c0eab218c39fe1c.jpg 1x, /p/gpt-03/cover_hu_8b791036cb6c2ce1.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #332e3880 0%, #d1c9c7C0 100%);">
+            <h2 class="article-title">GPT-3：In-Context Learning 与 Few-Shot 爆发</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/gpt-01/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post GPT-1/2：生成式预训练与 few-shot 萌芽" height="150" loading="lazy" src="/p/gpt-01/cover_hu_4837811e0a817e15.jpg" srcset="/p/gpt-01/cover_hu_4837811e0a817e15.jpg 1x, /p/gpt-01/cover_hu_3b7fc40c1b5c9ea8.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #574f4780 0%, #b0a7a4C0 100%);">
+            <h2 class="article-title">GPT-1/2：生成式预训练与 few-shot 萌芽</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

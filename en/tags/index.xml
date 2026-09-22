@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Mon, 21 Sep 2026 09:08:59 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 22 Sep 2026 09:14:54 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>GQA</title>
+            <link>/en/tags/gqa/</link>
+            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/gqa/</guid>
+            <description></description>
+        </item><item>
+            <title>Inference Efficiency</title>
+            <link>/en/tags/inference-efficiency/</link>
+            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/inference-efficiency/</guid>
+            <description></description>
+        </item><item>
+            <title>LLaMA</title>
+            <link>/en/tags/llama/</link>
+            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/llama/</guid>
+            <description></description>
+        </item><item>
+            <title>Open Models</title>
+            <link>/en/tags/open-models/</link>
+            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/open-models/</guid>
+            <description></description>
+        </item><item>
+            <title>RoPE</title>
+            <link>/en/tags/rope/</link>
+            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/rope/</guid>
+            <description></description>
+        </item><item>
             <title>Chinchilla</title>
             <link>/en/tags/chinchilla/</link>
             <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
