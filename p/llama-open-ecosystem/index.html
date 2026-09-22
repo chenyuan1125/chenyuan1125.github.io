@@ -16,7 +16,7 @@
 <meta property='og:description' content="LLaMA 没有发明全新的 Transformer，却用更充分的训练、RoPE 等成熟组件和可部署的模型尺寸改变了开放模型生态。本文拆解它的配方，并澄清 GQA 到底从哪一代开始。">
 <meta property='og:url' content='/p/llama-open-ecosystem/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LLaMA' /><meta property='article:tag' content='RoPE' /><meta property='article:tag' content='GQA' /><meta property='article:tag' content='推理效率' /><meta property='article:tag' content='开放模型' /><meta property='article:published_time' content='2026-09-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-22T09:14:52&#43;08:00'/><meta property='og:image' content='/p/llama-open-ecosystem/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LLaMA' /><meta property='article:tag' content='RoPE' /><meta property='article:tag' content='GQA' /><meta property='article:tag' content='推理效率' /><meta property='article:tag' content='开放模型' /><meta property='article:published_time' content='2026-09-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-22T21:32:34&#43;08:00'/><meta property='og:image' content='/p/llama-open-ecosystem/cover.jpg' />
 <meta name="twitter:title" content="LLaMA：没有架构革命，为什么成了开放模型的共同底座">
 <meta name="twitter:description" content="LLaMA 没有发明全新的 Transformer，却用更充分的训练、RoPE 等成熟组件和可部署的模型尺寸改变了开放模型生态。本文拆解它的配方，并澄清 GQA 到底从哪一代开始。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/p/llama-open-ecosystem/cover.jpg' />
@@ -446,11 +446,6 @@
     
     <p>2023 年 2 月的 LLaMA 论文有一个不太像“突破”的地方：它几乎没有宣称发明新的核心模块。网络仍是 decoder-only Transformer；RMSNorm、SwiGLU 和 RoPE 都来自已有工作。它真正改变的，是一组工程选择被组合之后产生的结果——7B 到 65B 的模型，用公开可获得的数据训练到 1.0T 或 1.4T token，在相对容易部署的尺寸上逼近甚至超过更大的模型。</p>
 <p>这件事后来比单次榜单胜负更重要。一个性能足够强、结构足够标准、尺寸覆盖足够完整的模型族，让微调、量化、推理框架和下游工具终于可以围绕同一套“共同底座”协作。LLaMA 的历史意义，不是把 Transformer 推倒重来，而是证明：<strong>把成熟组件、训练预算和发布方式配得足够好，也能改变技术扩散的速度。</strong></p>
-<figure><img src="/p/llama-open-ecosystem/cover.jpg"><figcaption>
-			<h4>封面：一个相对紧凑的模型底座，连接起远大于自身的工具与部署生态</h4>
-		</figcaption>
-</figure>
-
 <h2 id="先把模型做得值得部署">先把模型做得值得部署
 </h2><p>LLaMA 直接承接了 Chinchilla 的问题意识，却把目标从“固定训练算力下的最低损失”向部署端移动了一步。论文指出，Chinchilla 式计算最优没有计入推理预算；如果模型要被调用很多次，更小的模型即使需要看更多 token，生命周期总成本也可能更低。</p>
 <p>于是 LLaMA-7B 训练了 1T token，33B 和 65B 训练了 1.4T token。论文报告，13B 在多数基准上超过 175B 的 GPT-3，65B 则与 Chinchilla-70B、PaLM-540B 竞争。这里需要保留两个限定：这些是论文当时采用的学术基准，不等于今天的产品体验；“多数基准超过”也不等于所有能力都更强。但它足以支持一个关键判断：参数规模不再是获得可用能力的唯一通道。</p>

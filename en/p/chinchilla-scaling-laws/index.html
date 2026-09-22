@@ -16,7 +16,7 @@
 <meta property='og:description' content="With the same training compute, a 70B Chinchilla trained on 1.4T tokens beat the 280B Gopher. This article explains compute-optimal scaling, the paper's three fitting methods, and its lasting impact.">
 <meta property='og:url' content='/en/p/chinchilla-scaling-laws/'>
 <meta property='og:site_name' content='Lee'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Chinchilla' /><meta property='article:tag' content='Scaling Laws' /><meta property='article:tag' content='Pretraining' /><meta property='article:tag' content='Compute Optimality' /><meta property='article:tag' content='Data Engineering' /><meta property='article:published_time' content='2026-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-21T09:08:59&#43;08:00'/><meta property='og:image' content='/en/p/chinchilla-scaling-laws/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Chinchilla' /><meta property='article:tag' content='Scaling Laws' /><meta property='article:tag' content='Pretraining' /><meta property='article:tag' content='Compute Optimality' /><meta property='article:tag' content='Data Engineering' /><meta property='article:published_time' content='2026-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-22T21:26:50&#43;08:00'/><meta property='og:image' content='/en/p/chinchilla-scaling-laws/cover.jpg' />
 <meta name="twitter:title" content="Chinchilla: Why Bigger Models Are Not Always Better">
 <meta name="twitter:description" content="With the same training compute, a 70B Chinchilla trained on 1.4T tokens beat the 280B Gopher. This article explains compute-optimal scaling, the paper's three fitting methods, and its lasting impact."><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/en/p/chinchilla-scaling-laws/cover.jpg' />
@@ -452,11 +452,6 @@
 </h2><p>The large-model race of 2020–2021 had an easy scoreboard: more accelerators should produce more parameters. GPT-3 had 175B parameters, Gopher had 280B, and Megatron-Turing NLG reached 530B. Parameter count kept rising while training datasets often remained near the 300B-token scale.</p>
 <p>That strategy was not irrational. Kaplan et al.&rsquo;s 2020 scaling laws suggested that larger models were more sample-efficient. Under a fixed compute budget, the apparent optimum was to spend aggressively on model size and stop training well before convergence. But would the same allocation remain optimal across wider model sizes and longer training runs?</p>
 <p>DeepMind&rsquo;s 2022 paper, <em>Training Compute-Optimal Large Language Models</em>, gave a striking answer: for their available compute, the leading models of the time were generally too large and trained on too little data. A smaller model that reads much more data can be better than a giant, undertrained one.</p>
-<figure><img src="/en/p/chinchilla-scaling-laws/cover.jpg"><figcaption>
-			<h4>Cover: model capacity and training data must share the same compute budget</h4>
-		</figcaption>
-</figure>
-
 <p>The researchers trained more than 400 models ranging from 70M to over 16B parameters and from 5B to 500B training tokens. They then ran the decisive test: using essentially Gopher&rsquo;s training FLOPs, they trained Chinchilla with only 70B parameters but 1.4T tokens. The model was four times smaller than Gopher and nevertheless won across almost every measured task.</p>
 <p>Chinchilla therefore matters less as a particular model than as a reframing of the design question. Instead of asking “How large can we make the model?”, it asks: <strong>Given a compute budget, how should we divide it between parameters and data?</strong></p>
 <h2 id="the-compute-budget-what-are-we-actually-spending">The Compute Budget: What Are We Actually Spending?
@@ -611,7 +606,7 @@ $$N_{opt}\propto C^{0.50},\qquad D_{opt}\propto C^{0.50}$$<p>The second method c
 
 
         <span>
-            Last updated on 2026-09-21
+            Last updated on 2026-09-22
         </span>
     </section></footer>
 

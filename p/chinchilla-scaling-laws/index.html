@@ -16,7 +16,7 @@
 <meta property='og:description' content="Chinchilla 用同等训练算力证明：70B 参数、1.4T token 的模型可以胜过 280B 的 Gopher。本文拆解计算最优缩放律、三种拟合方法与它对现代大模型训练的影响。">
 <meta property='og:url' content='/p/chinchilla-scaling-laws/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Chinchilla' /><meta property='article:tag' content='Scaling Laws' /><meta property='article:tag' content='预训练' /><meta property='article:tag' content='计算最优' /><meta property='article:tag' content='数据工程' /><meta property='article:published_time' content='2026-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-21T09:08:58&#43;08:00'/><meta property='og:image' content='/p/chinchilla-scaling-laws/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Chinchilla' /><meta property='article:tag' content='Scaling Laws' /><meta property='article:tag' content='预训练' /><meta property='article:tag' content='计算最优' /><meta property='article:tag' content='数据工程' /><meta property='article:published_time' content='2026-09-21T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-22T21:26:48&#43;08:00'/><meta property='og:image' content='/p/chinchilla-scaling-laws/cover.jpg' />
 <meta name="twitter:title" content="Chinchilla：大模型不是越大越好，数据也要一起扩展">
 <meta name="twitter:description" content="Chinchilla 用同等训练算力证明：70B 参数、1.4T token 的模型可以胜过 280B 的 Gopher。本文拆解计算最优缩放律、三种拟合方法与它对现代大模型训练的影响。"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='/p/chinchilla-scaling-laws/cover.jpg' />
@@ -452,11 +452,6 @@
 </h2><p>如果把 2020—2021 年的大模型竞赛压缩成一句话，大概是：<strong>显卡更多，就把模型做得更大。</strong> GPT-3 有 175B 参数，Gopher 有 280B，Megatron-Turing NLG 更冲到 530B。参数量成了最醒目的进度条，训练数据却常停留在约 300B token 的量级。</p>
 <p>这背后并不是盲目崇拜“大”。Kaplan 等人在 2020 年得到的缩放律指出，大模型的样本效率更高；在固定计算预算下，似乎应该优先增加参数，并在模型还没有充分收敛时停止训练。问题是，当实验跨到更大的模型和更长的训练区间，这个结论还成立吗？</p>
 <p>2022 年，DeepMind 的 <em>Training Compute-Optimal Large Language Models</em> 给出了一个几乎反直觉的答案：当训练计算量固定时，当时的主流模型普遍<strong>参数太多、数据太少</strong>。与其造一个巨大的“半成品”，不如用更小的模型读更多数据。</p>
-<figure><img src="/p/chinchilla-scaling-laws/cover.jpg"><figcaption>
-			<h4>封面：同等训练能量下，参数规模与数据量必须共同分配</h4>
-		</figcaption>
-</figure>
-
 <p>论文训练了 400 多个模型，规模从 70M 到 16B 以上，训练数据从 5B 到 500B token。然后它做了最有说服力的实验：用与 Gopher 基本相同的训练 FLOPs，训练一个只有 70B 参数、却看过 1.4T token 的模型——Chinchilla。结果，这个小四倍的模型几乎全面胜过 280B 的 Gopher。</p>
 <p>Chinchilla 的意义因此不只是一个新模型，而是把问题从“模型还能做多大”改写为：<strong>给定一笔算力，参数和数据应该怎样分账？</strong></p>
 <h2 id="先把账算清训练计算量由什么决定">先把账算清：训练计算量由什么决定
@@ -611,7 +606,7 @@ $$N_{opt}\propto C^{0.50},\qquad D_{opt}\propto C^{0.50}$$<p>第二种方法构�
 
 
         <span>
-            最后更新于 2026-09-21
+            最后更新于 2026-09-22
         </span>
     </section></footer>
 
