@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/en/categories/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -15,8 +15,105 @@
                 href="/categories/"
                 />
   </url><url>
+    <loc>/en/tags/deepseek/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/deepseek/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/deepseek/"
+                />
+  </url><url>
+    <loc>/en/p/deepseek-mla-moe/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/deepseek-mla-moe/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/deepseek-mla-moe/"
+                />
+  </url><url>
+    <loc>/en/tags/inference-efficiency/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/kv-cache/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/kv-cache/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/kv-cache/"
+                />
+  </url><url>
+    <loc>/en/categories/llm-architecture/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/mla/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/mla/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/mla/"
+                />
+  </url><url>
+    <loc>/en/tags/moe/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/moe/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/moe/"
+                />
+  </url><url>
+    <loc>/en/post/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/en/tags/</loc>
+    <lastmod>2026-09-23T18:57:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
     <loc>/en/tags/gqa/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
+    <lastmod>2026-09-22T21:32:36+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -28,11 +125,8 @@
                 href="/tags/gqa/"
                 />
   </url><url>
-    <loc>/en/tags/inference-efficiency/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
-  </url><url>
     <loc>/en/tags/llama/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
+    <lastmod>2026-09-22T21:32:36+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -45,7 +139,7 @@
                 />
   </url><url>
     <loc>/en/p/llama-open-ecosystem/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
+    <lastmod>2026-09-22T21:32:36+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -57,27 +151,11 @@
                 href="/p/llama-open-ecosystem/"
                 />
   </url><url>
-    <loc>/en/categories/llm-architecture/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
-  </url><url>
     <loc>/en/tags/open-models/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
-  </url><url>
-    <loc>/en/post/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
+    <lastmod>2026-09-22T21:32:36+08:00</lastmod>
   </url><url>
     <loc>/en/tags/rope/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
+    <lastmod>2026-09-22T21:32:36+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -89,21 +167,8 @@
                 href="/tags/rope/"
                 />
   </url><url>
-    <loc>/en/tags/</loc>
-    <lastmod>2026-09-22T09:14:54+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
     <loc>/en/tags/chinchilla/</loc>
-    <lastmod>2026-09-21T09:08:59+08:00</lastmod>
+    <lastmod>2026-09-22T21:26:50+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -116,7 +181,7 @@
                 />
   </url><url>
     <loc>/en/p/chinchilla-scaling-laws/</loc>
-    <lastmod>2026-09-21T09:08:59+08:00</lastmod>
+    <lastmod>2026-09-22T21:26:50+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -129,16 +194,16 @@
                 />
   </url><url>
     <loc>/en/tags/compute-optimality/</loc>
-    <lastmod>2026-09-21T09:08:59+08:00</lastmod>
+    <lastmod>2026-09-22T21:26:50+08:00</lastmod>
   </url><url>
     <loc>/en/tags/data-engineering/</loc>
-    <lastmod>2026-09-21T09:08:59+08:00</lastmod>
+    <lastmod>2026-09-22T21:26:50+08:00</lastmod>
   </url><url>
     <loc>/en/tags/pretraining/</loc>
-    <lastmod>2026-09-21T09:08:59+08:00</lastmod>
+    <lastmod>2026-09-22T21:26:50+08:00</lastmod>
   </url><url>
     <loc>/en/tags/scaling-laws/</loc>
-    <lastmod>2026-09-21T09:08:59+08:00</lastmod>
+    <lastmod>2026-09-22T21:26:50+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -323,19 +388,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/tags/scaling-law/"
-                />
-  </url><url>
-    <loc>/en/tags/deepseek/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/deepseek/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/deepseek/"
                 />
   </url><url>
     <loc>/en/p/deepseek-r1-reasoning-rl/</loc>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="DeepSeek-V2/V3 compress the KV cache and sparsely activate experts. This article explains MLA, decoupled RoPE, DeepSeekMoE, and V3's auxiliary-loss-free load balancing from the data an inference system actually moves.">
+<title>DeepSeek-V2/V3: The Two Bills Behind MLA and MoE</title>
+
+
+<link rel="canonical" href="/en/p/deepseek-mla-moe/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="DeepSeek-V2/V3: The Two Bills Behind MLA and MoE">
+<meta property='og:description' content="DeepSeek-V2/V3 compress the KV cache and sparsely activate experts. This article explains MLA, decoupled RoPE, DeepSeekMoE, and V3's auxiliary-loss-free load balancing from the data an inference system actually moves.">
+<meta property='og:url' content='/en/p/deepseek-mla-moe/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='DeepSeek' /><meta property='article:tag' content='MLA' /><meta property='article:tag' content='MoE' /><meta property='article:tag' content='KV Cache' /><meta property='article:tag' content='Inference Efficiency' /><meta property='article:published_time' content='2026-09-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-23T18:57:29&#43;08:00'/><meta property='og:image' content='/en/p/deepseek-mla-moe/cover.jpg' />
+<meta name="twitter:title" content="DeepSeek-V2/V3: The Two Bills Behind MLA and MoE">
+<meta name="twitter:description" content="DeepSeek-V2/V3 compress the KV cache and sparsely activate experts. This article explains MLA, decoupled RoPE, DeepSeekMoE, and V3's auxiliary-loss-free load balancing from the data an inference system actually moves."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/deepseek-mla-moe/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/deepseek-mla-moe/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/deepseek-mla-moe/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#the-first-bill-what-generation-must-remember">The First Bill: What Generation Must Remember</a></li>
+    <li><a href="#rope-is-the-operation-that-cannot-simply-move">RoPE Is the Operation That Cannot Simply Move</a></li>
+    <li><a href="#the-second-bill-many-parameters-need-not-all-compute">The Second Bill: Many Parameters Need Not All Compute</a></li>
+    <li><a href="#why-v3-stopped-making-balance-a-direct-model-penalty">Why V3 Stopped Making Balance a Direct Model Penalty</a></li>
+    <li><a href="#end-to-end-efficiency-requires-both-bills">End-to-End Efficiency Requires Both Bills</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/deepseek-mla-moe/">
+            <img alt="Featured image of post DeepSeek-V2/V3: The Two Bills Behind MLA and MoE" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/deepseek-mla-moe/cover.jpg" srcset="/en/p/deepseek-mla-moe/cover_hu_8f3b030a09b3e5da.jpg 800w, /en/p/deepseek-mla-moe/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/deepseek-mla-moe/">DeepSeek-V2/V3: The Two Bills Behind MLA and MoE</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            DeepSeek-V2/V3 compress the KV cache and sparsely activate experts. This article explains MLA, decoupled RoPE, DeepSeekMoE, and V3&#39;s auxiliary-loss-free load balancing from the data an inference system actually moves.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-23T00:00:00Z'>2026-09-23</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        8 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/deepseek-mla-moe/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#the-first-bill-what-generation-must-remember">The First Bill: What Generation Must Remember</a></li>
+    <li><a href="#rope-is-the-operation-that-cannot-simply-move">RoPE Is the Operation That Cannot Simply Move</a></li>
+    <li><a href="#the-second-bill-many-parameters-need-not-all-compute">The Second Bill: Many Parameters Need Not All Compute</a></li>
+    <li><a href="#why-v3-stopped-making-balance-a-direct-model-penalty">Why V3 Stopped Making Balance a Direct Model Penalty</a></li>
+    <li><a href="#end-to-end-efficiency-requires-both-bills">End-to-End Efficiency Requires Both Bills</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>Writing “671B parameters” next to a model invites a misleading picture: every generated token must somehow move and compute all 671 billion parameters. Writing “128K context” creates a second simplification, as if the only concern were the arithmetic complexity of attention. The most instructive feature of DeepSeek-V2 and V3 is that they split those costs into two different bills: <strong>how much history each token must preserve, and how much model capacity each token must activate.</strong></p>
+<p>Multi-head Latent Attention (MLA) addresses the first bill. Instead of keeping complete keys and values for every attention head, it stores a low-dimensional joint latent from which their content can be recovered. DeepSeekMoE addresses the second. The model may own many expert parameters, while the router sends a token through only a few of them. Together they express a systems principle: total capacity, per-token compute, and serving memory do not have to scale together.</p>
+<p>That principle matters more than another claim to model size. The DeepSeek-V2 paper reports a 93.3% reduction in KV cache and up to 5.76 times maximum generation throughput relative to DeepSeek 67B, while using 236B total parameters, 21B activated per token, and a 128K context window. V3 retained MLA and DeepSeekMoE, then scaled to 671B total and roughly 37B activated parameters. These are measurements from the respective reports and should not be exported to unrelated hardware, precision, or serving settings. They do establish that the design survived beyond a small ablation model.</p>
+<h2 id="the-first-bill-what-generation-must-remember">The First Bill: What Generation Must Remember
+</h2><p>Autoregressive generation adds one token at a time. To avoid recomputing the entire prefix at every step, a Transformer retains the previous keys and values in a KV cache. Standard multi-head attention (MHA) stores this many elements per layer and token:</p>
+$$2n_h d_h$$<p>Here $n_h$ is the number of attention heads and $d_h$ is the dimension of one head; the factor two accounts for K and V. Multiplying by layer count, sequence length, batch size, and bytes per element gives the total memory. The cache grows linearly with context and concurrency, and every decoding step reads an ever-longer history. Capacity and memory bandwidth can therefore matter more than peak matrix-multiplication throughput.</p>
+<p>Multi-query attention shares one K/V head across all query heads. Grouped-query attention shares several. Both shrink the cache, but they also force query heads to share their historical representation. DeepSeek-V2 asked a more aggressive question than “How few KV heads can we keep?”: <strong>Why cache expanded K and V at all?</strong></p>
+<figure><img src="/en/p/deepseek-mla-moe/mla-cache.svg"><figcaption>
+			<h4>Figure 1: MHA caches complete K/V projections for every head; MLA caches a joint K/V latent plus a separate positional key</h4>
+		</figcaption>
+</figure>
+
+<p>MLA first down-projects the current hidden state $h_t$ into a compact latent:</p>
+$$c_t^{KV}=W^{DKV}h_t$$<p>Two up-projections can then recover content keys and values:</p>
+$$k_t^C=W^{UK}c_t^{KV},\qquad v_t^C=W^{UV}c_t^{KV}$$<p>During training, different heads can still learn different K/V representations. During generation, only $c_t^{KV}$ must remain. The important word is not merely “low-rank” but <strong>joint</strong>: the same latent serves both keys and values, and its dimension $d_c$ is much smaller than the fully expanded $2n_hd_h$.</p>
+<p>The more subtle step changes the computation graph. $W^{UK}$ can be absorbed into the query projection, while $W^{UV}$ can be absorbed into the output projection. Attention scores can therefore be computed between transformed queries and cached latents, and value aggregation can happen in latent space before the final mapping. DeepSeek&rsquo;s reference V3 code exposes the idea as two literal implementations named <code>naive</code> and <code>absorb</code>. The first materializes and caches full K/V tensors. The second caches the normalized low-rank KV and positional component. The code makes the paper&rsquo;s algebra inspectable as an execution path.</p>
+<h2 id="rope-is-the-operation-that-cannot-simply-move">RoPE Is the Operation That Cannot Simply Move
+</h2><p>If the chain contained only linear projections, absorption would be straightforward. Rotary position embedding complicates it because the rotation applied to queries and keys depends on token position. If RoPE is applied after reconstructing $k_t^C$, a position-dependent matrix sits between the query-side projection and $W^{UK}$. Those matrices do not commute. The up-projection can no longer be absorbed once and reused; recovering position-sensitive keys for the prefix would erase the practical benefit of compression.</p>
+<p>DeepSeek&rsquo;s solution separates query and key channels into content and position. The content path uses low-rank compression and permits projection absorption. A small additional query/key branch carries RoPE. Each head has its positional query $q_{t,i}^{R}$, while the positional key $k_t^{R}$ is shared across heads. The final score uses the concatenated content and positional components, and the cache retains only:</p>
+$$c_t^{KV}\quad\text{and}\quad k_t^R$$<figure><img src="/en/p/deepseek-mla-moe/rope-absorb.svg"><figcaption>
+			<h4>Figure 2: decoupled RoPE moves the position-dependent operation outside the absorbable content projection path</h4>
+		</figcaption>
+</figure>
+
+<p>DeepSeek-V2 sets $d_c=4d_h$ and $d_h^R=d_h/2$, so the cache contains $(d_c+d_h^R)=4.5d_h$ elements per layer and token. The paper describes that as roughly equivalent to GQA with only 2.25 groups, while its ablations retain performance comparable to or better than MHA. “Low-rank” should not be read as free compression. Representation capacity, training stability, and specialized kernels all require careful design. MLA reduces the state that must remain resident and move repeatedly; it does not eliminate every operation in every phase.</p>
+<h2 id="the-second-bill-many-parameters-need-not-all-compute">The Second Bill: Many Parameters Need Not All Compute
+</h2><p>After attention, feed-forward networks account for another large fraction of Transformer work. Every token in a dense model passes through the same FFN weights, tying model capacity closely to compute. A mixture of experts replaces one FFN with many experts and uses a router to select a top-K subset. Total parameters can grow quickly while active parameters per token grow much more slowly.</p>
+<p>DeepSeekMoE modifies conventional top-K MoE in two deliberate ways. First, it divides large experts into more fine-grained ones and selects more of those smaller units. With approximately the same active parameter budget, the router can form a richer set of combinations. Second, it isolates some shared experts through which every token passes. They learn common knowledge, reducing the need for routed experts to duplicate the same foundation.</p>
+<figure><img src="/en/p/deepseek-mla-moe/moe-routing.svg"><figcaption>
+			<h4>Figure 3: shared experts carry common capability while fine-grained routed experts provide specialized capacity in combinations</h4>
+		</figcaption>
+</figure>
+
+<p>This is why total and active parameters must be reported together. V2&rsquo;s 236B/21B and V3&rsquo;s 671B/37B are not interchangeable marketing numbers. Total parameters approximate the capacity and storage footprint of the weights; active parameters more closely describe the weights participating in one forward pass. Active parameters are not a complete latency formula, however. Expert weights must reach compute units, tokens cross devices, and an overloaded expert can stall the batch. MoE converts part of the compute problem into communication, scheduling, and load balancing.</p>
+<h2 id="why-v3-stopped-making-balance-a-direct-model-penalty">Why V3 Stopped Making Balance a Direct Model Penalty
+</h2><p>Earlier MoE systems commonly added an auxiliary training loss that pushed token assignments toward a more even expert distribution. It prevents a few experts from overloading, but it also mixes a systems objective into language modeling. One domain may genuinely benefit from concentrating on a particular group of experts, while a sequence-level balance loss tells each sequence to spread out.</p>
+<p>One of V3&rsquo;s main changes is an expert bias $b_i$ used for top-K selection. Routing still begins with token-expert affinity scores, but a dynamic bias is added to the selection score. An expert that has recently been overloaded receives a lower bias; an underused expert receives a higher one. Crucially, the bias affects which experts are selected without directly scaling their outputs or adding a main load-balancing term to the language-model loss. V3 retains a very small sequence-wise auxiliary loss to prevent extreme imbalance inside one sequence. “Auxiliary-loss-free” is therefore best read as <strong>the primary expert load-balancing mechanism does not depend on an auxiliary loss</strong>.</p>
+<p>V3&rsquo;s ablations support a bounded claim. At 15.7B and 228.7B baseline scales, the method outperformed the purely auxiliary-loss-based alternative on most reported benchmarks. A further batch-wise versus sequence-wise comparison suggested that looser batch-level balancing permits clearer domain specialization. It does not prove that routing bias is universally best for every batch size, network, or traffic distribution. The deployment design still uses redundant experts and dynamic scheduling to absorb skew in real requests.</p>
+<h2 id="end-to-end-efficiency-requires-both-bills">End-to-End Efficiency Requires Both Bills
+</h2><p>MLA and MoE are often taught as separate modules, yet they address adjacent serving bottlenecks. MLA makes the per-request historical state smaller. MoE lets each new token use only a fraction of total model capacity. The first can make room for a longer context or a larger batch; the second lets capacity grow without proportional token compute. With only one of them, the other bill can remain the limiting factor.</p>
+<p>This is also why an architecture paper cannot end at the equations. MLA needs an attention kernel that consumes the compressed cache directly. MoE needs efficient all-to-all communication, expert parallelism, and load-aware scheduling. DeepSeek later released FlashMLA as dedicated MLA decoding kernels, while the V3 report devotes substantial space to communication overlap and cross-node routing. Architecture reduces the amount that must theoretically move or activate; systems software decides whether the reduction becomes throughput.</p>
+<p>The durable lesson is not that low-rank attention always beats GQA or that MoE always beats dense models. MLA needs a suitable compression dimension, a compatible positional path, and kernel support. MoE benefits from enough load and capable interconnects; small batches may instead expose routing overhead and latency. The safer principle is: <strong>do not ask only how many parameters a model owns or how long its context is. Ask what each token stores, reads, activates, and sends across the hardware.</strong> DeepSeek-V2 and V3 made those four questions part of the architecture itself.</p>
+<h2 id="references">References
+</h2><ol>
+<li>DeepSeek-AI, <a class="link" href="https://arxiv.org/abs/2405.04434"  target="_blank" rel="noopener"
+    >DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model</a>, 2024.</li>
+<li>DeepSeek-AI, <a class="link" href="https://arxiv.org/abs/2412.19437"  target="_blank" rel="noopener"
+    >DeepSeek-V3 Technical Report</a>, 2024/2025.</li>
+<li>Dai et al., <a class="link" href="https://arxiv.org/abs/2401.06066"  target="_blank" rel="noopener"
+    >DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models</a>, 2024.</li>
+<li>DeepSeek-AI, <a class="link" href="https://github.com/deepseek-ai/DeepSeek-V3"  target="_blank" rel="noopener"
+    >DeepSeek-V3 official repository and reference inference implementation</a>.</li>
+<li>DeepSeek-AI, <a class="link" href="https://github.com/deepseek-ai/DeepSeek-V2"  target="_blank" rel="noopener"
+    >DeepSeek-V2 official repository</a>.</li>
+<li>DeepSeek-AI, <a class="link" href="https://github.com/deepseek-ai/FlashMLA"  target="_blank" rel="noopener"
+    >FlashMLA: Efficient Multi-head Latent Attention Kernels</a>.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/deepseek/">DeepSeek</a>
+        
+            <a href="/en/tags/mla/">MLA</a>
+        
+            <a href="/en/tags/moe/">MoE</a>
+        
+            <a href="/en/tags/kv-cache/">KV Cache</a>
+        
+            <a href="/en/tags/inference-efficiency/">Inference Efficiency</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-23
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/llama-open-ecosystem/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation" height="150" loading="lazy" src="/en/p/llama-open-ecosystem/cover_hu_fd1ca67b3f80cfc9.jpg" srcset="/en/p/llama-open-ecosystem/cover_hu_fd1ca67b3f80cfc9.jpg 1x, /en/p/llama-open-ecosystem/cover_hu_2fc618579127acef.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #d7c6c480 0%, #171e2eC0 100%);">
+            <h2 class="article-title">LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/deepseek-r1-reasoning-rl/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning" height="150" loading="lazy" src="/en/p/deepseek-r1-reasoning-rl/cover_hu_7e19977a34734f54.jpg" srcset="/en/p/deepseek-r1-reasoning-rl/cover_hu_7e19977a34734f54.jpg 1x, /en/p/deepseek-r1-reasoning-rl/cover_hu_3f572a106f5c78c6.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #54463d80 0%, #f0ebe7C0 100%);">
+            <h2 class="article-title">DeepSeek-R1: Eliciting Reasoning in LLMs via Reinforcement Learning</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/chinchilla-scaling-laws/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Chinchilla: Why Bigger Models Are Not Always Better" height="150" loading="lazy" src="/en/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg" srcset="/en/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg 1x, /en/p/chinchilla-scaling-laws/cover_hu_8efef5f297f5000b.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c8e0d480 0%, #171d23C0 100%);">
+            <h2 class="article-title">Chinchilla: Why Bigger Models Are Not Always Better</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT: Teaching LLMs to Be Helpful with RLHF" height="150" loading="lazy" src="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /en/p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT: Teaching LLMs to Be Helpful with RLHF</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART: Unifying Every NLP Task as Text-to-Text" height="150" loading="lazy" src="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /en/p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART: Unifying Every NLP Task as Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

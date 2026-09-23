@@ -6,17 +6,41 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 22 Sep 2026 09:14:54 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-            <title>GQA</title>
-            <link>/en/tags/gqa/</link>
-            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/gqa/</guid>
+        <lastBuildDate>Wed, 23 Sep 2026 18:57:29 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>DeepSeek</title>
+            <link>/en/tags/deepseek/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/deepseek/</guid>
             <description></description>
         </item><item>
             <title>Inference Efficiency</title>
             <link>/en/tags/inference-efficiency/</link>
-            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/inference-efficiency/</guid>
+            <description></description>
+        </item><item>
+            <title>KV Cache</title>
+            <link>/en/tags/kv-cache/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/kv-cache/</guid>
+            <description></description>
+        </item><item>
+            <title>MLA</title>
+            <link>/en/tags/mla/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/mla/</guid>
+            <description></description>
+        </item><item>
+            <title>MoE</title>
+            <link>/en/tags/moe/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/moe/</guid>
+            <description></description>
+        </item><item>
+            <title>GQA</title>
+            <link>/en/tags/gqa/</link>
+            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/gqa/</guid>
             <description></description>
         </item><item>
             <title>LLaMA</title>
@@ -137,12 +161,6 @@
             <link>/en/tags/scaling-law/</link>
             <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/scaling-law/</guid>
-            <description></description>
-        </item><item>
-            <title>DeepSeek</title>
-            <link>/en/tags/deepseek/</link>
-            <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/deepseek/</guid>
             <description></description>
         </item><item>
             <title>GRPO</title>

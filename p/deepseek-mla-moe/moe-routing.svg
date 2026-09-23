@@ -1,0 +1,18 @@
+<svg viewBox="0 0 600 410" width="600" height="410" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="moe-cn-title moe-cn-desc">
+  <title id="moe-cn-title">DeepSeekMoE 的共享专家与路由专家</title><desc id="moe-cn-desc">每个 token 总会经过共享专家，同时只激活少量细粒度路由专家；V3 用偏置调节负载。</desc>
+  <defs><marker id="a3cn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#56656c"/></marker><style>.bg{fill:#f7f3ec}.h{font:700 18px 'Microsoft YaHei',sans-serif;fill:#26343a}.t{font:14px 'Microsoft YaHei',sans-serif;fill:#42535b}.s{font:12px 'Microsoft YaHei',sans-serif;fill:#667780}.token{fill:#c76f4e}.shared{fill:#efc675;stroke:#a66d22}.route{fill:#dbe5e8;stroke:#6f8e98}.on{fill:#7d9fac;stroke:#3e6877}.line{stroke:#56656c;stroke-width:2;fill:none;marker-end:url(#a3cn)}.dash{stroke:#8d999e;stroke-width:1.5;stroke-dasharray:5 5;fill:none}.note{fill:#fff;stroke:#d1d7d8}</style></defs>
+  <rect width="600" height="410" rx="20" class="bg"/><text x="28" y="38" class="h">总参数决定容量，激活参数决定每个 token 的主要计算</text>
+  <circle cx="65" cy="196" r="28" class="token"/><text x="65" y="201" text-anchor="middle" fill="#fff" class="t">token</text>
+  <path d="M95 184C135 150 150 128 188 118" class="line"/><path d="M95 208C135 240 150 263 188 274" class="line"/>
+  <rect x="198" y="84" width="126" height="68" rx="12" class="shared"/><text x="261" y="111" text-anchor="middle" class="t">共享专家</text><text x="261" y="132" text-anchor="middle" class="s">所有 token 都经过</text>
+  <rect x="198" y="238" width="126" height="68" rx="12" class="note"/><text x="261" y="264" text-anchor="middle" class="t">路由器</text><text x="261" y="286" text-anchor="middle" class="s">Top-K 选择 + 负载偏置</text>
+  <path d="M326 272H356" class="line"/>
+  <g transform="translate(368 178)"><rect width="74" height="44" rx="9" class="on"/><text x="37" y="27" text-anchor="middle" fill="#fff" class="t">专家 2</text></g>
+  <g transform="translate(368 232)"><rect width="74" height="44" rx="9" class="route"/><text x="37" y="27" text-anchor="middle" class="t">专家 3</text></g>
+  <g transform="translate(368 286)"><rect width="74" height="44" rx="9" class="on"/><text x="37" y="27" text-anchor="middle" fill="#fff" class="t">专家 7</text></g>
+  <text x="405" y="160" text-anchor="middle" class="s">许多细粒度专家中的少数</text>
+  <path d="M326 118C390 118 445 115 492 154" class="line"/><path d="M444 200C469 202 477 210 492 226" class="line"/><path d="M444 308C470 303 480 284 492 262" class="line"/>
+  <rect x="502" y="178" width="70" height="82" rx="12" fill="#fff" stroke="#82949b"/><text x="537" y="211" text-anchor="middle" class="t">相加</text><text x="537" y="233" text-anchor="middle" class="s">共享知识</text><text x="537" y="250" text-anchor="middle" class="s">+ 专门知识</text>
+  <path d="M198 326H442" class="dash"/><text x="320" y="351" text-anchor="middle" class="s">V3：调节路由选择偏置 bᵢ，不把平衡目标直接混入主损失</text>
+  <text x="28" y="386" class="s">关键不是“少算几个专家”，而是让未激活的参数保留容量、已激活的路径承担本 token 的计算。</text>
+</svg>

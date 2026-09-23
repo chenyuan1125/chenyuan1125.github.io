@@ -1,0 +1,26 @@
+<svg viewBox="0 0 600 390" width="600" height="390" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mla-en-title mla-en-desc">
+  <title id="mla-en-title">KV-cache paths in MHA and MLA</title>
+  <desc id="mla-en-desc">MHA caches full keys and values for every head, while MLA caches a joint latent vector and a shared positional key.</desc>
+  <defs>
+    <marker id="arrow-en" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52606d"/></marker>
+    <style>.bg{fill:#f7f4ee}.panel{fill:#fff;stroke:#cbd2d9;stroke-width:1.5}.h{font:700 18px Arial,sans-serif;fill:#263238}.t{font:14px Arial,sans-serif;fill:#455a64}.s{font:12px Arial,sans-serif;fill:#607d8b}.cache{fill:#dce8ed;stroke:#557b8d}.latent{fill:#f1c980;stroke:#a66b1f}.line{stroke:#52606d;stroke-width:2;fill:none;marker-end:url(#arrow-en)}.thin{stroke:#9aa5b1;stroke-width:1.5;fill:none}.head{fill:#7999a8}.value{fill:#acc0c8}</style>
+  </defs>
+  <rect width="600" height="390" rx="20" class="bg"/>
+  <text x="30" y="38" class="h">Cache full projections—or a recoverable latent?</text>
+  <rect x="24" y="58" width="552" height="132" rx="14" class="panel"/>
+  <text x="42" y="84" class="h">MHA: every head leaves a K and V</text>
+  <rect x="42" y="106" width="64" height="48" rx="8" fill="#e8ecef"/><text x="74" y="135" text-anchor="middle" class="t">hₜ</text>
+  <path d="M108 130H150" class="line"/>
+  <g transform="translate(160 101)"><rect width="48" height="26" rx="6" class="head"/><rect y="32" width="48" height="26" rx="6" class="value"/><text x="24" y="18" text-anchor="middle" class="s">K₁</text><text x="24" y="50" text-anchor="middle" class="s">V₁</text></g>
+  <g transform="translate(222 101)"><rect width="48" height="26" rx="6" class="head"/><rect y="32" width="48" height="26" rx="6" class="value"/><text x="24" y="18" text-anchor="middle" class="s">K₂</text><text x="24" y="50" text-anchor="middle" class="s">V₂</text></g>
+  <text x="290" y="134" class="h">…</text>
+  <g transform="translate(322 101)"><rect width="48" height="26" rx="6" class="head"/><rect y="32" width="48" height="26" rx="6" class="value"/><text x="24" y="18" text-anchor="middle" class="s">Kₕ</text><text x="24" y="50" text-anchor="middle" class="s">Vₕ</text></g>
+  <path d="M380 130H421" class="line"/><rect x="432" y="101" width="124" height="58" rx="8" class="cache"/><text x="494" y="125" text-anchor="middle" class="t">KV cache</text><text x="494" y="146" text-anchor="middle" class="s">2nₕdₕ · layer⁻¹ token⁻¹</text>
+  <rect x="24" y="208" width="552" height="152" rx="14" class="panel"/>
+  <text x="42" y="234" class="h">MLA: compress jointly, absorb projections at decode</text>
+  <rect x="42" y="264" width="64" height="48" rx="8" fill="#e8ecef"/><text x="74" y="293" text-anchor="middle" class="t">hₜ</text><path d="M108 288H153" class="line"/>
+  <rect x="164" y="258" width="116" height="60" rx="10" class="latent"/><text x="222" y="283" text-anchor="middle" class="t">cₜᴷⱽ</text><text x="222" y="303" text-anchor="middle" class="s">joint K/V latent</text>
+  <path d="M282 276H342" class="thin"/><path d="M282 300H342" class="thin"/><text x="350" y="276" class="s">absorb Wᵁᴷ into Q</text><text x="350" y="304" class="s">absorb Wᵁⱽ into output</text>
+  <path d="M456 288H480" class="line"/><rect x="488" y="254" width="68" height="68" rx="10" class="latent"/><text x="522" y="281" text-anchor="middle" class="t">cache</text><text x="522" y="302" text-anchor="middle" class="s">cₜᴷⱽ+kₜᴿ</text>
+  <text x="42" y="344" class="s">DeepSeek-V2: (d_c + d_hᴿ) per layer/token—roughly GQA with 2.25 groups</text>
+</svg>

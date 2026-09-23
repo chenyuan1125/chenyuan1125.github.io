@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 22 Sep 2026 09:14:52 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 23 Sep 2026 18:57:28 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>DeepSeek</title>
+            <link>/tags/deepseek/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/deepseek/</guid>
+            <description></description>
+        </item><item>
+            <title>KV Cache</title>
+            <link>/tags/kv-cache/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/kv-cache/</guid>
+            <description></description>
+        </item><item>
+            <title>MLA</title>
+            <link>/tags/mla/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/mla/</guid>
+            <description></description>
+        </item><item>
+            <title>MoE</title>
+            <link>/tags/moe/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/moe/</guid>
+            <description></description>
+        </item><item>
+            <title>推理效率</title>
+            <link>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</link>
+            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</guid>
+            <description></description>
+        </item><item>
             <title>GQA</title>
             <link>/tags/gqa/</link>
             <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
@@ -29,12 +59,6 @@
             <link>/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</link>
             <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</guid>
-            <description></description>
-        </item><item>
-            <title>推理效率</title>
-            <link>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</link>
-            <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</guid>
             <description></description>
         </item><item>
             <title>Chinchilla</title>
@@ -221,12 +245,6 @@
             <link>/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</link>
             <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
             <guid>/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</guid>
-            <description></description>
-        </item><item>
-            <title>DeepSeek</title>
-            <link>/tags/deepseek/</link>
-            <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
-            <guid>/tags/deepseek/</guid>
             <description></description>
         </item><item>
             <title>GRPO</title>
