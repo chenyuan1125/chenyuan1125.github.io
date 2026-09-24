@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Wed, 23 Sep 2026 18:57:28 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 24 Sep 2026 09:09:04 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Mamba</title>
+            <link>/tags/mamba/</link>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/mamba/</guid>
+            <description></description>
+        </item><item>
+            <title>推理效率</title>
+            <link>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</link>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</guid>
+            <description></description>
+        </item><item>
+            <title>选择性扫描</title>
+            <link>/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</link>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</guid>
+            <description></description>
+        </item><item>
+            <title>长序列</title>
+            <link>/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</link>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</guid>
+            <description></description>
+        </item><item>
+            <title>状态空间模型</title>
+            <link>/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</link>
+            <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</guid>
+            <description></description>
+        </item><item>
             <title>DeepSeek</title>
             <link>/tags/deepseek/</link>
             <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
@@ -29,12 +59,6 @@
             <link>/tags/moe/</link>
             <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/tags/moe/</guid>
-            <description></description>
-        </item><item>
-            <title>推理效率</title>
-            <link>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</link>
-            <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</guid>
             <description></description>
         </item><item>
             <title>GQA</title>

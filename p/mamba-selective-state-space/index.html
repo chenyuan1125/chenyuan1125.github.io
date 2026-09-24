@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Mamba 不保存完整 KV cache，而是用选择性状态空间把历史压进固定状态。本文从选择性、扫描算法与实证边界解释它为何成为 Transformer 之外的重要路线。">
+<title>Mamba：少记，为什么反而可能更懂长序列</title>
+
+
+<link rel="canonical" href="/p/mamba-selective-state-space/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="Mamba：少记，为什么反而可能更懂长序列">
+<meta property='og:description' content="Mamba 不保存完整 KV cache，而是用选择性状态空间把历史压进固定状态。本文从选择性、扫描算法与实证边界解释它为何成为 Transformer 之外的重要路线。">
+<meta property='og:url' content='/p/mamba-selective-state-space/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Mamba' /><meta property='article:tag' content='状态空间模型' /><meta property='article:tag' content='长序列' /><meta property='article:tag' content='选择性扫描' /><meta property='article:tag' content='推理效率' /><meta property='article:published_time' content='2026-09-24T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-24T09:09:04&#43;08:00'/><meta property='og:image' content='/p/mamba-selective-state-space/cover.jpg' />
+<meta name="twitter:title" content="Mamba：少记，为什么反而可能更懂长序列">
+<meta name="twitter:description" content="Mamba 不保存完整 KV cache，而是用选择性状态空间把历史压进固定状态。本文从选择性、扫描算法与实证边界解释它为何成为 Transformer 之外的重要路线。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/mamba-selective-state-space/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/mamba-selective-state-space/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/mamba-selective-state-space/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#两种上下文契约档案室与工作记忆">两种上下文契约：档案室与工作记忆</a></li>
+    <li><a href="#选择性不是挑掉-token而是改变状态如何更新">选择性不是挑掉 token，而是改变状态如何更新</a></li>
+    <li><a href="#选择性拿走了卷积捷径扫描算法把并行性补回来">选择性拿走了卷积捷径，扫描算法把并行性补回来</a></li>
+    <li><a href="#mamba-block-为什么连-mlp-也合并了">Mamba block 为什么连 MLP 也合并了</a></li>
+    <li><a href="#纯-ssm-的边界后来由混合架构说得更清楚">纯 SSM 的边界，后来由混合架构说得更清楚</a></li>
+    <li><a href="#真正改变的是推理系统的记忆预算">真正改变的是推理系统的记忆预算</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/mamba-selective-state-space/">
+            <img alt="Featured image of post Mamba：少记，为什么反而可能更懂长序列" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/mamba-selective-state-space/cover.jpg" srcset="/p/mamba-selective-state-space/cover_hu_76454086d40ef09b.jpg 800w, /p/mamba-selective-state-space/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/mamba-selective-state-space/">Mamba：少记，为什么反而可能更懂长序列</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            Mamba 不保存完整 KV cache，而是用选择性状态空间把历史压进固定状态。本文从选择性、扫描算法与实证边界解释它为何成为 Transformer 之外的重要路线。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-24T00:00:00Z'>2026-09-24</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 8 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/mamba-selective-state-space/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#两种上下文契约档案室与工作记忆">两种上下文契约：档案室与工作记忆</a></li>
+    <li><a href="#选择性不是挑掉-token而是改变状态如何更新">选择性不是挑掉 token，而是改变状态如何更新</a></li>
+    <li><a href="#选择性拿走了卷积捷径扫描算法把并行性补回来">选择性拿走了卷积捷径，扫描算法把并行性补回来</a></li>
+    <li><a href="#mamba-block-为什么连-mlp-也合并了">Mamba block 为什么连 MLP 也合并了</a></li>
+    <li><a href="#纯-ssm-的边界后来由混合架构说得更清楚">纯 SSM 的边界，后来由混合架构说得更清楚</a></li>
+    <li><a href="#真正改变的是推理系统的记忆预算">真正改变的是推理系统的记忆预算</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>Transformer 的注意力做了一件昂贵但稳妥的事：不急着决定哪些历史重要，而是把每个旧 token 的 key 和 value 留在 KV cache，等新 token 到来后再逐一比较。Mamba 选择了相反的契约：<strong>历史经过当前位置时就被压进一个固定大小的状态，之后不再保留可任意回看的原始清单。</strong></p>
+<p>这个差别不是把 $O(L^2)$ 改写成 $O(L)$ 那么简单。压缩历史很容易，难的是压缩后仍保留真正有用的内容。早期线性时不变状态空间模型（LTI SSM）对每个 token 使用同一套动力学，像一只永远以相同方式更新的滤波器；它们适合连续信号，却难以处理语言中“这个词要记住、那个填充词可以略过”的内容判断。Mamba 的突破，是让状态更新的关键参数依赖当前输入，再为这种失去卷积捷径的模型设计硬件感知的并行扫描。</p>
+<p>因此，Mamba 最值得理解的不是“它没有 attention”，而是三个相互约束的选择：用有限状态压缩上下文，用输入相关参数决定压缩策略，再用扫描算法让递归结构在 GPU 上仍能高效训练。</p>
+<h2 id="两种上下文契约档案室与工作记忆">两种上下文契约：档案室与工作记忆
+</h2><p>设序列长度为 $L$。标准自注意力在训练时显式形成 token 两两交互，计算和注意力矩阵随 $L^2$ 增长；自回归生成虽然每步只计算一个新 query，却要保存并读取随 $L$ 增长的 KV cache。它的优势也来自这里：旧 token 的表示仍在，模型可以按当前问题重新检索它们。</p>
+<p>状态空间模型采用另一种形式。离散后，一个最简递归可以写成：</p>
+$$h_t=\bar A h_{t-1}+\bar Bx_t,\qquad y_t=Ch_t$$<p>$h_t$ 是到位置 $t$ 为止的压缩状态。每来一个 token，旧状态与新输入合成下一状态；生成时每层只需保留当前状态，缓存大小不随上下文长度增长，单步计算也不因前缀变长而线性增加。代价同样明确：一旦信息没有进入 $h_t$，未来就无法像注意力那样回头访问原始 token。</p>
+<figure><img src="/p/mamba-selective-state-space/context-contract.svg"><figcaption>
+			<h4>图 1：注意力保留可回看的 KV 档案；Mamba 把历史持续压缩进固定状态</h4>
+		</figcaption>
+</figure>
+
+<p>这使“长上下文”有了两种不同含义。对注意力模型，窗口更长主要意味着可访问的档案更多，同时付出更大的缓存和读取成本。对循环式 SSM，处理更长序列的计算增长是线性的，但固定状态并不会因为窗口变长自动获得更多容量。<strong>能处理一百万 token，不等于能无损记住一百万 token。</strong> 原始 Mamba 论文在 DNA 任务上观察到性能一直改善到百万长度，这是特定数据和任务上的实证，不是无限记忆的证明。</p>
+<h2 id="选择性不是挑掉-token而是改变状态如何更新">选择性不是挑掉 token，而是改变状态如何更新
+</h2><p>传统 LTI SSM 的 $Δ,A,B,C$ 对所有位置固定。它可以被看成递归，也可以预先展开成一个全局卷积核，因而容易并行训练；但固定动力学无法根据内容改变记忆方式。原论文用“选择性复制”任务说明这个缺口：需要复制的符号位置会变化，模型必须依据 token 内容决定何时写入，而不能只根据相对位置等待固定时长。</p>
+<p>Mamba 保留结构化的 $A$，却让 $Δ_t、B_t、C_t$ 成为输入 $x_t$ 的函数：</p>
+$$Δ_t=s_\Delta(x_t),\qquad B_t=s_B(x_t),\qquad C_t=s_C(x_t)$$<p>离散化后，状态转移也随位置变化：</p>
+$$h_t=\bar A_t h_{t-1}+\bar B_t x_t,\qquad y_t=C_t h_t$$<p>可以把三者理解成不同问题。$B_t$ 决定当前输入以什么方向写入状态，$C_t$ 决定此刻从状态读出什么，$Δ_t$ 调节保留旧状态与接纳当前输入的时间尺度。按论文的机械解释，较大的 $Δ_t$ 更倾向重置旧状态并聚焦当前输入，较小的 $Δ_t$ 更倾向维持状态、忽略这次短暂输入。它不是先给 token 打一个“保留/删除”的离散标签，而是在每一步连续改变信息流。</p>
+<figure><img src="/p/mamba-selective-state-space/selective-state.svg"><figcaption>
+			<h4>图 2：输入相关的 Δ、B、C 分别调节遗忘/更新、写入方向与读出内容</h4>
+		</figcaption>
+</figure>
+
+<p>这也是“Mamba”与一般 SSM 不能混为一谈的原因。论文消融中，仅把非选择性 SSM 换成选择性 S6 就显著降低语言模型困惑度；$Δ$ 是单项改动里最重要的参数，而同时让 $Δ、B、C$ 具有选择性效果最好。真正补上离散语言能力缺口的，不是“状态空间”四个字，而是内容相关的压缩。</p>
+<h2 id="选择性拿走了卷积捷径扫描算法把并行性补回来">选择性拿走了卷积捷径，扫描算法把并行性补回来
+</h2><p>固定参数的 LTI SSM 可以把整段序列写成卷积，训练时一次并行计算。参数随 token 变化后，不再存在一个适用于全序列的固定卷积核；如果朴素地按 $t=1,2,\ldots,L$ 顺序执行递归，GPU 会被大量细小、串行的操作拖慢。</p>
+<p>Mamba 的解决办法基于递推组合的结合律。每个位置都可表示成一对局部变换 $(\bar A_t,\bar B_tx_t)$；两个相邻变换能够先组合，再与其他区间组合。于是训练时可以用 parallel scan 在树形结构中并行归并，生成时则继续使用真正的单步递归。同一个方程因此有两种执行计划：批量训练重视序列并行，自回归生成重视常数大小状态。</p>
+<figure><img src="/p/mamba-selective-state-space/scan-modes.svg"><figcaption>
+			<h4>图 3：同一选择性递推在训练时采用并行扫描，在生成时采用单步状态更新</h4>
+		</figcaption>
+</figure>
+
+<p>算法仍不够。选择性 SSM 在概念上会产生形状约为 $B\times L\times D\times N$ 的扩展状态；若把中间量完整写回高带宽显存，线性复杂度也可能被内存流量吃掉。论文的 CUDA 实现把离散化、扫描与后续操作融合在片上 SRAM 中，避免物化庞大中间张量，并在反向传播时重算部分状态。原论文报告：在其测试设置中，选择性扫描在序列超过 2K 后快于 FlashAttention-2，较标准 PyTorch 扫描快 20–40 倍；端到端自回归推理吞吐最高达到同尺度 Transformer 的 5 倍。这些是特定硬件、模型形状和实现下的测量，不应当当作所有部署的固定倍率。</p>
+<h2 id="mamba-block-为什么连-mlp-也合并了">Mamba block 为什么连 MLP 也合并了
+</h2><p>原始 Mamba 不只是把 Transformer 的 attention 替换成 SSM。一个 block 先把输入扩展成两路：主路经过短的一维因果卷积、SiLU 和选择性 SSM；旁路形成门控；两路相乘后再投影回模型维度。这个设计把以往“序列混合层 + 独立 MLP”的两段结构合并成一个同质 block，整网不需要 attention，论文所说的“没有 MLP block”指没有单独堆叠的 FFN 子层，而不是内部没有线性投影或非线性。</p>
+<p>短卷积负责邻近 token 的局部混合，SSM 负责沿序列传播状态，门控则控制输出通道。它们共同解释了为什么只盯着递推公式会漏掉实际模型的一半：Mamba 的效果来自选择性状态层、局部卷积、门控架构和硬件实现的组合，而非某一个孤立公式。</p>
+<p>这种端到端简化也带来工程门槛。官方仓库的高性能路径依赖定制 CUDA kernel，支持的状态维度、数据类型和硬件会影响实际速度；在不匹配的环境里退回参考实现，理论上的线性优势未必自动变成更低延迟。架构复杂度从 KV cache 转移到了 kernel 与扫描实现，并没有凭空消失。</p>
+<h2 id="纯-ssm-的边界后来由混合架构说得更清楚">纯 SSM 的边界，后来由混合架构说得更清楚
+</h2><p>原始论文的结果很强：Mamba-3B 在其训练与评测设置中优于同规模 Transformer，并可匹配约两倍规模的 Transformer；它还覆盖语言、音频与基因组序列。但后续由 Mamba 作者与 NVIDIA 研究者共同完成的 8B 受控研究给出了更有价值的限制条件。研究让 Mamba、Mamba-2 和 Transformer 使用相同数据、最多训练 3.5T token，发现纯 SSM 在很多任务上可以匹配或超过 Transformer，却在强复制、in-context learning 和长上下文推理任务上落后。</p>
+<p>这个结果与上下文契约完全一致。注意力保留原始 KV，可以为一个很晚出现的问题重新指向早期细节；固定状态必须提前判断什么值得留下。选择性能改进这个判断，却不能取消有限状态的信息容量。复制电话号码、逐字复现某段内容或临时学习上下文中的新映射，恰好都是“以后会问什么，在写入时未必知道”的任务。</p>
+<p>同一研究中的 Mamba-2-Hybrid 使用 43% Mamba-2、7% attention 和 50% MLP 层。论文报告它在 12 个标准任务上平均超过 8B Transformer 2.65 分，并预测生成时最高可快 8 倍；在额外 23 个长上下文任务上，混合模型平均也能接近或超过 Transformer。这里的“预测最高 8 倍”不是完整线上基准，但方向很有启发：少量 attention 可以作为可回看的精确记忆，其余层用 SSM 承担廉价的顺序压缩。</p>
+<p>Mamba-2 又通过 State Space Duality（SSD）说明，结构化 SSM 与某类受约束 attention 并非两个互不相干的世界，而是同一类半可分矩阵的不同计算形式。它的核心层在论文基准中比 Mamba 的选择性 SSM 快 2–8 倍。更准确的产业判断因此不是“SSM 将淘汰 Transformer”，而是：<strong>attention 与状态空间提供了不同的记忆接口，模型可以按层、按任务组合它们。</strong></p>
+<h2 id="真正改变的是推理系统的记忆预算">真正改变的是推理系统的记忆预算
+</h2><p>昨天讨论 MLA 时，目标仍是在 attention 内部压缩 KV cache；Mamba 更进一步，直接改变缓存对象。它不再为每个历史 token 保存可寻址的 K/V，而是为每层维护一个随序列更新的状态。上下文从“越来越厚的档案”变成“大小固定、不断改写的工作记忆”。这为流式音频、基因组、传感器和超长生成提供了不同的系统设计空间：延迟和状态内存不必随已读长度增长。</p>
+<p>但这份预算必须与任务的记忆需求一起看。需要精确引用、任意回看和上下文内临时学习时，attention 的显式档案仍然珍贵；需要持续流式处理、低缓存和稳定单步成本时，选择性状态更有吸引力。混合模型之所以自然，不是折中得保守，而是承认“摘要式记忆”和“可寻址记忆”本来就是两种能力。</p>
+<p>Mamba 留下的核心问题也因此比某个榜单更长久：一个序列模型究竟该保存多少过去，又该在什么时候决定遗忘？注意力把决定推迟到读取时，Mamba 把决定提前到写入时。它的贡献，是证明后者在具备内容选择、并行扫描和合适 kernel 后，不再只是效率不错但能力落后的替代品，而成为可以与 attention 共同设计记忆系统的一条主线。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li>Gu &amp; Dao, <a class="link" href="https://arxiv.org/abs/2312.00752"  target="_blank" rel="noopener"
+    >Mamba: Linear-Time Sequence Modeling with Selective State Spaces</a>, 2023/2024.</li>
+<li>Dao &amp; Gu, <a class="link" href="https://arxiv.org/abs/2405.21060"  target="_blank" rel="noopener"
+    >Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality</a>, 2024.</li>
+<li>Waleffe et al., <a class="link" href="https://arxiv.org/abs/2406.07887"  target="_blank" rel="noopener"
+    >An Empirical Study of Mamba-based Language Models</a>, 2024.</li>
+<li>State Spaces Models team, <a class="link" href="https://github.com/state-spaces/mamba"  target="_blank" rel="noopener"
+    >Mamba official implementation</a>.</li>
+<li>NVIDIA Megatron-LM, <a class="link" href="https://github.com/NVIDIA/Megatron-LM/tree/main/megatron/core/models/mamba"  target="_blank" rel="noopener"
+    >Mamba and Mamba-2 model implementation</a>.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/mamba/">Mamba</a>
+        
+            <a href="/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/">状态空间模型</a>
+        
+            <a href="/tags/%E9%95%BF%E5%BA%8F%E5%88%97/">长序列</a>
+        
+            <a href="/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/">选择性扫描</a>
+        
+            <a href="/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/">推理效率</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-24
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看" height="150" loading="lazy" src="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg" srcset="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg 1x, /p/deepseek-mla-moe/cover_hu_5abd39a15d038789.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ded2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/llama-open-ecosystem/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LLaMA：没有架构革命，为什么成了开放模型的共同底座" height="150" loading="lazy" src="/p/llama-open-ecosystem/cover_hu_66b7ab446cd2193b.jpg" srcset="/p/llama-open-ecosystem/cover_hu_66b7ab446cd2193b.jpg 1x, /p/llama-open-ecosystem/cover_hu_737256bd48fd70c.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #d9cac880 0%, #171e2eC0 100%);">
+            <h2 class="article-title">LLaMA：没有架构革命，为什么成了开放模型的共同底座</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/chinchilla-scaling-laws/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Chinchilla：大模型不是越大越好，数据也要一起扩展" height="150" loading="lazy" src="/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg" srcset="/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg 1x, /p/chinchilla-scaling-laws/cover_hu_8efef5f297f5000b.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c8e0d480 0%, #171d23C0 100%);">
+            <h2 class="article-title">Chinchilla：大模型不是越大越好，数据也要一起扩展</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="150" loading="lazy" src="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT：用 RLHF 教会大模型「听话」</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART：把一切 NLP 任务统一成 Text-to-Text" height="150" loading="lazy" src="/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART：把一切 NLP 任务统一成 Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

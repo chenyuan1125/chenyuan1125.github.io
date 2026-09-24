@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Mamba replaces a growing KV cache with a fixed recurrent state. This article explains selective state spaces, hardware-aware scans, and the empirical limits that make hybrid models compelling.">
+<title>Mamba: Why Remembering Less Can Understand More</title>
+
+
+<link rel="canonical" href="/en/p/mamba-selective-state-space/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="Mamba: Why Remembering Less Can Understand More">
+<meta property='og:description' content="Mamba replaces a growing KV cache with a fixed recurrent state. This article explains selective state spaces, hardware-aware scans, and the empirical limits that make hybrid models compelling.">
+<meta property='og:url' content='/en/p/mamba-selective-state-space/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Mamba' /><meta property='article:tag' content='State Space Models' /><meta property='article:tag' content='Long Sequences' /><meta property='article:tag' content='Selective Scan' /><meta property='article:tag' content='Inference Efficiency' /><meta property='article:published_time' content='2026-09-24T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-24T09:09:06&#43;08:00'/><meta property='og:image' content='/en/p/mamba-selective-state-space/cover.jpg' />
+<meta name="twitter:title" content="Mamba: Why Remembering Less Can Understand More">
+<meta name="twitter:description" content="Mamba replaces a growing KV cache with a fixed recurrent state. This article explains selective state spaces, hardware-aware scans, and the empirical limits that make hybrid models compelling."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/mamba-selective-state-space/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/mamba-selective-state-space/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/mamba-selective-state-space/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#two-context-contracts-archive-and-working-memory">Two Context Contracts: Archive and Working Memory</a></li>
+    <li><a href="#selectivity-does-not-drop-tokens-it-changes-the-update">Selectivity Does Not Drop Tokens; It Changes the Update</a></li>
+    <li><a href="#selectivity-removes-the-convolution-shortcut-scan-restores-parallelism">Selectivity Removes the Convolution Shortcut; Scan Restores Parallelism</a></li>
+    <li><a href="#why-a-mamba-block-also-absorbs-the-mlp">Why a Mamba Block Also Absorbs the MLP</a></li>
+    <li><a href="#pure-ssm-limits-became-clearer-in-hybrid-models">Pure SSM Limits Became Clearer in Hybrid Models</a></li>
+    <li><a href="#the-real-change-is-the-inference-memory-budget">The Real Change Is the Inference Memory Budget</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/mamba-selective-state-space/">
+            <img alt="Featured image of post Mamba: Why Remembering Less Can Understand More" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/mamba-selective-state-space/cover.jpg" srcset="/en/p/mamba-selective-state-space/cover_hu_d134e86e6c6f1972.jpg 800w, /en/p/mamba-selective-state-space/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/mamba-selective-state-space/">Mamba: Why Remembering Less Can Understand More</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            Mamba replaces a growing KV cache with a fixed recurrent state. This article explains selective state spaces, hardware-aware scans, and the empirical limits that make hybrid models compelling.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-24T00:00:00Z'>2026-09-24</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        9 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/mamba-selective-state-space/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#two-context-contracts-archive-and-working-memory">Two Context Contracts: Archive and Working Memory</a></li>
+    <li><a href="#selectivity-does-not-drop-tokens-it-changes-the-update">Selectivity Does Not Drop Tokens; It Changes the Update</a></li>
+    <li><a href="#selectivity-removes-the-convolution-shortcut-scan-restores-parallelism">Selectivity Removes the Convolution Shortcut; Scan Restores Parallelism</a></li>
+    <li><a href="#why-a-mamba-block-also-absorbs-the-mlp">Why a Mamba Block Also Absorbs the MLP</a></li>
+    <li><a href="#pure-ssm-limits-became-clearer-in-hybrid-models">Pure SSM Limits Became Clearer in Hybrid Models</a></li>
+    <li><a href="#the-real-change-is-the-inference-memory-budget">The Real Change Is the Inference Memory Budget</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>Transformer attention makes an expensive but cautious choice. It does not decide too early which history matters; instead, it keeps every old token&rsquo;s key and value in a KV cache and lets each new query compare against them. Mamba adopts the opposite contract: <strong>history is compressed into a fixed-size state as it passes, and the original list is no longer available for arbitrary look-back.</strong></p>
+<p>That difference is more consequential than replacing $O(L^2)$ with $O(L)$. Compressing history is easy. Preserving the right information after compression is hard. Earlier linear time-invariant state space models (LTI SSMs) applied the same dynamics to every token. They behaved like filters that always updated in the same way: useful for continuous signals, but poorly suited to language decisions such as “retain this name, ignore that filler word.” Mamba made the important state-update parameters depend on the current input, then built a hardware-aware parallel scan for the resulting model after it had lost the convenient convolution path.</p>
+<p>The most useful way to understand Mamba is therefore not “a model without attention,” but as three coupled choices: compress context into finite state, make the compression policy input-dependent, and recover GPU-friendly training through an efficient scan.</p>
+<h2 id="two-context-contracts-archive-and-working-memory">Two Context Contracts: Archive and Working Memory
+</h2><p>Let the sequence length be $L$. Standard self-attention explicitly constructs pairwise token interactions during training, so compute and the attention matrix grow with $L^2$. Autoregressive generation computes only one new query per step, but it stores and reads a KV cache that grows with $L$. Its strength comes from the same design: the old representations remain available, so a later query can retrieve them in a new way.</p>
+<p>A state space model uses a different form. After discretization, a minimal recurrence is:</p>
+$$h_t=\bar A h_{t-1}+\bar Bx_t,\qquad y_t=Ch_t$$<p>$h_t$ is a compressed state for everything seen through position $t$. Each token combines the previous state and new input into the next state. During generation, each layer keeps only the current state, so cache size does not grow with context and per-step work does not increase with prefix length. The trade-off is just as clear: if some information did not enter $h_t$, a later step cannot return to the original token as attention can.</p>
+<figure><img src="/en/p/mamba-selective-state-space/context-contract.svg"><figcaption>
+			<h4>Figure 1: attention keeps an addressable KV archive; Mamba continuously compresses history into a fixed state</h4>
+		</figcaption>
+</figure>
+
+<p>This creates two meanings of “long context.” For attention, a longer window primarily means more addressable records, paid for with a larger cache and more reads. A recurrent SSM processes a longer sequence with linear total work, but its fixed state does not automatically gain capacity with a larger window. <strong>Being able to process one million tokens is not the same as remembering one million tokens losslessly.</strong> The original Mamba paper observed continued gains up to length one million on a DNA task. That is evidence for a particular dataset and objective, not proof of infinite memory.</p>
+<h2 id="selectivity-does-not-drop-tokens-it-changes-the-update">Selectivity Does Not Drop Tokens; It Changes the Update
+</h2><p>In a traditional LTI SSM, $Δ,A,B,C$ remain fixed across positions. The model can be viewed either as a recurrence or expanded into a global convolution, which makes parallel training convenient. Fixed dynamics, however, cannot alter the memory policy according to content. The paper illustrates the gap with Selective Copying: relevant symbols appear at varying positions, so the model must decide when to write based on token identity rather than wait for a fixed offset.</p>
+<p>Mamba keeps a structured $A$ but makes $Δ_t$, $B_t$, and $C_t$ functions of the current input $x_t$:</p>
+$$Δ_t=s_\Delta(x_t),\qquad B_t=s_B(x_t),\qquad C_t=s_C(x_t)$$<p>After discretization, the transition itself varies by position:</p>
+$$h_t=\bar A_t h_{t-1}+\bar B_t x_t,\qquad y_t=C_t h_t$$<p>The three terms answer different questions. $B_t$ determines how the current input is written into state. $C_t$ determines what is read from state now. $Δ_t$ changes the timescale between preserving the old state and accepting the current input. In the paper&rsquo;s mechanical interpretation, a larger $Δ_t$ tends to reset state and focus on the current input, while a smaller $Δ_t$ tends to preserve state and ignore a transient input. This is not a discrete keep/delete label assigned before processing. It is a continuous change to information flow at every step.</p>
+<figure><img src="/en/p/mamba-selective-state-space/selective-state.svg"><figcaption>
+			<h4>Figure 2: input-dependent Δ, B, and C govern forgetting/updating, write direction, and readout</h4>
+		</figcaption>
+</figure>
+
+<p>That is why Mamba should not be equated with SSMs in general. In the paper&rsquo;s ablations, replacing a non-selective SSM with the selective S6 layer substantially improved language-model perplexity. $Δ$ was the most important individual selective parameter, and making $Δ$, $B$, and $C$ selective together worked best. The crucial repair for discrete language was not “state space” by itself, but content-aware compression.</p>
+<h2 id="selectivity-removes-the-convolution-shortcut-scan-restores-parallelism">Selectivity Removes the Convolution Shortcut; Scan Restores Parallelism
+</h2><p>An LTI SSM with fixed parameters can express an entire sequence as one convolution and train in parallel. Once the parameters vary with each token, there is no single stationary kernel for the sequence. A naive implementation would execute $t=1,2,\ldots,L$ in order, leaving a GPU underused by many small serial operations.</p>
+<p>Mamba exploits the associativity of composing recurrences. Each position can be represented as a local transform $(\bar A_t,\bar B_tx_t)$. Neighboring transforms can be combined first and then combined with other intervals. Training can therefore use a parallel scan with a tree-shaped reduction, while generation uses the genuine one-step recurrence. One equation receives two execution plans: sequence parallelism for batch training and constant-size state for autoregressive decoding.</p>
+<figure><img src="/en/p/mamba-selective-state-space/scan-modes.svg"><figcaption>
+			<h4>Figure 3: the same selective recurrence uses parallel scan for training and one-step state updates for generation</h4>
+		</figcaption>
+</figure>
+
+<p>The algorithm alone is insufficient. A selective SSM conceptually produces expanded state with shape roughly $B\times L\times D\times N$. Materializing those intermediates in high-bandwidth memory could allow memory traffic to consume the apparent linear-time advantage. The paper&rsquo;s CUDA implementation fuses discretization, scan, and following operations in on-chip SRAM, avoids writing the large expanded state, and recomputes some intermediates during the backward pass. Under the paper&rsquo;s benchmark setup, selective scan became faster than FlashAttention-2 beyond sequence length 2K and 20–40 times faster than a standard PyTorch scan; end-to-end autoregressive throughput reached up to five times that of a similarly sized Transformer. These measurements depend on hardware, tensor shapes, and implementation. They are not universal deployment multipliers.</p>
+<h2 id="why-a-mamba-block-also-absorbs-the-mlp">Why a Mamba Block Also Absorbs the MLP
+</h2><p>Original Mamba does more than replace a Transformer attention layer with an SSM. A block expands its input into two paths. The main path passes through a short causal 1D convolution, SiLU, and the selective SSM. The other path forms a gate. Their outputs are multiplied and projected back to the model dimension. This merges what earlier architectures separated into a sequence-mixing layer and an independent MLP. When the paper says the network has “no MLP blocks,” it means there is no separately stacked FFN sublayer, not that the block lacks linear projections or nonlinearities.</p>
+<p>The short convolution mixes nearby tokens, the SSM propagates state over the sequence, and the gate controls output channels. Together they explain why studying only the recurrence misses much of the actual model. Mamba&rsquo;s behavior comes from the combination of selective state, local convolution, gating architecture, and the hardware implementation—not one isolated equation.</p>
+<p>The simplification also creates an engineering threshold. The official repository&rsquo;s fast path depends on custom CUDA kernels, and supported state dimensions, data types, and devices affect realized speed. Falling back to a reference implementation on mismatched hardware does not automatically convert linear asymptotics into lower latency. Complexity moved from a growing KV cache into kernels and scan execution; it did not vanish.</p>
+<h2 id="pure-ssm-limits-became-clearer-in-hybrid-models">Pure SSM Limits Became Clearer in Hybrid Models
+</h2><p>The original results were strong. Under its training and evaluation setup, Mamba-3B outperformed same-size Transformers and matched Transformers roughly twice its size, across work that also covered language, audio, and genomics. A later controlled 8B study coauthored by Mamba&rsquo;s authors and NVIDIA researchers supplied a more informative boundary. It trained Mamba, Mamba-2, and Transformer models on the same data for as many as 3.5 trillion tokens. Pure SSMs matched or exceeded Transformers on many tasks, but lagged on tasks demanding strong copying, in-context learning, or long-context reasoning.</p>
+<p>That result follows directly from the context contract. Attention retains raw K/V records and can point to an early detail in response to a question that appears much later. Fixed state must anticipate what deserves storage. Selectivity improves that decision but cannot remove finite-state capacity. Copying a phone number, reproducing an exact span, or learning a new mapping demonstrated only in the prompt are precisely the tasks where the future query may be unknowable at write time.</p>
+<p>The same study used a Mamba-2-Hybrid made of 43% Mamba-2, 7% attention, and 50% MLP layers. It reported that the 8B hybrid beat the 8B Transformer by an average 2.65 points across 12 standard tasks and was predicted to generate up to eight times faster. Across 23 additional long-context tasks, the hybrid closely matched or exceeded the Transformer on average. “Predicted up to 8×” is not a complete production benchmark, but the architectural direction is important: a small amount of attention can serve as exact addressable memory while SSM layers perform cheap sequential compression.</p>
+<p>Mamba-2&rsquo;s State Space Duality (SSD) further showed that structured SSMs and certain constrained forms of attention are not unrelated worlds. They are alternative computations over the same class of structured semiseparable matrices. Its core layer was 2–8 times faster than Mamba&rsquo;s selective SSM in the paper&rsquo;s benchmarks. The more accurate industry conclusion is not “SSMs will replace Transformers,” but: <strong>attention and state space layers expose different memory interfaces, and models can combine them by layer and task.</strong></p>
+<h2 id="the-real-change-is-the-inference-memory-budget">The Real Change Is the Inference Memory Budget
+</h2><p>MLA, discussed in the previous article, still compresses the KV cache inside attention. Mamba goes further by changing what is cached. Instead of storing addressable K/V for every historical token, it maintains a state per layer that is rewritten as the sequence advances. Context changes from an ever-thickening archive into fixed-size working memory. That opens a different systems design space for streaming audio, genomics, sensors, and long generation: state memory and per-step latency need not grow with elapsed sequence length.</p>
+<p>The budget must still be matched to the task&rsquo;s memory demands. Attention&rsquo;s explicit archive remains valuable for exact quotation, arbitrary look-back, and temporary learning inside a prompt. Selective state is attractive for continuous streaming, low cache usage, and stable per-step cost. Hybrid models are natural not because they are a timid compromise, but because summarizing memory and addressable memory are genuinely different capabilities.</p>
+<p>Mamba therefore leaves a question more durable than any benchmark: how much of the past should a sequence model keep, and when should it decide to forget? Attention postpones the choice until read time; Mamba makes it at write time. Its contribution was to show that the latter, once equipped with content selection, parallel scan, and the right kernels, no longer has to remain an efficient but less capable substitute. It can become one of the main components from which we design a model&rsquo;s memory system.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Gu &amp; Dao, <a class="link" href="https://arxiv.org/abs/2312.00752"  target="_blank" rel="noopener"
+    >Mamba: Linear-Time Sequence Modeling with Selective State Spaces</a>, 2023/2024.</li>
+<li>Dao &amp; Gu, <a class="link" href="https://arxiv.org/abs/2405.21060"  target="_blank" rel="noopener"
+    >Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality</a>, 2024.</li>
+<li>Waleffe et al., <a class="link" href="https://arxiv.org/abs/2406.07887"  target="_blank" rel="noopener"
+    >An Empirical Study of Mamba-based Language Models</a>, 2024.</li>
+<li>State Spaces Models team, <a class="link" href="https://github.com/state-spaces/mamba"  target="_blank" rel="noopener"
+    >Mamba official implementation</a>.</li>
+<li>NVIDIA Megatron-LM, <a class="link" href="https://github.com/NVIDIA/Megatron-LM/tree/main/megatron/core/models/mamba"  target="_blank" rel="noopener"
+    >Mamba and Mamba-2 model implementation</a>.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/mamba/">Mamba</a>
+        
+            <a href="/en/tags/state-space-models/">State Space Models</a>
+        
+            <a href="/en/tags/long-sequences/">Long Sequences</a>
+        
+            <a href="/en/tags/selective-scan/">Selective Scan</a>
+        
+            <a href="/en/tags/inference-efficiency/">Inference Efficiency</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-24
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3: The Two Bills Behind MLA and MoE" height="150" loading="lazy" src="/en/p/deepseek-mla-moe/cover_hu_d936419fdc43ceca.jpg" srcset="/en/p/deepseek-mla-moe/cover_hu_d936419fdc43ceca.jpg 1x, /en/p/deepseek-mla-moe/cover_hu_c42277eb841cd759.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ddd2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3: The Two Bills Behind MLA and MoE</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/llama-open-ecosystem/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation" height="150" loading="lazy" src="/en/p/llama-open-ecosystem/cover_hu_fd1ca67b3f80cfc9.jpg" srcset="/en/p/llama-open-ecosystem/cover_hu_fd1ca67b3f80cfc9.jpg 1x, /en/p/llama-open-ecosystem/cover_hu_2fc618579127acef.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #d7c6c480 0%, #171e2eC0 100%);">
+            <h2 class="article-title">LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/chinchilla-scaling-laws/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Chinchilla: Why Bigger Models Are Not Always Better" height="150" loading="lazy" src="/en/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg" srcset="/en/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg 1x, /en/p/chinchilla-scaling-laws/cover_hu_8efef5f297f5000b.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c8e0d480 0%, #171d23C0 100%);">
+            <h2 class="article-title">Chinchilla: Why Bigger Models Are Not Always Better</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT: Teaching LLMs to Be Helpful with RLHF" height="150" loading="lazy" src="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /en/p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT: Teaching LLMs to Be Helpful with RLHF</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/t5-bart/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post T5 / BART: Unifying Every NLP Task as Text-to-Text" height="150" loading="lazy" src="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg" srcset="/en/p/t5-bart/cover_hu_14bedfcddbc236b6.jpg 1x, /en/p/t5-bart/cover_hu_a632de1a1dc4362f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #079d2e80 0%, #04310fC0 100%);">
+            <h2 class="article-title">T5 / BART: Unifying Every NLP Task as Text-to-Text</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

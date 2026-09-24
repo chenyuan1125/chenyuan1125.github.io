@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2026-09-23T18:57:28+08:00</lastmod>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -14,6 +14,83 @@
                 hreflang="zh-cn"
                 href="/categories/"
                 />
+  </url><url>
+    <loc>/tags/mamba/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/mamba/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/mamba/"
+                />
+  </url><url>
+    <loc>/p/mamba-selective-state-space/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/mamba-selective-state-space/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/mamba-selective-state-space/"
+                />
+  </url><url>
+    <loc>/post/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/"
+                />
+  </url><url>
+    <loc>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2026-09-24T09:09:04+08:00</lastmod>
   </url><url>
     <loc>/tags/deepseek/</loc>
     <lastmod>2026-09-23T18:57:28+08:00</lastmod>
@@ -79,48 +156,6 @@
                 hreflang="zh-cn"
                 href="/tags/moe/"
                 />
-  </url><url>
-    <loc>/post/</loc>
-    <lastmod>2026-09-23T18:57:28+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2026-09-23T18:57:28+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2026-09-23T18:57:28+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/"
-                />
-  </url><url>
-    <loc>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</loc>
-    <lastmod>2026-09-23T18:57:28+08:00</lastmod>
   </url><url>
     <loc>/tags/gqa/</loc>
     <lastmod>2026-09-22T21:32:34+08:00</lastmod>

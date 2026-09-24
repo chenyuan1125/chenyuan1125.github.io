@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" width="600" height="480" role="img" aria-labelledby="sel-title sel-desc">
+  <title id="sel-title">Mamba selective state update</title>
+  <desc id="sel-desc">The current input produces Delta, B, and C parameters that control state retention, writing, and readout.</desc>
+  <defs><marker id="sel-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#54676b"/></marker><filter id="sel-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1f3538" flood-opacity=".12"/></filter></defs>
+  <rect width="600" height="480" rx="22" fill="#f5f1e9"/>
+  <text x="300" y="36" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#24383c">Selectivity makes compression input-dependent</text>
+  <g font-family="Arial,sans-serif">
+    <rect x="35" y="196" width="82" height="58" rx="14" fill="#304c52" filter="url(#sel-shadow)"/><text x="76" y="221" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">current input</text><text x="76" y="241" text-anchor="middle" font-size="16" fill="#fff">xₜ</text>
+    <path d="M119 225H164" stroke="#54676b" stroke-width="2" marker-end="url(#sel-arrow)"/>
+    <rect x="168" y="105" width="94" height="64" rx="13" fill="#e8c16e" filter="url(#sel-shadow)"/><text x="215" y="130" text-anchor="middle" font-size="15" font-weight="700" fill="#3b3527">Δₜ</text><text x="215" y="151" text-anchor="middle" font-size="12" fill="#5f5339">keep / reset</text>
+    <rect x="168" y="193" width="94" height="64" rx="13" fill="#9fc6bd" filter="url(#sel-shadow)"/><text x="215" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#24453f">Bₜ</text><text x="215" y="239" text-anchor="middle" font-size="12" fill="#315c54">write direction</text>
+    <rect x="168" y="281" width="94" height="64" rx="13" fill="#aebed0" filter="url(#sel-shadow)"/><text x="215" y="306" text-anchor="middle" font-size="15" font-weight="700" fill="#2f4054">Cₜ</text><text x="215" y="327" text-anchor="middle" font-size="12" fill="#41566f">read content</text>
+    <path d="M142 225C153 225 151 137 166 137M142 225H166M142 225C153 225 151 313 166 313" fill="none" stroke="#7a898b" stroke-width="1.7" marker-end="url(#sel-arrow)"/>
+    <rect x="318" y="170" width="174" height="115" rx="18" fill="#fff" stroke="#afc2be" stroke-width="1.5" filter="url(#sel-shadow)"/><text x="405" y="199" text-anchor="middle" font-size="14" font-weight="700" fill="#294b45">selective state update</text><text x="405" y="231" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#24383c">hₜ = Āₜ hₜ₋₁ + B̄ₜ xₜ</text><text x="405" y="259" text-anchor="middle" font-family="Georgia,serif" font-size="16" fill="#24383c">yₜ = Cₜ hₜ</text>
+    <path d="M264 137C294 137 295 187 316 201M264 225H316M264 313C295 313 295 267 316 255" fill="none" stroke="#54676b" stroke-width="1.8" marker-end="url(#sel-arrow)"/>
+    <rect x="337" y="83" width="136" height="45" rx="11" fill="#dfe8e6"/><text x="405" y="111" text-anchor="middle" font-size="13" fill="#345a53">previous state hₜ₋₁</text><path d="M405 130V168" stroke="#54676b" stroke-width="2" marker-end="url(#sel-arrow)"/>
+    <path d="M493 226H540" stroke="#54676b" stroke-width="2" marker-end="url(#sel-arrow)"/><rect x="541" y="198" width="38" height="56" rx="10" fill="#304c52"/><text x="560" y="232" text-anchor="middle" font-size="15" fill="#fff">yₜ</text>
+    <rect x="42" y="390" width="516" height="58" rx="15" fill="#e9e3d8"/><circle cx="78" cy="419" r="10" fill="#e8c16e"/><text x="98" y="414" font-size="12" fill="#514937">large Δ: focus on current input, reset more old state</text><text x="98" y="433" font-size="12" fill="#514937">small Δ: preserve state, ignore a transient input</text>
+    <text x="300" y="371" text-anchor="middle" font-size="13" font-weight="700" fill="#6a5b43">Selection changes continuous state flow; it does not pre-delete tokens.</text>
+  </g>
+</svg>

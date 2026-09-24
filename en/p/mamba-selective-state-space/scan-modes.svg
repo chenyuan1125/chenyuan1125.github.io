@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 460" width="600" height="460" role="img" aria-labelledby="scan-title scan-desc">
+  <title id="scan-title">Two execution modes for the selective recurrence</title>
+  <desc id="scan-desc">Training combines local transforms through a parallel tree scan, while generation updates a fixed state one token at a time.</desc>
+  <defs><marker id="scan-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#5b6e72"/></marker></defs>
+  <rect width="600" height="460" rx="22" fill="#f5f1e9"/>
+  <text x="300" y="35" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#24383c">One recurrence, two execution plans</text>
+  <g font-family="Arial,sans-serif">
+    <rect x="25" y="58" width="550" height="190" rx="18" fill="#fbfaf6" stroke="#d7d0c4"/><text x="48" y="87" font-size="16" font-weight="700" fill="#34504f">Training: parallel scan</text><text x="548" y="87" text-anchor="end" font-size="12" fill="#6c7778">full sequence available</text>
+    <g fill="#dce8e5" stroke="#7f9e97"><rect x="49" y="183" width="48" height="35" rx="8"/><rect x="114" y="183" width="48" height="35" rx="8"/><rect x="179" y="183" width="48" height="35" rx="8"/><rect x="244" y="183" width="48" height="35" rx="8"/><rect x="309" y="183" width="48" height="35" rx="8"/><rect x="374" y="183" width="48" height="35" rx="8"/><rect x="439" y="183" width="48" height="35" rx="8"/><rect x="504" y="183" width="48" height="35" rx="8"/></g>
+    <g text-anchor="middle" font-size="12" fill="#34504f"><text x="73" y="205">T₁</text><text x="138" y="205">T₂</text><text x="203" y="205">T₃</text><text x="268" y="205">T₄</text><text x="333" y="205">T₅</text><text x="398" y="205">T₆</text><text x="463" y="205">T₇</text><text x="528" y="205">T₈</text></g>
+    <g fill="#9fc4bb" stroke="#668a82"><rect x="80" y="137" width="52" height="31" rx="8"/><rect x="210" y="137" width="52" height="31" rx="8"/><rect x="340" y="137" width="52" height="31" rx="8"/><rect x="470" y="137" width="52" height="31" rx="8"/></g>
+    <g text-anchor="middle" font-size="11" fill="#264940"><text x="106" y="157">T₁∘T₂</text><text x="236" y="157">T₃∘T₄</text><text x="366" y="157">T₅∘T₆</text><text x="496" y="157">T₇∘T₈</text></g>
+    <g fill="#e7c16f" stroke="#b49047"><rect x="145" y="101" width="64" height="27" rx="8"/><rect x="405" y="101" width="64" height="27" rx="8"/></g>
+    <path d="M73 181L101 169M138 181L111 169M203 181L231 169M268 181L241 169M333 181L361 169M398 181L371 169M463 181L491 169M528 181L501 169M106 135L169 129M236 135L185 129M366 135L418 129M496 135L451 129" stroke="#7b8b8d" stroke-width="1.5"/>
+    <text x="300" y="234" text-anchor="middle" font-size="12" fill="#647173">local transforms Tₜ=(Āₜ, B̄ₜxₜ) compose associatively</text>
+    <rect x="25" y="266" width="550" height="161" rx="18" fill="#e8efed" stroke="#bed0cb"/><text x="48" y="296" font-size="16" font-weight="700" fill="#34504f">Generation: recurrence</text><text x="548" y="296" text-anchor="end" font-size="12" fill="#59736e">one token arrives</text>
+    <g font-size="13" text-anchor="middle"><rect x="53" y="332" width="62" height="45" rx="10" fill="#fff"/><text x="84" y="360" fill="#3b5357">hₜ₋₁</text><rect x="157" y="332" width="62" height="45" rx="10" fill="#edc77d"/><text x="188" y="360" fill="#4b402c">xₜ</text><rect x="278" y="318" width="126" height="73" rx="15" fill="#35675e"/><text x="341" y="348" fill="#fff" font-weight="700">state update</text><text x="341" y="369" fill="#dfeeea">Tₜ(hₜ₋₁)</text><rect x="463" y="332" width="73" height="45" rx="10" fill="#fff"/><text x="499" y="360" fill="#3b5357">hₜ</text></g>
+    <path d="M117 354H276M221 354H276M406 354H461" stroke="#5b6e72" stroke-width="2" marker-end="url(#scan-arrow)"/><text x="300" y="414" text-anchor="middle" font-size="12" fill="#536a66">only fixed-size current state moves to the next step</text>
+  </g>
+</svg>
