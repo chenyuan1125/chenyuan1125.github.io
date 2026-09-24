@@ -6,7 +6,7 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Thu, 24 Sep 2026 09:09:04 +0800</lastBuildDate><atom:link href="/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 24 Sep 2026 09:22:47 +0800</lastBuildDate><atom:link href="/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/index.xml" rel="self" type="application/rss+xml" /><item>
             <title>Mamba：少记，为什么反而可能更懂长序列</title>
             <link>/p/mamba-selective-state-space/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
