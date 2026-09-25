@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2026-09-24T09:22:47+08:00</lastmod>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -14,6 +14,93 @@
                 hreflang="zh-cn"
                 href="/categories/"
                 />
+  </url><url>
+    <loc>/tags/flashattention/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/flashattention/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/flashattention/"
+                />
+  </url><url>
+    <loc>/p/flashattention-io-aware/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/flashattention-io-aware/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/flashattention-io-aware/"
+                />
+  </url><url>
+    <loc>/tags/gpu/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/gpu/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/gpu/"
+                />
+  </url><url>
+    <loc>/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+  </url><url>
+    <loc>/post/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/"
+                />
+  </url><url>
+    <loc>/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</loc>
+    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
   </url><url>
     <loc>/tags/mamba/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
@@ -39,45 +126,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/p/mamba-selective-state-space/"
-                />
-  </url><url>
-    <loc>/post/</loc>
-    <lastmod>2026-09-24T09:22:47+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2026-09-24T09:22:47+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2026-09-24T09:22:47+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/"
                 />
   </url><url>
     <loc>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</loc>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 430" width="600" height="430" role="img" aria-labelledby="softmax-title softmax-desc">
+  <title id="softmax-title">分块在线 softmax</title>
+  <desc id="softmax-desc">三个分块依次更新最大值、指数和与输出累积量，最终得到精确输出。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8Z" fill="#497f8e"/></marker>
+    <style>.t{font-family:"Microsoft YaHei","Noto Sans SC",sans-serif;fill:#25323a}.h{font-size:20px;font-weight:700}.sh{font-size:14px;font-weight:700}.b{font-size:12px}.sm{font-size:10.5px;fill:#627078}.tile{stroke:#657b84;stroke-width:1.2}.state{fill:#fffaf0;stroke:#b0782f;stroke-width:1.4}.out{fill:#cfe3e4;stroke:#497f8e;stroke-width:1.5}</style>
+  </defs>
+  <rect width="600" height="430" rx="18" fill="#f4f2eb"/>
+  <text class="t h" x="300" y="34" text-anchor="middle">Softmax 不必等整行到齐</text>
+  <text class="t sm" x="300" y="55" text-anchor="middle">每个 score tile 到来时，只更新三组按行统计量</text>
+
+  <g transform="translate(34 84)">
+    <text class="t sh" x="70" y="0" text-anchor="middle">第 1 块</text>
+    <g class="tile"><rect x="18" y="16" width="26" height="26" fill="#88aeb9"/><rect x="46" y="16" width="26" height="26" fill="#b9ccd1"/><rect x="74" y="16" width="26" height="26" fill="#6f99a6"/><rect x="102" y="16" width="26" height="26" fill="#d7e2e3"/></g>
+    <text class="t sm" x="73" y="60" text-anchor="middle">局部 QKᵀ 分数</text>
+    <rect class="state" x="7" y="79" width="132" height="104" rx="9"/>
+    <text class="t b" x="73" y="103" text-anchor="middle">m₁ = 本块最大值</text>
+    <text class="t b" x="73" y="128" text-anchor="middle">ℓ₁ = 指数和</text>
+    <text class="t b" x="73" y="153" text-anchor="middle">o₁ = 加权 V 累积</text>
+    <text class="t sm" x="73" y="173" text-anchor="middle">不做最终归一化</text>
+  </g>
+  <line x1="176" y1="180" x2="212" y2="180" stroke="#497f8e" stroke-width="2.5" marker-end="url(#a)"/>
+
+  <g transform="translate(218 84)">
+    <text class="t sh" x="70" y="0" text-anchor="middle">第 2 块</text>
+    <g class="tile"><rect x="18" y="16" width="26" height="26" fill="#bd8a48"/><rect x="46" y="16" width="26" height="26" fill="#e0be88"/><rect x="74" y="16" width="26" height="26" fill="#9e6d30"/><rect x="102" y="16" width="26" height="26" fill="#f0d9b5"/></g>
+    <text class="t sm" x="73" y="60" text-anchor="middle">新的局部分数</text>
+    <rect class="state" x="0" y="79" width="146" height="104" rx="9"/>
+    <text class="t b" x="73" y="102" text-anchor="middle">m₂ = max(m₁, 块最大值)</text>
+    <text class="t b" x="73" y="127" text-anchor="middle">按 eᵐ¹⁻ᵐ² 缩放旧 ℓ</text>
+    <text class="t b" x="73" y="152" text-anchor="middle">同样缩放旧 o，再加新块</text>
+    <text class="t sm" x="73" y="173" text-anchor="middle">稳定地合并两块</text>
+  </g>
+  <line x1="370" y1="180" x2="406" y2="180" stroke="#497f8e" stroke-width="2.5" marker-end="url(#a)"/>
+
+  <g transform="translate(412 84)">
+    <text class="t sh" x="70" y="0" text-anchor="middle">第 3 块及以后</text>
+    <g class="tile"><rect x="18" y="16" width="26" height="26" fill="#8c9b76"/><rect x="46" y="16" width="26" height="26" fill="#c2ccb1"/><rect x="74" y="16" width="26" height="26" fill="#71855a"/><rect x="102" y="16" width="26" height="26" fill="#dde3d4"/></g>
+    <text class="t sm" x="73" y="60" text-anchor="middle">重复同一更新</text>
+    <rect class="state" x="7" y="79" width="132" height="104" rx="9"/>
+    <text class="t b" x="73" y="103" text-anchor="middle">持续维护 m、ℓ、o</text>
+    <text class="t b" x="73" y="130" text-anchor="middle">score tile 用完即弃</text>
+    <text class="t b" x="73" y="157" text-anchor="middle">无需保存完整一行</text>
+  </g>
+
+  <line x1="485" y1="270" x2="485" y2="311" stroke="#497f8e" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect class="out" x="345" y="315" width="240" height="76" rx="12"/>
+  <text class="t sh" x="465" y="341" text-anchor="middle">最终 O = o / ℓ</text>
+  <text class="t b" x="465" y="365" text-anchor="middle">与完整 stable softmax 等价</text>
+  <text class="t sm" x="465" y="382" text-anchor="middle">差异仅来自正常浮点舍入</text>
+  <rect x="29" y="315" width="270" height="76" rx="12" fill="#e7e3d9" stroke="#a7aaa8"/>
+  <text class="t sh" x="164" y="341" text-anchor="middle">片上只保留“足够统计量”</text>
+  <text class="t b" x="164" y="365" text-anchor="middle">每行 1 个最大值 m、1 个和 ℓ</text>
+  <text class="t b" x="164" y="383" text-anchor="middle">以及 d 维输出累积量 o</text>
+  <text class="t sm" x="300" y="418" text-anchor="middle">分块改变执行顺序，不改变 dense attention 的语义</text>
+</svg>

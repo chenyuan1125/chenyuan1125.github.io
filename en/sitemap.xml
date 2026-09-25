@@ -2,8 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/en/tags/attention/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+  </url><url>
     <loc>/en/categories/</loc>
-    <lastmod>2026-09-24T09:22:49+08:00</lastmod>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -15,10 +18,81 @@
                 href="/categories/"
                 />
   </url><url>
-    <loc>/en/tags/inference-efficiency/</loc>
-    <lastmod>2026-09-24T09:22:49+08:00</lastmod>
+    <loc>/en/tags/flashattention/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/flashattention/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/flashattention/"
+                />
+  </url><url>
+    <loc>/en/p/flashattention-io-aware/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/flashattention-io-aware/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/flashattention-io-aware/"
+                />
+  </url><url>
+    <loc>/en/tags/gpu/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/gpu/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/gpu/"
+                />
+  </url><url>
+    <loc>/en/tags/io-aware-algorithms/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
   </url><url>
     <loc>/en/categories/llm-architecture/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/long-context/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+  </url><url>
+    <loc>/en/post/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/en/tags/</loc>
+    <lastmod>2026-09-25T13:17:31+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/en/tags/inference-efficiency/</loc>
     <lastmod>2026-09-24T09:22:49+08:00</lastmod>
   </url><url>
     <loc>/en/tags/long-sequences/</loc>
@@ -50,37 +124,11 @@
                 href="/p/mamba-selective-state-space/"
                 />
   </url><url>
-    <loc>/en/post/</loc>
-    <lastmod>2026-09-24T09:22:49+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
     <loc>/en/tags/selective-scan/</loc>
     <lastmod>2026-09-24T09:22:49+08:00</lastmod>
   </url><url>
     <loc>/en/tags/state-space-models/</loc>
     <lastmod>2026-09-24T09:22:49+08:00</lastmod>
-  </url><url>
-    <loc>/en/tags/</loc>
-    <lastmod>2026-09-24T09:22:49+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
   </url><url>
     <loc>/en/tags/deepseek/</loc>
     <lastmod>2026-09-23T18:57:29+08:00</lastmod>
@@ -632,9 +680,6 @@
                 />
   </url><url>
     <loc>/en/tags/architecture/</loc>
-    <lastmod>2026-09-08T22:25:43+08:00</lastmod>
-  </url><url>
-    <loc>/en/tags/attention/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
     <loc>/en/p/transformer-01/</loc>

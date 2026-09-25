@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="FlashAttention 没有近似注意力，也没有消除二次计算；它通过分块、在线 softmax 与重计算避免物化巨大的注意力矩阵。本文从 GPU 内存层级解释它为何更快，以及 FA2、FA3 如何继续榨出硬件效率。">
+<title>FlashAttention：不是少算，而是少搬</title>
+
+
+<link rel="canonical" href="/p/flashattention-io-aware/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="FlashAttention：不是少算，而是少搬">
+<meta property='og:description' content="FlashAttention 没有近似注意力，也没有消除二次计算；它通过分块、在线 softmax 与重计算避免物化巨大的注意力矩阵。本文从 GPU 内存层级解释它为何更快，以及 FA2、FA3 如何继续榨出硬件效率。">
+<meta property='og:url' content='/p/flashattention-io-aware/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='FlashAttention' /><meta property='article:tag' content='注意力机制' /><meta property='article:tag' content='GPU' /><meta property='article:tag' content='IO感知算法' /><meta property='article:tag' content='长上下文' /><meta property='article:published_time' content='2026-09-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-25T13:17:29&#43;08:00'/><meta property='og:image' content='/p/flashattention-io-aware/cover.jpg' />
+<meta name="twitter:title" content="FlashAttention：不是少算，而是少搬">
+<meta name="twitter:description" content="FlashAttention 没有近似注意力，也没有消除二次计算；它通过分块、在线 softmax 与重计算避免物化巨大的注意力矩阵。本文从 GPU 内存层级解释它为何更快，以及 FA2、FA3 如何继续榨出硬件效率。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/flashattention-io-aware/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/flashattention-io-aware/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/flashattention-io-aware/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#慢的未必是乘法而是中间矩阵的往返">慢的未必是乘法，而是中间矩阵的往返</a></li>
+    <li><a href="#难点不是分块而是-softmax-看起来需要整行">难点不是分块，而是 softmax 看起来需要整行</a></li>
+    <li><a href="#为什么多算一点反而更快">为什么“多算一点”反而更快</a></li>
+    <li><a href="#从-fa1-到-fa3优化对象一层层靠近硬件">从 FA1 到 FA3：优化对象一层层靠近硬件</a></li>
+    <li><a href="#它改变了什么又没有改变什么">它改变了什么，又没有改变什么</a></li>
+    <li><a href="#真正的突破是把内存层级写进算法">真正的突破，是把内存层级写进算法</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/flashattention-io-aware/">
+            <img alt="Featured image of post FlashAttention：不是少算，而是少搬" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/flashattention-io-aware/cover.jpg" srcset="/p/flashattention-io-aware/cover_hu_8dbd1710d349d6b3.jpg 800w, /p/flashattention-io-aware/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/flashattention-io-aware/">FlashAttention：不是少算，而是少搬</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            FlashAttention 没有近似注意力，也没有消除二次计算；它通过分块、在线 softmax 与重计算避免物化巨大的注意力矩阵。本文从 GPU 内存层级解释它为何更快，以及 FA2、FA3 如何继续榨出硬件效率。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-25T00:00:00Z'>2026-09-25</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 8 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/flashattention-io-aware/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#慢的未必是乘法而是中间矩阵的往返">慢的未必是乘法，而是中间矩阵的往返</a></li>
+    <li><a href="#难点不是分块而是-softmax-看起来需要整行">难点不是分块，而是 softmax 看起来需要整行</a></li>
+    <li><a href="#为什么多算一点反而更快">为什么“多算一点”反而更快</a></li>
+    <li><a href="#从-fa1-到-fa3优化对象一层层靠近硬件">从 FA1 到 FA3：优化对象一层层靠近硬件</a></li>
+    <li><a href="#它改变了什么又没有改变什么">它改变了什么，又没有改变什么</a></li>
+    <li><a href="#真正的突破是把内存层级写进算法">真正的突破，是把内存层级写进算法</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>FlashAttention 有一个很反直觉的事实：它计算的仍是精确 attention，浮点运算量仍随序列长度平方增长，反向传播甚至会主动重算一部分结果；但它通常更快，也把额外显存从二次量级降到线性量级。</p>
+<p>如果只用“大 O 复杂度”理解算法，这件事很难解释。答案不在公式少了哪一项，而在 GPU 真正为哪一种成本付时间：现代加速器能很快地做矩阵乘法，却不喜欢把巨大的中间张量反复写入高带宽显存（HBM），再读回来交给下一个 kernel。FlashAttention 的贡献，是把 attention 从一串按数学步骤排列的算子，重排成一条适配内存层级的数据流。</p>
+<p>它没有改变模型学什么，而是改变同一公式怎样落到机器上。也正因为如此，这项工作比某个 CUDA 技巧更有解释价值：它提醒我们，模型效率既取决于计算图，也取决于数据在硬件中的旅程。</p>
+<h2 id="慢的未必是乘法而是中间矩阵的往返">慢的未必是乘法，而是中间矩阵的往返
+</h2><p>单个注意力头的计算可以写成：</p>
+$$S=QK^\top,\qquad P=\operatorname{softmax}(S),\qquad O=PV$$<p>若序列长度为 $N$、head dimension 为 $d$，$Q、K、V、O$ 的尺寸都是 $N\times d$，而分数矩阵 $S$ 与概率矩阵 $P$ 都是 $N\times N$。标准实现通常让不同 kernel 依次完成矩阵乘、mask、softmax、dropout 和第二次矩阵乘：先把 $S$ 写入 HBM，softmax 再把它读出并写回 $P$，最后第三次读出 $P$ 与 $V$ 相乘。</p>
+<p>问题不只是 $N^2$ 个元素占空间。每跨过一个 kernel 边界，中间结果都可能要经过一次“片上计算单元 ↔ HBM”的长途搬运。FlashAttention 原论文用 A100 举例：每个流多处理器只有约 192 KB 片上 SRAM，但带宽估算约 19 TB/s；整卡 HBM 有 40–80 GB，带宽却只有 1.5–2.0 TB/s。SRAM 快一个数量级，却小了许多个数量级。于是关键问题变成：<strong>能否让小块数据留在片上完成整段计算，而不是让完整 $N\times N$ 矩阵落地到 HBM？</strong></p>
+<figure><img src="/p/flashattention-io-aware/io-path.svg"><figcaption>
+			<h4>图 1：标准实现物化 S、P 并多次访问 HBM；FlashAttention 只让小分块进入 SRAM</h4>
+		</figcaption>
+</figure>
+
+<p>这里需要区分两个经常混在一起的“内存”。FlashAttention 并不会让输入 $Q、K、V$ 或最终输出凭空消失；它减少的是注意力内部中间量的 HBM 读写与保存。原论文证明，在常见 SRAM 大小范围内，标准 attention 的 HBM 访问量为 $\Theta(Nd+N^2)$，FlashAttention 则为 $\Theta(N^2d^2/M)$，其中 $M$ 是片上 SRAM 容量。计算量仍是 $O(N^2d)$，但数据搬运明显减少。</p>
+<h2 id="难点不是分块而是-softmax-看起来需要整行">难点不是分块，而是 softmax 看起来需要整行
+</h2><p>矩阵乘法天然适合 tiling：把 $Q、K、V$ 切成能放进 SRAM 的小块，逐块相乘即可。softmax 却把一整行耦合在一起。对分数向量 $x$，稳定 softmax 需要先知道全局最大值，再计算所有指数的总和：</p>
+$$m=\max_i x_i,\qquad \ell=\sum_i e^{x_i-m},\qquad \operatorname{softmax}(x)_i=\frac{e^{x_i-m}}{\ell}$$<p>如果必须先保存完整一行才能得到 $m$ 与 $\ell$，$N\times N$ 中间矩阵仍然躲不掉。FlashAttention 使用 online softmax，把“看完整行再归一化”改成“每读一块，就更新足够的统计量”。处理新分块 $x_b$ 时，只维护到目前为止的最大值 $m$、归一化和 $\ell$，以及尚未最终归一化的输出累积量 $o$：</p>
+$$
+\begin{aligned}
+m' &= \max(m,\max x_b)\\
+\ell' &= e^{m-m'}\ell + \sum_j e^{x_{b,j}-m'}\\
+o' &= e^{m-m'}o + \sum_j e^{x_{b,j}-m'}v_{b,j}
+\end{aligned}
+$$<p>最后用 $O=o/\ell$ 得到结果。新分块如果带来更大的最大值，旧累积量会按 $e^{m-m&rsquo;}$ 重新缩放；因此无论分成多少块，最终值与整行 stable softmax 相同，只存在正常的浮点舍入差异。它不是近似 attention，也不是稀疏 attention。</p>
+<figure><img src="/p/flashattention-io-aware/online-softmax.svg"><figcaption>
+			<h4>图 2：online softmax 逐块维护 m、ℓ、o，最终仍得到完整精确 attention</h4>
+		</figcaption>
+</figure>
+
+<p>在实际 kernel 中，一个 $K/V$ tile 被加载进 SRAM 后，会与若干 $Q$ tile 完成 $QK^\top$、mask、softmax 更新和与 $V$ 的乘法。局部的 score tile 用完即弃，只有输出块与少量归一化统计量需要保留。这样，FlashAttention 把原本跨多个 kernel 的流水线融合成一个 I/O 感知 kernel。</p>
+<h2 id="为什么多算一点反而更快">为什么“多算一点”反而更快
+</h2><p>训练的反向传播通常需要前向时的 $S$ 和 $P$。标准做法把它们保存到 HBM；FlashAttention 只保存输出与每行的 softmax 归一化统计量，反向时在 $Q、K、V$ 分块已经进入 SRAM 后重新算出局部 $S$ 和 $P$。</p>
+<p>这是一笔明确的交换：增加矩阵乘 FLOPs，换掉大规模 HBM 写入、读取与驻留。对一台矩阵乘吞吐远高于内存搬运效率的 GPU，这笔交换可能同时省时间和显存。原论文把额外内存需求从 $O(N^2)$ 降到 $O(N)$；FlashAttention-2 论文报告，反向阶段因不保存 $S、P$ 可节省约 10–20 倍内存，并获得 2–4 倍 wall-clock 加速。倍率依赖序列长度、head dimension、mask、数据类型与硬件，不能当作固定承诺。</p>
+<p>这也解释了一个常见误区：重计算不必然更慢。只有当“算力”是主要瓶颈时，少算才一定占优；当算子受内存访问限制时，宁可在片上重算，也可能比从 HBM 取回旧结果更便宜。FlashAttention 的核心不是某一条 softmax 公式，而是用正确的成本模型选择保存什么、搬运什么、重算什么。</p>
+<h2 id="从-fa1-到-fa3优化对象一层层靠近硬件">从 FA1 到 FA3：优化对象一层层靠近硬件
+</h2><p>第一代解决了最昂贵的 HBM 往返后，attention 仍未接近 GPU 的矩阵乘峰值。后续版本没有改变“分块 + online softmax + 重计算”的主干，而是继续处理更细的闲置和同步成本。</p>
+<p>FlashAttention-2 关注工作如何分给 GPU。A100 的矩阵乘吞吐远高于非矩阵运算，论文给出的理论峰值分别是 312 TFLOPs/s（FP16/BF16 matmul）与 19.5 TFLOPs/s（FP32 non-matmul）。因此 FA2 减少不必要的缩放等非 matmul 操作；除 batch 和 head 外，还沿序列长度把工作分给更多 thread blocks，改善长序列、小 batch 时的 occupancy；在一个 block 内重新分配 warps，减少 shared memory 通信。论文报告 FA2 相对 FA1 约快 2 倍，A100 前向最高达到理论峰值的 73%，GPT 风格模型训练最高达到每张 A100 225 TFLOPs/s。</p>
+<p>FlashAttention-3 则针对 Hopper。H100 的 Tensor Core 矩阵乘、TMA 数据搬运与普通 CUDA core 可以异步工作；若软件仍按“搬完再算、算完再 softmax”的顺序执行，专用单元会互相等待。FA3 用 warp specialization 分开 producer 与 consumer，用 ping-pong pipeline 重叠下一块搬运、矩阵乘和当前块 softmax，并为 FP8 加入 block quantization 与 incoherent processing 来抑制离群值造成的量化误差。论文在 H100 上报告：FP16 前向较 FA2 快 1.5–2.0 倍、最高 740 TFLOPs/s；FP8 接近 1.2 PFLOPs/s，并在其测试中把基线 FP8 attention 的数值误差降低 2.6 倍。</p>
+<figure><img src="/p/flashattention-io-aware/evolution.svg"><figcaption>
+			<h4>图 3：FA1 减少 HBM 往返，FA2 改进并行分工，FA3 用异步流水线与低精度适配 Hopper</h4>
+		</figcaption>
+</figure>
+
+<p>这条演进线很有代表性：先修正算法的数据路径，再修正 thread block/warp 的分工，最后把执行计划对齐到具体硬件的异步单元。性能不是“用了 GPU”自动得到的，而是算法与每一代 GPU 重新协商的结果。</p>
+<h2 id="它改变了什么又没有改变什么">它改变了什么，又没有改变什么
+</h2><p><strong>第一，FlashAttention 不是新的注意力模式。</strong> 模型权重、dense attention 的语义和输出都不需要改变；同一个模型可以在兼容条件下替换 kernel。它与 Linformer、稀疏 attention、线性 attention 的根本区别，是后者改变或近似了要计算的关系，FlashAttention 只改变执行顺序。</p>
+<p><strong>第二，它没有消除二次计算。</strong> 训练或长 prompt 的 prefill 仍要计算大量 token 两两关系。FlashAttention 让这些工作更接近硬件可承受的方式，并避免二次大小的中间激活，却不能让任意长上下文变成免费。上下文翻倍时，dense attention 的 FLOPs 仍大约变为四倍。</p>
+<p><strong>第三，它与 KV cache 优化解决的是不同账单。</strong> 在单 token 自回归 decode 中，不再形成大块 query-by-key 矩阵，读取不断增长的 KV cache 往往更突出。GQA 减少 KV head 数，MLA 压缩每个 token 的缓存表示，Mamba 改成固定状态；FlashAttention 主要优化 attention kernel 内部的数据流。它们可以互补，却不能互相替代。官方实现也不断增加 causal、GQA/MQA、variable length、paged attention 等路径，正说明“attention”并非一个固定形状的 kernel。</p>
+<p><strong>第四，峰值倍率不是应用端倍率。</strong> 一个训练 step 还包含 MLP、通信、优化器与数据加载；一次在线推理还包含调度、采样和服务框架。论文中的 attention microbenchmark、单卡 TFLOPs/s 与端到端吞吐回答的是不同问题。判断收益时必须同时说明硬件、精度、序列形状、因果 mask 和比较基线。</p>
+<h2 id="真正的突破是把内存层级写进算法">真正的突破，是把内存层级写进算法
+</h2><p>FlashAttention 的公式结果并不新，分块和 online softmax 也各有前史。它的突破在于把这些技术组成一个完整、可证明、可实现的 I/O 感知 attention：不物化 $N\times N$ 中间矩阵，正向与反向都围绕片上 tile 组织，并用开源 kernel 把理论节省变成 wall-clock 收益。官方仓库后来覆盖 NVIDIA 与 AMD 后端，主流框架也把 fused scaled-dot-product attention 变成常用执行路径；这类采用比一次榜单领先更能说明其影响。</p>
+<p>更深的一层判断是：长上下文能力从来不只是一条模型曲线。窗口能否真正扩展，还取决于激活是否放得下、数据能否喂得动、kernel 能否利用硬件、推理时 KV cache 如何管理。FlashAttention 没有解决所有这些问题，但它消掉了其中一个曾经极其昂贵的中间物。</p>
+<p>所以“不是少算，而是少搬”并非一句性能口号。它代表一种设计方法：不要只问算法做了多少 FLOPs，还要问每个字节在哪一层内存、被读取几次、何时值得保存，以及能否用廉价重算换掉昂贵搬运。模型规模继续增长后，这种问题只会更重要。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li>Dao et al., <a class="link" href="https://arxiv.org/abs/2205.14135"  target="_blank" rel="noopener"
+    >FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness</a>, NeurIPS 2022.</li>
+<li>Dao, <a class="link" href="https://arxiv.org/abs/2307.08691"  target="_blank" rel="noopener"
+    >FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning</a>, ICLR 2024.</li>
+<li>Shah et al., <a class="link" href="https://arxiv.org/abs/2407.08608"  target="_blank" rel="noopener"
+    >FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision</a>, 2024.</li>
+<li>Dao AI Lab, <a class="link" href="https://github.com/Dao-AILab/flash-attention"  target="_blank" rel="noopener"
+    >FlashAttention official implementation</a>.</li>
+<li>Tri Dao, <a class="link" href="https://tridao.me/blog/2024/flash3/"  target="_blank" rel="noopener"
+    >FlashAttention-3 technical blog</a>, 2024.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/flashattention/">FlashAttention</a>
+        
+            <a href="/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/">注意力机制</a>
+        
+            <a href="/tags/gpu/">GPU</a>
+        
+            <a href="/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/">IO感知算法</a>
+        
+            <a href="/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/">长上下文</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-25
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba：少记，为什么反而可能更懂长序列" height="150" loading="lazy" src="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg" srcset="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg 1x, /p/mamba-selective-state-space/cover_hu_5245944053dde7dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #303b4180 0%, #ddd3c4C0 100%);">
+            <h2 class="article-title">Mamba：少记，为什么反而可能更懂长序列</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看" height="150" loading="lazy" src="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg" srcset="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg 1x, /p/deepseek-mla-moe/cover_hu_5abd39a15d038789.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ded2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/llama-open-ecosystem/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LLaMA：没有架构革命，为什么成了开放模型的共同底座" height="150" loading="lazy" src="/p/llama-open-ecosystem/cover_hu_66b7ab446cd2193b.jpg" srcset="/p/llama-open-ecosystem/cover_hu_66b7ab446cd2193b.jpg 1x, /p/llama-open-ecosystem/cover_hu_737256bd48fd70c.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #d9cac880 0%, #171e2eC0 100%);">
+            <h2 class="article-title">LLaMA：没有架构革命，为什么成了开放模型的共同底座</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/chinchilla-scaling-laws/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Chinchilla：大模型不是越大越好，数据也要一起扩展" height="150" loading="lazy" src="/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg" srcset="/p/chinchilla-scaling-laws/cover_hu_ec43aa21a25b4955.jpg 1x, /p/chinchilla-scaling-laws/cover_hu_8efef5f297f5000b.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c8e0d480 0%, #171d23C0 100%);">
+            <h2 class="article-title">Chinchilla：大模型不是越大越好，数据也要一起扩展</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="150" loading="lazy" src="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT：用 RLHF 教会大模型「听话」</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

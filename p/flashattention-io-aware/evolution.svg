@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420" role="img" aria-labelledby="evo-title evo-desc">
+  <title id="evo-title">FlashAttention 三代优化层级</title>
+  <desc id="evo-desc">第一代优化 HBM 数据流，第二代优化 GPU 并行分工，第三代利用 Hopper 异步与 FP8。</desc>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#526f7a"/></marker><style>.t{font-family:"Microsoft YaHei","Noto Sans SC",sans-serif;fill:#243139}.h{font-size:20px;font-weight:700}.yr{font-size:12px;font-weight:700;fill:#fff}.sh{font-size:16px;font-weight:700}.b{font-size:12px}.sm{font-size:10.5px;fill:#5e6d74}.card{stroke-width:1.5}.metric{fill:#fffaf0;stroke:#b5843d;stroke-width:1.2}</style></defs>
+  <rect width="600" height="420" rx="18" fill="#f3f1ea"/><text class="t h" x="300" y="35" text-anchor="middle">从数据路径，到并行分工，再到异步硬件</text>
+  <line x1="73" y1="82" x2="527" y2="82" stroke="#526f7a" stroke-width="3" marker-end="url(#a)"/>
+  <circle cx="106" cy="82" r="18" fill="#4b8290"/><circle cx="300" cy="82" r="18" fill="#8f7650"/><circle cx="494" cy="82" r="18" fill="#8f5862"/>
+  <text class="t yr" x="106" y="86" text-anchor="middle">2022</text><text class="t yr" x="300" y="86" text-anchor="middle">2023</text><text class="t yr" x="494" y="86" text-anchor="middle">2024</text>
+  <rect class="card" x="22" y="118" width="174" height="252" rx="13" fill="#e2eef0" stroke="#4b8290"/><text class="t sh" x="109" y="149" text-anchor="middle">FlashAttention</text><text class="t b" x="109" y="176" text-anchor="middle">优化对象：HBM 往返</text>
+  <g fill="#82aab4" stroke="#4b8290"><rect x="50" y="197" width="28" height="28"/><rect x="81" y="197" width="28" height="28"/><rect x="112" y="197" width="28" height="28"/><rect x="143" y="197" width="28" height="28"/></g>
+  <path d="M61 243h96" stroke="#4b8290" stroke-width="5" stroke-dasharray="12 6"/>
+  <text class="t b" x="109" y="273" text-anchor="middle">tiling + online softmax</text><text class="t b" x="109" y="293" text-anchor="middle">kernel fusion + 重计算</text>
+  <rect class="metric" x="39" y="316" width="140" height="38" rx="7"/><text class="t b" x="109" y="340" text-anchor="middle">额外内存 O(N)</text>
+
+  <rect class="card" x="213" y="118" width="174" height="252" rx="13" fill="#eee7dc" stroke="#8f7650"/><text class="t sh" x="300" y="149" text-anchor="middle">FlashAttention-2</text><text class="t b" x="300" y="176" text-anchor="middle">优化对象：工作分配</text>
+  <g fill="#b79a6d"><rect x="242" y="197" width="25" height="25" rx="4"/><rect x="272" y="197" width="25" height="25" rx="4"/><rect x="302" y="197" width="25" height="25" rx="4"/><rect x="332" y="197" width="25" height="25" rx="4"/></g>
+  <g fill="#d2bd99"><rect x="242" y="229" width="25" height="25" rx="4"/><rect x="272" y="229" width="25" height="25" rx="4"/><rect x="302" y="229" width="25" height="25" rx="4"/><rect x="332" y="229" width="25" height="25" rx="4"/></g>
+  <text class="t b" x="300" y="279" text-anchor="middle">沿序列并行 thread blocks</text><text class="t b" x="300" y="299" text-anchor="middle">重分配 warps，少做 non-matmul</text>
+  <rect class="metric" x="230" y="316" width="140" height="38" rx="7"/><text class="t b" x="300" y="333" text-anchor="middle">约 2× FA1</text><text class="t sm" x="300" y="347" text-anchor="middle">A100 前向最高 73%</text>
+
+  <rect class="card" x="404" y="118" width="174" height="252" rx="13" fill="#efe0e3" stroke="#8f5862"/><text class="t sh" x="491" y="149" text-anchor="middle">FlashAttention-3</text><text class="t b" x="491" y="176" text-anchor="middle">优化对象：Hopper 异步单元</text>
+  <rect x="431" y="199" width="49" height="38" rx="6" fill="#c78a94"/><rect x="501" y="199" width="49" height="38" rx="6" fill="#9eb6bc"/><text class="t sm" x="455" y="222" text-anchor="middle">GEMM</text><text class="t sm" x="525" y="222" text-anchor="middle">softmax</text>
+  <path d="M430 248 C455 275 480 220 505 248 S550 275 558 248" fill="none" stroke="#8f5862" stroke-width="3"/>
+  <text class="t b" x="491" y="279" text-anchor="middle">TMA / Tensor Core 流水重叠</text><text class="t b" x="491" y="299" text-anchor="middle">warp specialization + FP8</text>
+  <rect class="metric" x="421" y="316" width="140" height="38" rx="7"/><text class="t b" x="491" y="333" text-anchor="middle">FP16 1.5–2.0× FA2</text><text class="t sm" x="491" y="347" text-anchor="middle">H100 最高 740 TFLOPs/s</text>
+  <text class="t sm" x="300" y="399" text-anchor="middle">图中倍率与峰值均为各论文在指定硬件和测试设置下的报告值</text>
+</svg>

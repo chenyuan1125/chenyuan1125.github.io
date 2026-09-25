@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Thu, 24 Sep 2026 09:22:49 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 25 Sep 2026 13:17:31 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Attention</title>
+            <link>/en/tags/attention/</link>
+            <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/attention/</guid>
+            <description></description>
+        </item><item>
+            <title>FlashAttention</title>
+            <link>/en/tags/flashattention/</link>
+            <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/flashattention/</guid>
+            <description></description>
+        </item><item>
+            <title>GPU</title>
+            <link>/en/tags/gpu/</link>
+            <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/gpu/</guid>
+            <description></description>
+        </item><item>
+            <title>IO-Aware Algorithms</title>
+            <link>/en/tags/io-aware-algorithms/</link>
+            <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/io-aware-algorithms/</guid>
+            <description></description>
+        </item><item>
+            <title>Long Context</title>
+            <link>/en/tags/long-context/</link>
+            <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/long-context/</guid>
+            <description></description>
+        </item><item>
             <title>Inference Efficiency</title>
             <link>/en/tags/inference-efficiency/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
@@ -281,12 +311,6 @@
             <link>/en/tags/architecture/</link>
             <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/architecture/</guid>
-            <description></description>
-        </item><item>
-            <title>Attention</title>
-            <link>/en/tags/attention/</link>
-            <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/attention/</guid>
             <description></description>
         </item><item>
             <title>CSAPP</title>

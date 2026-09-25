@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 440" width="600" height="440" role="img" aria-labelledby="io-title io-desc">
+  <title id="io-title">Data paths for standard attention and FlashAttention</title>
+  <desc id="io-desc">Standard attention writes scores and probabilities to HBM; FlashAttention completes tiled work in SRAM.</desc>
+  <defs>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#b85b52"/></marker>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#39788c"/></marker>
+    <style>.t{font-family:Arial,sans-serif;fill:#24313a}.h{font-size:20px;font-weight:700}.sh{font-size:14px;font-weight:700}.b{font-size:12px}.sm{font-size:10.5px;fill:#5a6870}.box{fill:#fbfaf6;stroke:#c9d0cf;stroke-width:1.5}.hbm{fill:#d9e1e3;stroke:#687982;stroke-width:1.5}.sram{fill:#f2d49b;stroke:#9d6a22;stroke-width:1.5}.bad{fill:#f0cbc5;stroke:#b85b52}.good{fill:#cde3e8;stroke:#39788c}</style>
+  </defs>
+  <rect width="600" height="440" rx="18" fill="#f3f1ea"/>
+  <text class="t h" x="300" y="34" text-anchor="middle">One Exact Attention Result, Two Data Paths</text>
+  <rect class="box" x="24" y="58" width="264" height="350" rx="14"/><rect class="box" x="312" y="58" width="264" height="350" rx="14"/>
+  <text class="t sh" x="156" y="86" text-anchor="middle">Standard: materialize intermediates</text>
+  <text class="t sh" x="444" y="86" text-anchor="middle">FlashAttention: stay tiled on chip</text>
+  <rect class="hbm" x="49" y="108" width="214" height="57" rx="8"/><text class="t sh" x="156" y="133" text-anchor="middle">HBM: Q, K, V</text><text class="t sm" x="156" y="151" text-anchor="middle">large capacity · slower round trips</text>
+  <line x1="156" y1="165" x2="156" y2="194" stroke="#b85b52" stroke-width="2.5" marker-end="url(#arrow-red)"/>
+  <rect class="bad" x="64" y="198" width="184" height="44" rx="7"/><text class="t b" x="156" y="217" text-anchor="middle">write S = QKᵀ</text><text class="t sm" x="156" y="234" text-anchor="middle">N × N</text>
+  <line x1="156" y1="242" x2="156" y2="269" stroke="#b85b52" stroke-width="2.5" marker-end="url(#arrow-red)"/>
+  <rect class="bad" x="64" y="273" width="184" height="44" rx="7"/><text class="t b" x="156" y="292" text-anchor="middle">read S, write P = softmax(S)</text><text class="t sm" x="156" y="309" text-anchor="middle">N × N</text>
+  <line x1="156" y1="317" x2="156" y2="344" stroke="#b85b52" stroke-width="2.5" marker-end="url(#arrow-red)"/>
+  <rect class="hbm" x="64" y="348" width="184" height="39" rx="7"/><text class="t b" x="156" y="372" text-anchor="middle">read P, V → write O</text>
+  <rect class="hbm" x="337" y="108" width="214" height="57" rx="8"/><text class="t sh" x="444" y="133" text-anchor="middle">HBM: Q, K, V, final O</text><text class="t sm" x="444" y="151" text-anchor="middle">never store full S or P</text>
+  <line x1="444" y1="165" x2="444" y2="200" stroke="#39788c" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <rect class="sram" x="342" y="204" width="204" height="105" rx="10"/><text class="t sh" x="444" y="229" text-anchor="middle">Small on-chip SRAM workspace</text>
+  <g fill="#fff7e7" stroke="#9d6a22"><rect x="368" y="246" width="45" height="32" rx="4"/><rect x="422" y="246" width="45" height="32" rx="4"/><rect x="476" y="246" width="45" height="32" rx="4"/></g>
+  <text class="t sm" x="390" y="266" text-anchor="middle">Q tile</text><text class="t sm" x="444" y="266" text-anchor="middle">K/V tile</text><text class="t sm" x="498" y="266" text-anchor="middle">O tile</text><text class="t sm" x="444" y="298" text-anchor="middle">matmul → mask → online softmax → matmul</text>
+  <path d="M545 260 C568 260 568 335 529 335" fill="none" stroke="#39788c" stroke-width="2.5" marker-end="url(#arrow-blue)"/><path d="M342 260 C319 260 319 335 359 335" fill="none" stroke="#39788c" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <rect class="good" x="365" y="322" width="158" height="48" rx="8"/><text class="t b" x="444" y="343" text-anchor="middle">discard local scores</text><text class="t sm" x="444" y="360" text-anchor="middle">return O tile + tiny statistics</text>
+  <text class="t sm" x="300" y="427" text-anchor="middle">The difference is HBM traffic—not an approximation of attention.</text>
+</svg>
