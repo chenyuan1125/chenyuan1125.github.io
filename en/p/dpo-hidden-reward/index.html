@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="DPO replaces a separate reward model and PPO loop with a pairwise classification loss. The preference signal has not vanished: it is encoded in how the policy's probabilities move relative to a reference model. This article derives that change of variables and examines its limits.">
+<title>DPO: Where Did the Reward Model Go?</title>
+
+
+<link rel="canonical" href="/en/p/dpo-hidden-reward/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="DPO: Where Did the Reward Model Go?">
+<meta property='og:description' content="DPO replaces a separate reward model and PPO loop with a pairwise classification loss. The preference signal has not vanished: it is encoded in how the policy's probabilities move relative to a reference model. This article derives that change of variables and examines its limits.">
+<meta property='og:url' content='/en/p/dpo-hidden-reward/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='DPO' /><meta property='article:tag' content='Preference Optimization' /><meta property='article:tag' content='RLHF' /><meta property='article:tag' content='Model Alignment' /><meta property='article:tag' content='Post-Training' /><meta property='article:published_time' content='2026-09-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-26T09:08:49&#43;08:00'/><meta property='og:image' content='/en/p/dpo-hidden-reward/cover.jpg' />
+<meta name="twitter:title" content="DPO: Where Did the Reward Model Go?">
+<meta name="twitter:description" content="DPO replaces a separate reward model and PPO loop with a pairwise classification loss. The preference signal has not vanished: it is encoded in how the policy's probabilities move relative to a reference model. This article derives that change of variables and examines its limits."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/dpo-hidden-reward/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/dpo-hidden-reward/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/dpo-hidden-reward/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#it-removes-training-stages-not-the-preference-assumption">It Removes Training Stages, Not the Preference Assumption</a></li>
+    <li><a href="#one-pair-becomes-four-log-probabilities">One Pair Becomes Four Log-Probabilities</a></li>
+    <li><a href="#its-simplicity-comes-from-being-offlineand-so-does-its-limit">Its Simplicity Comes From Being Offline—and So Does Its Limit</a></li>
+    <li><a href="#an-implicit-reward-can-still-be-exploited">An Implicit Reward Can Still Be Exploited</a></li>
+    <li><a href="#the-breakthrough-was-choosing-the-right-coordinates">The Breakthrough Was Choosing the Right Coordinates</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/dpo-hidden-reward/">
+            <img alt="Featured image of post DPO: Where Did the Reward Model Go?" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/dpo-hidden-reward/cover.jpg" srcset="/en/p/dpo-hidden-reward/cover_hu_7066d2cfa6a98ee0.jpg 800w, /en/p/dpo-hidden-reward/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/dpo-hidden-reward/">DPO: Where Did the Reward Model Go?</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            DPO replaces a separate reward model and PPO loop with a pairwise classification loss. The preference signal has not vanished: it is encoded in how the policy&#39;s probabilities move relative to a reference model. This article derives that change of variables and examines its limits.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-26T00:00:00Z'>2026-09-26</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        6 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/dpo-hidden-reward/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#it-removes-training-stages-not-the-preference-assumption">It Removes Training Stages, Not the Preference Assumption</a></li>
+    <li><a href="#one-pair-becomes-four-log-probabilities">One Pair Becomes Four Log-Probabilities</a></li>
+    <li><a href="#its-simplicity-comes-from-being-offlineand-so-does-its-limit">Its Simplicity Comes From Being Offline—and So Does Its Limit</a></li>
+    <li><a href="#an-implicit-reward-can-still-be-exploited">An Implicit Reward Can Still Be Exploited</a></li>
+    <li><a href="#the-breakthrough-was-choosing-the-right-coordinates">The Breakthrough Was Choosing the Right Coordinates</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>Classical RLHF resembles a three-stage production line: collect pairwise preferences, train a scalar reward model, then use PPO to make the language model pursue that score while a KL penalty keeps it tethered. DPO says the second and third stages can be removed, leaving a loss that looks like binary classification.</p>
+<p>That claim is often compressed into the misleading phrase “DPO needs no reward model.” More precisely, <strong>DPO does not train a separate, callable reward network, but it still assumes that preferences arise from a latent reward. It rewrites that reward as a change in policy log-probability relative to a reference model.</strong> The reward model moves from an explicit artifact into the language model&rsquo;s coordinate system.</p>
+<p>Understanding why that substitution works, what a batch actually computes, and where the simplification moves the remaining risk explains most of DPO.</p>
+<h2 id="it-removes-training-stages-not-the-preference-assumption">It Removes Training Stages, Not the Preference Assumption
+</h2><p>For prompt $x$, an annotator prefers response $y_w$ over $y_l$. A conventional reward model often uses the Bradley–Terry assumption:</p>
+$$
+p(y_w \succ y_l\mid x)=\sigma\big(r(x,y_w)-r(x,y_l)\big).
+$$<p>After fitting that reward network, RLHF solves a KL-regularized policy objective:</p>
+$$
+\max_\pi\;\mathbb E_{y\sim\pi}[r(x,y)]-
+\beta D_{\mathrm{KL}}\!\left(\pi(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)\right).
+$$<p>The first term favors high-reward responses. The second prevents the policy from moving too far from its reference. This is not decorative: a reward model is reliable only near the finite distribution on which it was trained, and a policy can learn to exploit it outside that region.</p>
+<figure><img src="/en/p/dpo-hidden-reward/pipeline.svg"><figcaption>
+			<h4>Figure 1: conventional RLHF fits a reward model and then runs PPO; DPO updates the policy directly from preference pairs</h4>
+		</figcaption>
+</figure>
+
+<p>DPO&rsquo;s key move is to observe that the optimal policy for this objective has a closed form:</p>
+$$
+\pi_r(y\mid x)=\frac{1}{Z(x)}\pi_{\mathrm{ref}}(y\mid x)
+\exp\!\left(\frac{r(x,y)}{\beta}\right).
+$$<p>Rearranging expresses reward through the policy:</p>
+$$
+r(x,y)=\beta\log\frac{\pi_r(y\mid x)}{\pi_{\mathrm{ref}}(y\mid x)}+\beta\log Z(x).
+$$<p>The inconvenient partition function $Z(x)$ depends only on the shared prompt. When the expression is substituted into Bradley–Terry, the two response rewards are subtracted and $\beta\log Z(x)$ cancels. We can fit which answer a person would choose without recovering an absolute reward first. This is a change of variables, not an approximation.</p>
+<h2 id="one-pair-becomes-four-log-probabilities">One Pair Becomes Four Log-Probabilities
+</h2><p>For each $(x,y_w,y_l)$, DPO computes sequence log-probabilities for the chosen and rejected responses under both the current policy and the reference. Define</p>
+$$
+a_w=\log\pi_\theta(y_w\mid x)-\log\pi_{\mathrm{ref}}(y_w\mid x),
+$$$$
+a_l=\log\pi_\theta(y_l\mid x)-\log\pi_{\mathrm{ref}}(y_l\mid x).
+$$<p>Each $a$ measures how much more support the current policy gives a response than its starting point did. DPO minimizes</p>
+$$
+\mathcal L_{\mathrm{DPO}}=-\log\sigma\big(\beta(a_w-a_l)\big).
+$$<figure><img src="/en/p/dpo-hidden-reward/four-logprobs.svg"><figcaption>
+			<h4>Figure 2: DPO constructs one relative advantage gap from policy/reference × chosen/rejected log-probabilities</h4>
+		</figcaption>
+</figure>
+
+<p>Three details matter.</p>
+<p>First, the isolated rule is not “the chosen probability must rise.” The chosen response&rsquo;s gain over the reference must exceed the rejected response&rsquo;s gain. Because parameters are shared, both absolute probabilities can even fall while the relevant margin improves.</p>
+<p>Second, the reference is not merely an old checkpoint label. It sets the zero point of the implicit reward and acts as the KL anchor. The paper initializes both policy and reference from an SFT model when one is available. If a matching SFT model is unavailable, it first maximizes likelihood on preferred completions to reduce distribution mismatch.</p>
+<p>Third, $\beta$ controls conservativeness relative to the reference, but conventions differ across implementations; its numeric value should not be copied blindly between libraries. In the authors&rsquo; reference code, the core really is short: compute the policy&rsquo;s chosen/rejected log-ratio, subtract the reference log-ratio, and pass the result through <code>logsigmoid</code>. A short loss does not mean one model-sized forward pass, however. A straightforward implementation still evaluates the trainable policy and frozen reference, so memory, parallelism, and truncation remain engineering concerns.</p>
+<h2 id="its-simplicity-comes-from-being-offlineand-so-does-its-limit">Its Simplicity Comes From Being Offline—and So Does Its Limit
+</h2><p>DPO does not generate fresh responses inside the training loop, score them with a reward model, or maintain PPO actor, critic, and rollout machinery. A fixed dataset of $(x,y_w,y_l)$ triples can be replayed like supervised learning. That lowers system complexity and makes experiments easier to reproduce.</p>
+<p>The original paper evaluated controlled sentiment generation, Reddit TL;DR summarization, and single-turn dialogue from Anthropic Helpful and Harmless, using models up to 6B parameters. In its GPT-4-evaluated summarization setup, DPO reached a reported win rate of roughly 61%, versus about 57% for PPO, and was more robust to sampling temperature. In a direct human comparison, DPO samples were preferred over PPO samples 58% of the time.</p>
+<p>Those results support “DPO achieves competitive preference alignment with simpler optimization in these settings.” They do not establish that DPO beats online RL at every scale and on every preference distribution. A fixed dataset cannot observe new failures produced by the changing policy. If training moves the policy beyond the data&rsquo;s coverage, the supervision does not follow automatically. Who generated the response pairs, which model produced them, and how consistently they were labeled all become part of the algorithm.</p>
+<figure><img src="/en/p/dpo-hidden-reward/tradeoffs.svg"><figcaption>
+			<h4>Figure 3: DPO removes the explicit reward network and online PPO loop, but retains reference computation and concentrates risk in preference data and distribution shift</h4>
+		</figcaption>
+</figure>
+
+<p>It is therefore more useful to distinguish regimes than to say one algorithm replaced another. DPO directly fits a policy on fixed preference data. Online RL is more complex, but can keep exploring the current policy and gathering feedback about its new mistakes.</p>
+<h2 id="an-implicit-reward-can-still-be-exploited">An Implicit Reward Can Still Be Exploited
+</h2><p>Removing the standalone reward network does not remove reward hacking. If the preference data contains a shortcut, DPO can amplify whatever feature predicts a win.</p>
+<p>Length is a clear example. Follow-up work by Rafailov and colleagues analyzed Anthropic HH and TL;DR. Preferred responses were only slightly longer in the datasets, yet unregularized DPO produced answers roughly twice as long on average and outside the length distribution of the feedback. The authors interpreted this as out-of-distribution extrapolation of a length-correlated preference and introduced a length regularizer, reporting gains of up to 20% in length-controlled win rate.</p>
+<p>The conclusion is not that long answers are bad. It is that a model may turn “more complete answers often win” into “more tokens cause winning,” while automated judges may have their own verbosity preference. Raw win rate can then mix content quality, response length, and judge bias.</p>
+<p>Binary preferences impose a deeper compression as well. DPO knows only that $y_w$ beat $y_l$—not by how much, nor whether both were poor. Annotation noise, prompt shift, and entanglement between style and factuality survive the elegant objective. Real systems still need independent evaluation: length-controlled comparisons, human audits, factuality and safety tests, and monitoring of drift from the reference.</p>
+<h2 id="the-breakthrough-was-choosing-the-right-coordinates">The Breakthrough Was Choosing the Right Coordinates
+</h2><p>DPO&rsquo;s durable contribution is not the slogan “one loss replaces RLHF.” It is the coordinate change: under KL-regularized preference optimization, reward differences can be represented by differences in policy-to-reference log-ratios. Bradley–Terry depends only on differences, so the unknown normalization disappears.</p>
+<p>That view shortens an expensive pipeline and reveals a broader design lesson. An intermediate model can be only one parameterization of the final object. If its constraint can be written directly into that object, stages may disappear without changing the underlying assumptions.</p>
+<p>But removing a module does not remove every problem the module carried. Preferences can remain biased. The reference still defines what “not too far” means. Offline data still bounds what can be learned, and evaluation can still reward surface features. DPO makes the optimization more direct; it does not make the question “what do people actually prefer, and why?” any simpler.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Rafailov et al., <a class="link" href="https://papers.neurips.cc/paper_files/paper/2023/hash/a85b405ed65c6477a4fe8302b5e06ce7-Abstract-Conference.html"  target="_blank" rel="noopener"
+    >Direct Preference Optimization: Your Language Model Is Secretly a Reward Model</a>, NeurIPS 2023.</li>
+<li>Rafailov et al., <a class="link" href="https://arxiv.org/abs/2305.18290"  target="_blank" rel="noopener"
+    >DPO paper and appendices</a>, 2023.</li>
+<li>Mitchell et al., <a class="link" href="https://github.com/eric-mitchell/direct-preference-optimization"  target="_blank" rel="noopener"
+    >DPO official reference implementation</a>.</li>
+<li>Park et al., <a class="link" href="https://aclanthology.org/2024.findings-acl.297/"  target="_blank" rel="noopener"
+    >Disentangling Length from Quality in Direct Preference Optimization</a>, Findings of ACL 2024.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/dpo/">DPO</a>
+        
+            <a href="/en/tags/preference-optimization/">Preference Optimization</a>
+        
+            <a href="/en/tags/rlhf/">RLHF</a>
+        
+            <a href="/en/tags/model-alignment/">Model Alignment</a>
+        
+            <a href="/en/tags/post-training/">Post-Training</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-26
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT: Teaching LLMs to Be Helpful with RLHF" height="150" loading="lazy" src="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/en/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /en/p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT: Teaching LLMs to Be Helpful with RLHF</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/flashattention-io-aware/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post FlashAttention: Move Less, Not Compute Less" height="150" loading="lazy" src="/en/p/flashattention-io-aware/cover_hu_c99e5cb43d35a221.jpg" srcset="/en/p/flashattention-io-aware/cover_hu_c99e5cb43d35a221.jpg 1x, /en/p/flashattention-io-aware/cover_hu_1d17ec47fd94c9de.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c7cac680 0%, #1e2a33C0 100%);">
+            <h2 class="article-title">FlashAttention: Move Less, Not Compute Less</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba: Why Remembering Less Can Understand More" height="150" loading="lazy" src="/en/p/mamba-selective-state-space/cover_hu_1535ced22fcf2da4.jpg" srcset="/en/p/mamba-selective-state-space/cover_hu_1535ced22fcf2da4.jpg 1x, /en/p/mamba-selective-state-space/cover_hu_8a64b8f9b67ca162.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #2f3b4180 0%, #ded4c5C0 100%);">
+            <h2 class="article-title">Mamba: Why Remembering Less Can Understand More</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3: The Two Bills Behind MLA and MoE" height="150" loading="lazy" src="/en/p/deepseek-mla-moe/cover_hu_d936419fdc43ceca.jpg" srcset="/en/p/deepseek-mla-moe/cover_hu_d936419fdc43ceca.jpg 1x, /en/p/deepseek-mla-moe/cover_hu_c42277eb841cd759.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ddd2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3: The Two Bills Behind MLA and MoE</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/llama-open-ecosystem/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation" height="150" loading="lazy" src="/en/p/llama-open-ecosystem/cover_hu_fd1ca67b3f80cfc9.jpg" srcset="/en/p/llama-open-ecosystem/cover_hu_fd1ca67b3f80cfc9.jpg 1x, /en/p/llama-open-ecosystem/cover_hu_2fc618579127acef.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #d7c6c480 0%, #171e2eC0 100%);">
+            <h2 class="article-title">LLaMA: No Architecture Revolution, Yet It Became the Open-Model Foundation</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

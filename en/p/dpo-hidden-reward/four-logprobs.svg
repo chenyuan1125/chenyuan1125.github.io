@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 470" width="600" height="470" role="img" aria-labelledby="logs-title logs-desc">
+  <title id="logs-title">The four log-probabilities in DPO</title>
+  <desc id="logs-desc">Policy and reference each score the chosen and rejected responses, producing two relative changes whose difference is optimized.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#42566a"/></marker>
+    <style>
+      .bg{fill:#faf7f0}.ink{fill:#17283a}.muted{fill:#627384}.head{font-size:19px;font-weight:800}.label{font-size:14px;font-weight:700}.formula{font-size:16px;font-family:"Cambria Math","Times New Roman",serif}.small{font-size:12px}.card{fill:#fffdf8;stroke:#bcc6ca;stroke-width:1.4}.teal{fill:#d9ebe5;stroke:#598878;stroke-width:1.4}.coral{fill:#f5d9d0;stroke:#b76b59;stroke-width:1.4}.line{stroke:#42566a;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      text{font-family:"Segoe UI",Arial,sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="600" height="470" rx="18"/>
+  <text x="300" y="39" text-anchor="middle" class="head ink">One preference pair, four log-probabilities</text>
+  <text x="62" y="78" class="label ink">chosen response y<tspan baseline-shift="sub" font-size="10">w</tspan></text>
+  <text x="363" y="78" class="label ink">rejected response y<tspan baseline-shift="sub" font-size="10">l</tspan></text>
+
+  <rect x="35" y="94" width="230" height="67" rx="10" class="teal"/>
+  <text x="55" y="120" class="small muted">current policy</text>
+  <text x="150" y="144" text-anchor="middle" class="formula ink">log πθ(yw | x)</text>
+  <rect x="335" y="94" width="230" height="67" rx="10" class="coral"/>
+  <text x="355" y="120" class="small muted">current policy</text>
+  <text x="450" y="144" text-anchor="middle" class="formula ink">log πθ(yl | x)</text>
+  <rect x="35" y="179" width="230" height="67" rx="10" class="card"/>
+  <text x="55" y="205" class="small muted">frozen reference</text>
+  <text x="150" y="229" text-anchor="middle" class="formula ink">log πref(yw | x)</text>
+  <rect x="335" y="179" width="230" height="67" rx="10" class="card"/>
+  <text x="355" y="205" class="small muted">frozen reference</text>
+  <text x="450" y="229" text-anchor="middle" class="formula ink">log πref(yl | x)</text>
+
+  <path d="M150 247V283" class="line"/>
+  <path d="M450 247V283" class="line"/>
+  <rect x="47" y="288" width="206" height="60" rx="10" class="teal"/>
+  <text x="150" y="313" text-anchor="middle" class="label ink">chosen change</text>
+  <text x="150" y="336" text-anchor="middle" class="formula ink">aw = log πθ − log πref</text>
+  <rect x="347" y="288" width="206" height="60" rx="10" class="coral"/>
+  <text x="450" y="313" text-anchor="middle" class="label ink">rejected change</text>
+  <text x="450" y="336" text-anchor="middle" class="formula ink">al = log πθ − log πref</text>
+
+  <path d="M253 318H295" class="line"/>
+  <path d="M347 318H305" stroke="#42566a" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <rect x="111" y="383" width="378" height="61" rx="12" fill="#17283a"/>
+  <text x="300" y="408" text-anchor="middle" font-size="13" fill="#dce8ef">Goal: make the chosen relative gain larger</text>
+  <text x="300" y="431" text-anchor="middle" class="formula" fill="#ffffff">−log σ [ β (aw − al) ]</text>
+</svg>
+

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450" role="img" aria-labelledby="trade-title trade-desc">
+  <title id="trade-title">DPO 简化了什么以及风险移向哪里</title>
+  <desc id="trade-desc">DPO 去掉独立奖励模型和在线 PPO 循环，保留冻结参考模型的前向计算，并将关键风险集中到离线偏好数据、分布偏移与评测偏差。</desc>
+  <defs>
+    <style>
+      .bg{fill:#faf7f0}.ink{fill:#17283a}.muted{fill:#627384}.head{font-size:20px;font-weight:800}.label{font-size:15px;font-weight:700}.body{font-size:13px}.small{font-size:12px}
+      .gone{fill:#f5d9d0;stroke:#b76b59;stroke-width:1.5}.stay{fill:#dce8ef;stroke:#6d8798;stroke-width:1.5}.risk{fill:#f3e6bd;stroke:#a88632;stroke-width:1.5}.core{fill:#17283a}
+      text{font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="600" height="450" rx="18"/>
+  <text x="300" y="42" text-anchor="middle" class="head ink">复杂度没有归零，而是重新分布</text>
+  <rect x="214" y="73" width="172" height="68" rx="14" class="core"/>
+  <text x="300" y="103" text-anchor="middle" font-size="20" font-weight="800" fill="#ffffff">DPO</text>
+  <text x="300" y="126" text-anchor="middle" class="small" fill="#d9ebe5">离线成对分类损失</text>
+
+  <rect x="31" y="178" width="164" height="113" rx="12" class="gone"/>
+  <text x="113" y="207" text-anchor="middle" class="label ink">消失的模块</text>
+  <text x="51" y="237" class="body ink">• 独立奖励网络</text>
+  <text x="51" y="261" class="body ink">• critic / value head</text>
+  <text x="51" y="285" class="body ink">• 在线 rollout + PPO</text>
+
+  <rect x="218" y="178" width="164" height="113" rx="12" class="stay"/>
+  <text x="300" y="207" text-anchor="middle" class="label ink">仍要支付的成本</text>
+  <text x="238" y="237" class="body ink">• policy 前向与反向</text>
+  <text x="238" y="261" class="body ink">• reference 前向</text>
+  <text x="238" y="285" class="body ink">• 序列级概率与显存</text>
+
+  <rect x="405" y="178" width="164" height="113" rx="12" class="risk"/>
+  <text x="487" y="207" text-anchor="middle" class="label ink">被集中的风险</text>
+  <text x="425" y="237" class="body ink">• 偏好标注的捷径</text>
+  <text x="425" y="261" class="body ink">• 离线数据覆盖不足</text>
+  <text x="425" y="285" class="body ink">• 评审器偏差</text>
+
+  <path d="M300 141V165H113V176" stroke="#42566a" stroke-width="2" fill="none"/>
+  <path d="M300 165V176" stroke="#42566a" stroke-width="2" fill="none"/>
+  <path d="M300 165H487V176" stroke="#42566a" stroke-width="2" fill="none"/>
+
+  <rect x="56" y="330" width="488" height="82" rx="12" fill="#fffdf8" stroke="#c7c0b4" stroke-width="1.4"/>
+  <text x="300" y="359" text-anchor="middle" class="label ink">关键边界</text>
+  <text x="300" y="383" text-anchor="middle" class="body ink">固定数据不会自动暴露当前策略的新失败；</text>
+  <text x="300" y="403" text-anchor="middle" class="body ink">隐式奖励也会放大长度、风格等偏好捷径。</text>
+</svg>
+

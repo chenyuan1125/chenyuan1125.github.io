@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -14,6 +14,93 @@
                 hreflang="zh-cn"
                 href="/categories/"
                 />
+  </url><url>
+    <loc>/tags/dpo/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/dpo/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/dpo/"
+                />
+  </url><url>
+    <loc>/p/dpo-hidden-reward/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/dpo-hidden-reward/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/dpo-hidden-reward/"
+                />
+  </url><url>
+    <loc>/post/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/tags/rlhf/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/rlhf/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/rlhf/"
+                />
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/"
+                />
+  </url><url>
+    <loc>/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
   </url><url>
     <loc>/tags/flashattention/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
@@ -56,45 +143,6 @@
   </url><url>
     <loc>/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
-  </url><url>
-    <loc>/post/</loc>
-    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2026-09-25T13:17:29+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/"
-                />
   </url><url>
     <loc>/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
@@ -358,19 +406,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/tags/ppo/"
-                />
-  </url><url>
-    <loc>/tags/rlhf/</loc>
-    <lastmod>2026-09-09T22:29:32+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/rlhf/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/rlhf/"
                 />
   </url><url>
     <loc>/tags/%E5%AF%B9%E9%BD%90/</loc>

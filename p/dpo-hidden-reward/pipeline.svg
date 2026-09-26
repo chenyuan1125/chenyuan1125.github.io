@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 440" width="600" height="440" role="img" aria-labelledby="pipeline-title pipeline-desc">
+  <title id="pipeline-title">RLHF 与 DPO 训练管线对比</title>
+  <desc id="pipeline-desc">传统 RLHF 从偏好对训练奖励模型，再通过在线采样和 PPO 更新策略；DPO 直接用偏好对与参考策略更新语言模型。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#42566a"/></marker>
+    <style>
+      .bg{fill:#faf7f0}.ink{fill:#17283a}.muted{fill:#627384}.line{stroke:#42566a;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .box{fill:#fffdf8;stroke:#bac4c9;stroke-width:1.5}.blue{fill:#dce8ef;stroke:#6d8798;stroke-width:1.5}.teal{fill:#d9ebe5;stroke:#598878;stroke-width:1.5}.coral{fill:#f5d9d0;stroke:#b76b59;stroke-width:1.5}
+      text{font-family:"Segoe UI","Microsoft YaHei",sans-serif}.label{font-size:14px;font-weight:700}.small{font-size:12px}.section{font-size:18px;font-weight:800}
+    </style>
+  </defs>
+  <rect class="bg" width="600" height="440" rx="18"/>
+  <text x="34" y="45" class="section ink">传统 RLHF：先学分数，再追分数</text>
+  <rect x="34" y="76" width="132" height="72" rx="10" class="blue"/>
+  <text x="100" y="104" text-anchor="middle" class="label ink">偏好数据</text>
+  <text x="100" y="127" text-anchor="middle" class="small muted">(x, chosen, rejected)</text>
+  <path d="M166 112H213" class="line"/>
+  <rect x="218" y="76" width="148" height="72" rx="10" class="coral"/>
+  <text x="292" y="104" text-anchor="middle" class="label ink">奖励模型</text>
+  <text x="292" y="127" text-anchor="middle" class="small muted">输出标量 r(x, y)</text>
+  <path d="M366 112H413" class="line"/>
+  <rect x="418" y="76" width="148" height="72" rx="10" class="teal"/>
+  <text x="492" y="104" text-anchor="middle" class="label ink">PPO 更新</text>
+  <text x="492" y="127" text-anchor="middle" class="small muted">actor + critic + KL</text>
+  <path d="M492 149V189" class="line"/>
+  <rect x="389" y="194" width="177" height="67" rx="10" class="box"/>
+  <text x="478" y="220" text-anchor="middle" class="label ink">在线 rollout 循环</text>
+  <text x="478" y="243" text-anchor="middle" class="small muted">生成 → 打分 → 更新</text>
+
+  <line x1="34" y1="290" x2="566" y2="290" stroke="#d8d0c2" stroke-width="1.5"/>
+  <text x="34" y="330" class="section ink">DPO：直接比较相对概率</text>
+  <rect x="34" y="352" width="180" height="62" rx="10" class="blue"/>
+  <text x="124" y="378" text-anchor="middle" class="label ink">偏好对 + reference</text>
+  <text x="124" y="399" text-anchor="middle" class="small muted">固定离线数据</text>
+  <path d="M214 383H352" class="line"/>
+  <text x="283" y="369" text-anchor="middle" class="small muted">一个成对损失</text>
+  <rect x="357" y="352" width="209" height="62" rx="10" class="teal"/>
+  <text x="462" y="378" text-anchor="middle" class="label ink">直接更新语言模型策略</text>
+  <text x="462" y="399" text-anchor="middle" class="small muted">无独立奖励网络、无 PPO</text>
+</svg>
+

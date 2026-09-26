@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="DPO 把奖励模型与 PPO 改写成一个成对分类损失，但偏好并未消失，而是藏进了策略相对参考模型的概率变化。本文从四个对数概率出发，解释它为何简单、为何有效，以及离线偏好优化的边界。">
+<title>DPO：奖励模型去哪了</title>
+
+
+<link rel="canonical" href="/p/dpo-hidden-reward/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="DPO：奖励模型去哪了">
+<meta property='og:description' content="DPO 把奖励模型与 PPO 改写成一个成对分类损失，但偏好并未消失，而是藏进了策略相对参考模型的概率变化。本文从四个对数概率出发，解释它为何简单、为何有效，以及离线偏好优化的边界。">
+<meta property='og:url' content='/p/dpo-hidden-reward/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='DPO' /><meta property='article:tag' content='偏好优化' /><meta property='article:tag' content='RLHF' /><meta property='article:tag' content='模型对齐' /><meta property='article:tag' content='后训练' /><meta property='article:published_time' content='2026-09-26T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-26T09:08:47&#43;08:00'/><meta property='og:image' content='/p/dpo-hidden-reward/cover.jpg' />
+<meta name="twitter:title" content="DPO：奖励模型去哪了">
+<meta name="twitter:description" content="DPO 把奖励模型与 PPO 改写成一个成对分类损失，但偏好并未消失，而是藏进了策略相对参考模型的概率变化。本文从四个对数概率出发，解释它为何简单、为何有效，以及离线偏好优化的边界。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/p/dpo-hidden-reward/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/dpo-hidden-reward/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/dpo-hidden-reward/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#它删掉的是训练阶段不是偏好假设">它删掉的是训练阶段，不是偏好假设</a></li>
+    <li><a href="#一个偏好对只需要四个对数概率">一个偏好对，只需要四个对数概率</a></li>
+    <li><a href="#简单来自离线也受限于离线">简单来自“离线”，也受限于“离线”</a></li>
+    <li><a href="#隐式奖励照样会被钻空子">隐式奖励照样会被钻空子</a></li>
+    <li><a href="#真正的贡献是找到了正确的坐标">真正的贡献，是找到了正确的坐标</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/dpo-hidden-reward/">
+            <img alt="Featured image of post DPO：奖励模型去哪了" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/dpo-hidden-reward/cover.jpg" srcset="/p/dpo-hidden-reward/cover_hu_8bff7a0b1da6de29.jpg 800w, /p/dpo-hidden-reward/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/dpo-hidden-reward/">DPO：奖励模型去哪了</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            DPO 把奖励模型与 PPO 改写成一个成对分类损失，但偏好并未消失，而是藏进了策略相对参考模型的概率变化。本文从四个对数概率出发，解释它为何简单、为何有效，以及离线偏好优化的边界。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-26T00:00:00Z'>2026-09-26</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 6 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/dpo-hidden-reward/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#它删掉的是训练阶段不是偏好假设">它删掉的是训练阶段，不是偏好假设</a></li>
+    <li><a href="#一个偏好对只需要四个对数概率">一个偏好对，只需要四个对数概率</a></li>
+    <li><a href="#简单来自离线也受限于离线">简单来自“离线”，也受限于“离线”</a></li>
+    <li><a href="#隐式奖励照样会被钻空子">隐式奖励照样会被钻空子</a></li>
+    <li><a href="#真正的贡献是找到了正确的坐标">真正的贡献，是找到了正确的坐标</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>经典 RLHF 像一条三段式生产线：收集成对偏好，训练一个输出标量的奖励模型，再用 PPO 让语言模型追逐这个分数，同时用 KL 惩罚拴住它。DPO 却说，第二段和第三段都可以拿掉，剩下一个看起来像二分类的损失就够了。</p>
+<p>这很容易被压缩成一句不准确的话：DPO“不需要奖励模型”。更精确的说法是，<strong>DPO 不训练一个独立、可调用的奖励网络，却仍然假设人类偏好来自潜在奖励；它把这个奖励改写成策略相对参考模型的对数概率变化。</strong> 奖励模型没有凭空消失，而是从一项显式资产变成了语言模型内部的一种坐标系。</p>
+<p>这次改写为何成立、每个 batch 到底算了什么，以及简化后的代价在哪里，是理解 DPO 的三把钥匙。</p>
+<h2 id="它删掉的是训练阶段不是偏好假设">它删掉的是训练阶段，不是偏好假设
+</h2><p>给定提示 $x$，标注者在两个回答里选择更好的 $y_w$，另一个记为 $y_l$。传统奖励模型通常采用 Bradley–Terry 假设：偏好概率只取决于两个潜在奖励之差，</p>
+$$
+p(y_w \succ y_l\mid x)=\sigma\big(r(x,y_w)-r(x,y_l)\big).
+$$<p>先用这个式子拟合奖励网络，再求解一个带 KL 约束的策略优化问题：</p>
+$$
+\max_\pi\;\mathbb E_{y\sim\pi}[r(x,y)]-
+\beta D_{\mathrm{KL}}\!\left(\pi(\cdot\mid x)\,\|\,\pi_{\mathrm{ref}}(\cdot\mid x)\right).
+$$<p>第一项鼓励高奖励回答，第二项阻止策略离参考模型太远。这个约束并非装饰：奖励模型只在有限数据分布附近可靠，策略若专门钻它的空子，分数可能继续上涨，回答质量却下降。</p>
+<figure><img src="/p/dpo-hidden-reward/pipeline.svg"><figcaption>
+			<h4>图 1：传统 RLHF 先拟合奖励再用 PPO 优化；DPO 直接用偏好对更新策略</h4>
+		</figcaption>
+</figure>
+
+<p>DPO 的关键不是发明另一种偏好标签，而是观察上述优化问题的最优策略具有闭式形式：</p>
+$$
+\pi_r(y\mid x)=\frac{1}{Z(x)}\pi_{\mathrm{ref}}(y\mid x)
+\exp\!\left(\frac{r(x,y)}{\beta}\right).
+$$<p>把它反解，就能用策略表示奖励：</p>
+$$
+r(x,y)=\beta\log\frac{\pi_r(y\mid x)}{\pi_{\mathrm{ref}}(y\mid x)}+\beta\log Z(x).
+$$<p>麻烦的配分函数 $Z(x)$ 只依赖同一个提示 $x$。代回 Bradley–Terry 模型时，两个回答的奖励相减，$\beta\log Z(x)$ 恰好抵消。于是无需先恢复奖励的绝对值，也能直接拟合“人更可能选哪一个回答”。这不是近似技巧，而是一次变量替换。</p>
+<h2 id="一个偏好对只需要四个对数概率">一个偏好对，只需要四个对数概率
+</h2><p>DPO 对每个样本 $(x,y_w,y_l)$ 计算四个序列级对数概率：当前策略与参考模型各自对 chosen、rejected 回答的概率。定义</p>
+$$
+a_w=\log\pi_\theta(y_w\mid x)-\log\pi_{\mathrm{ref}}(y_w\mid x),
+$$$$
+a_l=\log\pi_\theta(y_l\mid x)-\log\pi_{\mathrm{ref}}(y_l\mid x).
+$$<p>这里的 $a$ 可以理解为“当前策略相对出发点，给这个回答增加了多少支持”。DPO 最小化</p>
+$$
+\mathcal L_{\mathrm{DPO}}=-\log\sigma\big(\beta(a_w-a_l)\big).
+$$<figure><img src="/p/dpo-hidden-reward/four-logprobs.svg"><figcaption>
+			<h4>图 2：DPO 用 policy/reference × chosen/rejected 的四个对数概率构造一个相对优势差</h4>
+		</figcaption>
+</figure>
+
+<p>这个式子有三个容易忽略的细节。</p>
+<p>第一，它优化的不是“chosen 的概率必须变大”这一条孤立规则，而是 <strong>chosen 相对 reference 的提升要超过 rejected 相对 reference 的提升</strong>。即使两个回答的绝对概率都因参数共享而下降，只要相对差朝正确方向扩大，损失仍会改善。</p>
+<p>第二，reference 不是一份普通的旧 checkpoint 标签。它定义了隐式奖励的零点，也承担 KL 锚的角色。原论文在有 SFT 模型时用它初始化 reference 和待训练策略；没有匹配的 SFT 模型时，则先对 preferred completions 做最大似然微调，以减轻偏好数据与 reference 的分布错位。</p>
+<p>第三，$\beta$ 控制偏离 reference 的代价，但不同实现对参数含义与缩放的表述可能不同，不能把数值跨代码库机械搬运。论文官方参考实现里，核心计算确实只有：先求 policy 的 chosen/rejected log-ratio，再减去 reference 的对应 log-ratio，最后送入 <code>logsigmoid</code>。不过“损失短”不等于训练只需一份模型：朴素实现仍要对 policy 和冻结的 reference 做前向计算，显存、并行和序列截断依然是工程问题。</p>
+<h2 id="简单来自离线也受限于离线">简单来自“离线”，也受限于“离线”
+</h2><p>DPO 训练期间不需要一边生成新回答、一边让奖励模型打分，再维护 PPO 的 actor、critic 与 rollout 循环。固定的 $(x,y_w,y_l)$ 数据集可以像监督学习一样反复训练，这降低了系统复杂度，也让实验更容易复现。</p>
+<p>原论文在三个任务上验证了这点：受控情感生成、Reddit TL;DR 摘要和 Anthropic Helpful and Harmless 单轮对话。实验模型最大到 6B；在其 GPT-4 评估的摘要设置中，DPO 的最佳报告值约为 61% 胜率，PPO 约为 57%，且 DPO 对采样温度更稳健。论文还报告在人类头对头评估中，DPO 样本有 58% 的比较胜过 PPO 样本。</p>
+<p>这些结果支持“在论文设置下，DPO 能以更简单的优化达到有竞争力的偏好对齐”，却不支持“DPO 在所有规模、所有偏好数据上都优于在线 RL”。它使用固定数据，看不到当前策略新产生的失败；如果训练把策略推到数据覆盖之外，监督信号不会自动跟上。偏好对来自谁、由哪个模型生成、标注标准是否一致，都会成为算法的一部分。</p>
+<figure><img src="/p/dpo-hidden-reward/tradeoffs.svg"><figcaption>
+			<h4>图 3：DPO 消除了显式奖励与在线 PPO 环，却保留 reference 计算，并把风险集中到偏好数据与分布外推</h4>
+		</figcaption>
+</figure>
+
+<p>因此，把 DPO 与 PPO 理解成单纯的“新算法淘汰旧算法”并不合适。更有用的区分是：DPO 是固定偏好数据上的直接策略拟合；在线 RL 则能让当前策略持续探索、获得新反馈。前者适合数据已经准备好、希望训练管线简单稳定的场景；后者更复杂，却能针对模型正在犯的新错误继续收集信号。</p>
+<h2 id="隐式奖励照样会被钻空子">隐式奖励照样会被钻空子
+</h2><p>没有独立奖励网络，不代表没有 reward hacking。只要偏好数据含有捷径，DPO 就会放大能提高胜率的特征。</p>
+<p>一个清楚的例子是长度。Rafailov 等作者的后续研究分析 Anthropic HH 与 TL;DR 数据，发现 preferred 回答只有轻微偏长，但未正则化 DPO 生成的回答平均可变成约两倍长，并跑到反馈数据的长度分布之外。论文将其解释为对长度相关偏好的分布外外推，并提出长度正则项；在控制长度后，报告的胜率最高改善 20%。</p>
+<p>这里应避免另一个过度结论：长回答不等于坏回答。问题在于，模型可能把“通常更完整”学成“只要更长就更可能赢”，而自动评审本身也可能偏爱冗长。此时 raw win rate 同时测量内容质量、长度偏见和评审器偏见，不能单独充当真相。</p>
+<p>DPO 的二元偏好模型还有更基本的压缩：它只知道 $y_w$ 胜过 $y_l$，不知道胜多少，也不知道两者是否都很差。标注噪声、提示分布变化、答案风格与事实正确性的纠缠，都不会因公式优雅而消失。实际系统仍需要保留独立评测：长度校正、人类抽检、事实性与安全测试，以及对策略偏离 reference 程度的监控。</p>
+<h2 id="真正的贡献是找到了正确的坐标">真正的贡献，是找到了正确的坐标
+</h2><p>DPO 最值得记住的，不是“用一个 loss 替代一整套 RLHF”这句口号，而是它找到了一种坐标变换：在 KL 正则化的偏好优化中，奖励差可以写成策略相对 reference 的 log-ratio 差；Bradley–Terry 只关心差值，所以未知的归一化项会消失。</p>
+<p>这个视角让一条昂贵管线缩短了，也揭示了一个更普遍的设计原则：有时中间模型只是求解最终对象的一种参数化。如果能把约束直接写进最终对象，就可能减少训练阶段而不改变目标假设。</p>
+<p>但被删掉的模块不会带走它原本承载的所有问题。偏好仍可能有偏，reference 仍决定“不要走太远”相对于哪里，离线数据仍划定可学习边界，评测仍可能被表面特征欺骗。DPO 让优化更直接；它没有让“人到底喜欢什么、为什么喜欢”这个问题变简单。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li>Rafailov et al., <a class="link" href="https://papers.neurips.cc/paper_files/paper/2023/hash/a85b405ed65c6477a4fe8302b5e06ce7-Abstract-Conference.html"  target="_blank" rel="noopener"
+    >Direct Preference Optimization: Your Language Model Is Secretly a Reward Model</a>, NeurIPS 2023.</li>
+<li>Rafailov et al., <a class="link" href="https://arxiv.org/abs/2305.18290"  target="_blank" rel="noopener"
+    >DPO paper and appendices</a>, 2023.</li>
+<li>Mitchell et al., <a class="link" href="https://github.com/eric-mitchell/direct-preference-optimization"  target="_blank" rel="noopener"
+    >DPO official reference implementation</a>.</li>
+<li>Park et al., <a class="link" href="https://aclanthology.org/2024.findings-acl.297/"  target="_blank" rel="noopener"
+    >Disentangling Length from Quality in Direct Preference Optimization</a>, Findings of ACL 2024.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/dpo/">DPO</a>
+        
+            <a href="/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/">偏好优化</a>
+        
+            <a href="/tags/rlhf/">RLHF</a>
+        
+            <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/">模型对齐</a>
+        
+            <a href="/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/">后训练</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-09-26
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/instructgpt-rlhf/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post InstructGPT：用 RLHF 教会大模型「听话」" height="150" loading="lazy" src="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg" srcset="/p/instructgpt-rlhf/cover_hu_e6048057879ebe72.jpg 1x, /p/instructgpt-rlhf/cover_hu_3dc58f09bda74035.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c1c0c280 0%, #141417C0 100%);">
+            <h2 class="article-title">InstructGPT：用 RLHF 教会大模型「听话」</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/flashattention-io-aware/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post FlashAttention：不是少算，而是少搬" height="150" loading="lazy" src="/p/flashattention-io-aware/cover_hu_62c3677d14a862d3.jpg" srcset="/p/flashattention-io-aware/cover_hu_62c3677d14a862d3.jpg 1x, /p/flashattention-io-aware/cover_hu_b2a5c88a943f54e5.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #bec2be80 0%, #1e2a33C0 100%);">
+            <h2 class="article-title">FlashAttention：不是少算，而是少搬</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba：少记，为什么反而可能更懂长序列" height="150" loading="lazy" src="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg" srcset="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg 1x, /p/mamba-selective-state-space/cover_hu_5245944053dde7dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #303b4180 0%, #ddd3c4C0 100%);">
+            <h2 class="article-title">Mamba：少记，为什么反而可能更懂长序列</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看" height="150" loading="lazy" src="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg" srcset="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg 1x, /p/deepseek-mla-moe/cover_hu_5abd39a15d038789.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ded2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/llama-open-ecosystem/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LLaMA：没有架构革命，为什么成了开放模型的共同底座" height="150" loading="lazy" src="/p/llama-open-ecosystem/cover_hu_66b7ab446cd2193b.jpg" srcset="/p/llama-open-ecosystem/cover_hu_66b7ab446cd2193b.jpg 1x, /p/llama-open-ecosystem/cover_hu_737256bd48fd70c.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #d9cac880 0%, #171e2eC0 100%);">
+            <h2 class="article-title">LLaMA：没有架构革命，为什么成了开放模型的共同底座</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

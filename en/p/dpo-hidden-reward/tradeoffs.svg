@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450" role="img" aria-labelledby="trade-title trade-desc">
+  <title id="trade-title">What DPO simplifies and where risk moves</title>
+  <desc id="trade-desc">DPO removes a standalone reward model and online PPO loop, retains forward computation through a frozen reference, and concentrates risk in offline preferences, distribution shift, and evaluator bias.</desc>
+  <defs>
+    <style>
+      .bg{fill:#faf7f0}.ink{fill:#17283a}.muted{fill:#627384}.head{font-size:20px;font-weight:800}.label{font-size:15px;font-weight:700}.body{font-size:13px}.small{font-size:12px}
+      .gone{fill:#f5d9d0;stroke:#b76b59;stroke-width:1.5}.stay{fill:#dce8ef;stroke:#6d8798;stroke-width:1.5}.risk{fill:#f3e6bd;stroke:#a88632;stroke-width:1.5}.core{fill:#17283a}
+      text{font-family:"Segoe UI",Arial,sans-serif}
+    </style>
+  </defs>
+  <rect class="bg" width="600" height="450" rx="18"/>
+  <text x="300" y="42" text-anchor="middle" class="head ink">Complexity moves; it does not become zero</text>
+  <rect x="214" y="73" width="172" height="68" rx="14" class="core"/>
+  <text x="300" y="103" text-anchor="middle" font-size="20" font-weight="800" fill="#ffffff">DPO</text>
+  <text x="300" y="126" text-anchor="middle" class="small" fill="#d9ebe5">offline pairwise loss</text>
+
+  <rect x="31" y="178" width="164" height="113" rx="12" class="gone"/>
+  <text x="113" y="207" text-anchor="middle" class="label ink">Removed</text>
+  <text x="51" y="237" class="body ink">• reward network</text>
+  <text x="51" y="261" class="body ink">• critic / value head</text>
+  <text x="51" y="285" class="body ink">• rollouts + PPO</text>
+
+  <rect x="218" y="178" width="164" height="113" rx="12" class="stay"/>
+  <text x="300" y="207" text-anchor="middle" class="label ink">Still paid</text>
+  <text x="238" y="237" class="body ink">• policy forward/backward</text>
+  <text x="238" y="261" class="body ink">• reference forward</text>
+  <text x="238" y="285" class="body ink">• sequence log-probs</text>
+
+  <rect x="405" y="178" width="164" height="113" rx="12" class="risk"/>
+  <text x="487" y="207" text-anchor="middle" class="label ink">Concentrated risk</text>
+  <text x="425" y="237" class="body ink">• preference shortcuts</text>
+  <text x="425" y="261" class="body ink">• offline coverage gaps</text>
+  <text x="425" y="285" class="body ink">• evaluator bias</text>
+
+  <path d="M300 141V165H113V176" stroke="#42566a" stroke-width="2" fill="none"/>
+  <path d="M300 165V176" stroke="#42566a" stroke-width="2" fill="none"/>
+  <path d="M300 165H487V176" stroke="#42566a" stroke-width="2" fill="none"/>
+
+  <rect x="56" y="330" width="488" height="82" rx="12" fill="#fffdf8" stroke="#c7c0b4" stroke-width="1.4"/>
+  <text x="300" y="359" text-anchor="middle" class="label ink">Key boundary</text>
+  <text x="300" y="383" text-anchor="middle" class="body ink">Fixed data cannot expose a changing policy's new failures;</text>
+  <text x="300" y="403" text-anchor="middle" class="body ink">implicit reward can still amplify length or style shortcuts.</text>
+</svg>
+

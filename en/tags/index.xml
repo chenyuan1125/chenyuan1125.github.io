@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Fri, 25 Sep 2026 13:17:31 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 26 Sep 2026 09:08:49 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>DPO</title>
+            <link>/en/tags/dpo/</link>
+            <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/dpo/</guid>
+            <description></description>
+        </item><item>
+            <title>Model Alignment</title>
+            <link>/en/tags/model-alignment/</link>
+            <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/model-alignment/</guid>
+            <description></description>
+        </item><item>
+            <title>Post-Training</title>
+            <link>/en/tags/post-training/</link>
+            <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/post-training/</guid>
+            <description></description>
+        </item><item>
+            <title>Preference Optimization</title>
+            <link>/en/tags/preference-optimization/</link>
+            <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/preference-optimization/</guid>
+            <description></description>
+        </item><item>
+            <title>RLHF</title>
+            <link>/en/tags/rlhf/</link>
+            <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/rlhf/</guid>
+            <description></description>
+        </item><item>
             <title>Attention</title>
             <link>/en/tags/attention/</link>
             <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
@@ -167,12 +197,6 @@
             <link>/en/tags/ppo/</link>
             <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/ppo/</guid>
-            <description></description>
-        </item><item>
-            <title>RLHF</title>
-            <link>/en/tags/rlhf/</link>
-            <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/rlhf/</guid>
             <description></description>
         </item><item>
             <title>BART</title>

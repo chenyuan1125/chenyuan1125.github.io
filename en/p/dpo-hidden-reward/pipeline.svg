@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 440" width="600" height="440" role="img" aria-labelledby="pipeline-title pipeline-desc">
+  <title id="pipeline-title">RLHF and DPO training pipelines</title>
+  <desc id="pipeline-desc">Classical RLHF trains a reward model from preferences, then updates the policy through online sampling and PPO. DPO updates the language model directly from preference pairs and a reference policy.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#42566a"/></marker>
+    <style>
+      .bg{fill:#faf7f0}.ink{fill:#17283a}.muted{fill:#627384}.line{stroke:#42566a;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .box{fill:#fffdf8;stroke:#bac4c9;stroke-width:1.5}.blue{fill:#dce8ef;stroke:#6d8798;stroke-width:1.5}.teal{fill:#d9ebe5;stroke:#598878;stroke-width:1.5}.coral{fill:#f5d9d0;stroke:#b76b59;stroke-width:1.5}
+      text{font-family:"Segoe UI",Arial,sans-serif}.label{font-size:14px;font-weight:700}.small{font-size:12px}.section{font-size:18px;font-weight:800}
+    </style>
+  </defs>
+  <rect class="bg" width="600" height="440" rx="18"/>
+  <text x="34" y="45" class="section ink">Classical RLHF: learn a score, then chase it</text>
+  <rect x="34" y="76" width="132" height="72" rx="10" class="blue"/>
+  <text x="100" y="104" text-anchor="middle" class="label ink">Preferences</text>
+  <text x="100" y="127" text-anchor="middle" class="small muted">(x, chosen, rejected)</text>
+  <path d="M166 112H213" class="line"/>
+  <rect x="218" y="76" width="148" height="72" rx="10" class="coral"/>
+  <text x="292" y="104" text-anchor="middle" class="label ink">Reward model</text>
+  <text x="292" y="127" text-anchor="middle" class="small muted">scalar r(x, y)</text>
+  <path d="M366 112H413" class="line"/>
+  <rect x="418" y="76" width="148" height="72" rx="10" class="teal"/>
+  <text x="492" y="104" text-anchor="middle" class="label ink">PPO update</text>
+  <text x="492" y="127" text-anchor="middle" class="small muted">actor + critic + KL</text>
+  <path d="M492 149V189" class="line"/>
+  <rect x="389" y="194" width="177" height="67" rx="10" class="box"/>
+  <text x="478" y="220" text-anchor="middle" class="label ink">Online rollout loop</text>
+  <text x="478" y="243" text-anchor="middle" class="small muted">generate → score → update</text>
+
+  <line x1="34" y1="290" x2="566" y2="290" stroke="#d8d0c2" stroke-width="1.5"/>
+  <text x="34" y="330" class="section ink">DPO: compare relative probabilities directly</text>
+  <rect x="34" y="352" width="180" height="62" rx="10" class="blue"/>
+  <text x="124" y="378" text-anchor="middle" class="label ink">Pairs + reference</text>
+  <text x="124" y="399" text-anchor="middle" class="small muted">fixed offline data</text>
+  <path d="M214 383H352" class="line"/>
+  <text x="283" y="369" text-anchor="middle" class="small muted">one pairwise loss</text>
+  <rect x="357" y="352" width="209" height="62" rx="10" class="teal"/>
+  <text x="462" y="378" text-anchor="middle" class="label ink">Update the LM policy</text>
+  <text x="462" y="399" text-anchor="middle" class="small muted">no reward net, no PPO</text>
+</svg>
+
