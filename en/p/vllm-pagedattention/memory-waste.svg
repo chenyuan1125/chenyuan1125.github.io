@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 390" width="600" height="390" role="img" aria-labelledby="mw-title mw-desc">
+  <title id="mw-title">Memory use under contiguous reservation and paged allocation</title>
+  <desc id="mw-desc">The left side reserves for maximum lengths; the right side allocates fixed-size physical blocks on demand.</desc>
+  <rect width="600" height="390" rx="20" fill="#f7f4ee"/>
+  <text x="30" y="42" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#18324b">Same requests, two memory bills</text>
+  <rect x="28" y="70" width="260" height="282" rx="15" fill="#e8edf0"/>
+  <rect x="312" y="70" width="260" height="282" rx="15" fill="#e5efeb"/>
+  <text x="48" y="103" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#29465d">CONTIGUOUS RESERVATION</text>
+  <text x="332" y="103" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#265a55">BLOCKS ON DEMAND</text>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#475867"><text x="48" y="137">Request A · max 12</text><text x="48" y="207">Request B · max 12</text><text x="48" y="277">Request C · max 12</text></g>
+  <g><rect x="48" y="151" width="216" height="30" rx="6" fill="#c9d2d8"/><rect x="48" y="151" width="90" height="30" rx="6" fill="#3b7896"/><rect x="48" y="221" width="216" height="30" rx="6" fill="#c9d2d8"/><rect x="48" y="221" width="144" height="30" rx="6" fill="#4a938a"/><rect x="48" y="291" width="216" height="30" rx="6" fill="#c9d2d8"/><rect x="48" y="291" width="54" height="30" rx="6" fill="#cf735d"/></g>
+  <text x="48" y="339" font-family="Arial, sans-serif" font-size="12" fill="#7a858c">Gray: reserved for tokens that do not exist</text>
+  <g stroke="#f7f4ee" stroke-width="3"><rect x="332" y="134" width="48" height="42" rx="7" fill="#3b7896"/><rect x="384" y="134" width="48" height="42" rx="7" fill="#3b7896"/><rect x="332" y="190" width="48" height="42" rx="7" fill="#4a938a"/><rect x="384" y="190" width="48" height="42" rx="7" fill="#4a938a"/><rect x="436" y="190" width="48" height="42" rx="7" fill="#4a938a"/><rect x="332" y="246" width="48" height="42" rx="7" fill="#cf735d"/><rect x="488" y="246" width="48" height="42" rx="7" fill="#d9ded9" stroke="#a9b4ae" stroke-dasharray="5 4"/></g>
+  <g font-family="Arial, sans-serif" font-size="12" fill="#536963"><text x="332" y="122">A: 2 blocks</text><text x="332" y="178">B: 3 blocks</text><text x="332" y="234">C: 1 block</text><text x="488" y="305">Free pool</text></g>
+  <text x="332" y="331" font-family="Arial, sans-serif" font-size="12" fill="#536963">Only each sequence's tail block can waste space</text>
+</svg>

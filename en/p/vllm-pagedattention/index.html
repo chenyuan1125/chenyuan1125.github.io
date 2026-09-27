@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="PagedAttention does not necessarily make the attention kernel faster, yet it enables much higher serving throughput in vLLM. This article explains how paging, block tables, on-demand allocation, and copy-on-write turn KV-cache memory into a first-class systems problem.">
+<title>PagedAttention: When a Slower Kernel Makes the System Faster</title>
+
+
+<link rel="canonical" href="/en/p/vllm-pagedattention/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="PagedAttention: When a Slower Kernel Makes the System Faster">
+<meta property='og:description' content="PagedAttention does not necessarily make the attention kernel faster, yet it enables much higher serving throughput in vLLM. This article explains how paging, block tables, on-demand allocation, and copy-on-write turn KV-cache memory into a first-class systems problem.">
+<meta property='og:url' content='/en/p/vllm-pagedattention/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='vLLM' /><meta property='article:tag' content='PagedAttention' /><meta property='article:tag' content='KV Cache' /><meta property='article:tag' content='LLM Inference' /><meta property='article:tag' content='Model Serving' /><meta property='article:published_time' content='2026-09-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-27T09:08:32&#43;08:00'/><meta property='og:image' content='/en/p/vllm-pagedattention/cover.jpg' />
+<meta name="twitter:title" content="PagedAttention: When a Slower Kernel Makes the System Faster">
+<meta name="twitter:description" content="PagedAttention does not necessarily make the attention kernel faster, yet it enables much higher serving throughput in vLLM. This article explains how paging, block tables, on-demand allocation, and copy-on-write turn KV-cache memory into a first-class systems problem."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/vllm-pagedattention/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/vllm-pagedattention/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/vllm-pagedattention/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#a-kv-cache-is-a-set-of-live-objects-with-unknown-lengths">A KV Cache Is a Set of Live Objects with Unknown Lengths</a></li>
+    <li><a href="#the-block-table-separates-logical-from-physical-contiguity">The Block Table Separates Logical from Physical Contiguity</a></li>
+    <li><a href="#one-physical-block-can-safely-belong-to-several-sequences">One Physical Block Can Safely Belong to Several Sequences</a></li>
+    <li><a href="#larger-effective-batches-are-the-throughput-transmission">Larger Effective Batches Are the Throughput Transmission</a></li>
+    <li><a href="#flashattention-and-pagedattention-pay-different-bills">FlashAttention and PagedAttention Pay Different Bills</a></li>
+    <li><a href="#paging-is-not-a-free-lunch">Paging Is Not a Free Lunch</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/vllm-pagedattention/">
+            <img alt="Featured image of post PagedAttention: When a Slower Kernel Makes the System Faster" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/vllm-pagedattention/cover.jpg" srcset="/en/p/vllm-pagedattention/cover_hu_45f5e7d67d690be8.jpg 800w, /en/p/vllm-pagedattention/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/tech-framework/" style="background-color: hsl(293, 60%, 84%); color: hsl(293, 60%, 15%);">
+                Tech Framework
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/vllm-pagedattention/">PagedAttention: When a Slower Kernel Makes the System Faster</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            PagedAttention does not necessarily make the attention kernel faster, yet it enables much higher serving throughput in vLLM. This article explains how paging, block tables, on-demand allocation, and copy-on-write turn KV-cache memory into a first-class systems problem.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-27T00:00:00Z'>2026-09-27</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        7 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/vllm-pagedattention/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#a-kv-cache-is-a-set-of-live-objects-with-unknown-lengths">A KV Cache Is a Set of Live Objects with Unknown Lengths</a></li>
+    <li><a href="#the-block-table-separates-logical-from-physical-contiguity">The Block Table Separates Logical from Physical Contiguity</a></li>
+    <li><a href="#one-physical-block-can-safely-belong-to-several-sequences">One Physical Block Can Safely Belong to Several Sequences</a></li>
+    <li><a href="#larger-effective-batches-are-the-throughput-transmission">Larger Effective Batches Are the Throughput Transmission</a></li>
+    <li><a href="#flashattention-and-pagedattention-pay-different-bills">FlashAttention and PagedAttention Pay Different Bills</a></li>
+    <li><a href="#paging-is-not-a-free-lunch">Paging Is Not a Free Lunch</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>The most useful lesson in PagedAttention is not simply that it borrows paging from operating systems. It is a more counterintuitive result. In the paper&rsquo;s microbenchmark, block-table lookups and variable-length handling make its attention kernel <strong>20–26% slower</strong> than a highly optimized contiguous-memory implementation. Yet vLLM, the serving system built around it, achieves substantially higher end-to-end throughput.</p>
+<p>How can a slower local operator produce a faster system? Online inference is often constrained less by a few microseconds in one attention call than by how many growing sequences fit in GPU memory at once. PagedAttention pays for indirection to waste less KV-cache memory, build larger dynamic batches, and share prefixes safely. It optimizes system-level concurrency rather than one formula.</p>
+<h2 id="a-kv-cache-is-a-set-of-live-objects-with-unknown-lengths">A KV Cache Is a Set of Live Objects with Unknown Lengths
+</h2><p>Autoregressive decoding emits one token at a time. Keys and values from earlier tokens stay in GPU memory so the next query does not recompute them. This KV cache begins with the prompt, grows at every step, and disappears when the sequence ends.</p>
+<p>That object has three inconvenient properties: its final length is unknown, requests arrive and finish independently, and every decoding step needs fast access to all preceding state. Earlier serving systems commonly reserved one contiguous region per sequence, sized by a maximum length or an output-length estimate. The layout was friendly to ordinary tensor kernels but created three kinds of waste: space reserved for tokens that did not exist yet, unused capacity inside allocations, and external holes left among differently sized allocations.</p>
+<p>In the PagedAttention paper&rsquo;s baseline experiments, only <strong>20.4%–38.2%</strong> of allocated KV-cache memory stored actual token state. This is not a universal production ratio. It does expose the systems problem: unchanged model weights and unchanged arithmetic can still leave requests outside the batch because allocation wastes the remaining memory.</p>
+<figure><img src="/en/p/vllm-pagedattention/memory-waste.svg"><figcaption>
+			<h4>Figure 1: contiguous allocation reserves for maximum lengths; paging allocates fixed-size KV blocks only as needed</h4>
+		</figcaption>
+</figure>
+
+<h2 id="the-block-table-separates-logical-from-physical-contiguity">The Block Table Separates Logical from Physical Contiguity
+</h2><p>PagedAttention divides a sequence&rsquo;s KV cache into <strong>logical blocks</strong>, each covering a fixed number of tokens. GPU memory is divided into equal-size <strong>physical blocks</strong>. Logical blocks 0, 1, and 2 remain consecutive from the request&rsquo;s perspective, but they may map to physical blocks 7, 1, and 3. A block table stores that mapping.</p>
+<p>At admission, the system allocates only enough physical blocks for the prompt. New tokens fill the last block. Only after that block becomes full does the manager take another block from the free pool and append a mapping. Memory grows with the real sequence instead of its maximum possible future.</p>
+<p>Paging does not eliminate internal fragmentation. The final block of every active sequence may still be partially empty. It confines the waste to <strong>at most one block</strong>, rather than an entire maximum-length reservation. The official launch post reported less than 4% waste in its tests. Blocks are not free to shrink indefinitely: smaller blocks reduce tail waste but add table entries and addressing overhead; larger blocks improve parallel access but increase fragmentation. The paper found a 16-token block to work well for its workloads. That is an empirical operating point, not a constant for every model and accelerator.</p>
+<figure><img src="/en/p/vllm-pagedattention/block-table.svg"><figcaption>
+			<h4>Figure 2: logical token order stays contiguous while the block table maps it to scattered physical blocks and grows on demand</h4>
+		</figcaption>
+</figure>
+
+<p>The attention kernel must understand this layout. It can no longer sweep one contiguous KV tensor. It follows the table, fetches separate K/V blocks, and performs scores, softmax, and weighted sums block by block. Attention mathematics is unchanged; address discovery is not. Indirection, branches, and variable lengths explain part of the paper&rsquo;s 20–26% kernel-latency penalty.</p>
+<h2 id="one-physical-block-can-safely-belong-to-several-sequences">One Physical Block Can Safely Belong to Several Sequences
+</h2><p>Paging also makes sharing natural. Parallel samples, beams, and requests with an identical prompt contain the same prefix KV cache. Copying that prefix into every branch wastes both memory and bandwidth. With block tables, several logical sequences can point their prefix entries at the same physical blocks.</p>
+<p>vLLM maintains a reference count per physical block. Read-only prefix sharing needs no copy. If one branch must modify a shared tail block, the system performs copy-on-write: copy that block, update only that branch&rsquo;s table, then write. Earlier full blocks remain shared. The paper reports up to 55% KV-cache memory savings in its beam-search setting. That gain follows the sharing pattern and should not be projected onto every sampling workload.</p>
+<figure><img src="/en/p/vllm-pagedattention/sharing.svg"><figcaption>
+			<h4>Figure 3: branches share physical prefix blocks and trigger copy-on-write only when a shared tail must change</h4>
+		</figcaption>
+</figure>
+
+<p>vLLM&rsquo;s later automatic prefix caching turns “blocks can be shared” into “blocks can be found.” A full KV block is identified from its parent hash, block tokens, and extra context such as LoRA IDs, multimodal hashes, or a cache salt. When a new request matches an existing prefix, it can reuse those KV blocks and skip the corresponding prefill computation. The layers should remain distinct: PagedAttention supplies block-level storage and mapping; prefix caching additionally needs content addressing, eviction, and tenant-isolation policy.</p>
+<h2 id="larger-effective-batches-are-the-throughput-transmission">Larger Effective Batches Are the Throughput Transmission
+</h2><p>Decode is commonly memory-bound. Each step adds one token but reads model weights and an expanding cache. Executing more requests together amortizes weight traffic and scheduling overhead. Yet request lengths differ: one request enters prefill, another has decoded hundreds of steps, and a third finishes now.</p>
+<p>Iteration-level scheduling, often called continuous batching, lets the engine remove completed requests and admit new ones after each iteration. PagedAttention did not invent that scheduler. It makes the scheduler&rsquo;s changing batch practical by letting memory be recomposed as requests enter, grow, fork, and exit. The causal chain is:</p>
+
+    <blockquote>
+        <p>On-demand blocks and sharing → less KV waste → more simultaneous sequences → larger effective batches → higher GPU utilization and serving throughput.</p>
+
+    </blockquote>
+<p>In its 2023 OPT and LLaMA experiments on hardware including A100 and A10G, the paper reports roughly <strong>2–4×</strong> throughput over FasterTransformer and its Orca reproduction. In ShareGPT basic sampling, vLLM sustained 1.7–2.7× higher request rates than the infeasible Orca Oracle, which knew output lengths in advance. That comparison makes the point sharply: dynamic memory management can outweigh a slower attention kernel.</p>
+<p>Those multipliers belong to particular models, traces, hardware, and baselines. A modern engine must also be judged by time to first token, time per output token, tail latency, concurrency, prompt/output distributions, quantization, and scheduling policy. Throughput without these conditions is not portable.</p>
+<h2 id="flashattention-and-pagedattention-pay-different-bills">FlashAttention and PagedAttention Pay Different Bills
+</h2><p>Both names contain “Attention,” and both care about memory, but they attack different problems.</p>
+<p>FlashAttention reorganizes data movement <em>inside one attention operation</em>. Tiling and online softmax avoid materializing the full score and probability matrices in HBM. PagedAttention organizes KV caches <em>across many requests</em>. Block tables let a logically contiguous sequence occupy non-contiguous physical memory and support on-demand growth and sharing. One changes operator dataflow; the other changes serving data structures and resource management.</p>
+<p>They can coexist. Prefill needs efficient processing of large query tiles; decode especially needs growing KV state, scheduling, and efficient paged-decode kernels. Modern vLLM also supports multiple attention backends, so its performance should not be reduced to one paper-era CUDA kernel. PagedAttention&rsquo;s durable impact is the idea that KV cache is a dynamic resource requiring operating-system-like management.</p>
+<h2 id="paging-is-not-a-free-lunch">Paging Is Not a Free Lunch
+</h2><p>The tradeoffs are concrete. Block translation and non-contiguous access increase kernel complexity and can hurt locality; the paper&rsquo;s microbenchmark says so directly. Block size is workload-dependent, and short sequences, long contexts, GQA/MLA, and hybrid attention models may want different layouts. GPU capacity is only one bottleneck: prefill compute, inter-GPU communication, CPU frontend work, sampling, queues, and service-level objectives may dominate next.</p>
+<p>Paging also answers “where is this state stored?” rather than “which state deserves to stay?” Prefix-cache hit rate, eviction, tenant isolation, and cache salts affect both efficiency and security. Cross-tenant reuse can even create timing side channels. Block management is infrastructure, not a complete caching policy.</p>
+<p>That systems view is precisely the contribution. PagedAttention does not reduce parameter count or remove attention&rsquo;s mathematical complexity. It redefines KV cache—often treated as a tensor detail—as a runtime object that must be allocated, mapped, reference-counted, copied on write, and coordinated with scheduling.</p>
+<p>There is therefore no contradiction in a slower local kernel making the whole system faster. Once the objective changes from “finish one operator soonest” to “use finite memory for the most useful concurrent work,” indirection is no longer pure overhead. It is the price of buying concurrency—and the central design lesson of vLLM and PagedAttention.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Kwon et al., <a class="link" href="https://arxiv.org/abs/2309.06180"  target="_blank" rel="noopener"
+    >Efficient Memory Management for Large Language Model Serving with PagedAttention</a>, SOSP 2023.</li>
+<li>vLLM Team, <a class="link" href="https://vllm.ai/blog/2023-06-20-vllm"  target="_blank" rel="noopener"
+    >vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention</a>, 2023.</li>
+<li>vLLM Project, <a class="link" href="https://github.com/vllm-project/vllm"  target="_blank" rel="noopener"
+    >vLLM official repository</a>.</li>
+<li>vLLM Documentation, <a class="link" href="https://docs.vllm.ai/en/latest/design/prefix_caching/"  target="_blank" rel="noopener"
+    >Automatic Prefix Caching</a>.</li>
+<li>vLLM Team, <a class="link" href="https://vllm.ai/blog/2025-09-05-anatomy-of-vllm"  target="_blank" rel="noopener"
+    >Inside vLLM: Anatomy of a High-Throughput LLM Inference System</a>, 2025.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/vllm/">VLLM</a>
+        
+            <a href="/en/tags/pagedattention/">PagedAttention</a>
+        
+            <a href="/en/tags/kv-cache/">KV Cache</a>
+        
+            <a href="/en/tags/llm-inference/">LLM Inference</a>
+        
+            <a href="/en/tags/model-serving/">Model Serving</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-27
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/encryption-algorithm/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Encryption Algorithm Survey" loading="lazy" src="cover.jpg">
+
+        </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Encryption Algorithm Survey</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

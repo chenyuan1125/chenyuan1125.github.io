@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 390" width="600" height="390" role="img" aria-labelledby="sh-title sh-desc">
+  <title id="sh-title">Prefix sharing with copy-on-write</title><desc id="sh-desc">Three generation branches share prefix blocks and copy only one shared tail block when it must be modified.</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#466678"/></marker></defs>
+  <rect width="600" height="390" rx="20" fill="#f7f4ee"/>
+  <text x="30" y="42" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#18324b">Share first; pay only when branches differ</text>
+  <text x="30" y="78" font-family="Arial, sans-serif" font-size="13" fill="#52636d">All three block tables reference the same physical prefix blocks</text>
+  <g stroke="#f7f4ee" stroke-width="3"><rect x="52" y="112" width="76" height="52" rx="9" fill="#315f7a"/><rect x="142" y="112" width="76" height="52" rx="9" fill="#3b7896"/><rect x="232" y="112" width="76" height="52" rx="9" fill="#4a938a"/></g>
+  <g font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white"><text x="90" y="135">Prefix 0</text><text x="90" y="151">ref = 3</text><text x="180" y="135">Prefix 1</text><text x="180" y="151">ref = 3</text><text x="270" y="135">Shared tail</text><text x="270" y="151">ref = 3</text></g>
+  <g stroke="#466678" stroke-width="2" fill="none" marker-end="url(#a)"><path d="M270 166 C270 195 140 195 140 226"/><path d="M270 166 L270 226"/><path d="M270 166 C270 195 400 195 400 226"/></g>
+  <g font-family="Arial, sans-serif" font-size="13" text-anchor="middle"><rect x="82" y="230" width="116" height="46" rx="9" fill="#dfe9e6"/><text x="140" y="258" fill="#265a55">Branch A · read</text><rect x="212" y="230" width="116" height="46" rx="9" fill="#dfe9e6"/><text x="270" y="258" fill="#265a55">Branch B · read</text><rect x="342" y="230" width="116" height="46" rx="9" fill="#f1e2de"/><text x="400" y="258" fill="#8a4a3c">Branch C · write</text></g>
+  <path d="M400 278 C400 300 482 296 482 318" fill="none" stroke="#cf735d" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="427" y="322" width="110" height="42" rx="8" fill="#cf735d"/><text x="482" y="348" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white">Copy tail only</text>
+  <rect x="36" y="303" width="315" height="61" rx="10" fill="#e7ebed"/><text x="52" y="328" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#29465d">COPY-ON-WRITE</text><text x="52" y="349" font-family="Arial, sans-serif" font-size="12" fill="#5e6b72">Full prefix blocks stay shared; no full-sequence copy</text>
+</svg>

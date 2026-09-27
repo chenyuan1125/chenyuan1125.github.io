@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -14,6 +14,103 @@
                 hreflang="zh-cn"
                 href="/categories/"
                 />
+  </url><url>
+    <loc>/tags/kv-cache/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/kv-cache/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/kv-cache/"
+                />
+  </url><url>
+    <loc>/tags/pagedattention/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/pagedattention/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/pagedattention/"
+                />
+  </url><url>
+    <loc>/p/vllm-pagedattention/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/vllm-pagedattention/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/vllm-pagedattention/"
+                />
+  </url><url>
+    <loc>/post/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/tags/vllm/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/vllm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/vllm/"
+                />
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/"
+                />
+  </url><url>
+    <loc>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</loc>
+    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
   </url><url>
     <loc>/tags/dpo/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
@@ -41,19 +138,6 @@
                 href="/p/dpo-hidden-reward/"
                 />
   </url><url>
-    <loc>/post/</loc>
-    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
     <loc>/tags/rlhf/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
     <xhtml:link
@@ -65,32 +149,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/tags/rlhf/"
-                />
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2026-09-26T09:08:47+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/"
                 />
   </url><url>
     <loc>/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</loc>
@@ -212,19 +270,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/p/deepseek-mla-moe/"
-                />
-  </url><url>
-    <loc>/tags/kv-cache/</loc>
-    <lastmod>2026-09-23T18:57:28+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/kv-cache/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/kv-cache/"
                 />
   </url><url>
     <loc>/tags/mla/</loc>
