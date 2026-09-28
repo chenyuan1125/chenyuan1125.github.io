@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420" role="img" aria-labelledby="serial-title serial-desc">
+  <title id="serial-title">普通解码与推测解码的串行步数对比</title>
+  <desc id="serial-desc">普通解码四次运行目标模型得到四个 token；推测解码先由小模型提出三个 token，再由目标模型一次验证。</desc>
+  <defs>
+    <style>
+      .bg{fill:#f7f3ea}.panel{fill:#fffdf8;stroke:#d8d2c6;stroke-width:1.5}.h{font:700 18px 'Microsoft YaHei',sans-serif;fill:#172f3d}.t{font:14px 'Microsoft YaHei',sans-serif;fill:#39515d}.inv{font:14px 'Microsoft YaHei',sans-serif;fill:#fff}.s{font:12px 'Microsoft YaHei',sans-serif;fill:#657782}.target{fill:#18394a}.draft{fill:#c96842}.token{fill:#e9eee9;stroke:#a9b9b2}.ok{fill:#5d8f72}.arrow{stroke:#6c7f87;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#6c7f87"/></marker>
+  </defs>
+  <rect class="bg" width="600" height="420" rx="18"/>
+  <text class="h" x="32" y="36">同样生成 4 个 token，昂贵模型要走几轮？</text>
+  <rect class="panel" x="24" y="58" width="552" height="142" rx="14"/>
+  <text class="h" x="44" y="87">普通自回归解码</text>
+  <text class="t" x="44" y="111">每次目标模型调用只确认下一个位置</text>
+  <g transform="translate(50 133)">
+    <rect class="target" x="0" y="0" width="86" height="40" rx="8"/><text x="43" y="25" text-anchor="middle" class="inv">目标模型</text>
+    <path class="arrow" d="M90 20 H118"/><rect class="token" x="125" y="2" width="42" height="36" rx="7"/><text class="t" x="146" y="25" text-anchor="middle">t₁</text>
+    <path class="arrow" d="M171 20 H198"/><rect class="target" x="205" y="0" width="40" height="40" rx="8"/>
+    <path class="arrow" d="M249 20 H276"/><rect class="token" x="283" y="2" width="42" height="36" rx="7"/><text class="t" x="304" y="25" text-anchor="middle">t₂</text>
+    <path class="arrow" d="M329 20 H356"/><rect class="target" x="363" y="0" width="40" height="40" rx="8"/>
+    <text class="t" x="438" y="25">… 共 4 轮</text>
+  </g>
+  <rect class="panel" x="24" y="218" width="552" height="176" rx="14"/>
+  <text class="h" x="44" y="247">推测解码</text>
+  <text class="t" x="44" y="271">便宜草稿串行猜测，目标模型把多个位置并行评分</text>
+  <g transform="translate(52 294)">
+    <rect class="draft" x="0" y="0" width="82" height="38" rx="8"/><text x="41" y="24" text-anchor="middle" class="inv">草稿模型</text>
+    <path class="arrow" d="M86 19 H110"/>
+    <rect class="token" x="116" y="1" width="40" height="36" rx="7"/><text class="t" x="136" y="24" text-anchor="middle">t₁</text>
+    <rect class="token" x="164" y="1" width="40" height="36" rx="7"/><text class="t" x="184" y="24" text-anchor="middle">t₂</text>
+    <rect class="token" x="212" y="1" width="40" height="36" rx="7"/><text class="t" x="232" y="24" text-anchor="middle">t₃</text>
+    <path class="arrow" d="M258 19 H286"/>
+    <rect class="target" x="293" y="0" width="91" height="38" rx="8"/><text x="338" y="24" text-anchor="middle" class="inv">一次验证</text>
+    <path class="arrow" d="M388 19 H416"/>
+    <circle class="ok" cx="434" cy="19" r="16"/><path d="M426 19 l6 6 11-13" fill="none" stroke="white" stroke-width="3"/>
+  </g>
+  <text class="s" x="52" y="361">目标模型仍决定每个 token；变化的是验证的调度方式。</text>
+</svg>

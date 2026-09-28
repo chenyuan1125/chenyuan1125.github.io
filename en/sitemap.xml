@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/en/categories/</loc>
-    <lastmod>2026-09-27T09:08:32+08:00</lastmod>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -13,6 +13,73 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/categories/"
+                />
+  </url><url>
+    <loc>/en/tags/decoding-acceleration/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+  </url><url>
+    <loc>/en/categories/llm-architecture/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/llm-inference/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+  </url><url>
+    <loc>/en/post/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/en/tags/rejection-sampling/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+  </url><url>
+    <loc>/en/tags/speculative-decoding/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+  </url><url>
+    <loc>/en/p/speculative-decoding/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/speculative-decoding/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/speculative-decoding/"
+                />
+  </url><url>
+    <loc>/en/tags/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/en/tags/vllm/</loc>
+    <lastmod>2026-09-28T09:07:10+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/vllm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/vllm/"
                 />
   </url><url>
     <loc>/en/tags/kv-cache/</loc>
@@ -27,9 +94,6 @@
                 hreflang="zh-cn"
                 href="/tags/kv-cache/"
                 />
-  </url><url>
-    <loc>/en/tags/llm-inference/</loc>
-    <lastmod>2026-09-27T09:08:32+08:00</lastmod>
   </url><url>
     <loc>/en/tags/model-serving/</loc>
     <lastmod>2026-09-27T09:08:32+08:00</lastmod>
@@ -60,47 +124,8 @@
                 href="/p/vllm-pagedattention/"
                 />
   </url><url>
-    <loc>/en/post/</loc>
-    <lastmod>2026-09-27T09:08:32+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
-    <loc>/en/tags/</loc>
-    <lastmod>2026-09-27T09:08:32+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
     <loc>/en/categories/tech-framework/</loc>
     <lastmod>2026-09-27T09:08:32+08:00</lastmod>
-  </url><url>
-    <loc>/en/tags/vllm/</loc>
-    <lastmod>2026-09-27T09:08:32+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/vllm/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/vllm/"
-                />
   </url><url>
     <loc>/en/tags/dpo/</loc>
     <lastmod>2026-09-26T09:08:49+08:00</lastmod>
@@ -127,9 +152,6 @@
                 hreflang="zh-cn"
                 href="/p/dpo-hidden-reward/"
                 />
-  </url><url>
-    <loc>/en/categories/llm-architecture/</loc>
-    <lastmod>2026-09-26T09:08:49+08:00</lastmod>
   </url><url>
     <loc>/en/tags/model-alignment/</loc>
     <lastmod>2026-09-26T09:08:49+08:00</lastmod>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 430" width="600" height="430" role="img" aria-labelledby="accept-title accept-desc">
+  <title id="accept-title">推测采样如何保持目标分布</title><desc id="accept-desc">目标分布和草稿分布的重叠部分由接受路径产生，目标分布剩余的概率质量由拒绝后的校正采样补回。</desc>
+  <defs><style>.bg{fill:#f7f3ea}.h{font:700 18px 'Microsoft YaHei',sans-serif;fill:#172f3d}.t{font:14px 'Microsoft YaHei',sans-serif;fill:#39515d}.s{font:12px 'Microsoft YaHei',sans-serif;fill:#687a82}.p{fill:#2f7181;fill-opacity:.72}.q{fill:#d4784d;fill-opacity:.7}.overlap{fill:#607e70}.line{stroke:#72858c;stroke-width:1.5}.box{fill:#fffdf8;stroke:#d8d2c6;stroke-width:1.5}</style></defs>
+  <rect class="bg" width="600" height="430" rx="18"/><text class="h" x="28" y="36">拒绝不是重来，而是在补回目标分布缺失的部分</text>
+  <rect class="box" x="24" y="58" width="552" height="228" rx="14"/>
+  <line class="line" x1="58" y1="245" x2="542" y2="245"/><line class="line" x1="58" y1="90" x2="58" y2="245"/>
+  <path class="p" d="M58 245 C110 240,135 118,200 105 C280 88,315 215,365 220 C420 225,452 148,542 132 L542 245 Z"/>
+  <path class="q" d="M58 245 C105 235,144 150,205 140 C270 130,300 190,355 205 C420 222,475 213,542 202 L542 245 Z"/>
+  <path class="overlap" d="M58 245 C105 235,144 150,205 140 C270 130,300 190,355 205 C420 222,475 213,542 202 L542 245 Z" opacity=".72"/>
+  <text class="t" x="95" y="92" fill="#2f7181">目标分布 p</text><text class="t" x="410" y="194" fill="#b45834">草稿分布 q</text>
+  <rect x="54" y="309" width="210" height="82" rx="12" fill="#e2ebe5"/><text class="h" x="72" y="338">接受路径</text><text class="t" x="72" y="363">概率质量 min(p, q)</text><text class="s" x="72" y="382">两者重叠的部分</text>
+  <text class="h" x="285" y="353">+</text>
+  <rect x="324" y="309" width="222" height="82" rx="12" fill="#e8eef0"/><text class="h" x="342" y="338">拒绝后校正</text><text class="t" x="342" y="363">norm(max(0, p − q))</text><text class="s" x="342" y="382">补回 p 独有的部分</text>
+  <text class="h" x="226" y="416">两条路径相加 = 目标分布 p</text>
+</svg>

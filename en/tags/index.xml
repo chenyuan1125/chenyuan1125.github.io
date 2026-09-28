@@ -6,17 +6,41 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 27 Sep 2026 09:08:32 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-            <title>KV Cache</title>
-            <link>/en/tags/kv-cache/</link>
-            <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/kv-cache/</guid>
+        <lastBuildDate>Mon, 28 Sep 2026 09:07:10 +0800</lastBuildDate><atom:link href="/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Decoding Acceleration</title>
+            <link>/en/tags/decoding-acceleration/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/decoding-acceleration/</guid>
             <description></description>
         </item><item>
             <title>LLM Inference</title>
             <link>/en/tags/llm-inference/</link>
-            <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/llm-inference/</guid>
+            <description></description>
+        </item><item>
+            <title>Rejection Sampling</title>
+            <link>/en/tags/rejection-sampling/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/rejection-sampling/</guid>
+            <description></description>
+        </item><item>
+            <title>Speculative Decoding</title>
+            <link>/en/tags/speculative-decoding/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/speculative-decoding/</guid>
+            <description></description>
+        </item><item>
+            <title>VLLM</title>
+            <link>/en/tags/vllm/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/vllm/</guid>
+            <description></description>
+        </item><item>
+            <title>KV Cache</title>
+            <link>/en/tags/kv-cache/</link>
+            <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/en/tags/kv-cache/</guid>
             <description></description>
         </item><item>
             <title>Model Serving</title>
@@ -29,12 +53,6 @@
             <link>/en/tags/pagedattention/</link>
             <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/en/tags/pagedattention/</guid>
-            <description></description>
-        </item><item>
-            <title>VLLM</title>
-            <link>/en/tags/vllm/</link>
-            <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/en/tags/vllm/</guid>
             <description></description>
         </item><item>
             <title>DPO</title>

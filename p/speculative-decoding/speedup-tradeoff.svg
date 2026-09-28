@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420" role="img" aria-labelledby="trade-title trade-desc">
+  <title id="trade-title">推测解码速度的三个控制量</title><desc id="trade-desc">接受率提高收益，草稿成本降低收益，推测长度存在由两者共同决定的最佳点。</desc>
+  <defs><style>.bg{fill:#f7f3ea}.h{font:700 18px 'Microsoft YaHei',sans-serif;fill:#172f3d}.invh{font:700 18px 'Microsoft YaHei',sans-serif;fill:#fff}.t{font:14px 'Microsoft YaHei',sans-serif;fill:#39515d}.s{font:12px 'Microsoft YaHei',sans-serif;fill:#687a82}.card{fill:#fffdf8;stroke:#d8d2c6;stroke-width:1.5}.good{fill:#5d8f72}.warn{fill:#c96842}.navy{fill:#18394a}.axis{stroke:#829198;stroke-width:1.5}.curve{stroke:#2f7181;stroke-width:4;fill:none}</style></defs>
+  <rect class="bg" width="600" height="420" rx="18"/><text class="h" x="30" y="38">速度不是“猜得准”一个指标决定的</text>
+  <g transform="translate(28 62)">
+    <rect class="card" width="166" height="112" rx="14"/><circle class="good" cx="32" cy="32" r="17"/><text x="32" y="37" text-anchor="middle" class="invh">α</text><text class="h" x="58" y="36">接受率</text><text class="t" x="18" y="68">越高，连续通过的</text><text class="t" x="18" y="90">草稿 token 越多</text>
+    <rect class="card" x="189" width="166" height="112" rx="14"/><circle class="warn" cx="221" cy="32" r="17"/><text x="221" y="37" text-anchor="middle" class="invh">c</text><text class="h" x="247" y="36">草稿成本</text><text class="t" x="207" y="68">越大，起草本身</text><text class="t" x="207" y="90">越容易吃掉收益</text>
+    <rect class="card" x="378" width="166" height="112" rx="14"/><circle class="navy" cx="410" cy="32" r="17"/><text x="410" y="37" text-anchor="middle" class="invh">γ</text><text class="h" x="436" y="36">推测长度</text><text class="t" x="396" y="68">太短利用不足</text><text class="t" x="396" y="90">太长拒绝浪费</text>
+  </g>
+  <rect class="card" x="28" y="198" width="544" height="190" rx="14"/><text class="h" x="49" y="228">最佳 γ 是工作负载的测量结果</text>
+  <line class="axis" x1="74" y1="348" x2="526" y2="348"/><line class="axis" x1="74" y1="260" x2="74" y2="348"/>
+  <path class="curve" d="M78 338 C145 316,192 272,267 266 C346 259,381 281,438 314 C472 334,498 340,522 342"/>
+  <circle cx="276" cy="266" r="7" fill="#c96842"/><text class="t" x="291" y="270">最佳点随 α、c、batch 改变</text>
+  <text class="s" x="68" y="373">短草稿</text><text class="s" x="478" y="373">长草稿</text><text class="s" x="37" y="305" transform="rotate(-90 37 305)">实际加速</text>
+</svg>

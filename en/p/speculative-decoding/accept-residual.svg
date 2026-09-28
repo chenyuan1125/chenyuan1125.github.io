@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 430" width="600" height="430" role="img" aria-labelledby="accept-title accept-desc">
+  <title id="accept-title">How speculative sampling preserves the target distribution</title><desc id="accept-desc">The acceptance path produces the overlap of target and draft distributions; residual sampling restores the remaining target probability mass.</desc>
+  <defs><style>.bg{fill:#f7f3ea}.h{font:700 18px Arial,sans-serif;fill:#172f3d}.t{font:14px Arial,sans-serif;fill:#39515d}.s{font:12px Arial,sans-serif;fill:#687a82}.p{fill:#2f7181;fill-opacity:.72}.q{fill:#d4784d;fill-opacity:.7}.overlap{fill:#607e70}.line{stroke:#72858c;stroke-width:1.5}.box{fill:#fffdf8;stroke:#d8d2c6;stroke-width:1.5}</style></defs>
+  <rect class="bg" width="600" height="430" rx="18"/><text class="h" x="28" y="36">Rejection repairs the missing part of the target distribution</text>
+  <rect class="box" x="24" y="58" width="552" height="228" rx="14"/><line class="line" x1="58" y1="245" x2="542" y2="245"/><line class="line" x1="58" y1="90" x2="58" y2="245"/>
+  <path class="p" d="M58 245 C110 240,135 118,200 105 C280 88,315 215,365 220 C420 225,452 148,542 132 L542 245 Z"/><path class="q" d="M58 245 C105 235,144 150,205 140 C270 130,300 190,355 205 C420 222,475 213,542 202 L542 245 Z"/><path class="overlap" d="M58 245 C105 235,144 150,205 140 C270 130,300 190,355 205 C420 222,475 213,542 202 L542 245 Z" opacity=".72"/>
+  <text class="t" x="95" y="92" fill="#2f7181">Target p</text><text class="t" x="410" y="194" fill="#b45834">Draft q</text>
+  <rect x="54" y="309" width="210" height="82" rx="12" fill="#e2ebe5"/><text class="h" x="72" y="338">Acceptance path</text><text class="t" x="72" y="363">mass min(p, q)</text><text class="s" x="72" y="382">the shared overlap</text>
+  <text class="h" x="285" y="353">+</text><rect x="324" y="309" width="222" height="82" rx="12" fill="#e8eef0"/><text class="h" x="342" y="338">Residual repair</text><text class="t" x="342" y="363">norm(max(0, p − q))</text><text class="s" x="342" y="382">mass unique to p</text>
+  <text class="h" x="191" y="416">Both paths add back to target distribution p</text>
+</svg>

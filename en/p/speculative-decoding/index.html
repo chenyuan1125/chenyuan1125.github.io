@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Speculative decoding lets a cheap model draft several tokens and a large model verify them in one pass. This article explains the serial bottleneck, rejection-sampling correction, and the real conditions for a speedup.">
+<title>Speculative Decoding: Guess Ahead Without Changing the Answer</title>
+
+
+<link rel="canonical" href="/en/p/speculative-decoding/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="Speculative Decoding: Guess Ahead Without Changing the Answer">
+<meta property='og:description' content="Speculative decoding lets a cheap model draft several tokens and a large model verify them in one pass. This article explains the serial bottleneck, rejection-sampling correction, and the real conditions for a speedup.">
+<meta property='og:url' content='/en/p/speculative-decoding/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Speculative Decoding' /><meta property='article:tag' content='LLM Inference' /><meta property='article:tag' content='Rejection Sampling' /><meta property='article:tag' content='Decoding Acceleration' /><meta property='article:tag' content='vLLM' /><meta property='article:published_time' content='2026-09-28T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-28T09:07:10&#43;08:00'/><meta property='og:image' content='/en/p/speculative-decoding/cover.jpg' />
+<meta name="twitter:title" content="Speculative Decoding: Guess Ahead Without Changing the Answer">
+<meta name="twitter:description" content="Speculative decoding lets a cheap model draft several tokens and a large model verify them in one pass. This article explains the serial bottleneck, rejection-sampling correction, and the real conditions for a speedup."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='/en/p/speculative-decoding/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/speculative-decoding/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/speculative-decoding/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#decoding-is-bottlenecked-by-a-dependency-chain">Decoding Is Bottlenecked by a Dependency Chain</a></li>
+    <li><a href="#what-happens-in-one-speculative-step">What Happens in One Speculative Step</a></li>
+    <li><a href="#why-guess-and-correct-does-not-bias-the-target">Why “Guess and Correct” Does Not Bias the Target</a></li>
+    <li><a href="#speed-depends-on-two-numbers-not-draft-accuracy-alone">Speed Depends on Two Numbers, Not Draft Accuracy Alone</a></li>
+    <li><a href="#the-drafter-does-not-have-to-be-another-transformer">The Drafter Does Not Have to Be Another Transformer</a></li>
+    <li><a href="#when-it-does-not-win">When It Does Not Win</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/speculative-decoding/">
+            <img alt="Featured image of post Speculative Decoding: Guess Ahead Without Changing the Answer" height="941" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/speculative-decoding/cover.jpg" srcset="/en/p/speculative-decoding/cover_hu_96356f5487ecd387.jpg 800w, /en/p/speculative-decoding/cover_hu_940dd44ce879dcf6.jpg 1600w, /en/p/speculative-decoding/cover.jpg 1672w" width="1672">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/speculative-decoding/">Speculative Decoding: Guess Ahead Without Changing the Answer</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            Speculative decoding lets a cheap model draft several tokens and a large model verify them in one pass. This article explains the serial bottleneck, rejection-sampling correction, and the real conditions for a speedup.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-09-28T00:00:00Z'>2026-09-28</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        2 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/speculative-decoding/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#decoding-is-bottlenecked-by-a-dependency-chain">Decoding Is Bottlenecked by a Dependency Chain</a></li>
+    <li><a href="#what-happens-in-one-speculative-step">What Happens in One Speculative Step</a></li>
+    <li><a href="#why-guess-and-correct-does-not-bias-the-target">Why “Guess and Correct” Does Not Bias the Target</a></li>
+    <li><a href="#speed-depends-on-two-numbers-not-draft-accuracy-alone">Speed Depends on Two Numbers, Not Draft Accuracy Alone</a></li>
+    <li><a href="#the-drafter-does-not-have-to-be-another-transformer">The Drafter Does Not Have to Be Another Transformer</a></li>
+    <li><a href="#when-it-does-not-win">When It Does Not Win</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>When a large language model writes a sentence, the hardest part to parallelize is not understanding the prompt. It is the wait that follows. Token 2 cannot be chosen before token 1 exists; token 3 waits for token 2. Producing 100 output tokens therefore requires at least 100 serial decoding steps through the target model. The GPU may be fast, but it is tied to a dependency chain.</p>
+<p>Speculative decoding borrows an idea from CPU branch prediction. A cheap draft model guesses several tokens ahead, then the expensive target model checks the entire draft in one pass. Accepted guesses advance the sequence by several positions. A rejection corrects the first wrong position. The important part is not that a small model helps write the answer; it is that the correction rule makes the final sample come from exactly the target model&rsquo;s distribution. The draft can change execution time, but it never receives final authority.</p>
+<p>That makes speculative decoding an unusual optimization. It does not quantize or prune the target, modify its architecture, or trade output quality for latency. The original Google Research paper reported a 2–3× speedup on T5-XXL. Independent work from DeepMind reported a 2–2.5× decoding speedup for a distributed 70B Chinchilla setup. Those multipliers are workload-specific, but the idea—fold several serial steps into one parallel verification—has become part of mainstream inference engines.</p>
+<h2 id="decoding-is-bottlenecked-by-a-dependency-chain">Decoding Is Bottlenecked by a Dependency Chain
+</h2><p>During Transformer training, many positions in a sentence can be processed together because the correct prefix at every position is already known. Generation lacks that answer key. At time \(t\), the target first computes \(p(x_t\mid x_{<t})\), samples \(x_t\), and only then knows the input for the next position.</p>
+<p>A KV cache avoids recomputing keys and values for old tokens, but it does not remove the time dependency. Small-batch decoding is also commonly memory-bound: each step does a modest amount of work for one new position while reading a large set of weights and cached state. A target-model forward pass may leave compute units underused, yet the next token still cannot be selected early.</p>
+<p>Speculative decoding exploits two facts. First, scoring a short continuation with the target often does not cost the same multiple as scoring one position; matrix operations can use more parallelism. Second, language contains many locally easy regions—fixed phrases, punctuation, code indentation, and spans copied from context—that a small model can often predict. A cheap model creates parallel work and the large model audits it in one pass.</p>
+<figure><img src="/en/p/speculative-decoding/serial-vs-speculative.svg"><figcaption>
+			<h4>Figure 1: ordinary decoding waits for one target pass per token; speculative decoding drafts ahead and verifies several candidate positions in parallel</h4>
+		</figcaption>
+</figure>
+
+<h2 id="what-happens-in-one-speculative-step">What Happens in One Speculative Step
+</h2><p>Let \(p\) be the target distribution, \(q\) the draft distribution, and \(\gamma\) the number of proposed tokens per round.</p>
+<ol>
+<li>The draft model autoregressively produces \(x_1,\ldots,x_\gamma\), retaining each \(q_i(x)\). This stage remains serial, so the drafter must be cheap.</li>
+<li>The target treats “original prefix + full draft” as a short batch and computes every candidate-position distribution \(p_i(x)\), plus the distribution after an entirely accepted draft, in one pass.</li>
+<li>Verification proceeds left to right. Draft token \(x_i\) is accepted with probability \(\min(1,p_i(x_i)/q_i(x_i))\). Once one token is rejected, all later draft tokens are discarded.</li>
+<li>On a rejection at position \(i\), the algorithm does not simply sample again from \(p_i\). It samples from a corrected residual distribution. If every proposal is accepted, it can draw one extra token from the already computed next-position target distribution.</li>
+</ol>
+<p>One round therefore advances by at least one token and at most \(\gamma+1\). The draft itself is not parallel in the classic small-model version. What becomes parallel is the expensive target verification.</p>
+<h2 id="why-guess-and-correct-does-not-bias-the-target">Why “Guess and Correct” Does Not Bias the Target
+</h2><p>Keeping only proposals that the target also likes sounds as if it should favor safe tokens on which both models agree. The residual distribution after a rejection prevents that bias.</p>
+<p>For one proposed token \(x\), sample first from \(q\). If \(q(x)\le p(x)\), always accept. Otherwise, accept with probability \(p(x)/q(x)\). The probability of obtaining \(x\) along the acceptance path is therefore</p>
+\[
+q(x)\min\left(1,\frac{p(x)}{q(x)}\right)=\min(p(x),q(x)).
+\]<p>The accepted path captures the overlap between the two distributions. The target still has probability mass where \(p(x)>q(x)\), so a rejection is repaired by sampling from</p>
+\[
+p'(x)=\operatorname{norm}(\max(0,p(x)-q(x))).
+\]<p>Adding the overlap and residual paths reconstructs \(p\). Applying the same conditional argument at each position preserves the distribution over complete sequences.</p>
+<figure><img src="/en/p/speculative-decoding/accept-residual.svg"><figcaption>
+			<h4>Figure 2: the acceptance path captures the overlap of p and q; residual sampling restores the probability mass unique to p</h4>
+		</figcaption>
+</figure>
+
+<p>For greedy decoding, the rule is simpler: accept while the draft token equals the target argmax, then replace the first mismatch with the target token. For stochastic decoding, “unchanged output” means an unchanged <strong>probability distribution</strong>, not necessarily an identical string under every nominally equal random seed. Floating-point precision, batch shape, and random-number consumption can still produce run-to-run differences. vLLM&rsquo;s official documentation accordingly separates theoretical losslessness, algorithmic validation, and numerical stability.</p>
+<h2 id="speed-depends-on-two-numbers-not-draft-accuracy-alone">Speed Depends on Two Numbers, Not Draft Accuracy Alone
+</h2><p>Let \(\alpha\) be the mean token acceptance rate. Under the independent, identically distributed approximation used in the paper, the expected number of tokens emitted by one target verification is</p>
+\[
+E[N]=\frac{1-\alpha^{\gamma+1}}{1-\alpha}=1+\alpha+\alpha^2+\cdots+\alpha^\gamma.
+\]<p>A higher acceptance rate makes an entire draft more likely to survive. But acceptance is not yet speed. Let \(c\) be the ratio between one draft-model step and one target-model step. An idealized speedup is</p>
+\[
+S=\frac{1-\alpha^{\gamma+1}}{(1-\alpha)(1+\gamma c)}.
+\]<p>This equation exposes the engineering tradeoff. A stronger drafter may improve \(\alpha\) while also increasing \(c\). A short draft misses parallelism; a long draft wastes more proposal and verification work after an early rejection. The original paper found that a drafter roughly two orders of magnitude smaller than the target often balanced these factors in its experiments, but that is not a universal recipe.</p>
+<figure><img src="/en/p/speculative-decoding/speedup-tradeoff.svg"><figcaption>
+			<h4>Figure 3: acceptance, draft cost, and speculation length jointly determine the gain; neither a longer draft nor a stronger drafter is automatically better</h4>
+		</figcaption>
+</figure>
+
+<p>The formula also assumes that verifying \(\gamma+1\) target positions takes nearly the time of one position and that the machine has spare compute. Interactive, low-concurrency, memory-bound generation often fits this assumption. When a high-concurrency server already fills the GPU, a larger verification micro-batch can instead compete for arithmetic throughput. vLLM therefore frames speculative decoding as especially useful for latency-sensitive, medium-to-low-QPS workloads and supports changing speculation length with batch size.</p>
+<h2 id="the-drafter-does-not-have-to-be-another-transformer">The Drafter Does Not Have to Be Another Transformer
+</h2><p>The classic algorithm only needs a cheap proposer; it does not require the proposer to share the target architecture. That interface has produced several families:</p>
+<ul>
+<li><strong>Independent draft models</strong> are conceptually direct and expose a full \(q\) distribution, but add weights, KV state, and scheduling overhead. Different vocabularies require additional mapping.</li>
+<li><strong>N-gram or prompt lookup</strong> reuses repeated spans in the prompt or generated text at nearly zero model cost. Code, structured output, and rewriting often contain useful copying patterns, while open-ended prose may not.</li>
+<li><strong>Lightweight heads and EAGLE-style methods</strong> reuse target hidden states and predict future tokens with small additional modules. They reduce the cost of a separate drafter but require compatible learned weights.</li>
+<li><strong>Native multi-token prediction</strong> teaches the model to predict several future positions during training. Deployment can reuse those predictions as speculative candidates, bringing the proposer inside the model rather than attaching another full model.</li>
+</ul>
+<p>These methods change candidate generation, not the propose–verify principle. Current vLLM documentation lists draft models, EAGLE, MTP, n-gram, suffix decoding, and other methods. Speculative decoding has evolved from one algorithm into a family of systems sharing a verification protocol.</p>
+<h2 id="when-it-does-not-win">When It Does Not Win
+</h2><p>A compelling acceptance-rate chart can hide the actual outcome. A deployment should measure at least mean accepted length, drafter overhead, GPU utilization during verification, and end-to-end time per output token. High acceptance with an expensive drafter may still lose; moderate acceptance with an almost-free proposer may win.</p>
+<p>Speculation is often unfavorable when target and draft distributions diverge, high-temperature sampling reduces agreement, a large existing batch makes verification compute-bound, outputs are too short to amortize setup, or multi-GPU placement introduces communication overhead. The optimal \(\gamma\) can vary across requests and even across phases of one generation, so one static value rarely covers every workload.</p>
+<p>Latency and throughput must also be separated. A user waiting for one response benefits when the system makes fewer serial large-model calls. A platform already saturated by continuous batching may not produce more total tokens per GPU-second. Speculative decoding can spend more total FLOPs to reduce wall-clock time. That is not a contradiction; it spends idle parallel capacity to buy latency.</p>
+<p>The PagedAttention story is a useful contrast. PagedAttention fits more live sequences in memory and grows the batch horizontally. Speculative decoding tries to cross several time steps inside one sequence and advances vertically. Neither changes what the model should answer. One rewrites memory management; the other rewrites time scheduling.</p>
+<p>The durable lesson is broader than “small model drafts, large model verifies.” When expensive computation is trapped behind a serial dependency, a cheap approximation can manufacture candidates and one parallel exact computation can restore correctness. The guess may be aggressive because the target retains the right to decide. The execution path changes; the answer standard does not.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Leviathan, Kalman, Matias, <a class="link" href="https://arxiv.org/abs/2211.17192"  target="_blank" rel="noopener"
+    >Fast Inference from Transformers via Speculative Decoding</a>, ICML 2023.</li>
+<li>Chen et al., <a class="link" href="https://arxiv.org/abs/2302.01318"  target="_blank" rel="noopener"
+    >Accelerating Large Language Model Decoding with Speculative Sampling</a>, 2023.</li>
+<li>vLLM Project, <a class="link" href="https://docs.vllm.ai/en/latest/features/speculative_decoding/"  target="_blank" rel="noopener"
+    >Speculative Decoding documentation</a>.</li>
+<li>vLLM Project, <a class="link" href="https://github.com/vllm-project/speculators"  target="_blank" rel="noopener"
+    >Speculators: training and deployment library</a>.</li>
+<li>Li et al., <a class="link" href="https://arxiv.org/abs/2401.15077"  target="_blank" rel="noopener"
+    >EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty</a>, ICML 2024.</li>
+<li>Cai et al., <a class="link" href="https://arxiv.org/abs/2401.10774"  target="_blank" rel="noopener"
+    >Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads</a>, ICML 2024.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/speculative-decoding/">Speculative Decoding</a>
+        
+            <a href="/en/tags/llm-inference/">LLM Inference</a>
+        
+            <a href="/en/tags/rejection-sampling/">Rejection Sampling</a>
+        
+            <a href="/en/tags/decoding-acceleration/">Decoding Acceleration</a>
+        
+            <a href="/en/tags/vllm/">VLLM</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-09-28
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/vllm-pagedattention/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post PagedAttention: When a Slower Kernel Makes the System Faster" height="150" loading="lazy" src="/en/p/vllm-pagedattention/cover_hu_b27d9b59ec906417.jpg" srcset="/en/p/vllm-pagedattention/cover_hu_b27d9b59ec906417.jpg 1x, /en/p/vllm-pagedattention/cover_hu_da5d3bec37ce11ee.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #34455280 0%, #eae2d4C0 100%);">
+            <h2 class="article-title">PagedAttention: When a Slower Kernel Makes the System Faster</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/dpo-hidden-reward/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DPO: Where Did the Reward Model Go?" height="150" loading="lazy" src="/en/p/dpo-hidden-reward/cover_hu_b46a947206e5f426.jpg" srcset="/en/p/dpo-hidden-reward/cover_hu_b46a947206e5f426.jpg 1x, /en/p/dpo-hidden-reward/cover_hu_83364114a3bc2333.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #2a394980 0%, #eae5dcC0 100%);">
+            <h2 class="article-title">DPO: Where Did the Reward Model Go?</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/flashattention-io-aware/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post FlashAttention: Move Less, Not Compute Less" height="150" loading="lazy" src="/en/p/flashattention-io-aware/cover_hu_c99e5cb43d35a221.jpg" srcset="/en/p/flashattention-io-aware/cover_hu_c99e5cb43d35a221.jpg 1x, /en/p/flashattention-io-aware/cover_hu_1d17ec47fd94c9de.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c7cac680 0%, #1e2a33C0 100%);">
+            <h2 class="article-title">FlashAttention: Move Less, Not Compute Less</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba: Why Remembering Less Can Understand More" height="150" loading="lazy" src="/en/p/mamba-selective-state-space/cover_hu_1535ced22fcf2da4.jpg" srcset="/en/p/mamba-selective-state-space/cover_hu_1535ced22fcf2da4.jpg 1x, /en/p/mamba-selective-state-space/cover_hu_8a64b8f9b67ca162.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #2f3b4180 0%, #ded4c5C0 100%);">
+            <h2 class="article-title">Mamba: Why Remembering Less Can Understand More</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3: The Two Bills Behind MLA and MoE" height="150" loading="lazy" src="/en/p/deepseek-mla-moe/cover_hu_d936419fdc43ceca.jpg" srcset="/en/p/deepseek-mla-moe/cover_hu_d936419fdc43ceca.jpg 1x, /en/p/deepseek-mla-moe/cover_hu_c42277eb841cd759.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ddd2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3: The Two Bills Behind MLA and MoE</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

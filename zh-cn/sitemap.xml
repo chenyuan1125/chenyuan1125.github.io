@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/categories/</loc>
-    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -13,6 +13,83 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="/categories/"
+                />
+  </url><url>
+    <loc>/post/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/post/"
+                />
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/"
+                />
+  </url><url>
+    <loc>/tags/vllm/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/tags/vllm/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/tags/vllm/"
+                />
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/"
+                />
+  </url><url>
+    <loc>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+  </url><url>
+    <loc>/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+  </url><url>
+    <loc>/p/speculative-decoding/</loc>
+    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="/en/p/speculative-decoding/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="/p/speculative-decoding/"
                 />
   </url><url>
     <loc>/tags/kv-cache/</loc>
@@ -53,61 +130,6 @@
                 hreflang="zh-cn"
                 href="/p/vllm-pagedattention/"
                 />
-  </url><url>
-    <loc>/post/</loc>
-    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/post/"
-                />
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/"
-                />
-  </url><url>
-    <loc>/tags/vllm/</loc>
-    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/tags/vllm/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/tags/vllm/"
-                />
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="/"
-                />
-  </url><url>
-    <loc>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</loc>
-    <lastmod>2026-09-27T09:08:30+08:00</lastmod>
   </url><url>
     <loc>/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</loc>
     <lastmod>2026-09-27T09:08:30+08:00</lastmod>

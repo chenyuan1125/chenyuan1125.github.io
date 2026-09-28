@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Sun, 27 Sep 2026 09:08:30 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 28 Sep 2026 09:07:08 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>VLLM</title>
+            <link>/tags/vllm/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/vllm/</guid>
+            <description></description>
+        </item><item>
+            <title>大模型推理</title>
+            <link>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</guid>
+            <description></description>
+        </item><item>
+            <title>解码加速</title>
+            <link>/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</guid>
+            <description></description>
+        </item><item>
+            <title>拒绝采样</title>
+            <link>/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</guid>
+            <description></description>
+        </item><item>
+            <title>推测解码</title>
+            <link>/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</link>
+            <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
+            <guid>/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</guid>
+            <description></description>
+        </item><item>
             <title>KV Cache</title>
             <link>/tags/kv-cache/</link>
             <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
@@ -17,18 +47,6 @@
             <link>/tags/pagedattention/</link>
             <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
             <guid>/tags/pagedattention/</guid>
-            <description></description>
-        </item><item>
-            <title>VLLM</title>
-            <link>/tags/vllm/</link>
-            <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/vllm/</guid>
-            <description></description>
-        </item><item>
-            <title>大模型推理</title>
-            <link>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</link>
-            <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</guid>
             <description></description>
         </item><item>
             <title>推理服务</title>
