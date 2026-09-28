@@ -2,1214 +2,1214 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/categories/</loc>
+    <loc>https://ethan-lily.cn/categories/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/"
+                href="https://ethan-lily.cn/en/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/"
+                href="https://ethan-lily.cn/categories/"
                 />
   </url><url>
-    <loc>/post/</loc>
+    <loc>https://ethan-lily.cn/post/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/post/"
+                href="https://ethan-lily.cn/en/post/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/post/"
+                href="https://ethan-lily.cn/post/"
                 />
   </url><url>
-    <loc>/tags/</loc>
+    <loc>https://ethan-lily.cn/tags/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/"
+                href="https://ethan-lily.cn/en/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/"
+                href="https://ethan-lily.cn/tags/"
                 />
   </url><url>
-    <loc>/tags/vllm/</loc>
+    <loc>https://ethan-lily.cn/tags/vllm/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/vllm/"
+                href="https://ethan-lily.cn/en/tags/vllm/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/vllm/"
+                href="https://ethan-lily.cn/tags/vllm/"
                 />
   </url><url>
-    <loc>/</loc>
+    <loc>https://ethan-lily.cn/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/"
+                href="https://ethan-lily.cn/en/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/"
+                href="https://ethan-lily.cn/"
                 />
   </url><url>
-    <loc>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</loc>
+    <loc>https://ethan-lily.cn/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
   </url><url>
-    <loc>/p/speculative-decoding/</loc>
+    <loc>https://ethan-lily.cn/p/speculative-decoding/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/speculative-decoding/"
+                href="https://ethan-lily.cn/en/p/speculative-decoding/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/speculative-decoding/"
+                href="https://ethan-lily.cn/p/speculative-decoding/"
                 />
   </url><url>
-    <loc>/tags/kv-cache/</loc>
+    <loc>https://ethan-lily.cn/tags/kv-cache/</loc>
     <lastmod>2026-09-27T09:08:30+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/kv-cache/"
+                href="https://ethan-lily.cn/en/tags/kv-cache/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/kv-cache/"
+                href="https://ethan-lily.cn/tags/kv-cache/"
                 />
   </url><url>
-    <loc>/tags/pagedattention/</loc>
+    <loc>https://ethan-lily.cn/tags/pagedattention/</loc>
     <lastmod>2026-09-27T09:08:30+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/pagedattention/"
+                href="https://ethan-lily.cn/en/tags/pagedattention/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/pagedattention/"
+                href="https://ethan-lily.cn/tags/pagedattention/"
                 />
   </url><url>
-    <loc>/p/vllm-pagedattention/</loc>
+    <loc>https://ethan-lily.cn/p/vllm-pagedattention/</loc>
     <lastmod>2026-09-27T09:08:30+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/vllm-pagedattention/"
+                href="https://ethan-lily.cn/en/p/vllm-pagedattention/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/vllm-pagedattention/"
+                href="https://ethan-lily.cn/p/vllm-pagedattention/"
                 />
   </url><url>
-    <loc>/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</loc>
     <lastmod>2026-09-27T09:08:30+08:00</lastmod>
   </url><url>
-    <loc>/tags/dpo/</loc>
+    <loc>https://ethan-lily.cn/tags/dpo/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/dpo/"
+                href="https://ethan-lily.cn/en/tags/dpo/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/dpo/"
+                href="https://ethan-lily.cn/tags/dpo/"
                 />
   </url><url>
-    <loc>/p/dpo-hidden-reward/</loc>
+    <loc>https://ethan-lily.cn/p/dpo-hidden-reward/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/dpo-hidden-reward/"
+                href="https://ethan-lily.cn/en/p/dpo-hidden-reward/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/dpo-hidden-reward/"
+                href="https://ethan-lily.cn/p/dpo-hidden-reward/"
                 />
   </url><url>
-    <loc>/tags/rlhf/</loc>
+    <loc>https://ethan-lily.cn/tags/rlhf/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/rlhf/"
+                href="https://ethan-lily.cn/en/tags/rlhf/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/rlhf/"
+                href="https://ethan-lily.cn/tags/rlhf/"
                 />
   </url><url>
-    <loc>/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</loc>
     <lastmod>2026-09-26T09:08:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/flashattention/</loc>
+    <loc>https://ethan-lily.cn/tags/flashattention/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/flashattention/"
+                href="https://ethan-lily.cn/en/tags/flashattention/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/flashattention/"
+                href="https://ethan-lily.cn/tags/flashattention/"
                 />
   </url><url>
-    <loc>/p/flashattention-io-aware/</loc>
+    <loc>https://ethan-lily.cn/p/flashattention-io-aware/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/flashattention-io-aware/"
+                href="https://ethan-lily.cn/en/p/flashattention-io-aware/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/flashattention-io-aware/"
+                href="https://ethan-lily.cn/p/flashattention-io-aware/"
                 />
   </url><url>
-    <loc>/tags/gpu/</loc>
+    <loc>https://ethan-lily.cn/tags/gpu/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/gpu/"
+                href="https://ethan-lily.cn/en/tags/gpu/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/gpu/"
+                href="https://ethan-lily.cn/tags/gpu/"
                 />
   </url><url>
-    <loc>/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://ethan-lily.cn/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</loc>
+    <loc>https://ethan-lily.cn/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</loc>
     <lastmod>2026-09-25T13:17:29+08:00</lastmod>
   </url><url>
-    <loc>/tags/mamba/</loc>
+    <loc>https://ethan-lily.cn/tags/mamba/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/mamba/"
+                href="https://ethan-lily.cn/en/tags/mamba/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/mamba/"
+                href="https://ethan-lily.cn/tags/mamba/"
                 />
   </url><url>
-    <loc>/p/mamba-selective-state-space/</loc>
+    <loc>https://ethan-lily.cn/p/mamba-selective-state-space/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/mamba-selective-state-space/"
+                href="https://ethan-lily.cn/en/p/mamba-selective-state-space/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/mamba-selective-state-space/"
+                href="https://ethan-lily.cn/p/mamba-selective-state-space/"
                 />
   </url><url>
-    <loc>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</loc>
+    <loc>https://ethan-lily.cn/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</loc>
+    <loc>https://ethan-lily.cn/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2026-09-24T09:22:47+08:00</lastmod>
   </url><url>
-    <loc>/tags/deepseek/</loc>
+    <loc>https://ethan-lily.cn/tags/deepseek/</loc>
     <lastmod>2026-09-23T18:57:28+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/deepseek/"
+                href="https://ethan-lily.cn/en/tags/deepseek/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/deepseek/"
+                href="https://ethan-lily.cn/tags/deepseek/"
                 />
   </url><url>
-    <loc>/p/deepseek-mla-moe/</loc>
+    <loc>https://ethan-lily.cn/p/deepseek-mla-moe/</loc>
     <lastmod>2026-09-23T18:57:28+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/deepseek-mla-moe/"
+                href="https://ethan-lily.cn/en/p/deepseek-mla-moe/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/deepseek-mla-moe/"
+                href="https://ethan-lily.cn/p/deepseek-mla-moe/"
                 />
   </url><url>
-    <loc>/tags/mla/</loc>
+    <loc>https://ethan-lily.cn/tags/mla/</loc>
     <lastmod>2026-09-23T18:57:28+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/mla/"
+                href="https://ethan-lily.cn/en/tags/mla/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/mla/"
+                href="https://ethan-lily.cn/tags/mla/"
                 />
   </url><url>
-    <loc>/tags/moe/</loc>
+    <loc>https://ethan-lily.cn/tags/moe/</loc>
     <lastmod>2026-09-23T18:57:28+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/moe/"
+                href="https://ethan-lily.cn/en/tags/moe/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/moe/"
+                href="https://ethan-lily.cn/tags/moe/"
                 />
   </url><url>
-    <loc>/tags/gqa/</loc>
+    <loc>https://ethan-lily.cn/tags/gqa/</loc>
     <lastmod>2026-09-22T21:32:34+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/gqa/"
+                href="https://ethan-lily.cn/en/tags/gqa/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/gqa/"
+                href="https://ethan-lily.cn/tags/gqa/"
                 />
   </url><url>
-    <loc>/tags/llama/</loc>
+    <loc>https://ethan-lily.cn/tags/llama/</loc>
     <lastmod>2026-09-22T21:32:34+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/llama/"
+                href="https://ethan-lily.cn/en/tags/llama/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/llama/"
+                href="https://ethan-lily.cn/tags/llama/"
                 />
   </url><url>
-    <loc>/p/llama-open-ecosystem/</loc>
+    <loc>https://ethan-lily.cn/p/llama-open-ecosystem/</loc>
     <lastmod>2026-09-22T21:32:34+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/llama-open-ecosystem/"
+                href="https://ethan-lily.cn/en/p/llama-open-ecosystem/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/llama-open-ecosystem/"
+                href="https://ethan-lily.cn/p/llama-open-ecosystem/"
                 />
   </url><url>
-    <loc>/tags/rope/</loc>
+    <loc>https://ethan-lily.cn/tags/rope/</loc>
     <lastmod>2026-09-22T21:32:34+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/rope/"
+                href="https://ethan-lily.cn/en/tags/rope/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/rope/"
+                href="https://ethan-lily.cn/tags/rope/"
                 />
   </url><url>
-    <loc>/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2026-09-22T21:32:34+08:00</lastmod>
   </url><url>
-    <loc>/tags/chinchilla/</loc>
+    <loc>https://ethan-lily.cn/tags/chinchilla/</loc>
     <lastmod>2026-09-22T21:26:48+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/chinchilla/"
+                href="https://ethan-lily.cn/en/tags/chinchilla/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/chinchilla/"
+                href="https://ethan-lily.cn/tags/chinchilla/"
                 />
   </url><url>
-    <loc>/p/chinchilla-scaling-laws/</loc>
+    <loc>https://ethan-lily.cn/p/chinchilla-scaling-laws/</loc>
     <lastmod>2026-09-22T21:26:48+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/chinchilla-scaling-laws/"
+                href="https://ethan-lily.cn/en/p/chinchilla-scaling-laws/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/chinchilla-scaling-laws/"
+                href="https://ethan-lily.cn/p/chinchilla-scaling-laws/"
                 />
   </url><url>
-    <loc>/tags/scaling-laws/</loc>
+    <loc>https://ethan-lily.cn/tags/scaling-laws/</loc>
     <lastmod>2026-09-22T21:26:48+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/scaling-laws/"
+                href="https://ethan-lily.cn/en/tags/scaling-laws/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/scaling-laws/"
+                href="https://ethan-lily.cn/tags/scaling-laws/"
                 />
   </url><url>
-    <loc>/tags/%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98/</loc>
+    <loc>https://ethan-lily.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98/</loc>
     <lastmod>2026-09-22T21:26:48+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/</loc>
     <lastmod>2026-09-22T21:26:48+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
+    <loc>https://ethan-lily.cn/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
     <lastmod>2026-09-22T21:26:48+08:00</lastmod>
   </url><url>
-    <loc>/tags/gpt-3/</loc>
+    <loc>https://ethan-lily.cn/tags/gpt-3/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/gpt-3/"
+                href="https://ethan-lily.cn/en/tags/gpt-3/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/gpt-3/"
+                href="https://ethan-lily.cn/tags/gpt-3/"
                 />
   </url><url>
-    <loc>/tags/instructgpt/</loc>
+    <loc>https://ethan-lily.cn/tags/instructgpt/</loc>
     <lastmod>2026-09-09T22:29:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/instructgpt/"
+                href="https://ethan-lily.cn/en/tags/instructgpt/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/instructgpt/"
+                href="https://ethan-lily.cn/tags/instructgpt/"
                 />
   </url><url>
-    <loc>/p/instructgpt-rlhf/</loc>
+    <loc>https://ethan-lily.cn/p/instructgpt-rlhf/</loc>
     <lastmod>2026-09-09T22:29:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/instructgpt-rlhf/"
+                href="https://ethan-lily.cn/en/p/instructgpt-rlhf/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/instructgpt-rlhf/"
+                href="https://ethan-lily.cn/p/instructgpt-rlhf/"
                 />
   </url><url>
-    <loc>/tags/ppo/</loc>
+    <loc>https://ethan-lily.cn/tags/ppo/</loc>
     <lastmod>2026-09-09T22:29:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/ppo/"
+                href="https://ethan-lily.cn/en/tags/ppo/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/ppo/"
+                href="https://ethan-lily.cn/tags/ppo/"
                 />
   </url><url>
-    <loc>/tags/%E5%AF%B9%E9%BD%90/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%AF%B9%E9%BD%90/</loc>
     <lastmod>2026-09-09T22:29:32+08:00</lastmod>
   </url><url>
-    <loc>/tags/bart/</loc>
+    <loc>https://ethan-lily.cn/tags/bart/</loc>
     <lastmod>2026-09-12T10:40:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/bart/"
+                href="https://ethan-lily.cn/en/tags/bart/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/bart/"
+                href="https://ethan-lily.cn/tags/bart/"
                 />
   </url><url>
-    <loc>/tags/encoder-decoder/</loc>
+    <loc>https://ethan-lily.cn/tags/encoder-decoder/</loc>
     <lastmod>2026-09-12T10:40:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/encoder-decoder/"
+                href="https://ethan-lily.cn/en/tags/encoder-decoder/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/encoder-decoder/"
+                href="https://ethan-lily.cn/tags/encoder-decoder/"
                 />
   </url><url>
-    <loc>/tags/t5/</loc>
+    <loc>https://ethan-lily.cn/tags/t5/</loc>
     <lastmod>2026-09-12T10:40:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/t5/"
+                href="https://ethan-lily.cn/en/tags/t5/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/t5/"
+                href="https://ethan-lily.cn/tags/t5/"
                 />
   </url><url>
-    <loc>/p/t5-bart/</loc>
+    <loc>https://ethan-lily.cn/p/t5-bart/</loc>
     <lastmod>2026-09-12T10:40:32+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/t5-bart/"
+                href="https://ethan-lily.cn/en/p/t5-bart/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/t5-bart/"
+                href="https://ethan-lily.cn/p/t5-bart/"
                 />
   </url><url>
-    <loc>/tags/few-shot/</loc>
+    <loc>https://ethan-lily.cn/tags/few-shot/</loc>
     <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/few-shot/"
+                href="https://ethan-lily.cn/en/tags/few-shot/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/few-shot/"
+                href="https://ethan-lily.cn/tags/few-shot/"
                 />
   </url><url>
-    <loc>/p/gpt-03/</loc>
+    <loc>https://ethan-lily.cn/p/gpt-03/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/gpt-03/"
+                href="https://ethan-lily.cn/en/p/gpt-03/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/gpt-03/"
+                href="https://ethan-lily.cn/p/gpt-03/"
                 />
   </url><url>
-    <loc>/tags/in-context-learning/</loc>
+    <loc>https://ethan-lily.cn/tags/in-context-learning/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/in-context-learning/"
+                href="https://ethan-lily.cn/en/tags/in-context-learning/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/in-context-learning/"
+                href="https://ethan-lily.cn/tags/in-context-learning/"
                 />
   </url><url>
-    <loc>/tags/scaling-law/</loc>
+    <loc>https://ethan-lily.cn/tags/scaling-law/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/scaling-law/"
+                href="https://ethan-lily.cn/en/tags/scaling-law/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/scaling-law/"
+                href="https://ethan-lily.cn/tags/scaling-law/"
                 />
   </url><url>
-    <loc>/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
   </url><url>
-    <loc>/tags/containerd/</loc>
+    <loc>https://ethan-lily.cn/tags/containerd/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/containerd/"
+                href="https://ethan-lily.cn/en/tags/containerd/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/containerd/"
+                href="https://ethan-lily.cn/tags/containerd/"
                 />
   </url><url>
-    <loc>/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</loc>
+    <loc>https://ethan-lily.cn/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"
+                href="https://ethan-lily.cn/en/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"
+                href="https://ethan-lily.cn/p/containerd-%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6/"
                 />
   </url><url>
-    <loc>/tags/gpt/</loc>
+    <loc>https://ethan-lily.cn/tags/gpt/</loc>
     <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/gpt/"
+                href="https://ethan-lily.cn/en/tags/gpt/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/gpt/"
+                href="https://ethan-lily.cn/tags/gpt/"
                 />
   </url><url>
-    <loc>/p/gpt-01/</loc>
+    <loc>https://ethan-lily.cn/p/gpt-01/</loc>
     <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/gpt-01/"
+                href="https://ethan-lily.cn/en/p/gpt-01/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/gpt-01/"
+                href="https://ethan-lily.cn/p/gpt-01/"
                 />
   </url><url>
-    <loc>/tags/grpc/</loc>
+    <loc>https://ethan-lily.cn/tags/grpc/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/grpc/"
+                href="https://ethan-lily.cn/en/tags/grpc/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/grpc/"
+                href="https://ethan-lily.cn/tags/grpc/"
                 />
   </url><url>
-    <loc>/tags/ipc/</loc>
+    <loc>https://ethan-lily.cn/tags/ipc/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/ipc/"
+                href="https://ethan-lily.cn/en/tags/ipc/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/ipc/"
+                href="https://ethan-lily.cn/tags/ipc/"
                 />
   </url><url>
-    <loc>/categories/linux%E5%86%85%E6%A0%B8/</loc>
+    <loc>https://ethan-lily.cn/categories/linux%E5%86%85%E6%A0%B8/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/linux%E5%86%85%E6%A0%B8/</loc>
+    <loc>https://ethan-lily.cn/tags/linux%E5%86%85%E6%A0%B8/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/transformer/</loc>
+    <loc>https://ethan-lily.cn/tags/transformer/</loc>
     <lastmod>2026-09-10T00:59:44+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/transformer/"
+                href="https://ethan-lily.cn/en/tags/transformer/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/transformer/"
+                href="https://ethan-lily.cn/tags/transformer/"
                 />
   </url><url>
-    <loc>/tags/uds/</loc>
+    <loc>https://ethan-lily.cn/tags/uds/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/uds/"
+                href="https://ethan-lily.cn/en/tags/uds/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/uds/"
+                href="https://ethan-lily.cn/tags/uds/"
                 />
   </url><url>
-    <loc>/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <loc>https://ethan-lily.cn/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
+                href="https://ethan-lily.cn/en/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
+                href="https://ethan-lily.cn/p/uds-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"
                 />
   </url><url>
-    <loc>/categories/%E5%AE%B9%E5%99%A8/</loc>
+    <loc>https://ethan-lily.cn/categories/%E5%AE%B9%E5%99%A8/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E5%AE%B9%E5%99%A8/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%AE%B9%E5%99%A8/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
+    <loc>https://ethan-lily.cn/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</loc>
     <lastmod>2026-09-10T00:59:44+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/bert/</loc>
+    <loc>https://ethan-lily.cn/tags/bert/</loc>
     <lastmod>2026-09-10T00:57:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/bert/"
+                href="https://ethan-lily.cn/en/tags/bert/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/bert/"
+                href="https://ethan-lily.cn/tags/bert/"
                 />
   </url><url>
-    <loc>/p/bert-02/</loc>
+    <loc>https://ethan-lily.cn/p/bert-02/</loc>
     <lastmod>2026-09-10T00:57:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/bert-02/"
+                href="https://ethan-lily.cn/en/p/bert-02/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/bert-02/"
+                href="https://ethan-lily.cn/p/bert-02/"
                 />
   </url><url>
-    <loc>/tags/mlm/</loc>
+    <loc>https://ethan-lily.cn/tags/mlm/</loc>
     <lastmod>2026-09-10T00:57:40+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/mlm/"
+                href="https://ethan-lily.cn/en/tags/mlm/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/mlm/"
+                href="https://ethan-lily.cn/tags/mlm/"
                 />
   </url><url>
-    <loc>/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</loc>
+    <loc>https://ethan-lily.cn/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/</loc>
     <lastmod>2026-09-10T00:59:07+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/transformer-01/"
+                href="https://ethan-lily.cn/en/p/transformer-01/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/"
+                href="https://ethan-lily.cn/p/01-%E4%B8%80%E5%88%87%E7%9A%84%E8%B5%B7%E7%82%B9transformer-%E5%88%B0%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98/"
                 />
   </url><url>
-    <loc>/series/</loc>
+    <loc>https://ethan-lily.cn/series/</loc>
     <lastmod>2026-09-10T00:59:07+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/series/"
+                href="https://ethan-lily.cn/en/series/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/series/"
+                href="https://ethan-lily.cn/series/"
                 />
   </url><url>
-    <loc>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2026-09-10T00:59:07+08:00</lastmod>
   </url><url>
-    <loc>/series/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</loc>
+    <loc>https://ethan-lily.cn/series/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2026-09-10T00:59:07+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
+    <loc>https://ethan-lily.cn/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</loc>
     <lastmod>2026-09-10T00:59:07+08:00</lastmod>
   </url><url>
-    <loc>/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/</loc>
+    <loc>https://ethan-lily.cn/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/deepseek-r1-reasoning-rl/"
+                href="https://ethan-lily.cn/en/p/deepseek-r1-reasoning-rl/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/"
+                href="https://ethan-lily.cn/p/deepseek-r1%E7%94%A8%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%BF%80%E5%8F%91%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86%E8%83%BD%E5%8A%9B/"
                 />
   </url><url>
-    <loc>/tags/grpo/</loc>
+    <loc>https://ethan-lily.cn/tags/grpo/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/grpo/"
+                href="https://ethan-lily.cn/en/tags/grpo/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/grpo/"
+                href="https://ethan-lily.cn/tags/grpo/"
                 />
   </url><url>
-    <loc>/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2026-09-10T00:51:52+08:00</lastmod>
   </url><url>
-    <loc>/p/bandit%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://ethan-lily.cn/p/bandit%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/bandit%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/en/p/bandit%E5%AE%9E%E9%AA%8C/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/bandit%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/p/bandit%E5%AE%9E%E9%AA%8C/"
                 />
   </url><url>
-    <loc>/tags/csapp/</loc>
+    <loc>https://ethan-lily.cn/tags/csapp/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/csapp/"
+                href="https://ethan-lily.cn/en/tags/csapp/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/csapp/"
+                href="https://ethan-lily.cn/tags/csapp/"
                 />
   </url><url>
-    <loc>/p/csappbuffer%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://ethan-lily.cn/p/csappbuffer%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/en/p/csappbuffer%E5%AE%9E%E9%AA%8C/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/csappbuffer%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/p/csappbuffer%E5%AE%9E%E9%AA%8C/"
                 />
   </url><url>
-    <loc>/series/ctf/</loc>
+    <loc>https://ethan-lily.cn/series/ctf/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/series/ctf/"
+                href="https://ethan-lily.cn/en/series/ctf/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/series/ctf/"
+                href="https://ethan-lily.cn/series/ctf/"
                 />
   </url><url>
-    <loc>/tags/ctf/</loc>
+    <loc>https://ethan-lily.cn/tags/ctf/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/ctf/"
+                href="https://ethan-lily.cn/en/tags/ctf/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/ctf/"
+                href="https://ethan-lily.cn/tags/ctf/"
                 />
   </url><url>
-    <loc>/p/csappattack%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://ethan-lily.cn/p/csappattack%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/csappattack%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/en/p/csappattack%E5%AE%9E%E9%AA%8C/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/csappattack%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/p/csappattack%E5%AE%9E%E9%AA%8C/"
                 />
   </url><url>
-    <loc>/p/csappbomb%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://ethan-lily.cn/p/csappbomb%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/csappbomb%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/en/p/csappbomb%E5%AE%9E%E9%AA%8C/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/csappbomb%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/p/csappbomb%E5%AE%9E%E9%AA%8C/"
                 />
   </url><url>
-    <loc>/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://ethan-lily.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/ipc-introduction/"
+                href="https://ethan-lily.cn/en/p/ipc-introduction/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/"
+                href="https://ethan-lily.cn/p/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1ipc%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E5%8F%8A%E6%80%BB%E7%BB%93/"
                 />
   </url><url>
-    <loc>/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://ethan-lily.cn/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</loc>
+    <loc>https://ethan-lily.cn/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/encryption-algorithm/"
+                href="https://ethan-lily.cn/en/p/encryption-algorithm/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/"
+                href="https://ethan-lily.cn/p/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E8%B0%83%E7%A0%94/"
                 />
   </url><url>
-    <loc>/tags/os/</loc>
+    <loc>https://ethan-lily.cn/tags/os/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/os/"
+                href="https://ethan-lily.cn/en/tags/os/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/os/"
+                href="https://ethan-lily.cn/tags/os/"
                 />
   </url><url>
-    <loc>/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</loc>
+    <loc>https://ethan-lily.cn/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/os/"
+                href="https://ethan-lily.cn/en/p/os/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/"
+                href="https://ethan-lily.cn/p/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%A4%A7%E4%BD%9C%E4%B8%9A%E5%86%85%E5%AD%98%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E5%92%8C%E5%A4%84%E7%90%86/"
                 />
   </url><url>
-    <loc>/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</loc>
+    <loc>https://ethan-lily.cn/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/architecture/"
+                href="https://ethan-lily.cn/en/p/architecture/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/"
+                href="https://ethan-lily.cn/p/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/"
                 />
   </url><url>
-    <loc>/series/%E8%AF%BE%E7%A8%8B/</loc>
+    <loc>https://ethan-lily.cn/series/%E8%AF%BE%E7%A8%8B/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</loc>
+    <loc>https://ethan-lily.cn/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
   </url><url>
-    <loc>/tags/hugo%E6%95%99%E7%A8%8B/</loc>
+    <loc>https://ethan-lily.cn/tags/hugo%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/hugo%E6%95%99%E7%A8%8B/"
+                href="https://ethan-lily.cn/en/tags/hugo%E6%95%99%E7%A8%8B/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/hugo%E6%95%99%E7%A8%8B/"
+                href="https://ethan-lily.cn/tags/hugo%E6%95%99%E7%A8%8B/"
                 />
   </url><url>
-    <loc>/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
+    <loc>https://ethan-lily.cn/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"
+                href="https://ethan-lily.cn/en/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"
+                href="https://ethan-lily.cn/p/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"
                 />
   </url><url>
-    <loc>/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</loc>
+    <loc>https://ethan-lily.cn/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/"
+                href="https://ethan-lily.cn/en/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/"
+                href="https://ethan-lily.cn/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/"
                 />
   </url><url>
-    <loc>/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</loc>
+    <loc>https://ethan-lily.cn/p/%E9%9A%8F%E6%83%B3%E5%BD%95/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/p/%E9%9A%8F%E6%83%B3%E5%BD%95/"
+                href="https://ethan-lily.cn/en/p/%E9%9A%8F%E6%83%B3%E5%BD%95/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/p/%E9%9A%8F%E6%83%B3%E5%BD%95/"
+                href="https://ethan-lily.cn/p/%E9%9A%8F%E6%83%B3%E5%BD%95/"
                 />
   </url><url>
-    <loc>/page/</loc>
+    <loc>https://ethan-lily.cn/page/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/page/"
+                href="https://ethan-lily.cn/en/page/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/page/"
+                href="https://ethan-lily.cn/page/"
                 />
   </url><url>
-    <loc>/archives/</loc>
+    <loc>https://ethan-lily.cn/archives/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/archives/"
+                href="https://ethan-lily.cn/en/archives/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/archives/"
+                href="https://ethan-lily.cn/archives/"
                 />
   </url><url>
-    <loc>/%E5%85%B3%E4%BA%8E/</loc>
+    <loc>https://ethan-lily.cn/%E5%85%B3%E4%BA%8E/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/%E5%85%B3%E4%BA%8E/"
+                href="https://ethan-lily.cn/en/%E5%85%B3%E4%BA%8E/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/%E5%85%B3%E4%BA%8E/"
+                href="https://ethan-lily.cn/%E5%85%B3%E4%BA%8E/"
                 />
   </url><url>
-    <loc>/categories/ctf/</loc>
+    <loc>https://ethan-lily.cn/categories/ctf/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/ctf/"
+                href="https://ethan-lily.cn/en/categories/ctf/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/ctf/"
+                href="https://ethan-lily.cn/categories/ctf/"
                 />
   </url><url>
-    <loc>/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</loc>
+    <loc>https://ethan-lily.cn/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/"
+                href="https://ethan-lily.cn/en/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/"
+                href="https://ethan-lily.cn/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/"
                 />
   </url><url>
-    <loc>/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</loc>
+    <loc>https://ethan-lily.cn/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/"
+                href="https://ethan-lily.cn/en/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/"
+                href="https://ethan-lily.cn/categories/%E6%8A%80%E6%9C%AF%E6%A1%86%E6%9E%B6/"
                 />
   </url><url>
-    <loc>/categories/%E6%95%99%E7%A8%8B/</loc>
+    <loc>https://ethan-lily.cn/categories/%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E6%95%99%E7%A8%8B/"
+                href="https://ethan-lily.cn/en/categories/%E6%95%99%E7%A8%8B/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E6%95%99%E7%A8%8B/"
+                href="https://ethan-lily.cn/categories/%E6%95%99%E7%A8%8B/"
                 />
   </url><url>
-    <loc>/categories/%E8%AF%BE%E7%A8%8B/</loc>
+    <loc>https://ethan-lily.cn/categories/%E8%AF%BE%E7%A8%8B/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E8%AF%BE%E7%A8%8B/"
+                href="https://ethan-lily.cn/en/categories/%E8%AF%BE%E7%A8%8B/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E8%AF%BE%E7%A8%8B/"
+                href="https://ethan-lily.cn/categories/%E8%AF%BE%E7%A8%8B/"
                 />
   </url><url>
-    <loc>/%E9%93%BE%E6%8E%A5/</loc>
+    <loc>https://ethan-lily.cn/%E9%93%BE%E6%8E%A5/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/%E9%93%BE%E6%8E%A5/"
+                href="https://ethan-lily.cn/en/%E9%93%BE%E6%8E%A5/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/%E9%93%BE%E6%8E%A5/"
+                href="https://ethan-lily.cn/%E9%93%BE%E6%8E%A5/"
                 />
   </url><url>
-    <loc>/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/</loc>
+    <loc>https://ethan-lily.cn/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/"
+                href="https://ethan-lily.cn/en/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/"
+                href="https://ethan-lily.cn/categories/%E6%97%A5%E5%B8%B8%E7%A0%94%E7%A9%B6/"
                 />
   </url><url>
-    <loc>/categories/%E5%AE%9E%E9%AA%8C/</loc>
+    <loc>https://ethan-lily.cn/categories/%E5%AE%9E%E9%AA%8C/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/en/categories/%E5%AE%9E%E9%AA%8C/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E5%AE%9E%E9%AA%8C/"
+                href="https://ethan-lily.cn/categories/%E5%AE%9E%E9%AA%8C/"
                 />
   </url><url>
-    <loc>/search/</loc>
+    <loc>https://ethan-lily.cn/search/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/search/"
+                href="https://ethan-lily.cn/en/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/search/"
+                href="https://ethan-lily.cn/search/"
                 />
   </url><url>
-    <loc>/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
+    <loc>https://ethan-lily.cn/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
     <lastmod>2026-09-08T22:25:43+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/en/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+                href="https://ethan-lily.cn/en/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
+                href="https://ethan-lily.cn/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/"
                 />
   </url>
 </urlset>

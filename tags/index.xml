@@ -1,430 +1,430 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Tags on 辰远</title>
-        <link>/tags/</link>
+        <link>https://ethan-lily.cn/tags/</link>
         <description>Recent content in Tags on 辰远</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Mon, 28 Sep 2026 09:07:08 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 28 Sep 2026 09:07:08 +0800</lastBuildDate><atom:link href="https://ethan-lily.cn/tags/index.xml" rel="self" type="application/rss+xml" /><item>
             <title>VLLM</title>
-            <link>/tags/vllm/</link>
+            <link>https://ethan-lily.cn/tags/vllm/</link>
             <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/vllm/</guid>
+            <guid>https://ethan-lily.cn/tags/vllm/</guid>
             <description></description>
         </item><item>
             <title>大模型推理</title>
-            <link>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</link>
+            <link>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</link>
             <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</guid>
             <description></description>
         </item><item>
             <title>解码加速</title>
-            <link>/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</link>
+            <link>https://ethan-lily.cn/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</link>
             <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</guid>
+            <guid>https://ethan-lily.cn/tags/%E8%A7%A3%E7%A0%81%E5%8A%A0%E9%80%9F/</guid>
             <description></description>
         </item><item>
             <title>拒绝采样</title>
-            <link>/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</link>
+            <link>https://ethan-lily.cn/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</link>
             <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%8B%92%E7%BB%9D%E9%87%87%E6%A0%B7/</guid>
             <description></description>
         </item><item>
             <title>推测解码</title>
-            <link>/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</link>
+            <link>https://ethan-lily.cn/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</link>
             <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%8E%A8%E6%B5%8B%E8%A7%A3%E7%A0%81/</guid>
             <description></description>
         </item><item>
             <title>KV Cache</title>
-            <link>/tags/kv-cache/</link>
+            <link>https://ethan-lily.cn/tags/kv-cache/</link>
             <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/kv-cache/</guid>
+            <guid>https://ethan-lily.cn/tags/kv-cache/</guid>
             <description></description>
         </item><item>
             <title>PagedAttention</title>
-            <link>/tags/pagedattention/</link>
+            <link>https://ethan-lily.cn/tags/pagedattention/</link>
             <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/pagedattention/</guid>
+            <guid>https://ethan-lily.cn/tags/pagedattention/</guid>
             <description></description>
         </item><item>
             <title>推理服务</title>
-            <link>/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</link>
+            <link>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</link>
             <pubDate>Sun, 27 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%9C%8D%E5%8A%A1/</guid>
             <description></description>
         </item><item>
             <title>DPO</title>
-            <link>/tags/dpo/</link>
+            <link>https://ethan-lily.cn/tags/dpo/</link>
             <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/dpo/</guid>
+            <guid>https://ethan-lily.cn/tags/dpo/</guid>
             <description></description>
         </item><item>
             <title>RLHF</title>
-            <link>/tags/rlhf/</link>
+            <link>https://ethan-lily.cn/tags/rlhf/</link>
             <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/rlhf/</guid>
+            <guid>https://ethan-lily.cn/tags/rlhf/</guid>
             <description></description>
         </item><item>
             <title>后训练</title>
-            <link>/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</link>
+            <link>https://ethan-lily.cn/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</link>
             <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%90%8E%E8%AE%AD%E7%BB%83/</guid>
             <description></description>
         </item><item>
             <title>模型对齐</title>
-            <link>/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</link>
+            <link>https://ethan-lily.cn/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</link>
             <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%A8%A1%E5%9E%8B%E5%AF%B9%E9%BD%90/</guid>
             <description></description>
         </item><item>
             <title>偏好优化</title>
-            <link>/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</link>
+            <link>https://ethan-lily.cn/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</link>
             <pubDate>Sat, 26 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%81%8F%E5%A5%BD%E4%BC%98%E5%8C%96/</guid>
             <description></description>
         </item><item>
             <title>FlashAttention</title>
-            <link>/tags/flashattention/</link>
+            <link>https://ethan-lily.cn/tags/flashattention/</link>
             <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/flashattention/</guid>
+            <guid>https://ethan-lily.cn/tags/flashattention/</guid>
             <description></description>
         </item><item>
             <title>GPU</title>
-            <link>/tags/gpu/</link>
+            <link>https://ethan-lily.cn/tags/gpu/</link>
             <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/gpu/</guid>
+            <guid>https://ethan-lily.cn/tags/gpu/</guid>
             <description></description>
         </item><item>
             <title>IO感知算法</title>
-            <link>/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</link>
+            <link>https://ethan-lily.cn/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</link>
             <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</guid>
+            <guid>https://ethan-lily.cn/tags/io%E6%84%9F%E7%9F%A5%E7%AE%97%E6%B3%95/</guid>
             <description></description>
         </item><item>
             <title>长上下文</title>
-            <link>/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</link>
+            <link>https://ethan-lily.cn/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</link>
             <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</guid>
+            <guid>https://ethan-lily.cn/tags/%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87/</guid>
             <description></description>
         </item><item>
             <title>注意力机制</title>
-            <link>/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</link>
+            <link>https://ethan-lily.cn/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</link>
             <pubDate>Fri, 25 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6/</guid>
             <description></description>
         </item><item>
             <title>Mamba</title>
-            <link>/tags/mamba/</link>
+            <link>https://ethan-lily.cn/tags/mamba/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/mamba/</guid>
+            <guid>https://ethan-lily.cn/tags/mamba/</guid>
             <description></description>
         </item><item>
             <title>推理效率</title>
-            <link>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</link>
+            <link>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%95%88%E7%8E%87/</guid>
             <description></description>
         </item><item>
             <title>选择性扫描</title>
-            <link>/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</link>
+            <link>https://ethan-lily.cn/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</guid>
+            <guid>https://ethan-lily.cn/tags/%E9%80%89%E6%8B%A9%E6%80%A7%E6%89%AB%E6%8F%8F/</guid>
             <description></description>
         </item><item>
             <title>长序列</title>
-            <link>/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</link>
+            <link>https://ethan-lily.cn/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</guid>
+            <guid>https://ethan-lily.cn/tags/%E9%95%BF%E5%BA%8F%E5%88%97/</guid>
             <description></description>
         </item><item>
             <title>状态空间模型</title>
-            <link>/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</link>
+            <link>https://ethan-lily.cn/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</link>
             <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B/</guid>
             <description></description>
         </item><item>
             <title>DeepSeek</title>
-            <link>/tags/deepseek/</link>
+            <link>https://ethan-lily.cn/tags/deepseek/</link>
             <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/deepseek/</guid>
+            <guid>https://ethan-lily.cn/tags/deepseek/</guid>
             <description></description>
         </item><item>
             <title>MLA</title>
-            <link>/tags/mla/</link>
+            <link>https://ethan-lily.cn/tags/mla/</link>
             <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/mla/</guid>
+            <guid>https://ethan-lily.cn/tags/mla/</guid>
             <description></description>
         </item><item>
             <title>MoE</title>
-            <link>/tags/moe/</link>
+            <link>https://ethan-lily.cn/tags/moe/</link>
             <pubDate>Wed, 23 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/moe/</guid>
+            <guid>https://ethan-lily.cn/tags/moe/</guid>
             <description></description>
         </item><item>
             <title>GQA</title>
-            <link>/tags/gqa/</link>
+            <link>https://ethan-lily.cn/tags/gqa/</link>
             <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/gqa/</guid>
+            <guid>https://ethan-lily.cn/tags/gqa/</guid>
             <description></description>
         </item><item>
             <title>LLaMA</title>
-            <link>/tags/llama/</link>
+            <link>https://ethan-lily.cn/tags/llama/</link>
             <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/llama/</guid>
+            <guid>https://ethan-lily.cn/tags/llama/</guid>
             <description></description>
         </item><item>
             <title>RoPE</title>
-            <link>/tags/rope/</link>
+            <link>https://ethan-lily.cn/tags/rope/</link>
             <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/rope/</guid>
+            <guid>https://ethan-lily.cn/tags/rope/</guid>
             <description></description>
         </item><item>
             <title>开放模型</title>
-            <link>/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</link>
+            <link>https://ethan-lily.cn/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</link>
             <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%BC%80%E6%94%BE%E6%A8%A1%E5%9E%8B/</guid>
             <description></description>
         </item><item>
             <title>Chinchilla</title>
-            <link>/tags/chinchilla/</link>
+            <link>https://ethan-lily.cn/tags/chinchilla/</link>
             <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/chinchilla/</guid>
+            <guid>https://ethan-lily.cn/tags/chinchilla/</guid>
             <description></description>
         </item><item>
             <title>Scaling Laws</title>
-            <link>/tags/scaling-laws/</link>
+            <link>https://ethan-lily.cn/tags/scaling-laws/</link>
             <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/scaling-laws/</guid>
+            <guid>https://ethan-lily.cn/tags/scaling-laws/</guid>
             <description></description>
         </item><item>
             <title>计算最优</title>
-            <link>/tags/%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98/</link>
+            <link>https://ethan-lily.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98/</link>
             <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98/</guid>
+            <guid>https://ethan-lily.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%80%E4%BC%98/</guid>
             <description></description>
         </item><item>
             <title>数据工程</title>
-            <link>/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/</link>
+            <link>https://ethan-lily.cn/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/</link>
             <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%95%B0%E6%8D%AE%E5%B7%A5%E7%A8%8B/</guid>
             <description></description>
         </item><item>
             <title>预训练</title>
-            <link>/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</link>
+            <link>https://ethan-lily.cn/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</link>
             <pubDate>Mon, 21 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</guid>
+            <guid>https://ethan-lily.cn/tags/%E9%A2%84%E8%AE%AD%E7%BB%83/</guid>
             <description></description>
         </item><item>
             <title>GPT-3</title>
-            <link>/tags/gpt-3/</link>
+            <link>https://ethan-lily.cn/tags/gpt-3/</link>
             <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/gpt-3/</guid>
+            <guid>https://ethan-lily.cn/tags/gpt-3/</guid>
             <description></description>
         </item><item>
             <title>InstructGPT</title>
-            <link>/tags/instructgpt/</link>
+            <link>https://ethan-lily.cn/tags/instructgpt/</link>
             <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/instructgpt/</guid>
+            <guid>https://ethan-lily.cn/tags/instructgpt/</guid>
             <description></description>
         </item><item>
             <title>PPO</title>
-            <link>/tags/ppo/</link>
+            <link>https://ethan-lily.cn/tags/ppo/</link>
             <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/ppo/</guid>
+            <guid>https://ethan-lily.cn/tags/ppo/</guid>
             <description></description>
         </item><item>
             <title>对齐</title>
-            <link>/tags/%E5%AF%B9%E9%BD%90/</link>
+            <link>https://ethan-lily.cn/tags/%E5%AF%B9%E9%BD%90/</link>
             <pubDate>Tue, 08 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%AF%B9%E9%BD%90/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%AF%B9%E9%BD%90/</guid>
             <description></description>
         </item><item>
             <title>BART</title>
-            <link>/tags/bart/</link>
+            <link>https://ethan-lily.cn/tags/bart/</link>
             <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/bart/</guid>
+            <guid>https://ethan-lily.cn/tags/bart/</guid>
             <description></description>
         </item><item>
             <title>Encoder-Decoder</title>
-            <link>/tags/encoder-decoder/</link>
+            <link>https://ethan-lily.cn/tags/encoder-decoder/</link>
             <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/encoder-decoder/</guid>
+            <guid>https://ethan-lily.cn/tags/encoder-decoder/</guid>
             <description></description>
         </item><item>
             <title>T5</title>
-            <link>/tags/t5/</link>
+            <link>https://ethan-lily.cn/tags/t5/</link>
             <pubDate>Sat, 05 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/t5/</guid>
+            <guid>https://ethan-lily.cn/tags/t5/</guid>
             <description></description>
         </item><item>
             <title>Few-Shot</title>
-            <link>/tags/few-shot/</link>
+            <link>https://ethan-lily.cn/tags/few-shot/</link>
             <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/few-shot/</guid>
+            <guid>https://ethan-lily.cn/tags/few-shot/</guid>
             <description></description>
         </item><item>
             <title>In-Context Learning</title>
-            <link>/tags/in-context-learning/</link>
+            <link>https://ethan-lily.cn/tags/in-context-learning/</link>
             <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/in-context-learning/</guid>
+            <guid>https://ethan-lily.cn/tags/in-context-learning/</guid>
             <description></description>
         </item><item>
             <title>Scaling Law</title>
-            <link>/tags/scaling-law/</link>
+            <link>https://ethan-lily.cn/tags/scaling-law/</link>
             <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/scaling-law/</guid>
+            <guid>https://ethan-lily.cn/tags/scaling-law/</guid>
             <description></description>
         </item><item>
             <title>大语言模型</title>
-            <link>/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</link>
+            <link>https://ethan-lily.cn/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</link>
             <pubDate>Wed, 02 Sep 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/</guid>
             <description></description>
         </item><item>
             <title>Containerd</title>
-            <link>/tags/containerd/</link>
+            <link>https://ethan-lily.cn/tags/containerd/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/containerd/</guid>
+            <guid>https://ethan-lily.cn/tags/containerd/</guid>
             <description></description>
         </item><item>
             <title>GPT</title>
-            <link>/tags/gpt/</link>
+            <link>https://ethan-lily.cn/tags/gpt/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/gpt/</guid>
+            <guid>https://ethan-lily.cn/tags/gpt/</guid>
             <description></description>
         </item><item>
             <title>GRPC</title>
-            <link>/tags/grpc/</link>
+            <link>https://ethan-lily.cn/tags/grpc/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/grpc/</guid>
+            <guid>https://ethan-lily.cn/tags/grpc/</guid>
             <description></description>
         </item><item>
             <title>IPC</title>
-            <link>/tags/ipc/</link>
+            <link>https://ethan-lily.cn/tags/ipc/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/ipc/</guid>
+            <guid>https://ethan-lily.cn/tags/ipc/</guid>
             <description></description>
         </item><item>
             <title>Linux内核</title>
-            <link>/tags/linux%E5%86%85%E6%A0%B8/</link>
+            <link>https://ethan-lily.cn/tags/linux%E5%86%85%E6%A0%B8/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/linux%E5%86%85%E6%A0%B8/</guid>
+            <guid>https://ethan-lily.cn/tags/linux%E5%86%85%E6%A0%B8/</guid>
             <description></description>
         </item><item>
             <title>Transformer</title>
-            <link>/tags/transformer/</link>
+            <link>https://ethan-lily.cn/tags/transformer/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/transformer/</guid>
+            <guid>https://ethan-lily.cn/tags/transformer/</guid>
             <description></description>
         </item><item>
             <title>UDS</title>
-            <link>/tags/uds/</link>
+            <link>https://ethan-lily.cn/tags/uds/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/uds/</guid>
+            <guid>https://ethan-lily.cn/tags/uds/</guid>
             <description></description>
         </item><item>
             <title>容器</title>
-            <link>/tags/%E5%AE%B9%E5%99%A8/</link>
+            <link>https://ethan-lily.cn/tags/%E5%AE%B9%E5%99%A8/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%AE%B9%E5%99%A8/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%AE%B9%E5%99%A8/</guid>
             <description></description>
         </item><item>
             <title>生成式预训练</title>
-            <link>/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</link>
+            <link>https://ethan-lily.cn/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</guid>
+            <guid>https://ethan-lily.cn/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E9%A2%84%E8%AE%AD%E7%BB%83/</guid>
             <description></description>
         </item><item>
             <title>源码分析</title>
-            <link>/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+            <link>https://ethan-lily.cn/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
             <pubDate>Fri, 28 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
             <description></description>
         </item><item>
             <title>BERT</title>
-            <link>/tags/bert/</link>
+            <link>https://ethan-lily.cn/tags/bert/</link>
             <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/bert/</guid>
+            <guid>https://ethan-lily.cn/tags/bert/</guid>
             <description></description>
         </item><item>
             <title>MLM</title>
-            <link>/tags/mlm/</link>
+            <link>https://ethan-lily.cn/tags/mlm/</link>
             <pubDate>Thu, 27 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/mlm/</guid>
+            <guid>https://ethan-lily.cn/tags/mlm/</guid>
             <description></description>
         </item><item>
             <title>大模型</title>
-            <link>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</link>
+            <link>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</link>
             <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B/</guid>
             <description></description>
         </item><item>
             <title>论文精读</title>
-            <link>/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</link>
+            <link>https://ethan-lily.cn/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</link>
             <pubDate>Wed, 26 Aug 2026 00:00:00 +0000</pubDate>
-            <guid>/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</guid>
+            <guid>https://ethan-lily.cn/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/</guid>
             <description></description>
         </item><item>
             <title>GRPO</title>
-            <link>/tags/grpo/</link>
+            <link>https://ethan-lily.cn/tags/grpo/</link>
             <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
-            <guid>/tags/grpo/</guid>
+            <guid>https://ethan-lily.cn/tags/grpo/</guid>
             <description></description>
         </item><item>
             <title>强化学习</title>
-            <link>/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</link>
+            <link>https://ethan-lily.cn/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</link>
             <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</guid>
             <description></description>
         </item><item>
             <title>推理模型</title>
-            <link>/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</link>
+            <link>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</link>
             <pubDate>Mon, 01 Sep 2025 00:00:00 +0000</pubDate>
-            <guid>/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B/</guid>
             <description></description>
         </item><item>
             <title>CSAPP</title>
-            <link>/tags/csapp/</link>
+            <link>https://ethan-lily.cn/tags/csapp/</link>
             <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
-            <guid>/tags/csapp/</guid>
+            <guid>https://ethan-lily.cn/tags/csapp/</guid>
             <description></description>
         </item><item>
             <title>CTF</title>
-            <link>/tags/ctf/</link>
+            <link>https://ethan-lily.cn/tags/ctf/</link>
             <pubDate>Sun, 06 Oct 2024 00:00:00 +0000</pubDate>
-            <guid>/tags/ctf/</guid>
+            <guid>https://ethan-lily.cn/tags/ctf/</guid>
             <description></description>
         </item><item>
             <title>加密算法</title>
-            <link>/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
+            <link>https://ethan-lily.cn/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</link>
             <pubDate>Sat, 20 Jul 2024 00:00:00 +0000</pubDate>
-            <guid>/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</guid>
+            <guid>https://ethan-lily.cn/tags/%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</guid>
             <description></description>
         </item><item>
             <title>Os</title>
-            <link>/tags/os/</link>
+            <link>https://ethan-lily.cn/tags/os/</link>
             <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
-            <guid>/tags/os/</guid>
+            <guid>https://ethan-lily.cn/tags/os/</guid>
             <description></description>
         </item><item>
             <title>体系结构</title>
-            <link>/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
+            <link>https://ethan-lily.cn/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</link>
             <pubDate>Tue, 26 Dec 2023 00:00:00 +0000</pubDate>
-            <guid>/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</guid>
+            <guid>https://ethan-lily.cn/tags/%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84/</guid>
             <description></description>
         </item><item>
             <title>Hugo教程</title>
-            <link>/tags/hugo%E6%95%99%E7%A8%8B/</link>
+            <link>https://ethan-lily.cn/tags/hugo%E6%95%99%E7%A8%8B/</link>
             <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-            <guid>/tags/hugo%E6%95%99%E7%A8%8B/</guid>
+            <guid>https://ethan-lily.cn/tags/hugo%E6%95%99%E7%A8%8B/</guid>
             <description></description>
         </item><item>
             <title>个人相关</title>
-            <link>/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</link>
+            <link>https://ethan-lily.cn/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</link>
             <pubDate>Thu, 09 Mar 2023 00:00:00 +0000</pubDate>
-            <guid>/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</guid>
+            <guid>https://ethan-lily.cn/tags/%E4%B8%AA%E4%BA%BA%E7%9B%B8%E5%85%B3/</guid>
             <description></description>
         </item></channel>
 </rss>

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Labs on Lee</title>
-        <link>/en/categories/labs/</link>
+        <link>https://ethan-lily.cn/en/categories/labs/</link>
         <description>Recent content in Labs on Lee</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Tue, 08 Sep 2026 22:25:43 +0800</lastBuildDate><atom:link href="/en/categories/labs/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Sep 2026 22:25:43 +0800</lastBuildDate><atom:link href="https://ethan-lily.cn/en/categories/labs/index.xml" rel="self" type="application/rss+xml" /><item>
             <title>OS Course Project: Memory Fault Detection and Handling</title>
-            <link>/en/p/os/</link>
+            <link>https://ethan-lily.cn/en/p/os/</link>
             <pubDate>Wed, 05 Jun 2024 00:00:00 +0000</pubDate>
-            <guid>/en/p/os/</guid>
-            <description>&lt;img src=&#34;/cover.jpg&#34; alt=&#34;Featured image of post OS Course Project: Memory Fault Detection and Handling&#34; /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;&#xA;</description>
+            <guid>https://ethan-lily.cn/en/p/os/</guid>
+            <description>&lt;img src=&#34;https://ethan-lily.cn/cover.jpg&#34; alt=&#34;Featured image of post OS Course Project: Memory Fault Detection and Handling&#34; /&gt;&lt;p&gt;&lt;em&gt;(This article is primarily code analysis and course notes; the original is in Chinese. English version is a summary — see the source code and diagrams below.)&lt;/em&gt;&lt;/p&gt;&#xA;</description>
         </item></channel>
 </rss>

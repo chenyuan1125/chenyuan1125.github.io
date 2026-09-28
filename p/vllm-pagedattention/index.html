@@ -5,7 +5,7 @@
 <title>PagedAttention：局部更慢，系统为何更快</title>
 
 
-<link rel="canonical" href="/p/vllm-pagedattention/">
+<link rel="canonical" href="https://ethan-lily.cn/p/vllm-pagedattention/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
@@ -14,12 +14,12 @@
 
 <link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="PagedAttention：局部更慢，系统为何更快">
 <meta property='og:description' content="PagedAttention 的注意力 kernel 本身并不一定更快，却让 vLLM 获得更高服务吞吐。本文从 KV cache 的动态增长出发，解释分页、块表、按需分配与写时复制如何把显存管理变成推理系统的核心能力。">
-<meta property='og:url' content='/p/vllm-pagedattention/'>
+<meta property='og:url' content='https://ethan-lily.cn/p/vllm-pagedattention/'>
 <meta property='og:site_name' content='辰远'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='vLLM' /><meta property='article:tag' content='PagedAttention' /><meta property='article:tag' content='KV Cache' /><meta property='article:tag' content='大模型推理' /><meta property='article:tag' content='推理服务' /><meta property='article:published_time' content='2026-09-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-27T09:08:30&#43;08:00'/><meta property='og:image' content='/p/vllm-pagedattention/cover.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='vLLM' /><meta property='article:tag' content='PagedAttention' /><meta property='article:tag' content='KV Cache' /><meta property='article:tag' content='大模型推理' /><meta property='article:tag' content='推理服务' /><meta property='article:published_time' content='2026-09-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-09-27T09:08:30&#43;08:00'/><meta property='og:image' content='https://ethan-lily.cn/p/vllm-pagedattention/cover.jpg' />
 <meta name="twitter:title" content="PagedAttention：局部更慢，系统为何更快">
 <meta name="twitter:description" content="PagedAttention 的注意力 kernel 本身并不一定更快，却让 vLLM 获得更高服务吞吐。本文从 KV cache 的动态增长出发，解释分页、块表、按需分配与写时复制如何把显存管理变成推理系统的核心能力。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='/p/vllm-pagedattention/cover.jpg' />
+    <meta name="twitter:image" content='https://ethan-lily.cn/p/vllm-pagedattention/cover.jpg' />
     </head>
     <body class="
     article-page
