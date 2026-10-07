@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ethan-lily.cn/categories/</loc>
-    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -15,8 +15,34 @@
                 href="https://ethan-lily.cn/categories/"
                 />
   </url><url>
+    <loc>https://ethan-lily.cn/tags/lora/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/lora/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/lora/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/p/lora-low-rank-adaptation/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/p/lora-low-rank-adaptation/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/p/lora-low-rank-adaptation/"
+                />
+  </url><url>
     <loc>https://ethan-lily.cn/post/</loc>
-    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -28,8 +54,21 @@
                 href="https://ethan-lily.cn/post/"
                 />
   </url><url>
+    <loc>https://ethan-lily.cn/tags/qlora/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/qlora/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/qlora/"
+                />
+  </url><url>
     <loc>https://ethan-lily.cn/tags/</loc>
-    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -40,6 +79,28 @@
                 hreflang="zh-cn"
                 href="https://ethan-lily.cn/tags/"
                 />
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E4%BD%8E%E7%A7%A9%E5%88%86%E8%A7%A3/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E6%A8%A1%E5%9E%8B%E9%80%82%E9%85%8D/</loc>
+    <lastmod>2026-10-07T09:12:49+08:00</lastmod>
   </url><url>
     <loc>https://ethan-lily.cn/tags/vllm/</loc>
     <lastmod>2026-09-28T09:07:08+08:00</lastmod>
@@ -52,19 +113,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="https://ethan-lily.cn/tags/vllm/"
-                />
-  </url><url>
-    <loc>https://ethan-lily.cn/</loc>
-    <lastmod>2026-09-28T09:07:08+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ethan-lily.cn/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://ethan-lily.cn/"
                 />
   </url><url>
     <loc>https://ethan-lily.cn/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/</loc>

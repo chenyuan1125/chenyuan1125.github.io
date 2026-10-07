@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Mon, 28 Sep 2026 09:07:10 +0800</lastBuildDate><atom:link href="https://ethan-lily.cn/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 07 Oct 2026 09:15:22 +0800</lastBuildDate><atom:link href="https://ethan-lily.cn/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>LoRA</title>
+            <link>https://ethan-lily.cn/en/tags/lora/</link>
+            <pubDate>Wed, 07 Oct 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/lora/</guid>
+            <description></description>
+        </item><item>
+            <title>Low-Rank Updates</title>
+            <link>https://ethan-lily.cn/en/tags/low-rank-updates/</link>
+            <pubDate>Wed, 07 Oct 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/low-rank-updates/</guid>
+            <description></description>
+        </item><item>
+            <title>Model Adaptation</title>
+            <link>https://ethan-lily.cn/en/tags/model-adaptation/</link>
+            <pubDate>Wed, 07 Oct 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/model-adaptation/</guid>
+            <description></description>
+        </item><item>
+            <title>Parameter-Efficient Fine-Tuning</title>
+            <link>https://ethan-lily.cn/en/tags/parameter-efficient-fine-tuning/</link>
+            <pubDate>Wed, 07 Oct 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/parameter-efficient-fine-tuning/</guid>
+            <description></description>
+        </item><item>
+            <title>QLoRA</title>
+            <link>https://ethan-lily.cn/en/tags/qlora/</link>
+            <pubDate>Wed, 07 Oct 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/qlora/</guid>
+            <description></description>
+        </item><item>
             <title>Decoding Acceleration</title>
             <link>https://ethan-lily.cn/en/tags/decoding-acceleration/</link>
             <pubDate>Mon, 28 Sep 2026 00:00:00 +0000</pubDate>

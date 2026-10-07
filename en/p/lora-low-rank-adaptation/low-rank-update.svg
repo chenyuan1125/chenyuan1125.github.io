@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 390" width="600" height="390" role="img" aria-labelledby="lora-update-title lora-update-desc">
+  <title id="lora-update-title">LoRA low-rank update</title>
+  <desc id="lora-update-desc">The input follows a frozen weight path and a low-rank A-B path; their results are added.</desc>
+  <defs><style>.t{font-family:Arial,sans-serif;fill:#18324a}.h{font-weight:700;font-size:20px}.m{font-size:15px}.s{font-size:13px;fill:#516273}.line{stroke:#294a66;stroke-width:2.5;fill:none}.dash{stroke:#9aabb8;stroke-width:2;stroke-dasharray:6 5;fill:none}</style><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#294a66"/></marker></defs>
+  <rect width="600" height="390" rx="20" fill="#f7f3ea"/>
+  <text x="30" y="38" class="t h">One input, two paths</text>
+  <rect x="28" y="165" width="58" height="54" rx="12" fill="#fff" stroke="#294a66" stroke-width="2"/><text x="57" y="198" text-anchor="middle" class="t h">x</text>
+  <path d="M86 192H125V112H171" class="line" marker-end="url(#a)"/><path d="M86 192H125V278H171" class="line" marker-end="url(#a)"/>
+  <rect x="177" y="70" width="146" height="85" rx="12" fill="#18324a"/><text x="250" y="107" text-anchor="middle" fill="#fff" class="h" font-family="Arial, sans-serif">W</text><text x="250" y="133" text-anchor="middle" fill="#dce8ef" font-size="13" font-family="Arial, sans-serif">frozen · dₒᵤₜ × dᵢₙ</text>
+  <rect x="177" y="241" width="104" height="74" rx="12" fill="#ee765a"/><text x="229" y="273" text-anchor="middle" fill="#fff" font-size="20" font-weight="700" font-family="Arial, sans-serif">A</text><text x="229" y="297" text-anchor="middle" fill="#fff" font-size="13" font-family="Arial, sans-serif">r × dᵢₙ</text>
+  <path d="M281 278H331" class="line" marker-end="url(#a)"/><rect x="337" y="241" width="104" height="74" rx="12" fill="#20a39e"/><text x="389" y="273" text-anchor="middle" fill="#fff" font-size="20" font-weight="700" font-family="Arial, sans-serif">B</text><text x="389" y="297" text-anchor="middle" fill="#fff" font-size="13" font-family="Arial, sans-serif">dₒᵤₜ × r</text>
+  <path d="M323 112H479V178" class="line" marker-end="url(#a)"/><path d="M441 278H479V218" class="line" marker-end="url(#a)"/>
+  <circle cx="479" cy="198" r="23" fill="#fff" stroke="#294a66" stroke-width="2"/><text x="479" y="206" text-anchor="middle" class="t h">＋</text><path d="M502 198H552" class="line" marker-end="url(#a)"/><text x="567" y="204" class="t h">y</text>
+  <path d="M177 334H441" class="dash"/><text x="309" y="359" text-anchor="middle" class="t m">Only train the low-rank path: r(dᵢₙ + dₒᵤₜ)</text><text x="309" y="378" text-anchor="middle" class="t s">The task delta stays small when r is narrow</text>
+</svg>

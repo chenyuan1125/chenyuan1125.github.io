@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="LoRA 冻结预训练权重，只学习一个低秩更新。本文从矩阵分解、训练账本与 QLoRA 出发，解释它为什么便宜、何时可以合并，以及低秩假设的边界。">
+<title>LoRA：不重写整座模型，如何学会一项新任务</title>
+
+
+<link rel="canonical" href="https://ethan-lily.cn/p/lora-low-rank-adaptation/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="LoRA：不重写整座模型，如何学会一项新任务">
+<meta property='og:description' content="LoRA 冻结预训练权重，只学习一个低秩更新。本文从矩阵分解、训练账本与 QLoRA 出发，解释它为什么便宜、何时可以合并，以及低秩假设的边界。">
+<meta property='og:url' content='https://ethan-lily.cn/p/lora-low-rank-adaptation/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LoRA' /><meta property='article:tag' content='参数高效微调' /><meta property='article:tag' content='低秩分解' /><meta property='article:tag' content='QLoRA' /><meta property='article:tag' content='模型适配' /><meta property='article:published_time' content='2026-10-07T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-07T09:12:49&#43;08:00'/><meta property='og:image' content='https://ethan-lily.cn/p/lora-low-rank-adaptation/cover.jpg' />
+<meta name="twitter:title" content="LoRA：不重写整座模型，如何学会一项新任务">
+<meta name="twitter:description" content="LoRA 冻结预训练权重，只学习一个低秩更新。本文从矩阵分解、训练账本与 QLoRA 出发，解释它为什么便宜、何时可以合并，以及低秩假设的边界。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://ethan-lily.cn/p/lora-low-rank-adaptation/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/lora-low-rank-adaptation/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/lora-low-rank-adaptation/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#一次完整更新被压成两次窄投影">一次完整更新，被压成两次窄投影</a></li>
+    <li><a href="#低秩不是压缩魔法而是对任务变化的假设">低秩不是压缩魔法，而是对任务变化的假设</a></li>
+    <li><a href="#真正省下来的是训练与版本管理的账">真正省下来的，是训练与版本管理的账</a></li>
+    <li><a href="#合并之后没有额外层但多租户服务另有代价">合并之后没有额外层，但多租户服务另有代价</a></li>
+    <li><a href="#qlora-把冻结底座再压到-4-bit">QLoRA 把冻结底座再压到 4 bit</a></li>
+    <li><a href="#什么时候应该换一种方法">什么时候应该换一种方法</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/lora-low-rank-adaptation/">
+            <img alt="Featured image of post LoRA：不重写整座模型，如何学会一项新任务" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/lora-low-rank-adaptation/cover.jpg" srcset="/p/lora-low-rank-adaptation/cover_hu_a7f9af579af200f6.jpg 800w, /p/lora-low-rank-adaptation/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/lora-low-rank-adaptation/">LoRA：不重写整座模型，如何学会一项新任务</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            LoRA 冻结预训练权重，只学习一个低秩更新。本文从矩阵分解、训练账本与 QLoRA 出发，解释它为什么便宜、何时可以合并，以及低秩假设的边界。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-10-07T00:00:00Z'>2026-10-07</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 7 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/lora-low-rank-adaptation/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#一次完整更新被压成两次窄投影">一次完整更新，被压成两次窄投影</a></li>
+    <li><a href="#低秩不是压缩魔法而是对任务变化的假设">低秩不是压缩魔法，而是对任务变化的假设</a></li>
+    <li><a href="#真正省下来的是训练与版本管理的账">真正省下来的，是训练与版本管理的账</a></li>
+    <li><a href="#合并之后没有额外层但多租户服务另有代价">合并之后没有额外层，但多租户服务另有代价</a></li>
+    <li><a href="#qlora-把冻结底座再压到-4-bit">QLoRA 把冻结底座再压到 4 bit</a></li>
+    <li><a href="#什么时候应该换一种方法">什么时候应该换一种方法</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>给十个任务各微调一份模型，最直观的办法是保存十份完整权重。问题是，任务并没有创造十个底座：绝大多数预训练能力相同，真正不同的只是模型为了适应数据而发生的那一点变化。模型越大，这种“为了保存差异而复制整体”的做法越昂贵。</p>
+<p>LoRA（Low-Rank Adaptation）把问题改写了：不要直接训练新的权重 \(W'\)，而是冻结预训练权重 \(W\)，只学习它的更新量 \(\Delta W\)。进一步假设这个更新不需要覆盖整个高维空间，可以写成两个窄矩阵的乘积：</p>
+\[
+W' = W + \Delta W, \qquad \Delta W = \frac{\alpha}{r}BA.
+\]<p>这里的关键不是“给模型外挂一个小网络”，而是<strong>改变要保存和优化的对象</strong>。底座仍负责绝大多数计算与知识，适配器只描述这次任务要把底座往哪个方向推。LoRA 论文以 GPT-3 175B 为例，报告相对 Adam 全量微调最多可将可训练参数减少约一万倍、GPU 显存需求降至约三分之一；这些是特定配置下的结果，不是所有模型都能复现的固定倍率。</p>
+<h2 id="一次完整更新被压成两次窄投影">一次完整更新，被压成两次窄投影
+</h2><p>设某个线性层的权重 \(W\in\mathbb{R}^{d_{out}\times d_{in}}\)。全量微调要为 \(d_{out}d_{in}\) 个元素学习变化。LoRA 令</p>
+\[
+A\in\mathbb{R}^{r\times d_{in}},\qquad
+B\in\mathbb{R}^{d_{out}\times r},\qquad r\ll\min(d_{in},d_{out}),
+\]<p>前向计算变为</p>
+\[
+y=Wx+\frac{\alpha}{r}B(Ax).
+\]<p>底座路径 \(Wx\) 不动；支路先把输入压到 \(r\) 维，再投影回输出空间。适配器只有 \(r(d_{in}+d_{out})\) 个参数。以一个 \(4096\times4096\) 的方阵为例，秩 \(r=8\) 时，完整矩阵有 16,777,216 个元素，而两块 LoRA 矩阵共 65,536 个，恰好是前者的 \(1/256\)。这是单个线性层的几何账，整模型比例还取决于把 LoRA 放到哪些模块。</p>
+<figure><img src="/p/lora-low-rank-adaptation/low-rank-update.svg"><figcaption>
+			<h4>图 1：LoRA 不修改冻结的 W，而用先降维再升维的 BA 支路表达低秩更新</h4>
+		</figcaption>
+</figure>
+
+<p>原始实现通常随机初始化 \(A\)、把 \(B\) 初始化为零，所以训练开始时 \(BA=0\)，模型输出与底座完全一致。系数 \(\alpha/r\) 控制更新强度，使改变 rank 时尺度更可控。训练期间只给 \(A\) 和 \(B\) 求梯度、维护优化器状态；\(W\) 仍参与前向和反向传播中的计算，但不被更新。</p>
+<p>这也是一个容易说错的地方：LoRA 减少的是<strong>可训练参数、参数梯度和优化器状态</strong>，不是把大模型的计算删除了。冻结权重仍要驻留或按需要读取，激活仍要为反向传播保存，训练吞吐还受序列长度、batch、激活检查点和算子效率影响。“只训练 0.x% 参数”不等于“训练只花 0.x% 的显存或算力”。</p>
+<h2 id="低秩不是压缩魔法而是对任务变化的假设">低秩不是压缩魔法，而是对任务变化的假设
+</h2><p>任意矩阵都可以用足够高的 rank 表示；LoRA 真正下注的是，下游任务需要的 \(\Delta W\) 具有很低的“内在秩”。预训练模型已经拥有语言和世界模式，适配往往不必从零重建它们，只需放大、抑制或重新组合一小组方向。</p>
+<p>原论文在 GPT-3 的部分任务上发现，对 query 与 value 投影同时适配时，rank 低至 1 仍可有竞争力；不同 rank 的更新也共享少数主要奇异方向。但论文同时明确说，小 rank 不会适用于所有任务和数据。这个实验证据支持“许多适配更新可低秩近似”，却没有证明所有新知识、所有领域迁移或所有模型层都天然低秩。</p>
+<p>rank 因而不是越小越先进，也不是越大越稳妥。太小会成为表达瓶颈；太大增加显存、通信和过拟合空间，收益可能饱和。更重要的是<strong>目标模块</strong>：原始 LoRA 实验主要适配 self-attention 的投影，并发现同一参数预算下，同时覆盖 query 和 value 往往优于只扩大单个投影的 rank。现代工具也允许覆盖 output、key 或 MLP 中的线性层，但这应当由任务和验证集决定，不能把某个社区默认值当成定律。</p>
+<h2 id="真正省下来的是训练与版本管理的账">真正省下来的，是训练与版本管理的账
+</h2><p>全量微调时，每个任务都产生一份完整模型；训练还要为所有可训练权重保留梯度以及 Adam 的一阶、二阶状态。LoRA 把这些按任务增长的部分限制在小矩阵中。一份底座可以配许多适配器，每个检查点只保存 LoRA 参数，Microsoft 的参考实现也直接提供了只导出 LoRA <code>state_dict</code> 的接口。</p>
+<figure><img src="/p/lora-low-rank-adaptation/three-memory-ledgers.svg"><figcaption>
+			<h4>图 2：全量微调、LoRA 与 QLoRA 省下的是不同账目；冻结不等于删除底座计算和激活</h4>
+		</figcaption>
+</figure>
+
+<p>这改变了模型交付方式。过去“一个任务一个模型”意味着复制、传输和部署整份权重；LoRA 之后，可以把底座看作共享运行时，把任务差异看作小型补丁。实验、回滚和版本组合更便宜，私有数据训练产生的差异也可以单独管控。</p>
+<p>但这并不自动降低所有成本。底座参数的前向乘法仍存在；训练中的激活显存可能占主导；分布式训练还要考虑适配器梯度与底座权重的放置。LoRA 最显著地削减“需要更新和持久化的状态”，至于端到端速度与峰值显存，必须测完整工作负载。</p>
+<h2 id="合并之后没有额外层但多租户服务另有代价">合并之后没有额外层，但多租户服务另有代价
+</h2><p>LoRA 的线性形式允许在部署前计算</p>
+\[
+W_{merged}=W+\frac{\alpha}{r}BA.
+\]<p>之后推理仍做一次普通的 \(W_{merged}x\)，因此单个已合并适配器不会像在 Transformer block 中插入串行 adapter layer 那样增加网络深度。这就是论文所说的“无额外推理延迟”的准确含义：<strong>合并后的单适配器路径</strong>与同形状的全量微调权重拥有相同矩阵乘法结构。</p>
+<p>如果服务需要在一个底座上同时承载许多适配器，情况不同。不能把多个互相冲突的 \(BA\) 永久合进同一份 \(W\)；系统要按请求选择适配器，动态执行支路或维护不同的合并副本。小检查点让切换和存储容易许多，但 batching、缓存、内核融合和适配器驻留仍是服务系统的问题。“可以合并”与“任意数量适配器并发都免费”不是一回事。</p>
+<figure><img src="/p/lora-low-rank-adaptation/shared-base-adapters.svg"><figcaption>
+			<h4>图 3：共享底座可以挂接多个小适配器；单个适配器可合并，多适配器并发仍需路由和调度</h4>
+		</figcaption>
+</figure>
+
+<p>这也解释了 LoRA 为什么改变的不只是训练门槛。模型的发布单位从“完整权重副本”变成“底座版本 + 适配器版本 + 精确配置”。rank、alpha、目标模块、偏置设置和底座哈希都是产物的一部分；底座对不上，即使矩阵尺寸勉强兼容，语义也不再可靠。</p>
+<h2 id="qlora-把冻结底座再压到-4-bit">QLoRA 把冻结底座再压到 4 bit
+</h2><p>LoRA 仍需装下底座。QLoRA 进一步把<strong>冻结的预训练权重</strong>以 4 bit 保存，计算时按需要反量化到计算精度，梯度继续穿过这条路径流向 LoRA 适配器；量化后的底座本身仍不更新。它不是“用 4 bit 训练所有模型参数”，而是“用 4 bit 承载冻结底座，用较高精度训练低秩更新”。</p>
+<p>QLoRA 论文引入了面向近似正态分布权重的 NF4、压缩量化常数的 double quantization，以及处理优化器显存尖峰的 paged optimizers。论文展示了在单张 48 GB GPU 上微调 65B 参数模型，并在所测设置中匹配 16 bit 全量微调表现。这项结果说明底座存储与可训练状态可以同时压缩，但不应被外推为“任意 65B、任意长度和 batch 都能装进 48 GB”：激活、上下文长度、目标模块、优化器与实现都会改变峰值。</p>
+<p>量化也没有把乘法变成零成本。推理或训练仍需读取、反量化并计算底座权重；不同硬件对 4 bit kernel 的支持差异很大。QLoRA 的最大贡献，是把“底座精度”和“更新精度”拆成两个可独立选择的轴，而不是承诺所有场景都比普通 LoRA 更快。</p>
+<h2 id="什么时候应该换一种方法">什么时候应该换一种方法
+</h2><p>LoRA 很适合底座能力已经足够、任务主要需要行为或领域适配，并且要保存许多版本的场景。它不保证把预训练中缺失的大量知识可靠地塞进一个很小的 rank，也不修复低质量数据、错误标注和评测泄漏。适配器很小，只说明参数账很小，不说明它学到的行为容易审计。</p>
+<p>若任务与底座差异极大，LoRA 在合理 rank 下持续落后于全量微调，就应把低秩假设当作失败的实验结论，而不是继续堆技巧。若只需要少量示例即可完成任务，检索或提示设计可能比训练更简单；若知识必须可更新、可引用，RAG 往往比把事实写入权重更合适。选择方法要看变化属于“行为”“知识”还是“基础能力”，而不是看到参数高效就默认使用。</p>
+<p>LoRA 最值得保留的直觉，是把“模型”和“模型的任务变化”分开计价。一个巨大系统的有效改动，可能只占高维空间里的少数方向。找到并保存这些方向，可以省下梯度、优化器状态、检查点和部署副本；但底座计算、激活成本与数据风险依然存在。它不是免费微调，而是一种更准确的账本。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li>Hu et al., <a class="link" href="https://arxiv.org/abs/2106.09685"  target="_blank" rel="noopener"
+    >LoRA: Low-Rank Adaptation of Large Language Models</a>, ICLR 2022.</li>
+<li>Microsoft, <a class="link" href="https://github.com/microsoft/LoRA"  target="_blank" rel="noopener"
+    >LoRA / loralib 官方实现</a>.</li>
+<li>Dettmers et al., <a class="link" href="https://arxiv.org/abs/2305.14314"  target="_blank" rel="noopener"
+    >QLoRA: Efficient Finetuning of Quantized LLMs</a>, NeurIPS 2023.</li>
+<li>QLoRA authors, <a class="link" href="https://github.com/artidoro/qlora"  target="_blank" rel="noopener"
+    >QLoRA 官方代码仓库</a>.</li>
+<li>Hugging Face, <a class="link" href="https://huggingface.co/docs/peft/main/en/package_reference/lora"  target="_blank" rel="noopener"
+    >PEFT LoRA 官方文档</a>.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/lora/">LoRA</a>
+        
+            <a href="/tags/%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83/">参数高效微调</a>
+        
+            <a href="/tags/%E4%BD%8E%E7%A7%A9%E5%88%86%E8%A7%A3/">低秩分解</a>
+        
+            <a href="/tags/qlora/">QLoRA</a>
+        
+            <a href="/tags/%E6%A8%A1%E5%9E%8B%E9%80%82%E9%85%8D/">模型适配</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-10-07
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/speculative-decoding/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post 推测解码：先猜几个 token，为什么答案仍然没变" height="150" loading="lazy" src="/p/speculative-decoding/cover_hu_6704b5895f3e3707.jpg" srcset="/p/speculative-decoding/cover_hu_6704b5895f3e3707.jpg 1x, /p/speculative-decoding/cover_hu_962ad6a60cac686f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #f0e9db80 0%, #253b47C0 100%);">
+            <h2 class="article-title">推测解码：先猜几个 token，为什么答案仍然没变</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/dpo-hidden-reward/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DPO：奖励模型去哪了" height="150" loading="lazy" src="/p/dpo-hidden-reward/cover_hu_d4f38066fa78749.jpg" srcset="/p/dpo-hidden-reward/cover_hu_d4f38066fa78749.jpg 1x, /p/dpo-hidden-reward/cover_hu_3741326db566f813.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #28374780 0%, #eae5dcC0 100%);">
+            <h2 class="article-title">DPO：奖励模型去哪了</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/flashattention-io-aware/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post FlashAttention：不是少算，而是少搬" height="150" loading="lazy" src="/p/flashattention-io-aware/cover_hu_62c3677d14a862d3.jpg" srcset="/p/flashattention-io-aware/cover_hu_62c3677d14a862d3.jpg 1x, /p/flashattention-io-aware/cover_hu_b2a5c88a943f54e5.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #bec2be80 0%, #1e2a33C0 100%);">
+            <h2 class="article-title">FlashAttention：不是少算，而是少搬</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba：少记，为什么反而可能更懂长序列" height="150" loading="lazy" src="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg" srcset="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg 1x, /p/mamba-selective-state-space/cover_hu_5245944053dde7dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #303b4180 0%, #ddd3c4C0 100%);">
+            <h2 class="article-title">Mamba：少记，为什么反而可能更懂长序列</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/deepseek-mla-moe/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看" height="150" loading="lazy" src="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg" srcset="/p/deepseek-mla-moe/cover_hu_c01c2916bc32d1d0.jpg 1x, /p/deepseek-mla-moe/cover_hu_5abd39a15d038789.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #3a454980 0%, #e5ded2C0 100%);">
+            <h2 class="article-title">DeepSeek-V2/V3：大模型的两张账，为什么 MLA 与 MoE 要一起看</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>
