@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 430" width="600" height="430" role="img" aria-labelledby="pixels-en-title pixels-en-desc">
+  <title id="pixels-en-title">From pixels to visual tokens</title>
+  <desc id="pixels-en-desc">An image becomes a patch grid, passes through CLIP and an MLP projector, then enters the language model beside the text prompt.</desc>
+  <defs>
+    <pattern id="grid-en" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="#fff" stroke-width="1.5"/></pattern>
+    <marker id="arrow-en" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#415a6b"/></marker>
+    <style>.t{font-family:Arial,sans-serif;fill:#21313b}.h{font-size:18px;font-weight:700}.l{font-size:13px}.s{font-size:11px;fill:#5c6b73}.box{stroke:#365361;stroke-width:1.5}.arrow{stroke:#415a6b;stroke-width:2;fill:none;marker-end:url(#arrow-en)}</style>
+  </defs>
+  <rect width="600" height="430" rx="18" fill="#f6f1e7"/>
+  <text x="30" y="38" class="t h">How an image enters a language model</text>
+  <text x="30" y="60" class="t s">Common LLaVA-1.5 path: CLIP ViT-L/14@336px + two-layer MLP</text>
+  <rect x="30" y="94" width="116" height="116" rx="10" fill="#7ba6a1" class="box"/>
+  <path d="M30 174L62 143L86 164L112 126L146 163V210H30Z" fill="#23485a" opacity=".9"/>
+  <rect x="30" y="94" width="116" height="116" rx="10" fill="url(#grid-en)"/>
+  <text x="88" y="232" text-anchor="middle" class="t l">336×336 pixels</text>
+  <path d="M153 152H190" class="arrow"/>
+  <rect x="198" y="105" width="96" height="92" rx="12" fill="#dce8e4" class="box"/>
+  <text x="246" y="138" text-anchor="middle" class="t l" font-weight="700">CLIP</text>
+  <text x="246" y="158" text-anchor="middle" class="t l">ViT-L/14</text>
+  <text x="246" y="178" text-anchor="middle" class="t s">24×24 grid</text>
+  <path d="M302 152H337" class="arrow"/>
+  <rect x="345" y="118" width="72" height="66" rx="10" fill="#ef846f" class="box"/>
+  <text x="381" y="144" text-anchor="middle" class="t l" font-weight="700">2-layer</text>
+  <text x="381" y="164" text-anchor="middle" class="t l" font-weight="700">MLP</text>
+  <path d="M425 152H458" class="arrow"/>
+  <g fill="#274c5e"><rect x="466" y="105" width="19" height="92" rx="4"/><rect x="490" y="105" width="19" height="92" rx="4"/><rect x="514" y="105" width="19" height="92" rx="4"/><rect x="538" y="105" width="19" height="92" rx="4"/></g>
+  <text x="511" y="222" text-anchor="middle" class="t l">576 visual tokens</text>
+  <text x="511" y="240" text-anchor="middle" class="t s">vectors, not words</text>
+  <path d="M510 251V282" class="arrow"/>
+  <rect x="267" y="288" width="290" height="93" rx="14" fill="#203d4d"/>
+  <rect x="285" y="307" width="78" height="35" rx="7" fill="#e5c36f"/>
+  <text x="324" y="330" text-anchor="middle" class="t l">text prompt</text>
+  <text x="379" y="330" class="t h" fill="#f6f1e7">+</text>
+  <rect x="404" y="307" width="130" height="35" rx="7" fill="#78a6a1"/>
+  <text x="469" y="330" text-anchor="middle" class="t l">visual tokens</text>
+  <text x="412" y="365" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#f6f1e7">one sequence → autoregressive answer</text>
+  <path d="M30 334H233" class="arrow"/>
+  <rect x="30" y="300" width="194" height="68" rx="12" fill="#fffaf0" class="box"/>
+  <text x="127" y="328" text-anchor="middle" class="t l" font-weight="700">The interface</text>
+  <text x="127" y="350" text-anchor="middle" class="t s">vision width → embedding width</text>
+  <text x="30" y="411" class="t s">The connector exposes existing visual features to existing language capability.</text>
+</svg>

@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ethan-lily.cn/en/categories/</loc>
-    <lastmod>2026-10-07T09:15:22+08:00</lastmod>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -15,8 +15,82 @@
                 href="https://ethan-lily.cn/categories/"
                 />
   </url><url>
+    <loc>https://ethan-lily.cn/en/tags/clip/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/clip/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/clip/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/en/tags/llava/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/llava/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/llava/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/en/p/llava-visual-connector/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/p/llava-visual-connector/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/p/llava-visual-connector/"
+                />
+  </url><url>
     <loc>https://ethan-lily.cn/en/categories/llm-architecture/</loc>
-    <lastmod>2026-10-07T09:15:22+08:00</lastmod>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/en/tags/multimodality/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/en/post/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/post/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/en/tags/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/en/tags/vision-language-models/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/en/tags/visual-instruction-tuning/</loc>
+    <lastmod>2026-10-08T09:01:51+08:00</lastmod>
   </url><url>
     <loc>https://ethan-lily.cn/en/tags/lora/</loc>
     <lastmod>2026-10-07T09:15:22+08:00</lastmod>
@@ -53,19 +127,6 @@
     <loc>https://ethan-lily.cn/en/tags/parameter-efficient-fine-tuning/</loc>
     <lastmod>2026-10-07T09:15:22+08:00</lastmod>
   </url><url>
-    <loc>https://ethan-lily.cn/en/post/</loc>
-    <lastmod>2026-10-07T09:15:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ethan-lily.cn/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://ethan-lily.cn/post/"
-                />
-  </url><url>
     <loc>https://ethan-lily.cn/en/tags/qlora/</loc>
     <lastmod>2026-10-07T09:15:22+08:00</lastmod>
     <xhtml:link
@@ -77,19 +138,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="https://ethan-lily.cn/tags/qlora/"
-                />
-  </url><url>
-    <loc>https://ethan-lily.cn/en/tags/</loc>
-    <lastmod>2026-10-07T09:15:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ethan-lily.cn/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://ethan-lily.cn/tags/"
                 />
   </url><url>
     <loc>https://ethan-lily.cn/en/tags/decoding-acceleration/</loc>

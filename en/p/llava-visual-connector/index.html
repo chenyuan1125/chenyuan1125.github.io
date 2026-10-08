@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="LLaVA connects CLIP visual features to a language model with a lightweight projector. This article explains visual tokens, two-stage training, the data contract, compute costs, and failure boundaries.">
+<title>LLaVA: How a Small Bridge Lets a Language Model See</title>
+
+
+<link rel="canonical" href="https://ethan-lily.cn/en/p/llava-visual-connector/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="LLaVA: How a Small Bridge Lets a Language Model See">
+<meta property='og:description' content="LLaVA connects CLIP visual features to a language model with a lightweight projector. This article explains visual tokens, two-stage training, the data contract, compute costs, and failure boundaries.">
+<meta property='og:url' content='https://ethan-lily.cn/en/p/llava-visual-connector/'>
+<meta property='og:site_name' content='Lee'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LLaVA' /><meta property='article:tag' content='Vision-Language Models' /><meta property='article:tag' content='CLIP' /><meta property='article:tag' content='Visual Instruction Tuning' /><meta property='article:tag' content='Multimodality' /><meta property='article:published_time' content='2026-10-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-08T09:01:51&#43;08:00'/><meta property='og:image' content='https://ethan-lily.cn/en/p/llava-visual-connector/cover.jpg' />
+<meta name="twitter:title" content="LLaVA: How a Small Bridge Lets a Language Model See">
+<meta name="twitter:description" content="LLaVA connects CLIP visual features to a language model with a lightweight projector. This article explains visual tokens, two-stage training, the data contract, compute costs, and failure boundaries."><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://ethan-lily.cn/en/p/llava-visual-connector/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/en/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/en/">Lee</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/en/'
+                        
+                        title="Home"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/en/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/about/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/en/page/links/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>Links</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/llava-visual-connector/" selected>English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/llava-visual-connector/" >中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#clip-built-language-coordinates-for-images-not-a-conversation-system">CLIP Built Language Coordinates for Images, Not a Conversation System</a></li>
+    <li><a href="#the-image-is-not-translated-into-words">The Image Is Not Translated Into Words</a></li>
+    <li><a href="#two-training-stages-teach-two-different-contracts">Two Training Stages Teach Two Different Contracts</a></li>
+    <li><a href="#a-small-bridge-works-because-both-banks-already-do-most-of-the-work">A Small Bridge Works Because Both Banks Already Do Most of the Work</a></li>
+    <li><a href="#visual-instruction-data-changed-the-way-the-model-could-be-used">Visual-Instruction Data Changed the Way the Model Could Be Used</a></li>
+    <li><a href="#visual-tokens-are-both-an-information-budget-and-a-compute-bill">Visual Tokens Are Both an Information Budget and a Compute Bill</a></li>
+    <li><a href="#fluent-language-makes-visual-errors-harder-to-notice">Fluent Language Makes Visual Errors Harder to Notice</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/en/p/llava-visual-connector/">
+            <img alt="Featured image of post LLaVA: How a Small Bridge Lets a Language Model See" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/en/p/llava-visual-connector/cover.jpg" srcset="/en/p/llava-visual-connector/cover_hu_c724a9e332483a1c.jpg 800w, /en/p/llava-visual-connector/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/en/categories/llm-architecture/" style="background-color: hsl(67, 60%, 84%); color: hsl(67, 60%, 15%);">
+                LLM Architecture
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/en/p/llava-visual-connector/">LLaVA: How a Small Bridge Lets a Language Model See</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            LLaVA connects CLIP visual features to a language model with a lightweight projector. This article explains visual tokens, two-stage training, the data contract, compute costs, and failure boundaries.
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-10-08T00:00:00Z'>2026-10-08</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        9 minutes read
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/p/llava-visual-connector/" class="link">中文</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>Table of contents</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#clip-built-language-coordinates-for-images-not-a-conversation-system">CLIP Built Language Coordinates for Images, Not a Conversation System</a></li>
+    <li><a href="#the-image-is-not-translated-into-words">The Image Is Not Translated Into Words</a></li>
+    <li><a href="#two-training-stages-teach-two-different-contracts">Two Training Stages Teach Two Different Contracts</a></li>
+    <li><a href="#a-small-bridge-works-because-both-banks-already-do-most-of-the-work">A Small Bridge Works Because Both Banks Already Do Most of the Work</a></li>
+    <li><a href="#visual-instruction-data-changed-the-way-the-model-could-be-used">Visual-Instruction Data Changed the Way the Model Could Be Used</a></li>
+    <li><a href="#visual-tokens-are-both-an-information-budget-and-a-compute-bill">Visual Tokens Are Both an Information Budget and a Compute Bill</a></li>
+    <li><a href="#fluent-language-makes-visual-errors-harder-to-notice">Fluent Language Makes Visual Errors Harder to Notice</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>A language model normally accepts discrete tokens. Hand it a photograph and the pixels do not automatically become “a snowy mountain reflected in a lake,” much less “compare what the two people on the left are doing.” The obvious solution seems to be training one enormous model to learn vision and language from scratch. LLaVA took a cheaper and more revealing route: retain a vision encoder that already knows how to represent images, retain a language model that already knows how to converse, and train a small bridge between them.</p>
+<p>That bridge was a single linear projection in the first LLaVA and a two-layer MLP in LLaVA-1.5. Its importance does not come from a small matrix creating visual intelligence out of nowhere. It changes the <strong>interface contract</strong> between two pretrained systems: convert the vision encoder&rsquo;s grid features into vectors that can occupy positions in the language model&rsquo;s context, then use visual-instruction data to teach the language model what to do with those vectors.</p>
+<h2 id="clip-built-language-coordinates-for-images-not-a-conversation-system">CLIP Built Language Coordinates for Images, Not a Conversation System
+</h2><p>LLaVA&rsquo;s visual side starts with CLIP. CLIP trains an image encoder and a text encoder on paired images and text. The objective pulls matching pairs together and pushes mismatched pairs apart. OpenAI trained it on 400 million web image-text pairs and framed the proxy task as identifying the correct caption among the text candidates in a batch.</p>
+<p>This creates an open semantic coordinate system. A conventional classifier chooses from a predetermined label set. CLIP can instead compare an image with descriptions such as “a snowy mountain reflected in a lake” or “a handwritten menu,” so its visual representation is not confined to one fixed taxonomy.</p>
+<p>But matching an image to a sentence is not the same as holding a multi-turn conversation about the image. CLIP&rsquo;s core output is similarity. It does not generate long answers or follow instructions such as “count only the red objects” and “explain first, then answer.” LLaVA does not ask CLIP to answer questions. It borrows CLIP&rsquo;s visual features and delegates generation and instruction following to a language model that already has those capabilities.</p>
+<h2 id="the-image-is-not-translated-into-words">The Image Is Not Translated Into Words
+</h2><p>In a common LLaVA-1.5 configuration, an image enters CLIP ViT-L/14 at 336 pixels. The ViT divides the 336×336 image into 14×14 patches, producing a (24\times24=576) grid. The vision encoder emits one feature vector per grid position. A connector (P) then projects the visual dimension into the language model&rsquo;s word-embedding dimension:</p>
+\[
+H_v=P(Z_v), \qquad Z_v=g(X_v).
+\]<p>The vectors in (H_v) are often called visual tokens, but they are not vocabulary tokens and do not each name a readable word. They are continuous vectors with the same width as the model&rsquo;s text embeddings. The system places them beside the question embeddings, allowing the autoregressive language model to attend to image regions and the textual prompt in one sequence.</p>
+<figure><img src="/en/p/llava-visual-connector/from-pixels-to-tokens.svg"><figcaption>
+			<h4>Figure 1: LLaVA projects CLIP grid features into continuous visual tokens that can enter the language model context</h4>
+		</figcaption>
+</figure>
+
+<p>This design avoids a separate multimodal decoder and does not add a new cross-attention block to every language-model layer. The tradeoff is that visual information consumes token budget inside the LLM. A finer image grid may preserve more detail, but it also lengthens the sequence and increases prefill attention and KV-cache work. A small connector does not make the whole multimodal inference path cheap.</p>
+<h2 id="two-training-stages-teach-two-different-contracts">Two Training Stages Teach Two Different Contracts
+</h2><p>The original LLaVA uses two stages. Stage one takes 595K image-text pairs filtered from CC3M and turns each pair into a simple request such as “briefly describe this image.” Both the vision encoder and the language model stay frozen; only the projection matrix is updated. This stage is not teaching conversation. It finds a visual representation that the frozen language model can consume. The paper describes it as training a compatible visual tokenizer for the LLM.</p>
+<p>Stage two switches to 158K visual-instruction examples spanning conversation, detailed description, and complex reasoning. The vision encoder remains frozen, while the connector and language model are updated together. The autoregressive loss is applied to the assistant answer tokens, teaching the model the behavior “image plus instruction produces an appropriate response.”</p>
+<figure><img src="/en/p/llava-visual-connector/two-stage-training.svg"><figcaption>
+			<h4>Figure 2: Stage one aligns the interface; stage two trains the connector and language model to follow visual instructions</h4>
+		</figcaption>
+</figure>
+
+<p>It is misleading to collapse these stages into “train on image-text data.” The first solves <strong>representation compatibility</strong>: how should a feature for the mountain region enter the LLM&rsquo;s vector space? The second solves an <strong>interaction contract</strong>: how should the answer change when the same image is paired with “describe the scene,” “count the people,” or “explain what is unusual”? One gets the signal through the door; the other teaches the model to use it according to human intent.</p>
+<h2 id="a-small-bridge-works-because-both-banks-already-do-most-of-the-work">A Small Bridge Works Because Both Banks Already Do Most of the Work
+</h2><p>The connector&rsquo;s size does not mean vision and language are naturally aligned. Most expensive capabilities already exist. CLIP has learned associations between many visual concepts and language semantics. Vicuna inherits a language model&rsquo;s knowledge, generation, and instruction-following behavior. The projection does not need to relearn object recognition or grammar. It needs to find an interface between two useful representation spaces, with later tuning adapting the LLM to that interface.</p>
+<p>LLaVA-1.5 provides a valuable engineering result. Replacing the original linear projection with a two-layer MLP, raising CLIP input resolution to 336 pixels, and adding public academic VQA data with concise response-format prompts produced a strong open baseline across 11 benchmarks. The paper reports that its final 13B checkpoint used about 1.2 million public samples and completed full training in roughly one day on a single eight-A100 node.</p>
+<p>That result does not prove that simpler connectors are universally superior. It supports a narrower claim: when the vision encoder, language model, and data are already strong, connector complexity may not be the first bottleneck. BLIP-2 illustrates another valid design. Its Q-Former uses learned queries and cross-attention to extract a fixed number of language-relevant features from the image encoder. LLaVA preserves the patch grid and favors a simple, rapidly iterable interface; Q-Former actively compresses information, trading more structure for a token count that does not directly grow with the input grid. The right bridge depends on fidelity, compute, and data—not on an abstract ranking of architectural sophistication.</p>
+<h2 id="visual-instruction-data-changed-the-way-the-model-could-be-used">Visual-Instruction Data Changed the Way the Model Could Be Used
+</h2><p>The source of LLaVA&rsquo;s 158K instruction examples is unusually instructive. The GPT-4 version available to the researchers accepted only text, so they did not show the teacher raw images. They represented each image through captions and bounding boxes, then asked GPT-4 to generate conversations, detailed descriptions, and complex reasoning questions around that symbolic description. The student still saw the real image during training.</p>
+<p>This pipeline reframed existing image-text data. The old question was “what caption belongs to this image?” The new question was “what might a user ask the assistant to do with this image?” That behavioral change mattered more than the raw sample count. In the paper&rsquo;s ablation on LLaVA-Bench (COCO), the system without visual instruction tuning received an overall score of 21.5; the full instruction dataset raised it to 85.1. These are scores from a specific setup using text-only GPT-4 as judge and reference, not percentages of universal capability. Within that setup, however, the gap clearly shows that describing images and following instructions about images are different skills.</p>
+<p>Synthetic instruction data also has a hard boundary. The teacher saw captions and boxes rather than pixels. If the symbolic description omitted a fine detail, the generated question and answer could not reliably recover that visual evidence. The student may learn the teacher&rsquo;s verbal preferences and reasoning templates without improving fine perception. Synthetic instructions broaden behavioral coverage; they do not replace grounded OCR data, detailed region annotations, or verified spatial relations.</p>
+<h2 id="visual-tokens-are-both-an-information-budget-and-a-compute-bill">Visual Tokens Are Both an Information Budget and a Compute Bill
+</h2><p>Sending every patch into the LLM is direct and preserves local representations. But patch count grows quadratically with image side length. With patch size 14, a square 224-pixel image produces 256 grid positions, 336 pixels produces 576, and 672 pixels produces 2,304. Doubling each side quadruples the visual tokens.</p>
+<p>If the prompt has (N_t) text tokens and the image contributes (N_v) visual tokens, a standard self-attention layer sees length (N_t+N_v). Its attention matrix scales roughly with ((N_t+N_v)^2), while KV cache scales with the total token count. Real systems can alter the bill with tiling, downsampling, token merging, sparse attention, or a visual resampler, but none eliminates the conflict between information density and computation.</p>
+<figure><img src="/en/p/llava-visual-connector/visual-token-budget.svg"><figcaption>
+			<h4>Figure 3: Connector parameters can stay small while visual-token length and attention cost grow rapidly with resolution</h4>
+		</figcaption>
+</figure>
+
+<p>This is why “higher resolution” is not enough to compare multimodal systems. We also need to ask how many tokens an image creates, how multiple images accumulate, whether visual tokens consume text context, whether they are compressed before entering the LLM, and whether a latency number measures image encoding, prefill, or autoregressive decoding. A maximum supported resolution is an input limit, not a recommendation to use that resolution for every request.</p>
+<h2 id="fluent-language-makes-visual-errors-harder-to-notice">Fluent Language Makes Visual Errors Harder to Notice
+</h2><p>Vision-language models combine uncertain perception with confident language generation. The original LLaVA paper describes a telling failure: a refrigerator contains strawberries and yogurt, but no strawberry-flavored yogurt; the model still answers yes when asked whether that flavor is present. It composes two co-occurring concepts into a relationship that the image does not contain. The authors describe the system as sometimes seeing a “bag of patches” without capturing the complex semantics.</p>
+<p>The error can enter at three points. The vision encoder may fail to preserve small text, counts, or exact locations. The connector may not map the relevant detail into directions the LLM can use. The language model may fill missing evidence with a plausible textual prior. The final fluent sentence does not reveal which layer failed.</p>
+<p>Practical evaluation should therefore separate perception, localization, OCR, relations, and generation. High-stakes systems may need traceable regions, external detectors, or abstention rather than a single score for how human-like the answer sounds. LLaVA itself notes inherited bias from its vision and language backbones, image-grounding hallucination, and the difficulty of evaluating a system that spans two modalities.</p>
+<p>LLaVA&rsquo;s most durable contribution may not be a checkpoint that still tops today&rsquo;s leaderboards. It is a minimal, reproducible blueprint: a strong vision encoder sees, a strong language model speaks, a lightweight interface puts their representations in one sequence, and instruction data defines the new interaction. The work showed how quickly multimodal capability could emerge by composing foundation models. It also showed why the bridge&rsquo;s parameter count tells us little about the information, training protocol, compute, and failure attribution carried across it.</p>
+<h2 id="references">References
+</h2><ol>
+<li>Radford et al., <a class="link" href="https://arxiv.org/abs/2103.00020"  target="_blank" rel="noopener"
+    >Learning Transferable Visual Models From Natural Language Supervision</a>, ICML 2021.</li>
+<li>OpenAI, <a class="link" href="https://openai.com/index/clip/"  target="_blank" rel="noopener"
+    >CLIP: Connecting Text and Images</a>.</li>
+<li>Liu et al., <a class="link" href="https://arxiv.org/abs/2304.08485"  target="_blank" rel="noopener"
+    >Visual Instruction Tuning</a>, NeurIPS 2023 Oral.</li>
+<li>Liu et al., <a class="link" href="https://arxiv.org/abs/2310.03744"  target="_blank" rel="noopener"
+    >Improved Baselines with Visual Instruction Tuning</a>, 2023.</li>
+<li>LLaVA authors, <a class="link" href="https://github.com/haotian-liu/LLaVA"  target="_blank" rel="noopener"
+    >Official LLaVA Code and Training Instructions</a>.</li>
+<li>Li et al., <a class="link" href="https://arxiv.org/abs/2301.12597"  target="_blank" rel="noopener"
+    >BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models</a>, ICML 2023.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/en/tags/llava/">LLaVA</a>
+        
+            <a href="/en/tags/vision-language-models/">Vision-Language Models</a>
+        
+            <a href="/en/tags/clip/">CLIP</a>
+        
+            <a href="/en/tags/visual-instruction-tuning/">Visual Instruction Tuning</a>
+        
+            <a href="/en/tags/multimodality/">Multimodality</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            Last updated on 2026-10-08
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">Related content</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/en/p/lora-low-rank-adaptation/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LoRA: Teach a Model Without Rewriting the Whole Thing" height="150" loading="lazy" src="/en/p/lora-low-rank-adaptation/cover_hu_a87075bd6bce2e92.jpg" srcset="/en/p/lora-low-rank-adaptation/cover_hu_a87075bd6bce2e92.jpg 1x, /en/p/lora-low-rank-adaptation/cover_hu_cb95d4190ae3c7d4.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #1e385180 0%, #f5ecdbC0 100%);">
+            <h2 class="article-title">LoRA: Teach a Model Without Rewriting the Whole Thing</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/speculative-decoding/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Speculative Decoding: Guess Ahead Without Changing the Answer" height="150" loading="lazy" src="/en/p/speculative-decoding/cover_hu_242c8d73b681f4ee.jpg" srcset="/en/p/speculative-decoding/cover_hu_242c8d73b681f4ee.jpg 1x, /en/p/speculative-decoding/cover_hu_1f0cfea86d0d6a48.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #f0e9db80 0%, #253b47C0 100%);">
+            <h2 class="article-title">Speculative Decoding: Guess Ahead Without Changing the Answer</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/dpo-hidden-reward/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DPO: Where Did the Reward Model Go?" height="150" loading="lazy" src="/en/p/dpo-hidden-reward/cover_hu_b46a947206e5f426.jpg" srcset="/en/p/dpo-hidden-reward/cover_hu_b46a947206e5f426.jpg 1x, /en/p/dpo-hidden-reward/cover_hu_83364114a3bc2333.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #2a394980 0%, #eae5dcC0 100%);">
+            <h2 class="article-title">DPO: Where Did the Reward Model Go?</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/flashattention-io-aware/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post FlashAttention: Move Less, Not Compute Less" height="150" loading="lazy" src="/en/p/flashattention-io-aware/cover_hu_c99e5cb43d35a221.jpg" srcset="/en/p/flashattention-io-aware/cover_hu_c99e5cb43d35a221.jpg 1x, /en/p/flashattention-io-aware/cover_hu_1d17ec47fd94c9de.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #c7cac680 0%, #1e2a33C0 100%);">
+            <h2 class="article-title">FlashAttention: Move Less, Not Compute Less</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/en/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba: Why Remembering Less Can Understand More" height="150" loading="lazy" src="/en/p/mamba-selective-state-space/cover_hu_1535ced22fcf2da4.jpg" srcset="/en/p/mamba-selective-state-space/cover_hu_1535ced22fcf2da4.jpg 1x, /en/p/mamba-selective-state-space/cover_hu_8a64b8f9b67ca162.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #2f3b4180 0%, #ded4c5C0 100%);">
+            <h2 class="article-title">Mamba: Why Remembering Less Can Understand More</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

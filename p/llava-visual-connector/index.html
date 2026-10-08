@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="LLaVA 没有重训一座多模态巨塔，而是用轻量连接器把 CLIP 视觉特征送进语言模型。本文拆解视觉 token、两阶段训练、数据协议与成本边界。">
+<title>LLaVA：一座小桥，为什么能让语言模型看图</title>
+
+
+<link rel="canonical" href="https://ethan-lily.cn/p/llava-visual-connector/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap">
+
+
+<link rel="stylesheet" href="/scss/style.min.11652a3993302650a35979705b3325a4045ecedbe6867c9c3efba3d2f0eb8b71.css"><meta property='og:title' content="LLaVA：一座小桥，为什么能让语言模型看图">
+<meta property='og:description' content="LLaVA 没有重训一座多模态巨塔，而是用轻量连接器把 CLIP 视觉特征送进语言模型。本文拆解视觉 token、两阶段训练、数据协议与成本边界。">
+<meta property='og:url' content='https://ethan-lily.cn/p/llava-visual-connector/'>
+<meta property='og:site_name' content='辰远'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='LLaVA' /><meta property='article:tag' content='视觉语言模型' /><meta property='article:tag' content='CLIP' /><meta property='article:tag' content='视觉指令微调' /><meta property='article:tag' content='多模态' /><meta property='article:published_time' content='2026-10-08T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-10-08T09:01:49&#43;08:00'/><meta property='og:image' content='https://ethan-lily.cn/p/llava-visual-connector/cover.jpg' />
+<meta name="twitter:title" content="LLaVA：一座小桥，为什么能让语言模型看图">
+<meta name="twitter:description" content="LLaVA 没有重训一座多模态巨塔，而是用轻量连接器把 CLIP 视觉特征送进语言模型。本文拆解视觉 token、两阶段训练、数据协议与成本边界。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://ethan-lily.cn/p/llava-visual-connector/cover.jpg' />
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        <figure class="site-avatar">
+                <a href="/">
+                    <img src="/img/avatar.png" 
+                        width="300"
+                        height="300"
+                        class="site-logo"
+                        loading="lazy"
+                        alt="Avatar">
+                </a>
+                
+                    <span class="emoji">🍥</span>
+                
+            </figure>
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">辰远</a></h1>
+            <h2 class="site-description">天将降大任于斯人也</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='/'
+                        
+                        title="首页&amp;关于"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/chenyuan1125'
+                        
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e5%85%b3%e4%ba%8e/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%e9%93%be%e6%8e%a5/' >
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+                    <li id="i18n-switch">  
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                        <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
+                            
+                                
+                                
+                                    
+                                        
+                                    
+                                
+                                    
+                                
+                                <option value="/en/p/llava-visual-connector/" >English</option>
+                            
+                                
+                                
+                                    
+                                
+                                    
+                                        
+                                    
+                                
+                                <option value="/p/llava-visual-connector/" selected>中文</option>
+                            
+                        </select>
+                    </li>
+                
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav class="toc-nav" id="TableOfContents">
+                
+  <ol>
+    <li><a href="#clip-给了图像一套语言坐标但没有给它对话能力">CLIP 给了图像一套语言坐标，但没有给它对话能力</a></li>
+    <li><a href="#图像不是被翻译成单词而是变成一段连续向量">图像不是被翻译成单词，而是变成一段连续向量</a></li>
+    <li><a href="#两阶段训练其实在教两份不同的契约">两阶段训练，其实在教两份不同的契约</a></li>
+    <li><a href="#小桥够用是因为两端已经做了大部分工作">小桥够用，是因为两端已经做了大部分工作</a></li>
+    <li><a href="#真正改变使用方式的是视觉指令数据">真正改变使用方式的，是视觉指令数据</a></li>
+    <li><a href="#视觉-token-是信息预算也是计算账单">视觉 token 是信息预算，也是计算账单</a></li>
+    <li><a href="#能说得流畅会让视觉错误更难察觉">能说得流畅，会让视觉错误更难察觉</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+    <div class="article-image">
+        <a href="/p/llava-visual-connector/">
+            <img alt="Featured image of post LLaVA：一座小桥，为什么能让语言模型看图" height="900" loading="lazy" sizes="(max-width: 767px) calc(100vw - 30px), (max-width: 1023px) 700px, (max-width: 1279px) 950px, 1232px" src="/p/llava-visual-connector/cover.jpg" srcset="/p/llava-visual-connector/cover_hu_d628a261c9f2cb75.jpg 800w, /p/llava-visual-connector/cover.jpg 1600w" width="1600">
+        </a>
+    </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0/" style="background-color: hsl(73, 60%, 84%); color: hsl(73, 60%, 15%);">
+                大模型架构学习
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/llava-visual-connector/">LLaVA：一座小桥，为什么能让语言模型看图</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            LLaVA 没有重训一座多模态巨塔，而是用轻量连接器把 CLIP 视觉特征送进语言模型。本文拆解视觉 token、两阶段训练、数据协议与成本边界。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    
+    
+    
+    <footer class="article-meta">
+        
+            <div class="inline-meta">
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                    <time class="article-time--published" datetime='2026-10-08T00:00:00Z'>2026-10-08</time>
+                
+
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                    <time class="article-time--reading">
+                        阅读时长: 7 分钟
+                    </time>
+                
+            </div>
+        
+
+        
+            <div class="inline-meta">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-language" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 5h7" />
+  <path d="M9 3v2c0 4.418 -2.239 8 -5 8" />
+  <path d="M5 9c-.003 2.144 2.952 3.908 6.7 4" />
+  <path d="M12 20l4 -9l4 9" />
+  <path d="M19.1 18h-6.2" />
+</svg>
+
+
+
+                
+                    <a href="/en/p/llava-visual-connector/" class="link">English</a>
+                
+            </div>
+        
+
+        
+    </footer>
+    
+</div>
+
+</header>
+
+    
+    <aside class="article-toc">
+        <details>
+            <summary>
+                <div class="article-toc-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
+                    <span>目录</span>
+                </div>
+            </summary>
+            <nav class="toc-nav">
+                
+  <ol>
+    <li><a href="#clip-给了图像一套语言坐标但没有给它对话能力">CLIP 给了图像一套语言坐标，但没有给它对话能力</a></li>
+    <li><a href="#图像不是被翻译成单词而是变成一段连续向量">图像不是被翻译成单词，而是变成一段连续向量</a></li>
+    <li><a href="#两阶段训练其实在教两份不同的契约">两阶段训练，其实在教两份不同的契约</a></li>
+    <li><a href="#小桥够用是因为两端已经做了大部分工作">小桥够用，是因为两端已经做了大部分工作</a></li>
+    <li><a href="#真正改变使用方式的是视觉指令数据">真正改变使用方式的，是视觉指令数据</a></li>
+    <li><a href="#视觉-token-是信息预算也是计算账单">视觉 token 是信息预算，也是计算账单</a></li>
+    <li><a href="#能说得流畅会让视觉错误更难察觉">能说得流畅，会让视觉错误更难察觉</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ol>
+
+            </nav>
+        </details>
+    </aside>
+    
+
+    <section class="article-content">
+    
+    
+    <p>语言模型原本只接收离散 token。给它一张照片，像素不会自动变成“湖边有一座雪山”，更不会自动变成“比较左侧两个人的动作”。最直接的办法似乎是从头训练一个同时懂图像和语言的巨大模型；LLaVA 选择了更便宜、也更有启发性的路线：保留已经会看图的视觉编码器和已经会对话的语言模型，在中间训练一座很小的桥。</p>
+<p>这座桥在初版 LLaVA 中只是一层线性投影，在 LLaVA-1.5 中也不过是两层 MLP。它之所以重要，不是因为一个小矩阵凭空创造了视觉智能，而是因为它改写了两个预训练系统之间的<strong>接口协议</strong>：把图像编码器输出的网格特征，映射成语言模型可以放进上下文序列处理的向量；再用视觉指令数据告诉语言模型，看到这些向量之后应该完成什么任务。</p>
+<h2 id="clip-给了图像一套语言坐标但没有给它对话能力">CLIP 给了图像一套语言坐标，但没有给它对话能力
+</h2><p>LLaVA 的视觉端来自 CLIP。CLIP 用大量图文对训练两个编码器：图像编码器产生一个视觉表示，文本编码器产生一个文本表示；训练目标让正确配对的图文更接近、错误配对更远。OpenAI 的工作使用 4 亿对网络图文数据，并把任务简化为从一个 batch 的文本候选中找出与图像匹配的描述。</p>
+<p>这一步的价值是建立了一个开放的语义坐标系。传统分类器最后只能在预先规定的类别中选择；CLIP 可以把“雪山倒映在湖面”“一张手写菜单”这类自然语言描述拿来比较，因此视觉表示不再被固定标签表锁死。</p>
+<p>但“能比较图像和一句话”不等于“能围绕图像进行多轮对话”。CLIP 的核心输出是相似度，它不会自己生成长答案，也没有学会遵守“只数红色物体”“先解释再给结论”这样的指令。LLaVA 没有让 CLIP 直接回答问题，而是借它提供的视觉特征，把生成与指令遵循交给已经具备这些能力的语言模型。</p>
+<h2 id="图像不是被翻译成单词而是变成一段连续向量">图像不是被翻译成单词，而是变成一段连续向量
+</h2><p>以 LLaVA-1.5 的常见配置为例，输入图像经过 CLIP ViT-L/14@336px。ViT 把 336×336 的图像切成 14×14 的 patch，因此形成 (24\times24=576) 个网格位置。视觉编码器为每个位置输出一个特征向量。连接器 (P) 再把视觉维度投影到语言模型的词嵌入维度：</p>
+\[
+H_v=P(Z_v), \qquad Z_v=g(X_v).
+\]<p>这里的 (H_v) 常被称为 visual tokens，但它们不是词表中的 token，也没有对应某个可读单词。它们只是与文本 embedding 维度相同的一串连续向量。系统把这串向量放到问题的文本 embedding 旁边，语言模型便能在同一个自回归序列里同时关注图像区域和文字提示。</p>
+<figure><img src="/p/llava-visual-connector/from-pixels-to-tokens.svg"><figcaption>
+			<h4>图 1：LLaVA 把 CLIP 网格特征投影成可插入语言模型上下文的连续视觉 token</h4>
+		</figcaption>
+</figure>
+
+<p>这个设计省掉了专门的多模态解码器，也没有在语言模型每一层插入新的 cross-attention。代价则是视觉信息要以 token 预算进入语言模型：图像分得越细，细节可能越多，但序列越长，prefill 的注意力与 KV cache 负担也越大。“连接器很小”和“整条多模态推理链很便宜”是两件不同的事。</p>
+<h2 id="两阶段训练其实在教两份不同的契约">两阶段训练，其实在教两份不同的契约
+</h2><p>原始 LLaVA 的训练分两步。第一步使用从 CC3M 过滤出的 595K 图文对，把图片配上“请简要描述图像”一类请求。视觉编码器和语言模型都冻结，只更新投影矩阵。此时任务不是教模型聊天，而是让连接器找到一种语言模型能消费的视觉表示。论文把它形容为为冻结的语言模型训练一个兼容的“视觉 tokenizer”。</p>
+<p>第二步换成 158K 视觉指令样本，包括对话、详细描述和复杂推理。视觉编码器仍然冻结，但连接器与语言模型一起更新。模型只对 assistant 的答案 token 计算自回归损失，从而学习“图像 + 指令 → 合适回答”的行为。</p>
+<figure><img src="/p/llava-visual-connector/two-stage-training.svg"><figcaption>
+			<h4>图 2：第一阶段只对齐接口；第二阶段让连接器和语言模型共同学习视觉指令行为</h4>
+		</figcaption>
+</figure>
+
+<p>这两步不能简单合并成一句“用图文数据训练”。第一阶段解决的是<strong>表示兼容</strong>：雪山区域的视觉特征怎样进入语言模型的向量空间。第二阶段解决的是<strong>交互契约</strong>：同一张图像面对“描述场景”“数出人物”“解释反常之处”时，输出应该怎样变化。一个负责把信号送进去，另一个负责让模型按人的意图使用信号。</p>
+<h2 id="小桥够用是因为两端已经做了大部分工作">小桥够用，是因为两端已经做了大部分工作
+</h2><p>连接器很小，并不意味着视觉与语言天然对齐。真正昂贵的能力已经预先存在：CLIP 学会了大量视觉概念与语言语义的对应，Vicuna 则继承了语言模型的知识、生成与指令遵循能力。投影层要做的不是重新识别每个物体或重新学习语法，而是找到两个表示空间之间可被后续训练利用的接口。</p>
+<p>LLaVA-1.5 提供了一个很有价值的工程结果：把初版线性投影换成两层 MLP、把 CLIP 输入分辨率提高到 336px，再加入面向学术 VQA 的公开数据和简洁回答格式，就得到一个在 11 个基准上很强的公开基线。论文报告其 13B checkpoint 只使用约 1.2M 公开样本，并在单个 8×A100 节点上约一天完成训练。</p>
+<p>这个结果支持的不是“连接器越简单越好”，而是一个更窄的判断：当视觉编码器、语言模型和数据都足够强时，复杂的跨模态模块未必是首要瓶颈。BLIP-2 走的是另一条合理路线：用带可学习 query 和 cross-attention 的 Q-Former，从视觉特征中提取固定数量的语言相关表示。LLaVA 保留整片网格，接口简单、实验迭代快；Q-Former 主动压缩信息，结构更复杂但 token 数量不随输入网格直接增长。选择哪种桥，取决于细节保真、计算预算和训练数据，而不是抽象意义上的“先进程度”。</p>
+<h2 id="真正改变使用方式的是视觉指令数据">真正改变使用方式的，是视觉指令数据
+</h2><p>初版 LLaVA 的 158K 指令数据有一个很巧的来源：当时使用的 GPT-4 只接收文本，因此研究者没有把图片直接交给教师模型，而是把图片的 caption 和 bounding box 作为符号化描述，让 GPT-4 生成围绕图像的对话、详细描述与复杂推理问题。最终的学生模型训练时仍看到真实图像。</p>
+<p>这套流程把已有图文数据从“这张图配什么说明”改造成“用户可能对这张图提出什么要求”。数据的变化比表面上的样本数量更关键。原论文消融中，没有视觉指令微调的模型在 LLaVA-Bench (COCO) 总分只有 21.5；使用完整指令数据时为 85.1。这个数字来自以文本版 GPT-4 为裁判和参照的特定评测，不能当作通用能力百分比，但同一设置下的大幅差距清楚说明：会描述图像，不等于会遵循关于图像的指令。</p>
+<p>它也暴露了合成数据的边界。教师看到的是 caption 和框，而不是像素本身；若符号描述漏掉细节，生成的问题与答案也不会神奇地补全视觉证据。学生可能学到教师的表达偏好和推理模板，而不是更细致的感知。合成指令扩大了行为覆盖，却没有替代真实图像标注、精细 OCR 数据或可验证的空间关系数据。</p>
+<h2 id="视觉-token-是信息预算也是计算账单">视觉 token 是信息预算，也是计算账单
+</h2><p>把 patch 全部送进语言模型的好处是直接：局部区域仍有自己的表示，模型可以在回答时关注不同位置。但 patch 数随分辨率的平方增长。对 patch size 14 的方形输入，224px 对应 256 个位置，336px 对应 576 个，672px 则对应 2304 个。边长翻倍，视觉 token 变四倍。</p>
+<p>若文本有 (N_t) 个 token、图像有 (N_v) 个 token，标准自注意力看到的总长度是 (N_t+N_v)。粗略的注意力矩阵规模随 ((N_t+N_v)^2) 增长，KV cache 则随总 token 数增长。真实实现会通过切图、降采样、token merging、稀疏注意力或专门的视觉重采样器改变这笔账，但不会让信息密度与计算成本的冲突消失。</p>
+<figure><img src="/p/llava-visual-connector/visual-token-budget.svg"><figcaption>
+			<h4>图 3：连接器参数可以很小，视觉 token 带来的序列长度与注意力成本却会随分辨率迅速上升</h4>
+		</figcaption>
+</figure>
+
+<p>这也是为什么高分辨率多模态模型不能只比较视觉编码器大小。还要问：每张图产生多少 token？多图输入怎样累计？图像 token 是否占用文本上下文？进入 LLM 前有没有压缩？测的是编码耗时、prefill，还是逐 token decode？“支持更高分辨率”描述的是输入上限，不等于每个请求都应该使用最高分辨率。</p>
+<h2 id="能说得流畅会让视觉错误更难察觉">能说得流畅，会让视觉错误更难察觉
+</h2><p>视觉语言模型的危险组合是：感知证据可能模糊，语言生成却很自信。原论文记录过一个典型错误：冰箱里有草莓，也有酸奶，但没有草莓味酸奶；模型仍回答“有”。它把同时出现的两个概念拼成了并不存在的关系。作者称这种情况像把图像看成一“袋 patch”，没能掌握复杂语义。</p>
+<p>错误可能出现在三处。视觉编码器可能没保留小字、数量或精确位置；连接器可能没有把相关细节映射成语言模型容易利用的方向；语言模型则可能用文本先验补出一个听起来合理的答案。仅看最终句子，很难判断是哪一层失真。因此实际系统需要让评测拆开感知、定位、OCR、关系与生成，关键任务还应提供可追溯区域、外部检测器或拒答机制，而不是只用“回答是否像人话”衡量质量。</p>
+<p>LLaVA 最持久的贡献，也许不是某个今天仍领先的 checkpoint，而是提供了一张极简、可复现的设计图：强视觉编码器负责看，强语言模型负责说，一个轻量接口让两者共享序列，再用指令数据定义新的使用方式。它证明了多模态能力可以通过组合已有基础模型快速形成，也同时提醒我们：桥再小，桥上承载的信息、训练协议和错误归因都不小。</p>
+<h2 id="参考资料">参考资料
+</h2><ol>
+<li>Radford et al., <a class="link" href="https://arxiv.org/abs/2103.00020"  target="_blank" rel="noopener"
+    >Learning Transferable Visual Models From Natural Language Supervision</a>, ICML 2021.</li>
+<li>OpenAI, <a class="link" href="https://openai.com/index/clip/"  target="_blank" rel="noopener"
+    >CLIP: Connecting Text and Images</a>.</li>
+<li>Liu et al., <a class="link" href="https://arxiv.org/abs/2304.08485"  target="_blank" rel="noopener"
+    >Visual Instruction Tuning</a>, NeurIPS 2023 Oral.</li>
+<li>Liu et al., <a class="link" href="https://arxiv.org/abs/2310.03744"  target="_blank" rel="noopener"
+    >Improved Baselines with Visual Instruction Tuning</a>, 2023.</li>
+<li>LLaVA authors, <a class="link" href="https://github.com/haotian-liu/LLaVA"  target="_blank" rel="noopener"
+    >LLaVA 官方代码与训练说明</a>.</li>
+<li>Li et al., <a class="link" href="https://arxiv.org/abs/2301.12597"  target="_blank" rel="noopener"
+    >BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models</a>, ICML 2023.</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-meta article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/llava/">LLaVA</a>
+        
+            <a href="/tags/%E8%A7%86%E8%A7%89%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">视觉语言模型</a>
+        
+            <a href="/tags/clip/">CLIP</a>
+        
+            <a href="/tags/%E8%A7%86%E8%A7%89%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83/">视觉指令微调</a>
+        
+            <a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/">多模态</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    <section class="article-lastmod inline-meta">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <span>
+            最后更新于 2026-10-08
+        </span>
+    </section></footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="/vendor/katex/katex.min.css"crossorigin="anonymous"
+            ><script 
+                src="/vendor/katex/katex.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="/vendor/katex/auto-render.min.js"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const elementsToRender = [".main-article", ".widget--toc"];
+
+        elementsToRender.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                renderMathInElement(element, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false },
+                        { left: "\\(", right: "\\)", display: false },
+                        { left: "\\[", right: "\\]", display: true }
+                    ],
+                    ignoredClasses: ["gist"]
+                });
+            }
+        });
+    });
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside>
+    <h2 class="section-title">相关文章</h2>
+    <div class="subsection-list">
+        <div class="article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/lora-low-rank-adaptation/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post LoRA：不重写整座模型，如何学会一项新任务" height="150" loading="lazy" src="/p/lora-low-rank-adaptation/cover_hu_2dfbdd8fe906cfbb.jpg" srcset="/p/lora-low-rank-adaptation/cover_hu_2dfbdd8fe906cfbb.jpg 1x, /p/lora-low-rank-adaptation/cover_hu_dd2d7eaa5a2a0d57.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #1e385180 0%, #f5ecdbC0 100%);">
+            <h2 class="article-title">LoRA：不重写整座模型，如何学会一项新任务</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/speculative-decoding/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post 推测解码：先猜几个 token，为什么答案仍然没变" height="150" loading="lazy" src="/p/speculative-decoding/cover_hu_6704b5895f3e3707.jpg" srcset="/p/speculative-decoding/cover_hu_6704b5895f3e3707.jpg 1x, /p/speculative-decoding/cover_hu_962ad6a60cac686f.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #f0e9db80 0%, #253b47C0 100%);">
+            <h2 class="article-title">推测解码：先猜几个 token，为什么答案仍然没变</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/dpo-hidden-reward/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post DPO：奖励模型去哪了" height="150" loading="lazy" src="/p/dpo-hidden-reward/cover_hu_d4f38066fa78749.jpg" srcset="/p/dpo-hidden-reward/cover_hu_d4f38066fa78749.jpg 1x, /p/dpo-hidden-reward/cover_hu_3741326db566f813.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #28374780 0%, #eae5dcC0 100%);">
+            <h2 class="article-title">DPO：奖励模型去哪了</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/flashattention-io-aware/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post FlashAttention：不是少算，而是少搬" height="150" loading="lazy" src="/p/flashattention-io-aware/cover_hu_62c3677d14a862d3.jpg" srcset="/p/flashattention-io-aware/cover_hu_62c3677d14a862d3.jpg 1x, /p/flashattention-io-aware/cover_hu_b2a5c88a943f54e5.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #bec2be80 0%, #1e2a33C0 100%);">
+            <h2 class="article-title">FlashAttention：不是少算，而是少搬</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/mamba-selective-state-space/">
+        
+        <div class="article-image">
+            <img alt="Featured image of post Mamba：少记，为什么反而可能更懂长序列" height="150" loading="lazy" src="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg" srcset="/p/mamba-selective-state-space/cover_hu_420822fe3d0f1ad1.jpg 1x, /p/mamba-selective-state-space/cover_hu_5245944053dde7dc.jpg 2x" width="250">
+
+        </div>
+        
+
+        <div class="article-details"style="background: linear-gradient(0deg, #303b4180 0%, #ddd3c4C0 100%);">
+            <h2 class="article-title">Mamba：少记，为什么反而可能更懂长序列</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+
+        <script src='//unpkg.com/@waline/client@v2/dist/waline.js'></script>
+<link href='//unpkg.com/@waline/client@v2/dist/waline.css' rel='stylesheet'/>
+<div id="waline" class="waline-container"></div>
+<style>
+    .waline-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+        --waline-font-size: var(--article-font-size);
+    }
+    .waline-container .wl-count {
+        color: var(--card-text-color-main);
+    }
+</style><script>
+    
+    Waline.init({"dark":"html[data-scheme=\"dark\"]","el":"#waline","emoji":["https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq","https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili"],"lang":"zh-CN","locale":{"admin":"Admin","placeholder":"感谢您的评论"},"pageview":true,"requiredMeta":["nick"],"serverURL":"https://waline.chenyuan1125.top"});
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2026 Lee
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="4.0.3">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+
+
+
+<script type="module">
+    import gallery from '\/ts\/gallery.js';
+
+    const articleContent = document.querySelector('.article-content');
+    const shouldLoad = articleContent && (articleContent.querySelectorAll('figure').length > 0 || articleContent.querySelectorAll('img.gallery-image').length > 0);
+    
+    if (shouldLoad) {
+        gallery(articleContent);
+
+        const PhotoSwipeLightbox = (await import("\/vendor\/photoswipe\/photoswipe-ui-default.min.js")).default;
+        const styleHref = "\/vendor\/photoswipe\/photoswipe.min.css";
+
+        const styleTag = document.createElement('link');
+        styleTag.rel = 'stylesheet';
+        styleTag.href = styleHref;
+        document.head.appendChild(styleTag);
+
+        const lightbox = new PhotoSwipeLightbox({
+            gallerySelector: '.article-content',
+            childSelector: 'figure a.image-link',
+            pswpModule: () => import("\/vendor\/photoswipe\/photoswipe.min.js")
+        });
+        lightbox.init();
+    }
+</script>
+
+    
+
+            </main>
+        </div>
+        
+<script type="text/javascript" src="/ts/main.87d72694fb97c84cb5cbf9b1a64d476a38e04a5706618a6ffe5b89c7db00488f.js" defer></script>
+
+
+
+    </body>
+</html>

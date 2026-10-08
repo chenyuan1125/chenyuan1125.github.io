@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 430" width="600" height="430" role="img" aria-labelledby="pixels-cn-title pixels-cn-desc">
+  <title id="pixels-cn-title">从像素到视觉 token</title>
+  <desc id="pixels-cn-desc">图像被切成网格，经 CLIP 编码和 MLP 投影后，与问题文本一同进入语言模型。</desc>
+  <defs>
+    <pattern id="grid-cn" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="#fff" stroke-width="1.5"/></pattern>
+    <marker id="arrow-cn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#415a6b"/></marker>
+    <style>
+      .t{font-family:'Microsoft YaHei','Noto Sans CJK SC',sans-serif;fill:#21313b}.h{font-size:18px;font-weight:700}.l{font-size:13px}.s{font-size:11px;fill:#5c6b73}.box{stroke:#365361;stroke-width:1.5}.arrow{stroke:#415a6b;stroke-width:2;fill:none;marker-end:url(#arrow-cn)}
+    </style>
+  </defs>
+  <rect width="600" height="430" rx="18" fill="#f6f1e7"/>
+  <text x="30" y="38" class="t h">图像怎样进入语言模型</text>
+  <text x="30" y="60" class="t s">LLaVA-1.5 常见配置：CLIP ViT-L/14@336px + 两层 MLP</text>
+  <rect x="30" y="94" width="116" height="116" rx="10" fill="#7ba6a1" class="box"/>
+  <path d="M30 174L62 143L86 164L112 126L146 163V210H30Z" fill="#23485a" opacity=".9"/>
+  <rect x="30" y="94" width="116" height="116" rx="10" fill="url(#grid-cn)"/>
+  <text x="88" y="232" text-anchor="middle" class="t l">336×336 像素</text>
+  <path d="M153 152H190" class="arrow"/>
+  <rect x="198" y="105" width="96" height="92" rx="12" fill="#dce8e4" class="box"/>
+  <text x="246" y="138" text-anchor="middle" class="t l" font-weight="700">CLIP</text>
+  <text x="246" y="158" text-anchor="middle" class="t l">ViT-L/14</text>
+  <text x="246" y="178" text-anchor="middle" class="t s">24×24 网格</text>
+  <path d="M302 152H337" class="arrow"/>
+  <rect x="345" y="118" width="72" height="66" rx="10" fill="#ef846f" class="box"/>
+  <text x="381" y="144" text-anchor="middle" class="t l" font-weight="700">两层</text>
+  <text x="381" y="164" text-anchor="middle" class="t l" font-weight="700">MLP</text>
+  <path d="M425 152H458" class="arrow"/>
+  <g fill="#274c5e">
+    <rect x="466" y="105" width="19" height="92" rx="4"/><rect x="490" y="105" width="19" height="92" rx="4"/><rect x="514" y="105" width="19" height="92" rx="4"/><rect x="538" y="105" width="19" height="92" rx="4"/>
+  </g>
+  <text x="511" y="222" text-anchor="middle" class="t l">576 个视觉 token</text>
+  <text x="511" y="240" text-anchor="middle" class="t s">连续向量，不是单词</text>
+  <path d="M510 251V282" class="arrow"/>
+  <rect x="267" y="288" width="290" height="93" rx="14" fill="#203d4d"/>
+  <rect x="285" y="307" width="78" height="35" rx="7" fill="#e5c36f"/>
+  <text x="324" y="330" text-anchor="middle" class="t l">问题文本</text>
+  <text x="379" y="330" class="t h" fill="#f6f1e7">+</text>
+  <rect x="404" y="307" width="130" height="35" rx="7" fill="#78a6a1"/>
+  <text x="469" y="330" text-anchor="middle" class="t l">视觉 token</text>
+  <text x="412" y="365" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="13" fill="#f6f1e7">同一序列 → 自回归回答</text>
+  <path d="M30 334H233" class="arrow"/>
+  <rect x="30" y="300" width="194" height="68" rx="12" fill="#fffaf0" class="box"/>
+  <text x="127" y="328" text-anchor="middle" class="t l" font-weight="700">关键接口</text>
+  <text x="127" y="350" text-anchor="middle" class="t s">视觉维度 → 词嵌入维度</text>
+  <text x="30" y="411" class="t s">连接器不负责重新识别世界；它让已有视觉特征进入已有语言能力。</text>
+</svg>
