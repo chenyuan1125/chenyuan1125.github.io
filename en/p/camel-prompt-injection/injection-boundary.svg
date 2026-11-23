@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" width="600" height="420" role="img" aria-labelledby="injection-title injection-desc">
+  <title id="injection-title">The trust boundary in indirect prompt injection</title>
+  <desc id="injection-desc">A trusted task and untrusted external content enter one language-model decision loop, allowing data to alter tool sequence or arguments.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#315e73"/></marker>
+    <marker id="bad-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#d8664b"/></marker>
+    <style>
+      text{font-family:Arial,sans-serif;fill:#173b57}.h{font-size:18px;font-weight:700}.m{font-size:13px}.s{font-size:11px}.box{fill:#f9f3e8;stroke:#315e73;stroke-width:2}.trusted{fill:#dcecf0;stroke:#2e7480;stroke-width:2}.untrusted{fill:#fff0e6;stroke:#d8664b;stroke-width:2;stroke-dasharray:7 5}.tool{fill:#e7f2ed;stroke:#3c8d7a;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="600" height="420" rx="18" fill="#fffaf1"/>
+  <text x="30" y="38" class="h">Same tokens, different authority</text>
+  <rect x="30" y="70" width="190" height="88" rx="12" class="trusted"/>
+  <text x="50" y="101" class="h">Trusted user task</text>
+  <text x="50" y="127" class="m">“Find notes, then send file”</text>
+  <rect x="30" y="244" width="190" height="112" rx="12" class="untrusted"/>
+  <text x="50" y="276" class="h" fill="#b54c39">Untrusted content</text>
+  <text x="50" y="302" class="m">Email · web · docs · tool output</text>
+  <text x="50" y="329" class="s" fill="#b54c39">May say “change address / call tool”</text>
+  <rect x="274" y="145" width="150" height="128" rx="18" class="box"/>
+  <text x="349" y="183" class="h" text-anchor="middle">One context</text>
+  <text x="349" y="213" class="h" text-anchor="middle">LLM decision</text>
+  <text x="349" y="242" class="s" text-anchor="middle">Plan + arguments together</text>
+  <line x1="220" y1="113" x2="274" y2="170" stroke="#315e73" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="220" y1="294" x2="274" y2="245" stroke="#d8664b" stroke-width="3" marker-end="url(#bad-arrow)"/>
+  <rect x="470" y="92" width="100" height="64" rx="12" class="tool"/>
+  <rect x="470" y="186" width="100" height="64" rx="12" class="tool"/>
+  <rect x="470" y="280" width="100" height="64" rx="12" class="tool"/>
+  <text x="520" y="131" class="m" text-anchor="middle">Read drive</text>
+  <text x="520" y="225" class="m" text-anchor="middle">Send email</text>
+  <text x="520" y="319" class="m" text-anchor="middle">External API</text>
+  <line x1="424" y1="181" x2="470" y2="128" stroke="#315e73" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="424" y1="209" x2="470" y2="218" stroke="#315e73" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M220 322 C350 392, 432 350, 470 322" fill="none" stroke="#d8664b" stroke-width="3" stroke-dasharray="8 5" marker-end="url(#bad-arrow)"/>
+  <text x="350" y="382" class="m" text-anchor="middle" fill="#b54c39">Data crosses the boundary and gains authority</text>
+</svg>

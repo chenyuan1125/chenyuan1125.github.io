@@ -6,7 +6,37 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
         <copyright>Lee</copyright>
-        <lastBuildDate>Thu, 08 Oct 2026 09:01:51 +0800</lastBuildDate><atom:link href="https://ethan-lily.cn/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 23 Nov 2026 09:05:30 +0800</lastBuildDate><atom:link href="https://ethan-lily.cn/en/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+            <title>Agent Security</title>
+            <link>https://ethan-lily.cn/en/tags/agent-security/</link>
+            <pubDate>Mon, 23 Nov 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/agent-security/</guid>
+            <description></description>
+        </item><item>
+            <title>CaMeL</title>
+            <link>https://ethan-lily.cn/en/tags/camel/</link>
+            <pubDate>Mon, 23 Nov 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/camel/</guid>
+            <description></description>
+        </item><item>
+            <title>Capability Security</title>
+            <link>https://ethan-lily.cn/en/tags/capability-security/</link>
+            <pubDate>Mon, 23 Nov 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/capability-security/</guid>
+            <description></description>
+        </item><item>
+            <title>Information Flow Control</title>
+            <link>https://ethan-lily.cn/en/tags/information-flow-control/</link>
+            <pubDate>Mon, 23 Nov 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/information-flow-control/</guid>
+            <description></description>
+        </item><item>
+            <title>Prompt Injection</title>
+            <link>https://ethan-lily.cn/en/tags/prompt-injection/</link>
+            <pubDate>Mon, 23 Nov 2026 00:00:00 +0000</pubDate>
+            <guid>https://ethan-lily.cn/en/tags/prompt-injection/</guid>
+            <description></description>
+        </item><item>
             <title>CLIP</title>
             <link>https://ethan-lily.cn/en/tags/clip/</link>
             <pubDate>Thu, 08 Oct 2026 00:00:00 +0000</pubDate>

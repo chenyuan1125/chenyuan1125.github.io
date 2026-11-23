@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" width="600" height="480" role="img" aria-labelledby="camel-title camel-desc">
+  <title id="camel-title">CaMeL 双模型与解释器架构</title>
+  <desc id="camel-desc">可信请求只进入特权模型，不可信内容只进入隔离模型，解释器合并代码与结构化字段并通过策略门调用工具。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#315e73"/></marker>
+    <style>text{font-family:"Microsoft YaHei",sans-serif;fill:#173b57}.h{font-size:18px;font-weight:700}.m{font-size:13px}.s{font-size:11px}.b{stroke-width:2}.blue{fill:#dcecf0;stroke:#2e7480}.sand{fill:#fbf0d8;stroke:#b98a3d}.coral{fill:#fff0e6;stroke:#d8664b}.green{fill:#e7f2ed;stroke:#3c8d7a}</style>
+  </defs>
+  <rect width="600" height="480" rx="18" fill="#fffaf1"/>
+  <text x="30" y="36" class="h">把“理解”与“执行权限”拆开</text>
+  <rect x="30" y="65" width="150" height="62" rx="11" class="blue b"/><text x="105" y="91" class="m" text-anchor="middle">可信用户请求</text><text x="105" y="112" class="s" text-anchor="middle">唯一的计划来源</text>
+  <rect x="225" y="65" width="150" height="82" rx="13" class="blue b"/><text x="300" y="94" class="h" text-anchor="middle">P-LLM</text><text x="300" y="118" class="m" text-anchor="middle">生成受限 Python</text><text x="300" y="137" class="s" text-anchor="middle">永远看不到工具数据</text>
+  <rect x="30" y="272" width="150" height="82" rx="11" class="coral b" stroke-dasharray="7 5"/><text x="105" y="300" class="m" text-anchor="middle">不可信工具数据</text><text x="105" y="323" class="s" text-anchor="middle">邮件 · 网页 · 文档</text><text x="105" y="342" class="s" text-anchor="middle">可能含注入</text>
+  <rect x="225" y="272" width="150" height="100" rx="13" class="sand b"/><text x="300" y="302" class="h" text-anchor="middle">Q-LLM</text><text x="300" y="327" class="m" text-anchor="middle">提取预定 schema</text><text x="300" y="349" class="s" text-anchor="middle">无工具、无自由回传</text>
+  <rect x="420" y="145" width="150" height="150" rx="15" fill="#f9f3e8" stroke="#315e73" stroke-width="2"/><text x="495" y="178" class="h" text-anchor="middle">CaMeL 解释器</text><text x="495" y="205" class="m" text-anchor="middle">执行受限代码</text><text x="495" y="228" class="m" text-anchor="middle">维护数据流图</text><text x="495" y="251" class="m" text-anchor="middle">传播能力标签</text><text x="495" y="276" class="s" text-anchor="middle">出错只让 P-LLM 改代码</text>
+  <rect x="420" y="350" width="150" height="58" rx="12" class="green b"/><text x="495" y="376" class="h" text-anchor="middle">安全策略门</text><text x="495" y="397" class="s" text-anchor="middle">允许 / 拒绝 / 请求确认</text>
+  <rect x="200" y="415" width="200" height="45" rx="11" class="green b"/><text x="300" y="443" class="m" text-anchor="middle">有副作用的工具调用</text>
+  <line x1="180" y1="96" x2="225" y2="96" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M375 106 C410 106, 410 174, 420 174" fill="none" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+  <line x1="180" y1="313" x2="225" y2="313" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M375 322 C410 322, 410 266, 420 266" fill="none" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+  <line x1="495" y1="295" x2="495" y2="350" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M420 379 H300 V415" fill="none" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+</svg>

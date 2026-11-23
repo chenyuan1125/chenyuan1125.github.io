@@ -2,8 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://ethan-lily.cn/tags/camel/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/camel/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/camel/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/p/camel-prompt-injection/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/p/camel-prompt-injection/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/p/camel-prompt-injection/"
+                />
+  </url><url>
     <loc>https://ethan-lily.cn/categories/</loc>
-    <lastmod>2026-10-08T09:01:49+08:00</lastmod>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -14,6 +40,57 @@
                 hreflang="zh-cn"
                 href="https://ethan-lily.cn/categories/"
                 />
+  </url><url>
+    <loc>https://ethan-lily.cn/post/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/post/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/post/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/tags/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://ethan-lily.cn/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh-cn"
+                href="https://ethan-lily.cn/"
+                />
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E8%83%BD%E5%8A%9B%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E4%BF%A1%E6%81%AF%E6%B5%81%E6%8E%A7%E5%88%B6/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
+  </url><url>
+    <loc>https://ethan-lily.cn/tags/%E6%99%BA%E8%83%BD%E4%BD%93%E5%AE%89%E5%85%A8/</loc>
+    <lastmod>2026-11-23T09:05:30+08:00</lastmod>
   </url><url>
     <loc>https://ethan-lily.cn/tags/clip/</loc>
     <lastmod>2026-10-08T09:01:49+08:00</lastmod>
@@ -52,45 +129,6 @@
                 rel="alternate"
                 hreflang="zh-cn"
                 href="https://ethan-lily.cn/p/llava-visual-connector/"
-                />
-  </url><url>
-    <loc>https://ethan-lily.cn/post/</loc>
-    <lastmod>2026-10-08T09:01:49+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ethan-lily.cn/en/post/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://ethan-lily.cn/post/"
-                />
-  </url><url>
-    <loc>https://ethan-lily.cn/tags/</loc>
-    <lastmod>2026-10-08T09:01:49+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ethan-lily.cn/en/tags/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://ethan-lily.cn/tags/"
-                />
-  </url><url>
-    <loc>https://ethan-lily.cn/</loc>
-    <lastmod>2026-10-08T09:01:49+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://ethan-lily.cn/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh-cn"
-                href="https://ethan-lily.cn/"
                 />
   </url><url>
     <loc>https://ethan-lily.cn/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/</loc>

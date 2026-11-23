@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 430" width="600" height="430" role="img" aria-labelledby="cap-title cap-desc">
+  <title id="cap-title">能力标签在发送工具前执行访问策略</title>
+  <desc id="cap-desc">一份仅允许 Alice 和 Bob 阅读的文档可以发给 Bob，但不能发给攻击者地址。</desc>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#315e73"/></marker>
+    <style>text{font-family:"Microsoft YaHei",sans-serif;fill:#173b57}.h{font-size:18px;font-weight:700}.m{font-size:14px}.s{font-size:12px}.meta{fill:#dcecf0;stroke:#2e7480;stroke-width:2}.gate{fill:#fbf0d8;stroke:#b98a3d;stroke-width:2}.ok{fill:#e7f2ed;stroke:#3c8d7a;stroke-width:2}.no{fill:#fff0e6;stroke:#d8664b;stroke-width:2}</style>
+  </defs>
+  <rect width="600" height="430" rx="18" fill="#fffaf1"/>
+  <text x="30" y="38" class="h">策略检查的是“值能流向哪里”</text>
+  <rect x="35" y="80" width="205" height="190" rx="15" class="meta"/>
+  <text x="55" y="113" class="h">document</text>
+  <line x1="55" y1="128" x2="218" y2="128" stroke="#7fa6b2"/>
+  <text x="55" y="158" class="m">值：confidential.pdf</text>
+  <text x="55" y="189" class="m">来源：cloud_drive</text>
+  <text x="55" y="220" class="m">可读者：Alice, Bob</text>
+  <text x="55" y="250" class="s">派生值继续携带这些标签</text>
+  <rect x="295" y="125" width="135" height="100" rx="15" class="gate"/>
+  <text x="362" y="158" class="h" text-anchor="middle">send_email</text>
+  <text x="362" y="186" class="m" text-anchor="middle">策略门</text>
+  <text x="362" y="208" class="s" text-anchor="middle">recipient ∈ readers?</text>
+  <line x1="240" y1="175" x2="295" y2="175" stroke="#315e73" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="475" y="74" width="95" height="92" rx="13" class="ok"/>
+  <text x="522" y="105" class="h" text-anchor="middle" fill="#2d7f6e">允许</text>
+  <text x="522" y="132" class="m" text-anchor="middle">Bob</text>
+  <text x="522" y="152" class="s" text-anchor="middle">已有读取权</text>
+  <rect x="475" y="238" width="95" height="104" rx="13" class="no"/>
+  <text x="522" y="270" class="h" text-anchor="middle" fill="#b54c39">拒绝</text>
+  <text x="522" y="297" class="m" text-anchor="middle">Attacker</text>
+  <text x="522" y="320" class="s" text-anchor="middle">或请求确认</text>
+  <path d="M430 158 C453 158, 452 120, 475 120" fill="none" stroke="#3c8d7a" stroke-width="3" marker-end="url(#a)"/>
+  <path d="M430 194 C453 194, 452 290, 475 290" fill="none" stroke="#d8664b" stroke-width="3" marker-end="url(#a)"/>
+  <rect x="68" y="330" width="464" height="58" rx="12" fill="#f9f3e8" stroke="#c8bda9"/>
+  <text x="300" y="355" class="m" text-anchor="middle">恶意内容可以改变提取出的字符串，</text>
+  <text x="300" y="378" class="m" text-anchor="middle">但不能伪造文档的来源与读取权限。</text>
+</svg>
